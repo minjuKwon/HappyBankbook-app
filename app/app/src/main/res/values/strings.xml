@@ -1,3 +1,41 @@
 <resources>
     <string name="app_name">HappyBankbook</string>
+
+    <string name="previous">이전 화면</string>
+    <string name="search">검색하기</string>
+    <string name="filter">조건 검색하기</string>
+    <string name="date">기록일</string>
+    <string name="content">기록 내용</string>
+    <string name="deposit">맡기신 금액</string>
+    <string name="sum">총 금액</string>
+
+    <string name="condition">검색 조건 설정</string>
+    <string name="duration">조회 기간</string>
+    <string name="sort">정렬</string>
+    <string name="newest">최신순</string>
+    <string name="oldest">과거순</string>
+    <string name="count">개수</string>
+
+    <string name="picture">사진 추가</string>
+    <string name="save">저장하기</string>
+    <string name="howHappy">얼마나 행복하셨습니까?</string>
+    <string name="OK">확인</string>
+
+    <string name="manual">사용 방법</string>
+    <string name="single">한 줄 보기</string>
+    <string name="multiple">두 줄 보기</string>
+    <string name="ellipsis">줄임표 표시</string>
+    <string name="font">글자 크기</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="export">내보내기</string>
+    <string name="pdf">pdf</string>
+    <string name="excel">excel</string>
+    <string name="txt">txt</string>
+    <string name="openSource">오픈 소스</string>
+    
+    <string name="list">메모 내역</string>
+    <string name="add">추가하기</string>
+    <string name="setting">설정</string>
 </resources>
