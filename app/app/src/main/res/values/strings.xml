@@ -34,8 +34,11 @@
     <string name="excel">excel</string>
     <string name="txt">txt</string>
     <string name="openSource">오픈 소스</string>
-    
+
     <string name="list">메모 내역</string>
     <string name="add">추가하기</string>
     <string name="setting">설정</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
