@@ -3,12 +3,80 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MemoFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="fragment2" />
+        android:layout_marginBottom="56dp"
+        android:background="@color/cream">
+
+        <TextView
+            android:id="@+id/previous"
+            android:text="@string/previous"
+            android:layout_marginTop="40dp"
+            style="@style/defaultFont"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/addPicture"
+           />
+
+        <TextView
+            android:id="@+id/addPicture"
+            android:text="@string/picture"
+            android:layout_marginTop="40dp"
+            style="@style/defaultFont"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/previous"
+            app:layout_constraintRight_toLeftOf="@id/save"/>
+
+        <TextView
+            android:id="@+id/save"
+            android:text="@string/save"
+            android:layout_marginTop="40dp"
+            style="@style/defaultFont"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/addPicture"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <View
+            android:id="@+id/memoView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/memo_writing"
+            app:layout_constraintTop_toBottomOf="@id/addPicture"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/txtDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:text="@string/memoDate"
+            android:textSize="32sp"
+            app:layout_constraintTop_toTopOf="@id/memoView"
+            app:layout_constraintRight_toRightOf="@id/memoView"
+            app:layout_constraintLeft_toLeftOf="@id/memoView"/>
+
+
+        <EditText
+            android:id="@+id/editMemo"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_margin="40dp"
+            android:gravity="center"
+            android:background="@color/white"
+            android:hint="@string/memo"
+            android:inputType="textMultiLine"
+            app:layout_constraintTop_toBottomOf="@id/txtDate"
+            app:layout_constraintBottom_toBottomOf="@id/memoView"
+            app:layout_constraintStart_toStartOf="@id/memoView"
+            app:layout_constraintEnd_toEndOf="@id/memoView"
+           />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
