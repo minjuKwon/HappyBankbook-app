@@ -21,9 +21,7 @@
             style="@style/setting_view.font.green"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/radioLineDisplay"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             />
 
@@ -33,9 +31,7 @@
             style="@style/setting_view.cream"
             app:layout_constraintTop_toBottomOf="@id/manual"
             app:layout_constraintBottom_toTopOf="@id/ellipsis"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
             <RadioButton
@@ -61,9 +57,7 @@
             style="@style/setting_view.font.green"
             app:layout_constraintTop_toBottomOf="@id/radioLineDisplay"
             app:layout_constraintBottom_toTopOf="@id/radioFont"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             />
 
@@ -73,9 +67,7 @@
             style="@style/setting_view.cream"
             app:layout_constraintTop_toBottomOf="@id/ellipsis"
             app:layout_constraintBottom_toTopOf="@id/export"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
@@ -115,9 +107,7 @@
             style="@style/setting_view.font.green"
             app:layout_constraintTop_toBottomOf="@id/radioFont"
             app:layout_constraintBottom_toTopOf="@id/openSource"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             />
         <TextView
@@ -128,9 +118,7 @@
             style="@style/setting_view.font.green"
             app:layout_constraintTop_toBottomOf="@id/radioFont"
             app:layout_constraintBottom_toTopOf="@id/openSource"
-            app:layout_constraintLeft_toLeftOf="@id/export"
             app:layout_constraintStart_toStartOf="@id/export"
-            app:layout_constraintRight_toLeftOf="@id/excel"
             app:layout_constraintEnd_toStartOf="@id/excel"
             />
 
@@ -141,9 +129,7 @@
             style="@style/setting_view.font.green"
             app:layout_constraintTop_toBottomOf="@id/radioFont"
             app:layout_constraintBottom_toTopOf="@id/openSource"
-            app:layout_constraintLeft_toRightOf="@id/pdf"
             app:layout_constraintStart_toEndOf="@id/pdf"
-            app:layout_constraintRight_toLeftOf="@id/txt"
             app:layout_constraintEnd_toStartOf="@id/txt"
              />
 
@@ -154,9 +140,7 @@
             style="@style/setting_view.font.green"
             app:layout_constraintTop_toBottomOf="@id/radioFont"
             app:layout_constraintBottom_toTopOf="@id/openSource"
-            app:layout_constraintLeft_toRightOf="@id/excel"
             app:layout_constraintStart_toEndOf="@id/excel"
-            app:layout_constraintRight_toRightOf="@id/export"
             app:layout_constraintEnd_toEndOf="@id/export"
             />
 
@@ -166,9 +150,7 @@
             style="@style/setting_view.font.cream"
             app:layout_constraintTop_toBottomOf="@id/export"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             />
 
