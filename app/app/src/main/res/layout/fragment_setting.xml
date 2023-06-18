@@ -3,12 +3,175 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/cream"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".SettingFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="fragment3" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:layout_gravity="center_vertical"
+        android:background="@color/cream"
+        >
+
+        <TextView
+            android:id="@+id/manual"
+            android:text="@string/manual"
+            style="@style/setting_view.font.green"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/radioLineDisplay"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <RadioGroup
+            android:id="@+id/radioLineDisplay"
+            android:orientation="horizontal"
+            style="@style/setting_view.cream"
+            app:layout_constraintTop_toBottomOf="@id/manual"
+            app:layout_constraintBottom_toTopOf="@id/ellipsis"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <RadioButton
+                android:id="@+id/radioLineSingle"
+                android:layout_width="wrap_content"
+                android:button="@null"
+                android:text="@string/single"
+                android:textColor="@drawable/radio_selector"
+                style="@style/setting_view.font"/>
+
+            <RadioButton
+                android:id="@+id/radioLineMul"
+                android:layout_width="wrap_content"
+                android:button="@null"
+                android:text="@string/multiple"
+                android:textColor="@drawable/radio_selector"
+                style="@style/setting_view.font"/>
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/ellipsis"
+            android:text="@string/ellipsis"
+            style="@style/setting_view.font.green"
+            app:layout_constraintTop_toBottomOf="@id/radioLineDisplay"
+            app:layout_constraintBottom_toTopOf="@id/radioFont"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <RadioGroup
+            android:id="@+id/radioFont"
+            android:orientation="horizontal"
+            style="@style/setting_view.cream"
+            app:layout_constraintTop_toBottomOf="@id/ellipsis"
+            app:layout_constraintBottom_toTopOf="@id/export"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/radioFontSize"
+                android:layout_width="wrap_content"
+                android:text="@string/font"
+                style="@style/setting_view.font"/>
+
+            <RadioButton
+                android:id="@+id/radioFontOne"
+                android:layout_width="wrap_content"
+                android:button="@null"
+                android:text="@string/one"
+                android:textColor="@drawable/radio_selector"
+                style="@style/setting_view.font"/>
+
+            <RadioButton
+                android:id="@+id/radioEllipsisTwo"
+                android:layout_width="wrap_content"
+                android:button="@null"
+                android:text="@string/two"
+                android:textColor="@drawable/radio_selector"
+                style="@style/setting_view.font"/>
+
+            <RadioButton
+                android:id="@+id/radioEllipsisThree"
+                android:layout_width="wrap_content"
+                android:button="@null"
+                android:text="@string/three"
+                android:textColor="@drawable/radio_selector"
+                style="@style/setting_view.font"/>
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/export"
+            android:text="@string/export"
+            style="@style/setting_view.font.green"
+            app:layout_constraintTop_toBottomOf="@id/radioFont"
+            app:layout_constraintBottom_toTopOf="@id/openSource"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+        <TextView
+            android:id="@+id/pdf"
+            android:layout_width="wrap_content"
+            android:text="@string/pdf"
+            android:layout_marginStart="100dp"
+            style="@style/setting_view.font.green"
+            app:layout_constraintTop_toBottomOf="@id/radioFont"
+            app:layout_constraintBottom_toTopOf="@id/openSource"
+            app:layout_constraintLeft_toLeftOf="@id/export"
+            app:layout_constraintStart_toStartOf="@id/export"
+            app:layout_constraintRight_toLeftOf="@id/excel"
+            app:layout_constraintEnd_toStartOf="@id/excel"
+            />
+
+        <TextView
+            android:id="@+id/excel"
+            android:layout_width="wrap_content"
+            android:text="@string/excel"
+            style="@style/setting_view.font.green"
+            app:layout_constraintTop_toBottomOf="@id/radioFont"
+            app:layout_constraintBottom_toTopOf="@id/openSource"
+            app:layout_constraintLeft_toRightOf="@id/pdf"
+            app:layout_constraintStart_toEndOf="@id/pdf"
+            app:layout_constraintRight_toLeftOf="@id/txt"
+            app:layout_constraintEnd_toStartOf="@id/txt"
+             />
+
+        <TextView
+            android:id="@+id/txt"
+            android:layout_width="wrap_content"
+            android:text="@string/txt"
+            style="@style/setting_view.font.green"
+            app:layout_constraintTop_toBottomOf="@id/radioFont"
+            app:layout_constraintBottom_toTopOf="@id/openSource"
+            app:layout_constraintLeft_toRightOf="@id/excel"
+            app:layout_constraintStart_toEndOf="@id/excel"
+            app:layout_constraintRight_toRightOf="@id/export"
+            app:layout_constraintEnd_toEndOf="@id/export"
+            />
+
+        <TextView
+            android:id="@+id/openSource"
+            android:text="@string/openSource"
+            style="@style/setting_view.font.cream"
+            app:layout_constraintTop_toBottomOf="@id/export"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

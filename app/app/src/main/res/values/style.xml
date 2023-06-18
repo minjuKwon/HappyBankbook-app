@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="BottomNavigationView">
         <item name="colorSecondaryContainer">@color/green</item>
     </style>
+
+    <style name="setting_view" >
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">start</item>
+        <item name="layout_constraintWidth_percent">0.8</item>
+    </style>
+
+    <style name="setting_view.green" >
+        <item name="android:background">@color/green</item>
+    </style>
+
+    <style name="setting_view.cream" >
+        <item name="android:background">@color/cream</item>
+    </style>
+
+    <style name="setting_view.font">
+        <item name="android:layout_weight">1</item>
+        <item name="android:padding">18dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="setting_view.font.green" >
+        <item name="android:background">@color/green</item>
+    </style>
+
+
+    <style name="setting_view.font.cream" >
+        <item name="android:background">@color/cream</item>
+    </style>
+
 </resources>
