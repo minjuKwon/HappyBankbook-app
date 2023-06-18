@@ -23,6 +23,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/main_bottom_menu"
         app:itemBackground="@drawable/item_selector"
+        app:itemTextAppearanceActive="@style/defaultFont"
+        app:itemTextAppearanceInactive="@style/defaultFont"
       />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
