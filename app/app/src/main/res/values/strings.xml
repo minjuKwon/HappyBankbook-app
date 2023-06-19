@@ -6,7 +6,7 @@
     <string name="filter">조건 검색하기</string>
     <string name="date">기록일</string>
     <string name="content">기록 내용</string>
-    <string name="deposit">맡기신 금액</string>
+    <string name="deposit">금액</string>
     <string name="sum">총 금액</string>
 
     <string name="condition">검색 조건 설정</string>
