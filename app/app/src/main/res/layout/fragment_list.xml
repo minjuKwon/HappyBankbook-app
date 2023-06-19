@@ -3,12 +3,73 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="fragment1" />
+        android:background="@color/cream">
+
+        <TextView
+            android:id="@+id/txtSearch"
+            android:text="@string/search"
+            android:layout_margin="20dp"
+            style="@style/defaultFont"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/txtCondition"
+            android:text="@string/condition"
+            android:layout_margin="20dp"
+            style="@style/defaultFont"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <TableRow
+            android:id="@+id/tableRowMemo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/txtCondition">
+
+            <TextView
+                android:id="@+id/txtDate"
+                android:text="@string/date"
+                android:layout_weight="1"
+                style="@style/memo_list"/>
+
+            <TextView
+                android:id="@+id/txtContent"
+                android:text="@string/content"
+                android:layout_weight="3"
+                style="@style/memo_list"/>
+
+            <TextView
+                android:id="@+id/txtDeposit"
+                android:layout_weight="1"
+                android:text="@string/deposit"
+                style="@style/memo_list"/>
+
+            <TextView
+                android:id="@+id/txtSum"
+                android:text="@string/sum"
+                android:layout_weight="1"
+                android:background="@drawable/memo_tab2_background"
+                style="@style/memo_list"/>
+
+        </TableRow>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerMemo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tableRowMemo"
+            tools:layout_editor_absoluteX="-55dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

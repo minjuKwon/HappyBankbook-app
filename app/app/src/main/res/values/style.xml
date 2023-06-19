@@ -5,6 +5,15 @@
         <item name="colorSecondaryContainer">@color/green</item>
     </style>
 
+    <style name="memo_list">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:background">@drawable/memo_tab_background</item>
+    </style>
+
     <style name="defaultFont">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
