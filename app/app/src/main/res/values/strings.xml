@@ -21,6 +21,7 @@
     <string name="memoDate">2023.06.11</string>
     <string name="memo">사소한 행복을 기록해 보세요</string>
     <string name="howHappy">얼마나 행복하셨습니까?</string>
+    <string name="cancel">취소</string>
     <string name="OK">확인</string>
 
     <string name="manual">사용 방법</string>
