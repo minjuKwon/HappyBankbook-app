@@ -23,6 +23,7 @@
 
     <style name="defaultFont.click">
         <item name="android:minHeight">48dp</item>
+        <item name="android:minWidth">48dp</item>
         <item name="android:gravity">center</item>
         <item name="android:clickable">true</item>
         <item name="android:background">@drawable/item_pressed</item>
@@ -62,7 +63,7 @@
         <item name="colorPrimary">@color/green</item>
         <item name="colorPrimaryDark">@color/green</item>
         <item name="colorAccent">@color/green</item>
-        <item name="android:buttonBarPositiveButtonStyle">@style/Widget.MaterialComponents.Button</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
         <item name="android:buttonBarNegativeButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
     </style>
     
