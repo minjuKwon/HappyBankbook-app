@@ -49,14 +49,16 @@
             android:id="@+id/txtDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/date_text"
+            android:clickable="true"
             android:minHeight="48dp"
-            android:layout_marginTop="35dp"
             android:text="@string/memoDate"
             android:textSize="32sp"
-            android:clickable="true"
-            app:layout_constraintTop_toTopOf="@id/memoView"
+            app:layout_constraintEnd_toEndOf="@id/memoView"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="@id/memoView"
-            app:layout_constraintEnd_toEndOf="@id/memoView" />
+            app:layout_constraintTop_toTopOf="@id/memoView" />
 
         <ImageView
             android:id="@+id/imageView"
@@ -75,7 +77,7 @@
             android:id="@+id/editMemo"
             android:layout_width="350dp"
             android:layout_height="220dp"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:background="@color/white"
             android:inputType="textMultiLine"
             android:hint="@string/memo"
