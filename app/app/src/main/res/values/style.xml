@@ -53,10 +53,17 @@
     <style name="setting_view.font.green" >
         <item name="android:background">@color/green</item>
     </style>
-
-
+    
     <style name="setting_view.font.cream" >
         <item name="android:background">@color/cream</item>
     </style>
 
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/green</item>
+        <item name="colorPrimaryDark">@color/green</item>
+        <item name="colorAccent">@color/green</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/Widget.MaterialComponents.Button</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
+    </style>
+    
 </resources>
