@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <TableRow
+        android:id="@+id/tableRowMemo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/txtNumber"
+            android:layout_weight="0.5"
+            style="@style/memo_list.green"/>
+
+        <TextView
+            android:id="@+id/inputTxtDate"
+            android:layout_weight="0.5"
+            style="@style/memo_list.green"/>
+
+        <TextView
+            android:id="@+id/inputTxtContent"
+            android:layout_weight="3"
+            style="@style/memo_list.green"/>
+
+        <TextView
+            android:id="@+id/inputTxtDeposit"
+            android:layout_weight="1"
+            style="@style/memo_list.green"/>
+
+        <TextView
+            android:id="@+id/inputTxtSum"
+            android:layout_weight="1"
+            android:background="@drawable/memo_list_background_green2"
+            style="@style/memo_list.green"/>
+
+        </TableRow>
+
+</TableLayout>
