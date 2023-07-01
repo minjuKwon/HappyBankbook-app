@@ -3,6 +3,7 @@ package com.example.happybankbook;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -34,25 +35,33 @@ public class MainActivity extends AppCompatActivity {
         memoFragment=new MemoFragment();
         settingFragment=new SettingFragment();
 
+        navigation();
+    }
+
+    public void navigation(){
         getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,listFragment).commit();
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                   if(item.getItemId()== R.id.mainMenu){
-                       getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,listFragment).commit();
-                       return true;
-                   }
-                   else if(item.getItemId()==R.id.addMenu){
-                       getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,memoFragment).commit();
-                       return true;
-                   }
-                   else if(item.getItemId()==R.id.settingMenu){
-                       getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,settingFragment).commit();
-                       return true;
-                   }
+                if(item.getItemId()== R.id.mainMenu){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,listFragment).commit();
+                    return true;
+                }
+                else if(item.getItemId()==R.id.addMenu){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,memoFragment).commit();
+                    return true;
+                }
+                else if(item.getItemId()==R.id.settingMenu){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,settingFragment).commit();
+                    return true;
+                }
                 return false;
             }
         });
+    }
+
+    public void replaceFragment(Fragment fragment){
+        getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,fragment).commit();
     }
 
 }
