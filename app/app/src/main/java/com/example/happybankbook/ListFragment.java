@@ -38,7 +38,7 @@ public class ListFragment extends Fragment implements View.OnClickListener{
         if(v.getId()==R.id.txtSearch){
             ((MainActivity)getActivity()).replaceFragment(new SearchFragment());
         }else if(v.getId()==R.id.txtCondition){
-
+            ((MainActivity)getActivity()).addFragment(new ConditionFragment());
         }
     }
 
