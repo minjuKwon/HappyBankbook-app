@@ -72,8 +72,22 @@
         <item name="colorPrimary">@color/green</item>
         <item name="colorPrimaryDark">@color/green</item>
         <item name="colorAccent">@color/green</item>
-        <item name="android:buttonBarPositiveButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
-        <item name="android:buttonBarNegativeButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/DialogTextTheme</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/DialogTextTheme</item>
+    </style>
+    
+    <style name="DialogTextTheme" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/black</item>
+    </style>
+    
+    <style name="duration">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_margin">30dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@color/brightGreen</item>
+        <item name="android:clickable">true</item>
     </style>
     
 </resources>
