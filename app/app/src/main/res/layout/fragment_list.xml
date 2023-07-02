@@ -15,7 +15,7 @@
             android:id="@+id/txtSearch"
             android:text="@string/search"
             android:layout_margin="20dp"
-            style="@style/defaultFont"
+            style="@style/defaultFont.click"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             />
@@ -24,7 +24,7 @@
             android:id="@+id/txtCondition"
             android:text="@string/condition"
             android:layout_margin="20dp"
-            style="@style/defaultFont"
+            style="@style/defaultFont.click"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             />
