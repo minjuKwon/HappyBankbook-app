@@ -52,10 +52,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd");
-        Date date=new Date();
-        txtDate.setText(dateFormat.format(date));
-
+        ((MainActivity)getActivity()).setNowDate(txtDate);
         getGallery();
     }
 
@@ -73,7 +70,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
     }
 
-    public void init(View view){
+    private void init(View view){
         txtDate=view.findViewById(R.id.txtDate);
         txtAddPicture=view.findViewById(R.id.addPicture);
         txtSave=view.findViewById(R.id.save);
@@ -87,30 +84,12 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
        if(v.getId()==R.id.txtDate){
-           setDate();
+           ((MainActivity)getActivity()).setDate(txtDate,getContext());
        }else if(v.getId()==R.id.addPicture){
            loadImage();
        }else if(v.getId()==R.id.save){
            save();
        }
-    }
-
-    public void setDate(){
-
-        DatePickerDialog.OnDateSetListener calendarListener=new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                txtDate.setText(String.format("%d.%d.%d",year,month+1,dayOfMonth));
-            }
-        };
-
-        Calendar calendar=Calendar.getInstance();
-        int year=calendar.get(Calendar.YEAR);
-        int month=calendar.get(Calendar.MONTH);
-        int day=calendar.get(Calendar.DAY_OF_MONTH);
-
-        new DatePickerDialog(getContext(),R.style.DialogTheme,calendarListener,year,month,day).show();
-
     }
 
     public void loadImage(){
