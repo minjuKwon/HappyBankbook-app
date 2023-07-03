@@ -75,6 +75,10 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.mainLayout,fragment).commit();
     }
 
+    public void removeFragment(Fragment fragment){
+        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+    }
+
     public void setNowDate(TextView textView){
         SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd");
         Date date=new Date();
