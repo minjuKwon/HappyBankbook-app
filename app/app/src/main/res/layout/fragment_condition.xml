@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|center_horizontal"
+    android:background="@drawable/condition_dialog"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ConditionFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="85dp">
+
+        <TextView
+            android:id="@+id/condition"
+            android:layout_margin="20dp"
+            android:text="@string/condition"
+            style="@style/defaultFont"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="20dp"
+            android:clickable="true"
+            android:src="@drawable/baseline_close_24"
+            android:contentDescription="@string/previous"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/duration"
+            android:layout_margin="30dp"
+            android:text="@string/duration"
+            style="@style/defaultFont"
+            app:layout_constraintTop_toBottomOf="@id/condition"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/toDuration"
+            android:text="@string/memoDate"
+            android:clickable="true"
+            style="@style/duration"
+            app:layout_constraintTop_toBottomOf="@id/duration"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/fromDuration"
+            app:layout_constraintHorizontal_weight="1"
+            />
+
+        <TextView
+            android:id="@+id/fromDuration"
+            android:text="@string/memoDate"
+            android:clickable="true"
+            style="@style/duration"
+            app:layout_constraintTop_toBottomOf="@id/duration"
+            app:layout_constraintStart_toEndOf="@id/toDuration"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            />
+
+        <TextView
+            android:id="@+id/sort"
+            android:layout_margin="30dp"
+            android:text="@string/sort"
+            style="@style/defaultFont"
+            app:layout_constraintTop_toBottomOf="@id/toDuration"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <RadioGroup
+            android:id="@+id/radioGroupSort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/sort">
+            <RadioButton
+                android:id="@+id/radioNewest"
+                android:text="@string/newest"
+                android:background="@color/green"
+                style="@style/defaultFont.radio"
+                />
+
+            <RadioButton
+                android:id="@+id/radioOldest"
+                android:text="@string/oldest"
+                android:background="@drawable/memo_writing"
+                style="@style/defaultFont.radio"/>
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/textCount"
+            android:layout_margin="30dp"
+            android:text="@string/count"
+            style="@style/defaultFont"
+            app:layout_constraintTop_toBottomOf="@id/radioGroupSort"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/editCount"
+            />
+
+        <EditText
+            android:id="@+id/editCount"
+            android:layout_width="290dp"
+            android:layout_height="48dp"
+            android:layout_margin="20dp"
+            android:clickable="true"
+            android:background="@color/brightGreen"
+            android:inputType="number"
+            android:importantForAutofill="no"
+            android:importantForAccessibility="no"
+            app:layout_constraintTop_toBottomOf="@id/radioGroupSort"
+            app:layout_constraintStart_toEndOf="@id/textCount"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonSubmit"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="25dp"
+            android:background="@color/green"
+            android:text="@string/search"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/editCount"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
