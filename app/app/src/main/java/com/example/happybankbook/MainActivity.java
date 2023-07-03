@@ -5,12 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.DatePicker;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -66,6 +73,30 @@ public class MainActivity extends AppCompatActivity {
 
     public void addFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction().add(R.id.mainLayout,fragment).commit();
+    }
+
+    public void setNowDate(TextView textView){
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd");
+        Date date=new Date();
+        textView.setText(dateFormat.format(date));
+    }
+
+    public void setDate(TextView textview, Context context){
+
+        DatePickerDialog.OnDateSetListener calendarListener=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                textview.setText(String.format("%d.%d.%d",year,month+1,dayOfMonth));
+            }
+        };
+
+        Calendar calendar=Calendar.getInstance();
+        int year=calendar.get(Calendar.YEAR);
+        int month=calendar.get(Calendar.MONTH);
+        int day=calendar.get(Calendar.DAY_OF_MONTH);
+
+        new DatePickerDialog(context,R.style.DialogTheme,calendarListener,year,month,day).show();
+
     }
 
 }
