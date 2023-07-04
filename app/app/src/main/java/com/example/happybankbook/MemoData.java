@@ -1,5 +1,7 @@
 package com.example.happybankbook;
 
+import android.graphics.Bitmap;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -12,13 +14,12 @@ public class MemoData {
     @NonNull
     public int idx=1;
 
-    public int price=0;
+    public int date;
 
-    @ColumnInfo(name="total_price")
-    public int totalPrice;
+    public int price=0;
 
     public String content;
 
-    public String date;
+    public Bitmap image;
 
 }
