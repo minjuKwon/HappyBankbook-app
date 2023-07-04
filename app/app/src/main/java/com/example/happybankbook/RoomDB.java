@@ -5,8 +5,10 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 @Database(entities ={MemoData.class},version = 1)
+@TypeConverters(com.example.happybankbook.Converters.class)
 public abstract class RoomDB extends RoomDatabase {
     
     private static RoomDB database;
