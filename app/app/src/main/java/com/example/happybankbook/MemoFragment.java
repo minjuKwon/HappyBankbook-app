@@ -1,11 +1,17 @@
 package com.example.happybankbook;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+
+import static java.lang.Thread.sleep;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -16,11 +22,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import android.text.Layout;
+import android.util.Log;
+import android.view.ActionProvider;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,8 +51,9 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     private TextView txtAddPicture;
     private TextView txtSave;
     private ImageView img;
-
-    ActivityResultLauncher<Intent> activityResultLauncher;
+    private EditText editContent;
+    private ActivityResultLauncher<Intent> activityResultLauncher;
+    private MemoPresenter presenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,9 +66,15 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         ((MainActivity)getActivity()).setNowDate(txtDate);
         getGallery();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        editContent.setText("");
     }
 
     public void getGallery(){
@@ -75,6 +96,9 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         txtAddPicture=view.findViewById(R.id.addPicture);
         txtSave=view.findViewById(R.id.save);
         img=view.findViewById(R.id.imageView);
+        editContent=view.findViewById(R.id.editMemo);
+
+        presenter=new MemoPresenter();
 
         txtDate.setOnClickListener(this);
         txtAddPicture.setOnClickListener(this);
@@ -108,10 +132,32 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         TextView txtOk=dialog.findViewById(R.id.ok);
         TextView txtCancel=dialog.findViewById(R.id.cancel);
 
+        String [] strDate=txtDate.getText().toString().split("\\.");
+        int intDate=Integer.parseInt(strDate[0]+strDate[1]+strDate[2]);
+
+        String content=editContent.getText().toString();
+
+        EditText editHappy=dialog.findViewById(R.id.editHappy);
+
+        MemoData data=new MemoData();
+        data.setDate(intDate);
+        data.setContent(content);
+
+        if(img.getVisibility()==View.VISIBLE){
+            BitmapDrawable drawable = (BitmapDrawable)img.getDrawable();
+            Bitmap bitmap = drawable.getBitmap();
+            data.setBitmap(bitmap);
+        }
+
         txtOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int price=Integer.parseInt(editHappy.getText().toString().trim());
+                data.setPrice(price);
 
+                presenter.insertMemo(RoomDB.getInstance(getContext()).memoDao(),data);
+                dialog.dismiss();
+                ((MainActivity)getActivity()).navigation(R.id.mainMenu);
             }
         });
         txtCancel.setOnClickListener(new View.OnClickListener() {

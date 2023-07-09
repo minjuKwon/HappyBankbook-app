@@ -66,6 +66,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    public void navigation(int id){
+        if(id== R.id.mainMenu){
+            navigationView.setSelectedItemId(id);
+            getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,listFragment).commit();
+        }
+        else if(id==R.id.addMenu){
+            navigationView.setSelectedItemId(id);
+            getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,memoFragment).commit();
+        }
+        else if(id==R.id.settingMenu){
+            navigationView.setSelectedItemId(id);
+            getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,settingFragment).commit();
+        }
+    }
 
     public void replaceFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,fragment).commit();

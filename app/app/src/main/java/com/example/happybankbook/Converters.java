@@ -12,7 +12,9 @@ public class Converters {
     @TypeConverter
     public static byte[] fromBitmap(Bitmap bitmap){
         ByteArrayOutputStream outputStream=new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream);
+        if(bitmap!=null){
+            bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream);
+        }
         return outputStream.toByteArray();
     }
 

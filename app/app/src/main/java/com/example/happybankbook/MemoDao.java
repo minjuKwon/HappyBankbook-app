@@ -10,7 +10,7 @@ import java.util.List;
 public interface MemoDao {
 
     @Insert
-    void insertMemo(MemoData memo);
+    void insert(MemoData memo);
 
     @Query("SELECT * FROM MemoData_table WHERE content LIKE '%' || :keyword || '%'")
     List<MemoData> searchKeyword(String keyword);

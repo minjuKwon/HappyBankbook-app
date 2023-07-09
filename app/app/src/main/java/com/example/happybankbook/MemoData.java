@@ -12,7 +12,7 @@ public class MemoData {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    public int idx=1;
+    public int idx;
 
     public int date;
 
@@ -21,5 +21,10 @@ public class MemoData {
     public String content;
 
     public Bitmap image;
+
+    public void setDate(int date){this.date=date;}
+    public void setPrice(int price){this.price=price;}
+    public void setContent(String content){this.content=content;}
+    public void setBitmap(Bitmap image){this.image=image;}
 
 }
