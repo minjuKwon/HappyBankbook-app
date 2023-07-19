@@ -6,11 +6,16 @@ import androidx.room.Query;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
+
 @Dao
 public interface MemoDao {
 
     @Insert
     void insert(MemoData memo);
+
+    @Query("SELECT * FROM MemoData_table")
+    Flowable<List<MemoData>> getAll();
 
     @Query("SELECT * FROM MemoData_table WHERE content LIKE '%' || :keyword || '%'")
     List<MemoData> searchKeyword(String keyword);
