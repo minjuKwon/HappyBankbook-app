@@ -4,5 +4,6 @@ public interface MemoContract {
 
     interface Presenter{
         void insertMemo(MemoDao memoDao, MemoData memoData);
+        void releaseView();
     }
 }

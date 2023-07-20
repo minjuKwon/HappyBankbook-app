@@ -77,6 +77,12 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         editContent.setText("");
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.releaseView();
+    }
+
     public void getGallery(){
 
         activityResultLauncher=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result -> {
