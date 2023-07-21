@@ -39,27 +39,20 @@
             <TextView
                 android:id="@+id/txtDate"
                 android:text="@string/date"
-                android:layout_weight="1"
-                style="@style/memo_list.green"/>
+                android:layout_weight="2"
+                style="@style/memo_list.title"/>
 
             <TextView
                 android:id="@+id/txtContent"
                 android:text="@string/content"
                 android:layout_weight="3"
-                style="@style/memo_list.green"/>
+                style="@style/memo_list.title"/>
 
             <TextView
                 android:id="@+id/txtDeposit"
                 android:layout_weight="1"
                 android:text="@string/deposit"
-                style="@style/memo_list.green"/>
-
-            <TextView
-                android:id="@+id/txtSum"
-                android:text="@string/sum"
-                android:layout_weight="1"
-                android:background="@drawable/memo_list_background_green2"
-                style="@style/memo_list.green"/>
+                style="@style/memo_list.title"/>
 
         </TableRow>
 
