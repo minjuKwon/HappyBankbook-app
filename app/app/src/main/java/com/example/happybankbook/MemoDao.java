@@ -14,7 +14,7 @@ public interface MemoDao {
     @Insert
     void insert(MemoData memo);
 
-    @Query("SELECT * FROM MemoData_table")
+    @Query("SELECT * FROM MemoData_table ORDER BY idx DESC")
     Flowable<List<MemoData>> getAll();
 
     @Query("SELECT * FROM MemoData_table WHERE content LIKE '%' || :keyword || '%'")
@@ -26,10 +26,10 @@ public interface MemoDao {
     @Query("SELECT * FROM MemoData_table LIMIT :cnt")
     List<MemoData> searchCount(int cnt);
 
-    @Query("SELECT * FROM MemoData_table ORDER BY date ASC")
+    @Query("SELECT * FROM MemoData_table ORDER BY idx ASC")
     List<MemoData> sortDateAsc();
 
-    @Query("SELECT * FROM MemoData_table ORDER BY date DESC")
+    @Query("SELECT * FROM MemoData_table ORDER BY idx DESC")
     List<MemoData> sortDateDesc();
 
 }
