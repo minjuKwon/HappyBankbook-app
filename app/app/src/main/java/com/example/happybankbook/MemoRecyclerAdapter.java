@@ -2,6 +2,7 @@ package com.example.happybankbook;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,14 +20,13 @@ public class MemoRecyclerAdapter extends RecyclerView.Adapter<MemoRecyclerAdapte
     private List<MemoData> dataList=new ArrayList<>();
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView txtIdx,txtDate,txtContent,txtPrice,txtSum;
+        TextView txtIdx,txtDate,txtContent,txtPrice;
         public ViewHolder(View view){
             super(view);
             txtIdx=view.findViewById(R.id.txtNumber);
             txtDate=view.findViewById(R.id.inputTxtDate);
             txtContent=view.findViewById(R.id.inputTxtContent);
             txtPrice=view.findViewById(R.id.inputTxtDeposit);
-            txtSum=view.findViewById(R.id.inputTxtSum);
         }
     }
 
@@ -42,9 +42,21 @@ public class MemoRecyclerAdapter extends RecyclerView.Adapter<MemoRecyclerAdapte
         MemoData data=dataList.get(holder.getAdapterPosition());
 
         holder.txtIdx.setText(Integer.toString(data.getIdx()));
-        holder.txtDate.setText(Integer.toString(data.getDate()));
+        holder.txtDate.setText(Long.toString(data.getDate()).substring(2));
         holder.txtContent.setText(data.getContent());
         holder.txtPrice.setText(Integer.toString(data.getPrice()));
+
+        if(position%2==0){
+            holder.txtIdx.setBackgroundResource(R.drawable.memo_list_content_background_cream);
+            holder.txtDate.setBackgroundResource(R.drawable.memo_list_content_background_cream);
+            holder.txtContent.setBackgroundResource(R.drawable.memo_list_content_background_cream);
+            holder.txtPrice.setBackgroundResource(R.color.cream);
+        }else{
+            holder.txtIdx.setBackgroundResource(R.drawable.memo_list_content_background_green);
+            holder.txtDate.setBackgroundResource(R.drawable.memo_list_content_background_green);
+            holder.txtContent.setBackgroundResource(R.drawable.memo_list_content_background_green);
+            holder.txtPrice.setBackgroundResource(R.color.green);
+        }
     }
 
     @Override
