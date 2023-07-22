@@ -52,8 +52,8 @@
                 android:id="@+id/txtDeposit"
                 android:layout_weight="1"
                 android:text="@string/deposit"
-                style="@style/memo_list.title"/>
-
+                style="@style/memo_list.title"
+                android:background="@drawable/memo_list_title_background_green2"/>
         </TableRow>
 
         <androidx.recyclerview.widget.RecyclerView
