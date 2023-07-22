@@ -7,7 +7,7 @@
 
     <style name="memo_list">
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_height">70dp</item>
         <item name="android:padding">5dp</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">15sp</item>
@@ -15,15 +15,15 @@
 
     <style name="memo_list.title">
         <item name="android:layout_height">40dp</item>
-        <item name="android:background">@drawable/memo_list_background_green</item>
+        <item name="android:background">@drawable/memo_list_title_background_green</item>
     </style>
 
     <style name="memo_list.green">
-        <item name="android:background">@drawable/memo_list_background_green</item>
+        <item name="android:background">@drawable/memo_list_content_background_green</item>
     </style>
 
     <style name="memo_list.cream">
-        <item name="android:background">@drawable/memo_list_background_cream</item>
+        <item name="android:background">@drawable/memo_list_content_background_cream</item>
     </style>
 
     <style name="defaultFont">
