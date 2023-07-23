@@ -52,7 +52,7 @@ public class ListFragment extends Fragment implements View.OnClickListener,ListC
         txtCondition.setOnClickListener(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter=new MemoRecyclerAdapter();
+        adapter=new MemoRecyclerAdapter(getContext());
         recyclerView.setAdapter(adapter);
 
         presenter=new ListPresenter();

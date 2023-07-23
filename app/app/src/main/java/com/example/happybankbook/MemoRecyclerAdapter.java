@@ -1,23 +1,23 @@
 package com.example.happybankbook;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MemoRecyclerAdapter extends RecyclerView.Adapter<MemoRecyclerAdapter.ViewHolder> {
 
+    private Context context;
     private List<MemoData> dataList=new ArrayList<>();
+
+    MemoRecyclerAdapter(Context context){this.context=context;}
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView txtIdx,txtDate,txtContent,txtPrice;
@@ -44,6 +44,11 @@ public class MemoRecyclerAdapter extends RecyclerView.Adapter<MemoRecyclerAdapte
         holder.txtIdx.setText(Integer.toString(data.getIdx()));
         holder.txtDate.setText(Long.toString(data.getDate()).substring(2));
         holder.txtContent.setText(data.getContent());
+        if(data.getImage()!=null){
+            Drawable img=new BitmapDrawable(context.getResources(),data.getImage());
+            img.setBounds(0,0,100,100);
+            holder.txtContent.setCompoundDrawables(img,null,null,null);
+        }
         holder.txtPrice.setText(Integer.toString(data.getPrice()));
 
         if(position%2==0){
