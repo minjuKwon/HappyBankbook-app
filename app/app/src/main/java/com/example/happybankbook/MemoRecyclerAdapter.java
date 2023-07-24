@@ -69,6 +69,12 @@ public class MemoRecyclerAdapter extends RecyclerView.Adapter<MemoRecyclerAdapte
         return dataList.size();
     }
 
+    //데이터 꼬임 현상 막음
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     public void setItems(ArrayList<MemoData>data){
         this.dataList=data;
         notifyDataSetChanged();
