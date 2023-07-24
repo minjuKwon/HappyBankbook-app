@@ -121,7 +121,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonSubmit"
-            android:layout_width="340dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_margin="25dp"
             android:background="@color/green"
@@ -130,6 +130,20 @@
             android:textColor="@color/black"
             app:layout_constraintTop_toBottomOf="@id/editCount"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/buttonInit"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonInit"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="25dp"
+            android:background="@color/green"
+            android:text="@string/init"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/editCount"
+            app:layout_constraintStart_toEndOf="@id/buttonSubmit"
             app:layout_constraintEnd_toEndOf="parent"
             />
 
