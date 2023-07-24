@@ -1,15 +1,18 @@
-package com.example.happybankbook;
+package com.example.happybankbook.presenter;
+
+import com.example.happybankbook.contract.MemoContract;
+import com.example.happybankbook.db.MemoDao;
+import com.example.happybankbook.db.MemoData;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class MemoPresenter implements MemoContract.Presenter{
+public class MemoPresenter implements MemoContract.Presenter {
 
     private CompositeDisposable disposable;
 
-    MemoPresenter(){this.disposable=new CompositeDisposable();}
+    public MemoPresenter(){this.disposable=new CompositeDisposable();}
 
     @Override
     public void releaseView() {

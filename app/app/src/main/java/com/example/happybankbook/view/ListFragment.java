@@ -1,25 +1,27 @@
-package com.example.happybankbook;
+package com.example.happybankbook.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.happybankbook.MainActivity;
+import com.example.happybankbook.MemoRecyclerAdapter;
+import com.example.happybankbook.R;
+import com.example.happybankbook.contract.ListContract;
+import com.example.happybankbook.db.MemoData;
+import com.example.happybankbook.db.RoomDB;
+import com.example.happybankbook.presenter.ListPresenter;
 
-public class ListFragment extends Fragment implements View.OnClickListener,ListContract.View{
+import java.util.ArrayList;
+
+public class ListFragment extends Fragment implements View.OnClickListener, ListContract.View{
 
     private TextView txtSearch;
     private TextView txtCondition;

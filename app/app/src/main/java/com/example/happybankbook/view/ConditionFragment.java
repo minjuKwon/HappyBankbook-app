@@ -1,4 +1,4 @@
-package com.example.happybankbook;
+package com.example.happybankbook.view;
 
 import android.os.Bundle;
 
@@ -15,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.example.happybankbook.MainActivity;
+import com.example.happybankbook.R;
 
 public class ConditionFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
@@ -57,6 +60,8 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
 
        radioNew.setChecked(true);
        radioGroupSort.setOnCheckedChangeListener(this);
+
+       submit.setOnClickListener(this);
     }
 
     @Override
@@ -67,7 +72,13 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
             ((MainActivity)getActivity()).setDate(txtToDuration,getContext());
         }else if(v.getId()==R.id.fromDuration){
             ((MainActivity)getActivity()).setDate(txtFromDuration,getContext());
+        }else if(v.getId()==R.id.buttonSubmit){
+            submit();
         }
+    }
+
+    public void submit(){
+
     }
 
     @Override

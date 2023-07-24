@@ -1,4 +1,7 @@
-package com.example.happybankbook;
+package com.example.happybankbook.contract;
+
+import com.example.happybankbook.db.MemoDao;
+import com.example.happybankbook.db.MemoData;
 
 public interface MemoContract {
 

@@ -1,19 +1,20 @@
-package com.example.happybankbook;
+package com.example.happybankbook.presenter;
+
+import com.example.happybankbook.contract.ListContract;
+import com.example.happybankbook.db.MemoDao;
+import com.example.happybankbook.db.MemoData;
 
 import java.util.ArrayList;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class ListPresenter implements ListContract.Presenter{
+public class ListPresenter implements ListContract.Presenter {
 
     private ListContract.View view;
     private CompositeDisposable disposable;
 
-    ListPresenter(){this.disposable=new CompositeDisposable();}
+    public ListPresenter(){this.disposable=new CompositeDisposable();}
 
     public void setView(ListContract.View view) {
         this.view = view;

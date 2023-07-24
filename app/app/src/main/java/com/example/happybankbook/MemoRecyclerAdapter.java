@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.happybankbook.db.MemoData;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +20,7 @@ public class MemoRecyclerAdapter extends RecyclerView.Adapter<MemoRecyclerAdapte
     private Context context;
     private List<MemoData> dataList=new ArrayList<>();
 
-    MemoRecyclerAdapter(Context context){this.context=context;}
+    public MemoRecyclerAdapter(Context context){this.context=context;}
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView txtIdx,txtDate,txtContent,txtPrice;
