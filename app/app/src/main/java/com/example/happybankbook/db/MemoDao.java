@@ -18,7 +18,7 @@ public interface MemoDao {
     Flowable<List<MemoData>> getAll();
 
     @Query("SELECT * FROM MemoData_table WHERE content LIKE '%' || :keyword || '%'")
-    List<MemoData> searchKeyword(String keyword);
+    Flowable<List<MemoData>> searchKeyword(String keyword);
 
     @Query("SELECT * FROM MemoData_table WHERE date BETWEEN :from AND :to")
     List<MemoData> searchDuration(int from, int to);
