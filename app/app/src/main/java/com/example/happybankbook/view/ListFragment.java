@@ -26,15 +26,14 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     private TextView txtSearch;
     private TextView txtCondition;
     private RecyclerView recyclerView;
-    ListPresenter presenter;
-    MemoRecyclerAdapter adapter;
+    private ListPresenter presenter;
+    private MemoRecyclerAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
-
         init(view);
         return view;
     }
