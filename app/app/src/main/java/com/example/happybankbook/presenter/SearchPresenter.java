@@ -1,5 +1,7 @@
 package com.example.happybankbook.presenter;
 
+import android.util.Log;
+
 import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.contract.SearchContract;
 import com.example.happybankbook.db.MemoDao;
@@ -36,7 +38,8 @@ public class SearchPresenter implements SearchContract.Presenter {
                         .subscribe(
                                 item->{
                                     view.setItems((ArrayList<MemoData>)item);
-                                }
+                                }, throwable -> {
+                                    Log.d("Happy","search error");}
                         )
         );
     }
