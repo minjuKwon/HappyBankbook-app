@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -35,11 +36,11 @@ public class SearchPresenter implements SearchContract.Presenter {
         disposable.add(
                 memoDao.searchKeyword(keyword)
                         .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 item->{
                                     view.setItems((ArrayList<MemoData>)item);
-                                }, throwable -> {
-                                    Log.d("Happy","search error");}
+                                }
                         )
         );
     }

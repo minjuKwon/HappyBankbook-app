@@ -6,6 +6,7 @@ import com.example.happybankbook.db.MemoData;
 
 import java.util.ArrayList;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -30,6 +31,7 @@ public class ListPresenter implements ListContract.Presenter {
         disposable.add(
                 memoDao.getAll()
                         .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                             item->{
                                 view.setItems((ArrayList<MemoData>)item);
