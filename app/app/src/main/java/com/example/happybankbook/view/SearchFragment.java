@@ -74,7 +74,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     @Override
     public boolean onQueryTextChange(String newText) {
         presenter.getData(RoomDB.getInstance(getContext()).memoDao(),newText);
-        return false;
+        return true;
     }
 
     @Override
