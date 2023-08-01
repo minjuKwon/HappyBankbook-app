@@ -6,11 +6,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.MemoRecyclerAdapter;
@@ -53,6 +55,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         txtPrevious.setOnClickListener(this);
         searchView.setOnQueryTextListener(this);
 
+        searchView.setIconified(false);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter=new MemoRecyclerAdapter(getContext());
         recyclerView.setAdapter(adapter);
@@ -73,7 +77,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        presenter.getData(RoomDB.getInstance(getContext()).memoDao(),newText);
+        if(TextUtils.isEmpty(newText)){
+            adapter.clear();
+            recyclerView.removeAllViews();
+        }else{
+            presenter.getData(RoomDB.getInstance(getContext()).memoDao(),newText);
+        }
         return true;
     }
 

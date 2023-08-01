@@ -83,4 +83,8 @@ public class MemoRecyclerAdapter extends RecyclerView.Adapter<MemoRecyclerAdapte
         notifyDataSetChanged();
     }
 
+    public void clear(){
+        dataList.clear();
+    }
+
 }
