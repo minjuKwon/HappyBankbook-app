@@ -1,5 +1,6 @@
 package com.example.happybankbook.view;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +27,7 @@ import com.example.happybankbook.view.ListFragment;
 
 import java.util.ArrayList;
 
-public class SearchFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener, SearchContract.View {
+public class SearchFragment extends Fragment implements View.OnClickListener, View.OnFocusChangeListener,SearchView.OnQueryTextListener, SearchContract.View {
 
     private TextView txtPrevious;
     private SearchView searchView;
@@ -54,8 +56,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
         txtPrevious.setOnClickListener(this);
         searchView.setOnQueryTextListener(this);
+        searchView.setOnQueryTextFocusChangeListener(this);
 
         searchView.setIconified(false);
+        searchView.setFocusable(true);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter=new MemoRecyclerAdapter(getContext());
@@ -84,6 +88,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             presenter.getData(RoomDB.getInstance(getContext()).memoDao(),newText);
         }
         return true;
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if(hasFocus){
+            InputMethodManager imm=(InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(v.findFocus(),InputMethodManager.SHOW_IMPLICIT);
+        }
     }
 
     @Override
