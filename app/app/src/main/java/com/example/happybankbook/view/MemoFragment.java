@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -144,12 +145,26 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         txtOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int price=Integer.parseInt(editHappy.getText().toString().trim());
-                data.setPrice(price);
 
-                presenter.insertMemo(RoomDB.getInstance(getContext()).memoDao(),data);
-                dialog.dismiss();
-                ((MainActivity)getActivity()).navigation(R.id.mainMenu);
+                String strPrice=editHappy.getText().toString().trim();
+
+                if(TextUtils.isEmpty(content)){
+                    Toast.makeText(getContext(),"행복을 메모해 주세요:)",Toast.LENGTH_SHORT).show();
+                }
+
+                if(TextUtils.isEmpty(strPrice)){
+                    Toast.makeText(getContext(),"얼마나 행복하셨나요?:D",Toast.LENGTH_SHORT).show();
+                }
+
+                if(!TextUtils.isEmpty(content)&&!TextUtils.isEmpty(strPrice)){
+                    Integer price=Integer.parseInt(strPrice);
+                    data.setPrice(price);
+
+                    presenter.insertMemo(RoomDB.getInstance(getContext()).memoDao(),data);
+                    dialog.dismiss();
+                    ((MainActivity)getActivity()).navigation(R.id.mainMenu);
+                }
+
             }
         });
         txtCancel.setOnClickListener(new View.OnClickListener() {
