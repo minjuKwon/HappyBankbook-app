@@ -19,7 +19,8 @@
 
     <string name="picture">사진 추가</string>
     <string name="save">저장하기</string>
-    <string name="memoDate">2023.06.11</string>
+    <string name="memoDateFrom">0000.0.00</string>
+    <string name="memoDateTo">0000.00.00</string>
     <string name="memo">사소한 행복을 기록해 보세요</string>
     <string name="howHappy">얼마나 행복하셨습니까?</string>
     <string name="cancel">취소</string>

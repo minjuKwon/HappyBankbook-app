@@ -24,11 +24,11 @@
 
         <ImageView
             android:id="@+id/close"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_margin="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:clickable="true"
-            android:src="@drawable/baseline_close_24"
+            android:src="@drawable/baseline_close_48"
             android:contentDescription="@string/previous"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -36,17 +36,20 @@
 
         <TextView
             android:id="@+id/duration"
-            android:layout_margin="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="30dp"
             android:text="@string/duration"
-            style="@style/defaultFont"
+            android:textColor="@color/darkGray"
+            style="@style/defaultFont.click"
             app:layout_constraintTop_toBottomOf="@id/condition"
             app:layout_constraintStart_toStartOf="parent"
             />
 
         <TextView
             android:id="@+id/toDuration"
-            android:text="@string/memoDate"
+            android:text="@string/memoDateFrom"
             android:clickable="true"
+            android:visibility="gone"
             style="@style/duration"
             app:layout_constraintTop_toBottomOf="@id/duration"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,8 +59,10 @@
 
         <TextView
             android:id="@+id/fromDuration"
-            android:text="@string/memoDate"
+            android:text="@string/memoDateTo"
+            android:layout_marginEnd="30dp"
             android:clickable="true"
+            android:visibility="gone"
             style="@style/duration"
             app:layout_constraintTop_toBottomOf="@id/duration"
             app:layout_constraintStart_toEndOf="@id/toDuration"
@@ -67,7 +72,8 @@
 
         <TextView
             android:id="@+id/sort"
-            android:layout_margin="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="30dp"
             android:text="@string/sort"
             style="@style/defaultFont"
             app:layout_constraintTop_toBottomOf="@id/toDuration"
@@ -86,7 +92,6 @@
                 android:background="@color/green"
                 style="@style/defaultFont.radio"
                 />
-
             <RadioButton
                 android:id="@+id/radioOldest"
                 android:text="@string/oldest"
@@ -110,11 +115,13 @@
             android:layout_height="48dp"
             android:layout_margin="20dp"
             android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:clickable="true"
             android:background="@color/brightGreen"
             android:inputType="number"
             android:importantForAutofill="no"
             android:importantForAccessibility="no"
+            tools:ignore="LabelFor"
             app:layout_constraintTop_toBottomOf="@id/radioGroupSort"
             app:layout_constraintStart_toEndOf="@id/textCount"
             />
@@ -123,7 +130,7 @@
             android:id="@+id/buttonSubmit"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_margin="25dp"
+            android:layout_margin="30dp"
             android:background="@color/green"
             android:text="@string/search"
             android:textSize="18sp"
@@ -137,7 +144,7 @@
             android:id="@+id/buttonInit"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_margin="25dp"
+            android:layout_margin="30dp"
             android:background="@color/green"
             android:text="@string/init"
             android:textSize="18sp"
