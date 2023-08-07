@@ -53,7 +53,7 @@
             android:background="@drawable/date_text"
             android:clickable="true"
             android:minHeight="48dp"
-            android:text="@string/memoDate"
+            android:text="@string/memoDateTo"
             android:textSize="32sp"
             app:layout_constraintEnd_toEndOf="@id/memoView"
             app:layout_constraintHorizontal_bias="0.498"
