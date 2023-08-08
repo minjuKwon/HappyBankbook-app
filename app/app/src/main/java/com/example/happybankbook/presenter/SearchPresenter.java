@@ -28,7 +28,7 @@ public class SearchPresenter implements SearchContract.Presenter {
 
     @Override
     public void releaseView() {
-        disposable.clear();;
+        disposable.clear();
     }
 
     @Override
