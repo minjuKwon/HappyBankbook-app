@@ -46,7 +46,7 @@
             />
 
         <TextView
-            android:id="@+id/toDuration"
+            android:id="@+id/fromDuration"
             android:text="@string/memoDateFrom"
             android:clickable="true"
             android:visibility="gone"
@@ -58,7 +58,7 @@
             />
 
         <TextView
-            android:id="@+id/fromDuration"
+            android:id="@+id/toDuration"
             android:text="@string/memoDateTo"
             android:layout_marginEnd="30dp"
             android:clickable="true"
