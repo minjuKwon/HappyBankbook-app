@@ -20,16 +20,10 @@ public interface MemoDao {
     @Query("SELECT * FROM MemoData_table WHERE content LIKE '%' || :keyword || '%'")
     Flowable<List<MemoData>> searchKeyword(String keyword);
 
-    @Query("SELECT * FROM MemoData_table WHERE date BETWEEN :from AND :to")
-    List<MemoData> searchDuration(int from, int to);
+    @Query("SELECT * FROM MemoData_table WHERE date BETWEEN :from AND :to ORDER BY idx ASC LIMIT :cnt")
+    Flowable<List<MemoData>> searchAsc(int from, int to, int cnt);
 
-    @Query("SELECT * FROM MemoData_table LIMIT :cnt")
-    List<MemoData> searchCount(int cnt);
-
-    @Query("SELECT * FROM MemoData_table ORDER BY idx ASC")
-    List<MemoData> sortDateAsc();
-
-    @Query("SELECT * FROM MemoData_table ORDER BY idx DESC")
-    List<MemoData> sortDateDesc();
+    @Query("SELECT * FROM MemoData_table WHERE date BETWEEN :from AND :to ORDER BY idx DESC LIMIT :cnt")
+    Flowable<List<MemoData>> searchDesc(int from, int to, int cnt);
 
 }
