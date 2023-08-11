@@ -40,4 +40,31 @@ public class ListPresenter implements ListContract.Presenter {
         );
     }
 
+    @Override
+    public void getDataAsc(MemoDao memoDao, int from, int to, int cnt) {
+        disposable.add(
+                memoDao.searchAsc(from, to, cnt)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                item->{
+                                    view.setItems((ArrayList<MemoData>)item);
+                                }
+                        )
+        );
+    }
+
+    @Override
+    public void getDataDesc(MemoDao memoDao, int from, int to, int cnt) {
+        disposable.add(memoDao.searchDesc(from, to, cnt)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        item->{
+                            view.setItems((ArrayList<MemoData>)item);
+                        }
+                )
+        );
+    }
+
 }
