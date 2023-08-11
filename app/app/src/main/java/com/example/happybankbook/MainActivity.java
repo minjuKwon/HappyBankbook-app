@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener calendarListener=new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                textview.setText(String.format("%d.%d.%d",year,month+1,dayOfMonth));
+                textview.setText(String.format("%d.%02d.%02d",year,month+1,dayOfMonth));
             }
         };
 
