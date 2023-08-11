@@ -53,7 +53,7 @@
             style="@style/duration"
             app:layout_constraintTop_toBottomOf="@id/duration"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/fromDuration"
+            app:layout_constraintEnd_toStartOf="@id/toDuration"
             app:layout_constraintHorizontal_weight="1"
             />
 
@@ -65,7 +65,7 @@
             android:visibility="gone"
             style="@style/duration"
             app:layout_constraintTop_toBottomOf="@id/duration"
-            app:layout_constraintStart_toEndOf="@id/toDuration"
+            app:layout_constraintStart_toEndOf="@id/fromDuration"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
             />
