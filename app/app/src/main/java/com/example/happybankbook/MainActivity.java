@@ -94,6 +94,12 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }
 
+    public String setNowDate(){
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd");
+        Date date=new Date();
+        return dateFormat.format(date);
+    }
+
     public void setNowDate(TextView textView){
         SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd");
         Date date=new Date();
@@ -117,5 +123,12 @@ public class MainActivity extends AppCompatActivity {
         new DatePickerDialog(context,R.style.DialogTheme,calendarListener,year,month,day).show();
 
     }
+
+    public int dateIntToString(TextView textView){
+        String [] strDate=textView.getText().toString().split("\\.");
+        int intDate=Integer.parseInt(strDate[0]+strDate[1]+strDate[2]);
+        return intDate;
+    }
+
 
 }
