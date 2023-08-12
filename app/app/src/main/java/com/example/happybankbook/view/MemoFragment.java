@@ -125,8 +125,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         TextView txtOk=dialog.findViewById(R.id.ok);
         TextView txtCancel=dialog.findViewById(R.id.cancel);
 
-        String [] strDate=txtDate.getText().toString().split("\\.");
-        int intDate=Integer.parseInt(strDate[0]+strDate[1]+strDate[2]);
+        int intDate=((MainActivity)getActivity()).dateIntToString(txtDate);
 
         String content=editContent.getText().toString();
 
