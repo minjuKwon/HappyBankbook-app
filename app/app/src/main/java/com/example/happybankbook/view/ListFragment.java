@@ -2,10 +2,14 @@ package com.example.happybankbook.view;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +33,46 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     private ListPresenter presenter;
     private MemoRecyclerAdapter adapter;
 
+    private int addFragment=1;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //ConditionFragment 정렬 값 받기
+        getParentFragmentManager().setFragmentResultListener("memoRequestKey", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                int fromDate=result.getInt("fromDate");
+                int toDate=result.getInt("toDate");
+                int count=result.getInt("count");
+                boolean isNewSort=result.getBoolean("sort");
+
+                if(fromDate>toDate){
+                    int temp=fromDate;
+                    fromDate=toDate;
+                    toDate=temp;
+                }
+
+                if(count==0){
+                    count=adapter.getItemCount();
+                }
+
+                if(isNewSort){
+                    presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
+                }else{
+                    presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
+                }
+            }
+        });
+        //ConditionFragment 클릭 시 한 개의 Fragment만 생성하기 위한 변수 받기
+        getParentFragmentManager().setFragmentResultListener("removeFragment", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                addFragment=result.getInt("ConditionFragment");
+            }
+        });
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,6 +80,15 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         init(view);
         return view;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //onStop()때 ConditionFragment 값 초기화
+        Bundle bundle=new Bundle();
+        bundle.putBoolean("stop",true);
+        getParentFragmentManager().setFragmentResult("recyclerStop", bundle);
     }
 
     @Override
@@ -66,7 +119,11 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         if(v.getId()==R.id.txtSearch){
             ((MainActivity)getActivity()).replaceFragment(new SearchFragment());
         }else if(v.getId()==R.id.txtCondition){
-            ((MainActivity)getActivity()).addFragment(new ConditionFragment());
+            //addFragment 1일 때만 addFragment()하여 여러 번 클릭 시 중복 생성을 막음
+            if(addFragment==1){
+                ((MainActivity)getActivity()).addFragment(new ConditionFragment());
+                ++addFragment;
+            }
         }
     }
 
