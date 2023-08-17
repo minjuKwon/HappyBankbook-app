@@ -18,6 +18,7 @@ public interface ListContract {
         void getData(MemoDao memoDao);
         void getDataAsc(MemoDao memoDao, int from, int to, int cnt);
         void getDataDesc(MemoDao memoDao, int from, int to, int cnt);
+        int getDataCount(MemoDao memoDao);
     }
 
 }

@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +37,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //ConditionFragment 정렬 값 받기
         getParentFragmentManager().setFragmentResultListener("memoRequestKey", this, new FragmentResultListener() {
             @Override
@@ -54,7 +54,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
                 }
 
                 if(count==0){
-                    count=adapter.getItemCount();
+                    count=presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
                 }
 
                 if(isNewSort){

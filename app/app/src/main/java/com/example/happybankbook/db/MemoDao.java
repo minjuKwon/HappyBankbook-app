@@ -26,4 +26,7 @@ public interface MemoDao {
     @Query("SELECT * FROM MemoData_table WHERE date BETWEEN :from AND :to ORDER BY idx DESC LIMIT :cnt")
     Flowable<List<MemoData>> searchDesc(int from, int to, int cnt);
 
+    @Query("SELECT COUNT(idx) FROM MemoData_table")
+    int getRowCount();
+
 }

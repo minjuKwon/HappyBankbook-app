@@ -7,6 +7,7 @@ import com.example.happybankbook.db.MemoData;
 import java.util.ArrayList;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -14,6 +15,7 @@ public class ListPresenter implements ListContract.Presenter {
 
     private ListContract.View view;
     private CompositeDisposable disposable;
+    private int result;
 
     public ListPresenter(){this.disposable=new CompositeDisposable();}
 
@@ -56,7 +58,8 @@ public class ListPresenter implements ListContract.Presenter {
 
     @Override
     public void getDataDesc(MemoDao memoDao, int from, int to, int cnt) {
-        disposable.add(memoDao.searchDesc(from, to, cnt)
+        disposable.add(
+                memoDao.searchDesc(from, to, cnt)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -65,6 +68,19 @@ public class ListPresenter implements ListContract.Presenter {
                         }
                 )
         );
+    }
+
+    @Override
+    public int getDataCount(MemoDao memoDao) {
+        disposable.add(
+                Observable.just(memoDao)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(
+                            value->{result=value.getRowCount();}
+                        )
+        );
+        try{Thread.sleep(500);}catch (InterruptedException  e){}
+        return result;
     }
 
 }
