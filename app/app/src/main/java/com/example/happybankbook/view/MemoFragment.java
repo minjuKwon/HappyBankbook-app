@@ -148,20 +148,24 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
                 String strPrice=editHappy.getText().toString().trim();
 
                 if(TextUtils.isEmpty(content)){
-                    Toast.makeText(getContext(),"행복을 메모해 주세요:)",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),getResources().getText(R.string.memoContentEmpty),Toast.LENGTH_SHORT).show();
                 }
 
                 if(TextUtils.isEmpty(strPrice)){
-                    Toast.makeText(getContext(),"얼마나 행복하셨나요?:D",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),getResources().getText(R.string.memoPriceEmpty),Toast.LENGTH_SHORT).show();
                 }
 
                 if(!TextUtils.isEmpty(content)&&!TextUtils.isEmpty(strPrice)){
-                    Integer price=Integer.parseInt(strPrice);
-                    data.setPrice(price);
+                    try{
+                        Integer price=Integer.parseInt(strPrice);
+                        data.setPrice(price);
 
-                    presenter.insertMemo(RoomDB.getInstance(getContext()).memoDao(),data);
-                    dialog.dismiss();
-                    ((MainActivity)getActivity()).navigation(R.id.mainMenu);
+                        presenter.insertMemo(RoomDB.getInstance(getContext()).memoDao(),data);
+                        dialog.dismiss();
+                        ((MainActivity)getActivity()).navigation(R.id.mainMenu);
+                    }catch(NumberFormatException e){
+                        Toast.makeText(getContext(),getResources().getText(R.string.memoPriceOver),Toast.LENGTH_LONG).show();
+                    }
                 }
 
             }
