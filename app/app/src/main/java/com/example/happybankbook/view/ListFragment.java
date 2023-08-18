@@ -37,7 +37,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //ConditionFragment 정렬 값 받기
         getParentFragmentManager().setFragmentResultListener("memoRequestKey", this, new FragmentResultListener() {
             @Override
@@ -46,6 +45,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
                 int toDate=result.getInt("toDate");
                 int count=result.getInt("count");
                 boolean isNewSort=result.getBoolean("sort");
+
+                adapter.setSort(isNewSort);
 
                 if(fromDate>toDate){
                     int temp=fromDate;
@@ -76,7 +77,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         init(view);
         return view;

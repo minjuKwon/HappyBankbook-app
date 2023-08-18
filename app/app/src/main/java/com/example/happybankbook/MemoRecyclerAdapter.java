@@ -19,6 +19,7 @@ public class MemoRecyclerAdapter extends RecyclerView.Adapter<MemoRecyclerAdapte
 
     private Context context;
     private List<MemoData> dataList=new ArrayList<>();
+    private boolean isNewSort=true;
 
     public MemoRecyclerAdapter(Context context){this.context=context;}
 
@@ -43,8 +44,13 @@ public class MemoRecyclerAdapter extends RecyclerView.Adapter<MemoRecyclerAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         MemoData data=dataList.get(holder.getAdapterPosition());
+        //isNewSort이면 txtIdx가 역순, 아닐 시 순서대로
+        if(isNewSort){
+            holder.txtIdx.setText(Integer.toString(dataList.size()-position));
+        }else{
+            holder.txtIdx.setText(Integer.toString(position+1));
+        }
 
-        holder.txtIdx.setText(Integer.toString(data.getIdx()));
         holder.txtDate.setText(Long.toString(data.getDate()).substring(2));
         holder.txtContent.setText(data.getContent());
         if(data.getImage()!=null){
@@ -85,6 +91,11 @@ public class MemoRecyclerAdapter extends RecyclerView.Adapter<MemoRecyclerAdapte
 
     public void clear(){
         dataList.clear();
+    }
+
+    //ConditionFragment 정렬 순서를 얻기 위한 메소드
+    public void setSort(boolean sort){
+        this.isNewSort=sort;
     }
 
 }
