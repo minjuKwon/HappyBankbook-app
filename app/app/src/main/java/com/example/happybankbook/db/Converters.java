@@ -1,4 +1,4 @@
-package com.example.happybankbook;
+package com.example.happybankbook.db;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

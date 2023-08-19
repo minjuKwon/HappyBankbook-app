@@ -1,4 +1,4 @@
-package com.example.happybankbook;
+package com.example.happybankbook.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.happybankbook.R;
 import com.example.happybankbook.db.MemoData;
 
 import java.util.ArrayList;

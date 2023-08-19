@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.happybankbook.MainActivity;
-import com.example.happybankbook.MemoRecyclerAdapter;
+import com.example.happybankbook.adapter.MemoRecyclerAdapter;
 import com.example.happybankbook.R;
 import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.MemoData;

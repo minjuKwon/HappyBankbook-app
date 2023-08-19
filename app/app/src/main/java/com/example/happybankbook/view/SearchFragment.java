@@ -14,16 +14,14 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.happybankbook.MainActivity;
-import com.example.happybankbook.MemoRecyclerAdapter;
+import com.example.happybankbook.adapter.MemoRecyclerAdapter;
 import com.example.happybankbook.R;
 import com.example.happybankbook.contract.SearchContract;
 import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.SearchPresenter;
-import com.example.happybankbook.view.ListFragment;
 
 import java.util.ArrayList;
 
