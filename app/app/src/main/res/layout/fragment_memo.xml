@@ -81,7 +81,7 @@
             android:background="@color/white"
             android:inputType="textMultiLine"
             android:hint="@string/memo"
-            android:textColorHint="@color/gray"
+            android:textColorHint="@color/darkerGray"
             android:textSize="12sp"
             android:importantForAutofill="no"
             app:layout_constraintTop_toBottomOf="@id/imageView"
