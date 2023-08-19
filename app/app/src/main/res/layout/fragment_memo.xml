@@ -46,7 +46,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
-            android:id="@+id/txtDate"
+            android:id="@+id/txtMemoDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -68,7 +68,7 @@
             android:scaleType="centerInside"
             android:visibility="gone"
             tools:src="@tools:sample/avatars"
-            app:layout_constraintTop_toBottomOf="@id/txtDate"
+            app:layout_constraintTop_toBottomOf="@id/txtMemoDate"
             app:layout_constraintBottom_toTopOf="@id/editMemo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

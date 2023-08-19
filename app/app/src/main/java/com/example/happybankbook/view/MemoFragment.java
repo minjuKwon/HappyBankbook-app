@@ -85,7 +85,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     }
 
     private void init(View view){
-        txtDate=view.findViewById(R.id.txtDate);
+        txtDate=view.findViewById(R.id.txtMemoDate);
         txtAddPicture=view.findViewById(R.id.addPicture);
         txtSave=view.findViewById(R.id.save);
         img=view.findViewById(R.id.imageView);
