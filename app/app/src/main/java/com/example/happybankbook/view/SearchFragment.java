@@ -66,6 +66,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter=new MemoAdapter(getContext(), MemoType.RECYCLER);
         recyclerView.setAdapter(adapter);
+
+        adapter.clear();
     }
 
     @Override
