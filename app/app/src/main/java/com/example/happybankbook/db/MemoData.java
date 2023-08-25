@@ -7,7 +7,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "MemoData_table")
-public class MemoData {
+public class MemoData extends BaseItem {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
