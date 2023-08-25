@@ -15,8 +15,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.happybankbook.MainActivity;
-import com.example.happybankbook.adapter.MemoRecyclerAdapter;
+import com.example.happybankbook.adapter.MemoAdapter;
 import com.example.happybankbook.R;
+import com.example.happybankbook.adapter.MemoType;
 import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.db.RoomDB;
@@ -30,7 +31,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     private TextView txtCondition;
     private RecyclerView recyclerView;
     private ListPresenter presenter;
-    private MemoRecyclerAdapter adapter;
+    private MemoAdapter adapter;
 
     private int addFragment=1;
 
@@ -106,7 +107,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         txtCondition.setOnClickListener(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter=new MemoRecyclerAdapter(getContext());
+        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER);
         recyclerView.setAdapter(adapter);
 
         presenter=new ListPresenter();

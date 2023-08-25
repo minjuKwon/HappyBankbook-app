@@ -16,8 +16,9 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.happybankbook.MainActivity;
-import com.example.happybankbook.adapter.MemoRecyclerAdapter;
+import com.example.happybankbook.adapter.MemoAdapter;
 import com.example.happybankbook.R;
+import com.example.happybankbook.adapter.MemoType;
 import com.example.happybankbook.contract.SearchContract;
 import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.db.RoomDB;
@@ -31,7 +32,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     private SearchView searchView;
     private RecyclerView recyclerView;
     private SearchPresenter presenter;
-    private MemoRecyclerAdapter adapter;
+    private MemoAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,12 +60,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
         searchView.setIconified(false);
         searchView.setFocusable(true);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter=new MemoRecyclerAdapter(getContext());
-        recyclerView.setAdapter(adapter);
-
         presenter=new SearchPresenter();
         presenter.setView(this);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
