@@ -15,7 +15,7 @@ import com.example.happybankbook.view.MemoDetailFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MemoRecyclerAdapter extends RecyclerView.Adapter<BaseItemView> {
+public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
     private Context context;
     private MemoType memoType;
@@ -24,7 +24,7 @@ public class MemoRecyclerAdapter extends RecyclerView.Adapter<BaseItemView> {
     private boolean isNewSort=true;
     private static int location;
 
-    public MemoRecyclerAdapter(Context context, MemoType memoType){
+    public MemoAdapter(Context context, MemoType memoType){
         this.context=context;
         this.memoType=memoType;
     }
