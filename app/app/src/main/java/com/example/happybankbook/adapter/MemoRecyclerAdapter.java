@@ -1,78 +1,74 @@
 package com.example.happybankbook.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.R;
 import com.example.happybankbook.db.MemoData;
+import com.example.happybankbook.view.MemoDetailFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MemoRecyclerAdapter extends RecyclerView.Adapter<MemoRecyclerAdapter.ViewHolder> {
+public class MemoRecyclerAdapter extends RecyclerView.Adapter<BaseItemView> {
 
     private Context context;
-    private List<MemoData> dataList=new ArrayList<>();
+    private MemoType memoType;
+    static private List<MemoData> dataList=new ArrayList<>();
+
     private boolean isNewSort=true;
+    private static int location;
 
-    public MemoRecyclerAdapter(Context context){this.context=context;}
-
-    public static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView txtIdx,txtDate,txtContent,txtPrice;
-        public ViewHolder(View view){
-            super(view);
-            txtIdx=view.findViewById(R.id.txtNumber);
-            txtDate=view.findViewById(R.id.inputTxtDate);
-            txtContent=view.findViewById(R.id.inputTxtContent);
-            txtPrice=view.findViewById(R.id.inputTxtDeposit);
-        }
+    public MemoRecyclerAdapter(Context context, MemoType memoType){
+        this.context=context;
+        this.memoType=memoType;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item,parent,false);
-        return new ViewHolder(view);
+    public BaseItemView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        View view;
+
+        if(memoType==MemoType.RECYCLER){
+            view=LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item,parent,false);
+            return new RecyclerViewHolder(view);
+        }else if(memoType==MemoType.VIEWPAGER){
+            view=LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_memo_detail_item,parent,false);
+            return new ViewPagerViewHolder(view);
+        }
+
+        return null;
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseItemView holder, int position) {
+
         MemoData data=dataList.get(holder.getAdapterPosition());
-        //isNewSort이면 txtIdx가 역순, 아닐 시 순서대로
-        if(isNewSort){
-            holder.txtIdx.setText(Integer.toString(dataList.size()-position));
-        }else{
-            holder.txtIdx.setText(Integer.toString(position+1));
-        }
 
-        holder.txtDate.setText(Long.toString(data.getDate()).substring(2));
-        holder.txtContent.setText(data.getContent());
-        if(data.getImage()!=null){
-            Drawable img=new BitmapDrawable(context.getResources(),data.getImage());
-            img.setBounds(0,0,100,100);
-            holder.txtContent.setCompoundDrawables(img,null,null,null);
-        }
-        holder.txtPrice.setText(Integer.toString(data.getPrice()));
+        if(holder instanceof RecyclerViewHolder){
+            RecyclerViewHolder recyclerViewHolder=(RecyclerViewHolder)holder;
+            recyclerViewHolder.onBind(data, context, isNewSort, position, dataList.size());
+            recyclerViewHolder.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick() {
+                    ((MainActivity)context).addFragment(new MemoDetailFragment());
+                    location= holder.getAdapterPosition();
+                }
+            });
 
-        if(position%2==0){
-            holder.txtIdx.setBackgroundResource(R.drawable.memo_list_content_background_cream);
-            holder.txtDate.setBackgroundResource(R.drawable.memo_list_content_background_cream);
-            holder.txtContent.setBackgroundResource(R.drawable.memo_list_content_background_cream);
-            holder.txtPrice.setBackgroundResource(R.color.cream);
-        }else{
-            holder.txtIdx.setBackgroundResource(R.drawable.memo_list_content_background_green);
-            holder.txtDate.setBackgroundResource(R.drawable.memo_list_content_background_green);
-            holder.txtContent.setBackgroundResource(R.drawable.memo_list_content_background_green);
-            holder.txtPrice.setBackgroundResource(R.color.green);
+        }else if(holder instanceof ViewPagerViewHolder){
+            ViewPagerViewHolder viewPagerViewHolder=(ViewPagerViewHolder) holder;
+            viewPagerViewHolder.onBind(dataList.get(holder.getAdapterPosition()+location), context);
         }
     }
+
 
     @Override
     public int getItemCount() {
