@@ -218,6 +218,7 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         bundle.putBoolean("sort",sort);
 
         getParentFragmentManager().setFragmentResult("memoRequestKey", bundle);
+        getParentFragmentManager().setFragmentResult("memoRequestKey2", bundle);
     }
 
     public void setSharedPreferences(){
