@@ -16,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +55,6 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         super.onViewCreated(view, savedInstanceState);
         ((MainActivity)getActivity()).setNowDate(txtDate);
         getGallery();
-
     }
 
     @Override
@@ -118,34 +116,35 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     }
 
     public void save(){
-
+        //Dialog 설정
         Dialog dialog=new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_happy);
 
         TextView txtOk=dialog.findViewById(R.id.ok);
         TextView txtCancel=dialog.findViewById(R.id.cancel);
-
-        int intDate=((MainActivity)getActivity()).dateIntToString(txtDate);
-
-        String strNowDate=((MainActivity)getActivity()).setNowDate();
-        String [] strDate=strNowDate.split("\\.");
-        int intNowDate=Integer.parseInt(strDate[0]+strDate[1]+strDate[2]);
-
-        String content=editContent.getText().toString();
-
         EditText editHappy=dialog.findViewById(R.id.editHappy);
 
         MemoData data=new MemoData();
+
+        int intDate=((MainActivity)getActivity()).dateIntToString(txtDate);
         data.setDate(intDate);
-        data.setContent(content);
 
         int count=presenter.getDataRange(RoomDB.getInstance(getContext()).memoDao(), intDate);
         data.setNum(count+1);
 
+        //현재 날짜 받기
+        String strNowDate=((MainActivity)getActivity()).setNowDate();
+        String [] strDate=strNowDate.split("\\.");
+        int intNowDate=Integer.parseInt(strDate[0]+strDate[1]+strDate[2]);
+
+        //설정한 날짜가 현재 날짜와 다르면, 중간에 메모가 삽입이 되는 것처럼 보이게 하기 위해 table num 값 update
         if(intDate!=intNowDate){
             presenter.changeNum(RoomDB.getInstance(getContext()).memoDao(), intDate);
         }
+
+        String content=editContent.getText().toString();
+        data.setContent(content);
 
         if(img.getVisibility()==View.VISIBLE){
             BitmapDrawable drawable = (BitmapDrawable)img.getDrawable();
@@ -157,12 +156,11 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(View v) {
 
-                String strPrice=editHappy.getText().toString().trim();
-
                 if(TextUtils.isEmpty(content)){
                     Toast.makeText(getContext(),getResources().getText(R.string.memoContentEmpty),Toast.LENGTH_SHORT).show();
                 }
 
+                String strPrice=editHappy.getText().toString().trim();
                 if(TextUtils.isEmpty(strPrice)){
                     Toast.makeText(getContext(),getResources().getText(R.string.memoPriceEmpty),Toast.LENGTH_SHORT).show();
                 }
