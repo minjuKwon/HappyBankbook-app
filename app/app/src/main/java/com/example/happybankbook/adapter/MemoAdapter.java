@@ -54,6 +54,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         if(holder instanceof RecyclerViewHolder){
             RecyclerViewHolder recyclerViewHolder=(RecyclerViewHolder)holder;
             recyclerViewHolder.onBind(data, context, position);
+            //recyclerview position 얻기 위한 클릭 이벤트
             recyclerViewHolder.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick() {
@@ -64,6 +65,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
         }else if(holder instanceof ViewPagerViewHolder){
             ViewPagerViewHolder viewPagerViewHolder=(ViewPagerViewHolder) holder;
+            //recyclerview position, viewpager position 더하여 클릭한 메모를 시작점으로 viewpager 화면 넘기게 함
             viewPagerViewHolder.onBind(dataList.get(holder.getAdapterPosition()+location), context);
         }
     }
