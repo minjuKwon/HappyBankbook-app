@@ -13,6 +13,8 @@ public class MemoData extends BaseItem {
     @NonNull
     public int idx;
 
+    public int num;
+
     public int date;
 
     public int price=0;
