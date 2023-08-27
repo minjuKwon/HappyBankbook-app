@@ -33,8 +33,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View  {
     private ListPresenter presenter;
     private MemoAdapter adapter;
 
-    static private int position;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,9 +45,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View  {
                 int toDate=result.getInt("toDate");
                 int count=result.getInt("count");
                 boolean isNewSort=result.getBoolean("sort");
-                Log.d("Memo","Detail get sort condition");
-
-                adapter.setSort(isNewSort);
 
                 if(fromDate>toDate){
                     int temp=fromDate;

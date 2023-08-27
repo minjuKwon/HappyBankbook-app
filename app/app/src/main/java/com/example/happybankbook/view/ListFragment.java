@@ -47,8 +47,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
                 int count=result.getInt("count");
                 boolean isNewSort=result.getBoolean("sort");
 
-                adapter.setSort(isNewSort);
-
                 if(fromDate>toDate){
                     int temp=fromDate;
                     fromDate=toDate;

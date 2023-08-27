@@ -39,16 +39,11 @@ public class RecyclerViewHolder extends BaseItemView{
         });
     }
 
-    public void onBind(BaseItem data, Context context, boolean isNewSort, int position, int size){
+    public void onBind(BaseItem data, Context context, int position){
 
         this.data=(MemoData)data;
 
-        //isNewSort이면 txtIdx가 역순, 아닐 시 순서대로
-        if(isNewSort){
-            txtIdx.setText(Integer.toString(size-position));
-        }else{
-            txtIdx.setText(Integer.toString(position+1));
-        }
+        txtIdx.setText(Integer.toString(this.data.getNum()));
 
         txtDate.setText(Long.toString(this.data.getDate()).substring(2));
 

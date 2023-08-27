@@ -21,7 +21,6 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
     private MemoType memoType;
     static private List<MemoData> dataList=new ArrayList<>();
 
-    private boolean isNewSort=true;
     private static int location;
 
     public MemoAdapter(Context context, MemoType memoType){
@@ -54,7 +53,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
         if(holder instanceof RecyclerViewHolder){
             RecyclerViewHolder recyclerViewHolder=(RecyclerViewHolder)holder;
-            recyclerViewHolder.onBind(data, context, isNewSort, position, dataList.size());
+            recyclerViewHolder.onBind(data, context, position);
             recyclerViewHolder.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick() {
@@ -88,11 +87,6 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
     public void clear(){
         dataList.clear();
-    }
-
-    //ConditionFragment 정렬 순서를 얻기 위한 메소드
-    public void setSort(boolean sort){
-        this.isNewSort=sort;
     }
 
 }
