@@ -14,6 +14,9 @@ public interface MemoDao {
     @Insert
     void insert(MemoData memo);
 
+    @Query("UPDATE MemoData_table SET num=num+1 WHERE date>=:date")
+    void changeNum(int date);
+
     @Query("SELECT * FROM MemoData_table ORDER BY date DESC, idx DESC")
     Flowable<List<MemoData>> getAll();
 
@@ -28,5 +31,8 @@ public interface MemoDao {
 
     @Query("SELECT COUNT(idx) FROM MemoData_table")
     int getRowCount();
+
+    @Query("SELECT COUNT(idx) FROM MemoData_table WHERE date<=:date")
+    int getRangeCount(int date);
 
 }
