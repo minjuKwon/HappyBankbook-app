@@ -11,6 +11,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class MemoPresenter implements MemoContract.Presenter {
 
     private CompositeDisposable disposable;
+    private int range;
+
 
     public MemoPresenter(){this.disposable=new CompositeDisposable();}
 
@@ -28,6 +30,30 @@ public class MemoPresenter implements MemoContract.Presenter {
                             item->{
                                 memoDao.insert(memoData);
                             }
+                        )
+        );
+    }
+
+    @Override
+    public int getDataRange(MemoDao memoDao, int date) {
+        disposable.add(
+                Observable.just(memoDao)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(
+                                value->{range=value.getRangeCount(date);}
+                        )
+        );
+        try{Thread.sleep(500);}catch (InterruptedException  e){}
+        return range;
+    }
+
+    @Override
+    public void changeNum(MemoDao memoDao, int date) {
+        disposable.add(
+                Observable.just(memoDao)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(
+                                value->{value.changeNum(date);}
                         )
         );
     }

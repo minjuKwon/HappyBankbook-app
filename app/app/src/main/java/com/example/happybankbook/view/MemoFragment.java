@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,7 +101,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-       if(v.getId()==R.id.txtDate){
+       if(v.getId()==R.id.txtMemoDate){
            ((MainActivity)getActivity()).setDate(txtDate,getContext());
        }else if(v.getId()==R.id.addPicture){
            loadImage();
@@ -127,6 +128,10 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
         int intDate=((MainActivity)getActivity()).dateIntToString(txtDate);
 
+        String strNowDate=((MainActivity)getActivity()).setNowDate();
+        String [] strDate=strNowDate.split("\\.");
+        int intNowDate=Integer.parseInt(strDate[0]+strDate[1]+strDate[2]);
+
         String content=editContent.getText().toString();
 
         EditText editHappy=dialog.findViewById(R.id.editHappy);
@@ -134,6 +139,13 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         MemoData data=new MemoData();
         data.setDate(intDate);
         data.setContent(content);
+
+        int count=presenter.getDataRange(RoomDB.getInstance(getContext()).memoDao(), intDate);
+        data.setNum(count+1);
+
+        if(intDate!=intNowDate){
+            presenter.changeNum(RoomDB.getInstance(getContext()).memoDao(), intDate);
+        }
 
         if(img.getVisibility()==View.VISIBLE){
             BitmapDrawable drawable = (BitmapDrawable)img.getDrawable();
