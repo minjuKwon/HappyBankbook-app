@@ -12,22 +12,19 @@ public class MemoData extends BaseItem {
     @PrimaryKey(autoGenerate = true)
     @NonNull
     public int idx;
-
     public int num;
-
     public int date;
-
     public int price=0;
-
     public String content;
-
     public Bitmap image;
 
     public void setDate(int date){this.date=date;}
     public void setPrice(int price){this.price=price;}
     public void setContent(String content){this.content=content;}
     public void setBitmap(Bitmap image){this.image=image;}
-
+    public void setNum(int num) {
+        this.num = num;
+    }
 
     public int getDate() {
         return date;
@@ -41,5 +38,8 @@ public class MemoData extends BaseItem {
     public Bitmap getImage() {
         return image;
     }
-    
+    public int getNum() {
+        return num;
+    }
+
 }
