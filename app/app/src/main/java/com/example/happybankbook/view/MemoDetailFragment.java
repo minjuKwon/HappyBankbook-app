@@ -47,8 +47,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     private PostRunnable postRunnable;
     private Handler handler;
 
-    int currentPosition;
-    int count;
+    private int currentPosition;
+    private int count;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
