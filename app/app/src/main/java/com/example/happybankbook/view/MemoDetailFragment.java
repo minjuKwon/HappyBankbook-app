@@ -1,13 +1,16 @@
 package com.example.happybankbook.view;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +28,15 @@ import java.util.ArrayList;
 
 public class MemoDetailFragment extends Fragment implements ListContract.View,View.OnClickListener{
 
+    //일정 시간 후 화살표 이미지 투명화 위한 Runnable class
+    private class PostRunnable implements Runnable{
+        @Override
+        public void run() {
+            imgForward.setColorFilter(Color.TRANSPARENT);
+            imgBack.setColorFilter(Color.TRANSPARENT);
+        }
+    }
+
     private ViewPager2 viewPager;
     private ImageView imgForward;
     private ImageView imgBack;
@@ -32,12 +44,18 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     private ListPresenter presenter;
     private MemoAdapter adapter;
 
+    private PostRunnable postRunnable;
+    private Handler handler;
+
     int currentPosition;
     int count;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        postRunnable=new PostRunnable();
+        handler=new Handler();
 
         //ConditionFragment 정렬 값 받기
         getParentFragmentManager().setFragmentResultListener("memoRequestKey2", this, new FragmentResultListener() {
@@ -102,9 +120,13 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.imgForward){
+            imgForward.setColorFilter(ContextCompat.getColor(getContext(),R.color.darkerGray));
             viewPager.setCurrentItem(currentPosition-1);
+            handler.postDelayed(postRunnable,5000);
         }else if(v.getId()==R.id.imgBack){
+            imgBack.setColorFilter(ContextCompat.getColor(getContext(),R.color.darkerGray));
             viewPager.setCurrentItem(currentPosition+1);
+            handler.postDelayed(postRunnable,5000);
         }
     }
 
@@ -131,6 +153,5 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         });
     }
 
-
-
 }
+
