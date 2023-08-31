@@ -1,6 +1,7 @@
 package com.example.happybankbook.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
     static private List<MemoData> dataList=new ArrayList<>();
 
     private static int location;
+    private boolean isFirst=true;
 
     public MemoAdapter(Context context, MemoType memoType){
         this.context=context;
@@ -65,8 +67,12 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
         }else if(holder instanceof ViewPagerViewHolder){
             ViewPagerViewHolder viewPagerViewHolder=(ViewPagerViewHolder) holder;
-            //recyclerview position, viewpager position 더하여 클릭한 메모를 시작점으로 viewpager 화면 넘기게 함
-            viewPagerViewHolder.onBind(dataList.get(holder.getAdapterPosition()+location), context);
+            //recyclerview position, viewpager position 더하여 클릭한 메모를 시작점으로 viewpager 화면 넘기게 하기 위한 초기 값
+            if(isFirst){
+                data=dataList.get(holder.getAdapterPosition()+location);
+                isFirst=false;
+            }
+            viewPagerViewHolder.onBind(data, context);
         }
     }
 
@@ -89,6 +95,10 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
     public void clear(){
         dataList.clear();
+    }
+
+    public int getLocation(){
+        return location;
     }
 
 }

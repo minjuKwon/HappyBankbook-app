@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentResultListener;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,9 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
 
     private int currentPosition;
     private int count;
+    private int adapterPosition;
+    private int rowCnt;
+    private boolean isFirst=true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -108,13 +112,15 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         imgForward.setOnClickListener(this);
         imgBack.setOnClickListener(this);
 
-        changePage();
-
         presenter=new ListPresenter();
         presenter.setView(this);
 
         adapter=new MemoAdapter(getContext(), MemoType.VIEWPAGER);
         viewPager.setAdapter(adapter);
+
+        adapterPosition= adapter.getLocation();
+        rowCnt=presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
+        changePage();
     }
 
     @Override
@@ -140,15 +146,25 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                currentPosition=position;
-                if(position==0){
+                //recyclerview position, viewpager position 더하여 클릭된 메모 데이터에서 슬라이드 하였을 때 다음 데이터 로딩 하기 위한 초기 값
+                if(isFirst){
+                    currentPosition=position+adapterPosition;
+                    isFirst=false;
+                }else{
+                    currentPosition=position;
+                }
+
+                if(currentPosition==0){
                     imgForward.setVisibility(View.INVISIBLE);
-                }else if(position==count-1){
+                    imgBack.setVisibility(View.VISIBLE);
+                }else if(currentPosition==(rowCnt-1)){
+                    imgForward.setVisibility(View.VISIBLE);
                     imgBack.setVisibility(View.INVISIBLE);
                 }else{
                     imgForward.setVisibility(View.VISIBLE);
                     imgBack.setVisibility(View.VISIBLE);
                 }
+
             }
         });
     }
