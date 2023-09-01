@@ -16,7 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.R;
 import com.example.happybankbook.adapter.MemoAdapter;
 import com.example.happybankbook.adapter.MemoType;
@@ -41,6 +43,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     private ViewPager2 viewPager;
     private ImageView imgForward;
     private ImageView imgBack;
+    private TextView txtPrevious;
 
     private ListPresenter presenter;
     private MemoAdapter adapter;
@@ -108,9 +111,11 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         viewPager=view.findViewById(R.id.viewPager2);
         imgForward=view.findViewById(R.id.imgForward);
         imgBack=view.findViewById(R.id.imgBack);
+        txtPrevious=view.findViewById(R.id.memoDetailPrevious);
 
         imgForward.setOnClickListener(this);
         imgBack.setOnClickListener(this);
+        txtPrevious.setOnClickListener(this);
 
         presenter=new ListPresenter();
         presenter.setView(this);
@@ -133,6 +138,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             imgBack.setColorFilter(ContextCompat.getColor(getContext(),R.color.darkerGray));
             viewPager.setCurrentItem(currentPosition+1);
             handler.postDelayed(postRunnable,5000);
+        }else if(v.getId()==R.id.memoDetailPrevious){
+            ((MainActivity)getActivity()).replaceFragment(new ListFragment());
         }
     }
 
