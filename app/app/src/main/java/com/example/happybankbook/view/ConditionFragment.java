@@ -42,6 +42,22 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
     private boolean isClick=true;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //ListFragment에서 recyclerStop 받을 때는 SharedPreferences 대신 값 초기화
+        getParentFragmentManager().setFragmentResultListener("recyclerStop", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                boolean value=result.getBoolean("stop");
+                if(value){
+                    reset();
+                }
+            }
+        });
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_condition, container, false);
@@ -72,17 +88,6 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         radioOld.setChecked(!newCheck);
 
         editCount.setText(preferences.getString("count",null));
-
-        //ListFragment에서 recyclerStop 받을 때는 SharedPreferences 대신 값 초기화
-        getParentFragmentManager().setFragmentResultListener("recyclerStop", this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                boolean value=result.getBoolean("stop");
-                if(value){
-                    reset();
-                }
-            }
-        });
 
     }
 
