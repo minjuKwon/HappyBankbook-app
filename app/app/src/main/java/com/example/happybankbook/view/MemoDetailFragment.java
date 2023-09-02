@@ -132,11 +132,11 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     public void onClick(View v) {
         if(v.getId()==R.id.imgForward){
             imgForward.setColorFilter(ContextCompat.getColor(getContext(),R.color.darkerGray));
-            viewPager.setCurrentItem(currentPosition-1);
+            viewPager.setCurrentItem(currentPosition-1,false);
             handler.postDelayed(postRunnable,5000);
         }else if(v.getId()==R.id.imgBack){
             imgBack.setColorFilter(ContextCompat.getColor(getContext(),R.color.darkerGray));
-            viewPager.setCurrentItem(currentPosition+1);
+            viewPager.setCurrentItem(currentPosition+1,false);
             handler.postDelayed(postRunnable,5000);
         }else if(v.getId()==R.id.memoDetailPrevious){
             ((MainActivity)getActivity()).replaceFragment(new ListFragment());
