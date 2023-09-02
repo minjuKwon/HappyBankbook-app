@@ -156,10 +156,10 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
                 //recyclerview position, viewpager position 더하여 클릭된 메모 데이터에서 슬라이드 하였을 때 다음 데이터 로딩 하기 위한 초기 값
                 if(isFirst){
                     currentPosition=position+adapterPosition;
-                    isFirst=false;
                 }else{
                     currentPosition=position;
                 }
+                isFirst=false;
 
                 if(currentPosition==0){
                     imgForward.setVisibility(View.INVISIBLE);
