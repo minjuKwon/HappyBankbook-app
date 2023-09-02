@@ -108,6 +108,9 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         submit=view.findViewById(R.id.buttonSubmit);
         init=view.findViewById(R.id.buttonInit);
 
+        radioNew.setChecked(true);
+        radioOld.setChecked(false);
+
         imgClose.setOnClickListener(this);
         txtDuration.setOnClickListener(this);
         txtFromDuration.setOnClickListener(this);
