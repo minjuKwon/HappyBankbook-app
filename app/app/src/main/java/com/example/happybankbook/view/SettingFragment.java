@@ -1,7 +1,9 @@
 package com.example.happybankbook.view;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -11,9 +13,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.R;
 
-public class SettingFragment extends Fragment{
+public class SettingFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener{
 
     private TextView txtManual, txtEllipsis, txtPdf, txtExcel, txtTxt, txtOpenSource;
     private RadioGroup radioGroupLine, radioGroupFont;
@@ -41,6 +44,58 @@ public class SettingFragment extends Fragment{
         radioOne=view.findViewById(R.id.radioFontOne);
         radioTwo=view.findViewById(R.id.radioFontTwo);
         radioThree=view.findViewById(R.id.radioFontThree);
+
+        radioSingle.setChecked(false);
+        radioMull.setChecked(true);
+
+        radioOne.setChecked(true);
+        radioTwo.setChecked(false);
+        radioThree.setChecked(false);
+
+        radioGroupLine.setOnCheckedChangeListener(this);
+        radioGroupFont.setOnCheckedChangeListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        if(group.getId()==R.id.radioLineDisplay){
+            if(checkedId==R.id.radioLineSingle){
+                radioLine(true, false, R.color.black, R.color.darkGray);
+            }else if(checkedId==R.id.radioLineMul){
+                radioLine(false, true, R.color.darkGray, R.color.black);
+            }
+        }
+        else if(group.getId()==R.id.radioFont){
+            if(checkedId==R.id.radioFontOne){
+                radioFont(true, false, false, R.color.black, R.color.darkGray, R.color.darkGray);
+            }else if(checkedId==R.id.radioFontTwo){
+                radioFont(false, true, false, R.color.darkGray, R.color.black, R.color.darkGray);
+            }else if(checkedId==R.id.radioFontThree){
+                radioFont(false, false, true, R.color.darkGray, R.color.darkGray, R.color.black);
+            }
+        }
+    }
+
+    public void radioLine(boolean b1, boolean b2, int c1, int c2){
+        radioSingle.setChecked(b1);
+        radioMull.setChecked(b2);
+        radioSingle.setTextColor(ContextCompat.getColor(getContext(),c1));
+        radioMull.setTextColor(ContextCompat.getColor(getContext(),c2));
+    }
+
+    public void radioFont(boolean b1, boolean b2, boolean b3, int c1, int c2, int c3){
+        radioOne.setChecked(b1);
+        radioTwo.setChecked(b2);
+        radioThree.setChecked(b3);
+        radioOne.setTextColor(ContextCompat.getColor(getContext(),c1));
+        radioTwo.setTextColor(ContextCompat.getColor(getContext(),c2));
+        radioThree.setTextColor(ContextCompat.getColor(getContext(),c3));
     }
 
 }
