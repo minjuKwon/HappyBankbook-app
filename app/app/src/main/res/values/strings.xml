@@ -8,6 +8,7 @@
     <string name="content">기록 내용</string>
     <string name="deposit">금액</string>
     <string name="sum">총 금액</string>
+    <string name="totalPriceOver">담을 수 있는 행복 수가 넘었습니다 (❁´◡`❁) \n 앞으로 메모 가격에 0을 입력해주세요</string>
 
     <string name="condition">검색 조건 설정</string>
     <string name="duration">조회 기간</string>

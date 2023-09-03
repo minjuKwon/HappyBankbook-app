@@ -1,5 +1,9 @@
 package com.example.happybankbook.presenter;
 
+import android.content.Context;
+import android.widget.Toast;
+
+import com.example.happybankbook.R;
 import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.MemoDao;
 import com.example.happybankbook.db.MemoData;
@@ -85,12 +89,15 @@ public class ListPresenter implements ListContract.Presenter {
     }
 
     @Override
-    public long getSumPrice(MemoDao memoDao) {
+    public long getSumPrice(MemoDao memoDao, Context context) {
         disposable.add(
                 Observable.just(memoDao)
                         .subscribeOn(Schedulers.io())
                         .subscribe(
-                                value->{price=value.getTotalPrice();}
+                                value->{price=value.getTotalPrice();},
+                                err->{
+                                    Toast.makeText(context,context.getResources().getText(R.string.totalPriceOver),Toast.LENGTH_LONG).show();
+                                }
                         )
         );
         try{Thread.sleep(500);}catch (InterruptedException  e){}

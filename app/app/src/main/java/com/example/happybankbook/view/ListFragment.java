@@ -117,7 +117,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         presenter.getData(RoomDB.getInstance(getContext()).memoDao());
 
         //메모 총합 표시
-        long totalPrice=presenter.getSumPrice(RoomDB.getInstance(getContext()).memoDao());
+        long totalPrice=presenter.getSumPrice(RoomDB.getInstance(getContext()).memoDao(),getContext());
         DecimalFormat priceFormat = new DecimalFormat("###,###");
         String strPrice= priceFormat.format(totalPrice);
         txtPrice.setText(strPrice);
