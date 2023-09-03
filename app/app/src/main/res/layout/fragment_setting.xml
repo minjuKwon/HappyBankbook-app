@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:button="@null"
                 android:text="@string/single"
-                android:textColor="@drawable/radio_selector"
+                android:textColor="@color/darkGray"
                 style="@style/setting_view.font"/>
 
             <RadioButton
@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:button="@null"
                 android:text="@string/multiple"
-                android:textColor="@drawable/radio_selector"
+                android:textColor="@color/black"
                 style="@style/setting_view.font"/>
         </RadioGroup>
 
@@ -81,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:button="@null"
                 android:text="@string/one"
-                android:textColor="@drawable/radio_selector"
+                android:textColor="@color/black"
                 style="@style/setting_view.font"/>
 
             <RadioButton
@@ -89,7 +89,7 @@
                 android:layout_width="wrap_content"
                 android:button="@null"
                 android:text="@string/two"
-                android:textColor="@drawable/radio_selector"
+                android:textColor="@color/darkGray"
                 style="@style/setting_view.font"/>
 
             <RadioButton
@@ -97,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:button="@null"
                 android:text="@string/three"
-                android:textColor="@drawable/radio_selector"
+                android:textColor="@color/darkGray"
                 style="@style/setting_view.font"/>
         </RadioGroup>
 
