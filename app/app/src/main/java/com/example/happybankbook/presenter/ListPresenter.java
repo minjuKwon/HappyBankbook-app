@@ -16,6 +16,7 @@ public class ListPresenter implements ListContract.Presenter {
     private ListContract.View view;
     private CompositeDisposable disposable;
     private int result;
+    private long price;
 
     public ListPresenter(){this.disposable=new CompositeDisposable();}
 
@@ -83,4 +84,16 @@ public class ListPresenter implements ListContract.Presenter {
         return result;
     }
 
+    @Override
+    public long getSumPrice(MemoDao memoDao) {
+        disposable.add(
+                Observable.just(memoDao)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(
+                                value->{price=value.getTotalPrice();}
+                        )
+        );
+        try{Thread.sleep(500);}catch (InterruptedException  e){}
+        return price;
+    }
 }

@@ -29,7 +29,9 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
 
     private TextView txtSearch;
     private TextView txtCondition;
+    private TextView txtPrice;
     private RecyclerView recyclerView;
+
     private ListPresenter presenter;
     private MemoAdapter adapter;
 
@@ -99,6 +101,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     private void init(View v){
         txtSearch=v.findViewById(R.id.txtSearch);
         txtCondition=v.findViewById(R.id.txtCondition);
+        txtPrice=v.findViewById(R.id.priceTotalTxt);
         recyclerView=v.findViewById(R.id.recyclerMemo);
 
         txtSearch.setOnClickListener(this);
@@ -111,6 +114,10 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         presenter=new ListPresenter();
         presenter.setView(this);
         presenter.getData(RoomDB.getInstance(getContext()).memoDao());
+
+        long totalPrice=presenter.getSumPrice(RoomDB.getInstance(getContext()).memoDao());
+        txtPrice.setText(Long.toString(totalPrice));
+
     }
 
     @Override

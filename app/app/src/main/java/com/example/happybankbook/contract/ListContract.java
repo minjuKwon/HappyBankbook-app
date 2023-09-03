@@ -19,6 +19,7 @@ public interface ListContract {
         void getDataAsc(MemoDao memoDao, int from, int to, int cnt);
         void getDataDesc(MemoDao memoDao, int from, int to, int cnt);
         int getDataCount(MemoDao memoDao);
+        long getSumPrice(MemoDao memoDao);
     }
 
 }

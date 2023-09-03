@@ -33,6 +33,9 @@ public interface MemoDao {
     @Query("SELECT COUNT(idx) FROM MemoData_table WHERE date<=:date")
     int getRangeCount(int date);
 
+    @Query("SELECT SUM(price) FROM MemoData_table")
+    long getTotalPrice();
+
     @Query("UPDATE MemoData_table SET num=num+1 WHERE date>:date")
     void changeNum(int date);
 
