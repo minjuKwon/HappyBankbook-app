@@ -23,6 +23,7 @@ import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.ListPresenter;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ListFragment extends Fragment implements View.OnClickListener, ListContract.View{
@@ -115,8 +116,11 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         presenter.setView(this);
         presenter.getData(RoomDB.getInstance(getContext()).memoDao());
 
+        //메모 총합 표시
         long totalPrice=presenter.getSumPrice(RoomDB.getInstance(getContext()).memoDao());
-        txtPrice.setText(Long.toString(totalPrice));
+        DecimalFormat priceFormat = new DecimalFormat("###,###");
+        String strPrice= priceFormat.format(totalPrice);
+        txtPrice.setText(strPrice);
 
     }
 
