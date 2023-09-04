@@ -25,11 +25,19 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
     private static int location;
     private boolean isFirst=true;
     private float fontSize;
+    private int textLine;
 
     public MemoAdapter(Context context, MemoType memoType, float fontSize){
         this.context=context;
         this.memoType=memoType;
         this.fontSize=fontSize;
+    }
+
+    public MemoAdapter(Context context, MemoType memoType, float fontSize, int textLine){
+        this.context=context;
+        this.memoType=memoType;
+        this.fontSize=fontSize;
+        this.textLine=textLine;
     }
 
     @NonNull
@@ -57,7 +65,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
         if(holder instanceof RecyclerViewHolder){
             RecyclerViewHolder recyclerViewHolder=(RecyclerViewHolder)holder;
-            recyclerViewHolder.onBind(data, context, position, fontSize);
+            recyclerViewHolder.onBind(data, context, position, fontSize, textLine);
             //recyclerview position 얻기 위한 클릭 이벤트
             recyclerViewHolder.setOnItemClickListener(new OnItemClickListener() {
                 @Override
@@ -105,6 +113,10 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
     public void setFont(float size){
         fontSize=size;
+    }
+
+    public void setTextLine(int line){
+        this.textLine=line;
     }
 
 }

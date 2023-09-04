@@ -40,7 +40,7 @@ public class RecyclerViewHolder extends BaseItemView{
         });
     }
 
-    public void onBind(BaseItem data, Context context, int position, float fontSize){
+    public void onBind(BaseItem data, Context context, int position, float fontSize, int textLine){
 
         this.data=(MemoData)data;
 
@@ -48,6 +48,10 @@ public class RecyclerViewHolder extends BaseItemView{
         txtDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
         txtContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
         txtPrice.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+
+        txtIdx.setMaxLines(textLine);
+        txtContent.setMaxLines(textLine);
+        txtPrice.setMaxLines(textLine);
 
         txtIdx.setText(Integer.toString(this.data.getNum()));
 

@@ -37,6 +37,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     private SearchPresenter presenter;
     private MemoAdapter adapter;
     private float fontSize=15;
+    private int textLine=2;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +47,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 fontSize=result.getFloat("fontSize");
                 adapter.setFont(fontSize);
+            }
+        });
+        //변경 text line 값
+        getParentFragmentManager().setFragmentResultListener("textLine2", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                textLine=result.getInt("textLine");
+                adapter.setTextLine(textLine);
             }
         });
     }
@@ -80,7 +89,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
         presenter.setView(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, fontSize);
+        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, fontSize, textLine);
         recyclerView.setAdapter(adapter);
 
         adapter.clear();

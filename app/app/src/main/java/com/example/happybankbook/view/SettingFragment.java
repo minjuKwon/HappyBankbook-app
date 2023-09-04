@@ -65,8 +65,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         if(group.getId()==R.id.radioLineDisplay){
             if(checkedId==R.id.radioLineSingle){
                 radioLine(true, false, R.color.black, R.color.darkGray);
+                changeTextLine(1,"textLine1");
+                changeTextLine(1,"textLine2");
             }else if(checkedId==R.id.radioLineMul){
                 radioLine(false, true, R.color.darkGray, R.color.black);
+                changeTextLine(2,"textLine1");
+                changeTextLine(2,"textLine2");
             }
         }
 
@@ -116,5 +120,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
         getParentFragmentManager().setFragmentResult(key, bundle);
     }
+
+   public void changeTextLine(int line, String key){
+       Bundle bundle=new Bundle();
+       bundle.putInt("textLine", line);
+
+       getParentFragmentManager().setFragmentResult(key, bundle);
+   }
 
 }

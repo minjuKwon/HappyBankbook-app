@@ -37,6 +37,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     private MemoAdapter adapter;
 
     private int addFragment=1;
+    private int textLine=2;
     private float fontSize=15;
 
     @Override
@@ -83,6 +84,14 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
                 adapter.setFont(fontSize);
             }
         });
+        //변경 text line 값
+        getParentFragmentManager().setFragmentResultListener("textLine1", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                textLine=result.getInt("textLine");
+                adapter.setTextLine(textLine);
+            }
+        });
     }
 
     @Override
@@ -118,7 +127,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         txtCondition.setOnClickListener(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, fontSize);
+        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, fontSize, textLine);
         recyclerView.setAdapter(adapter);
 
         presenter=new ListPresenter();
