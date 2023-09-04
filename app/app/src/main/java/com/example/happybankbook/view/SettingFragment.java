@@ -110,7 +110,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         radioThree.setTextColor(ContextCompat.getColor(getContext(),c3));
     }
 
-    public void changeFont(int size, String key){
+    public void changeFont(float size, String key){
         Bundle bundle=new Bundle();
         bundle.putFloat("fontSize",size);
 
