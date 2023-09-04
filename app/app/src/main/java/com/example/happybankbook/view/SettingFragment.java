@@ -1,6 +1,5 @@
 package com.example.happybankbook.view;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -13,7 +12,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.R;
 
 public class SettingFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener{
@@ -54,7 +52,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
         radioGroupLine.setOnCheckedChangeListener(this);
         radioGroupFont.setOnCheckedChangeListener(this);
-
     }
 
     @Override
@@ -64,6 +61,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
+
         if(group.getId()==R.id.radioLineDisplay){
             if(checkedId==R.id.radioLineSingle){
                 radioLine(true, false, R.color.black, R.color.darkGray);
@@ -71,15 +69,29 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
                 radioLine(false, true, R.color.darkGray, R.color.black);
             }
         }
+
         else if(group.getId()==R.id.radioFont){
             if(checkedId==R.id.radioFontOne){
                 radioFont(true, false, false, R.color.black, R.color.darkGray, R.color.darkGray);
+                changeFont(15,"fontSize1");
+                changeFont(15,"fontSize2");
+                changeFont(12,"fontSize3");
+                changeFont(12,"fontSize4");
             }else if(checkedId==R.id.radioFontTwo){
                 radioFont(false, true, false, R.color.darkGray, R.color.black, R.color.darkGray);
+                changeFont(18,"fontSize1");
+                changeFont(18,"fontSize2");
+                changeFont(15,"fontSize3");
+                changeFont(15,"fontSize4");
             }else if(checkedId==R.id.radioFontThree){
                 radioFont(false, false, true, R.color.darkGray, R.color.darkGray, R.color.black);
+                changeFont(21,"fontSize1");
+                changeFont(21,"fontSize2");
+                changeFont(18,"fontSize3");
+                changeFont(18,"fontSize4");
             }
         }
+
     }
 
     public void radioLine(boolean b1, boolean b2, int c1, int c2){
@@ -96,6 +108,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         radioOne.setTextColor(ContextCompat.getColor(getContext(),c1));
         radioTwo.setTextColor(ContextCompat.getColor(getContext(),c2));
         radioThree.setTextColor(ContextCompat.getColor(getContext(),c3));
+    }
+
+    public void changeFont(int size, String key){
+        Bundle bundle=new Bundle();
+        bundle.putFloat("fontSize",size);
+
+        getParentFragmentManager().setFragmentResult(key, bundle);
     }
 
 }

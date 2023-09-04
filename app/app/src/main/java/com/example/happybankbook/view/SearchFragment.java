@@ -3,7 +3,10 @@ package com.example.happybankbook.view;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +36,19 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     private RecyclerView recyclerView;
     private SearchPresenter presenter;
     private MemoAdapter adapter;
+    private float fontSize=15;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getParentFragmentManager().setFragmentResultListener("fontSize2", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                fontSize=result.getFloat("fontSize");
+                adapter.setFont(fontSize);
+            }
+        });
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,7 +80,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
         presenter.setView(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER);
+        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, fontSize);
         recyclerView.setAdapter(adapter);
 
         adapter.clear();

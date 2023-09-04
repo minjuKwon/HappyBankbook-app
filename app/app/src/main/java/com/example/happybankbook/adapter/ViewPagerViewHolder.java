@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,9 +31,11 @@ public class ViewPagerViewHolder extends BaseItemView {
         imgDetail=view.findViewById(R.id.memoDetailImg);
     }
 
-    public void onBind(BaseItem data, Context context){
+    public void onBind(BaseItem data, Context context, float fontSize){
 
         this.data=(MemoData)data;
+
+        txtDetailContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 
         String date=Integer.toString(this.data.getDate());
         String year=date.substring(0,4);

@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -41,6 +42,20 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     private EditText editContent;
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private MemoPresenter presenter;
+    private float fontSize=12;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //변경 font size 값
+        getParentFragmentManager().setFragmentResultListener("fontSize3", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                fontSize=result.getFloat("fontSize");
+                editContent.setTextSize(fontSize);
+            }
+        });
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

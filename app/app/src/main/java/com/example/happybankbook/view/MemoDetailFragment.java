@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentResultListener;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +55,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     private int adapterPosition;
     private int rowCnt;
     private boolean isFirst=true;
+    private float fontSize=12;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,6 +90,14 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
                 }
             }
         });
+        //변경 font size 값
+        getParentFragmentManager().setFragmentResultListener("fontSize4", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                fontSize=result.getFloat("fontSize");
+                adapter.setFont(fontSize);
+            }
+        });
 
     }
 
@@ -120,7 +128,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         presenter=new ListPresenter();
         presenter.setView(this);
 
-        adapter=new MemoAdapter(getContext(), MemoType.VIEWPAGER);
+        adapter=new MemoAdapter(getContext(), MemoType.VIEWPAGER, fontSize);
         viewPager.setAdapter(adapter);
 
         adapterPosition= adapter.getLocation();

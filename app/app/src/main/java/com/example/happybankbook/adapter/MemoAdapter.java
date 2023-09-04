@@ -24,10 +24,12 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
     private static int location;
     private boolean isFirst=true;
+    private float fontSize;
 
-    public MemoAdapter(Context context, MemoType memoType){
+    public MemoAdapter(Context context, MemoType memoType, float fontSize){
         this.context=context;
         this.memoType=memoType;
+        this.fontSize=fontSize;
     }
 
     @NonNull
@@ -55,7 +57,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
         if(holder instanceof RecyclerViewHolder){
             RecyclerViewHolder recyclerViewHolder=(RecyclerViewHolder)holder;
-            recyclerViewHolder.onBind(data, context, position);
+            recyclerViewHolder.onBind(data, context, position, fontSize);
             //recyclerview position 얻기 위한 클릭 이벤트
             recyclerViewHolder.setOnItemClickListener(new OnItemClickListener() {
                 @Override
@@ -72,7 +74,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
                 data=dataList.get(holder.getAdapterPosition()+location);
                 isFirst=false;
             }
-            viewPagerViewHolder.onBind(data, context);
+            viewPagerViewHolder.onBind(data, context, fontSize);
         }
     }
 
@@ -99,6 +101,10 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
     public int getLocation(){
         return location;
+    }
+
+    public void setFont(float size){
+        fontSize=size;
     }
 
 }
