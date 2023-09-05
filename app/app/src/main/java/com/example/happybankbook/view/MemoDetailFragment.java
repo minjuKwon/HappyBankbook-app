@@ -1,5 +1,7 @@
 package com.example.happybankbook.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -110,6 +112,21 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        SharedPreferences preferences= getActivity().getSharedPreferences("memoDetailTextSetting",Context.MODE_PRIVATE);
+        fontSize=preferences.getFloat("fontSize",12);
+        adapter.setFont(fontSize);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        resetTextSetting();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         presenter.releaseView();
@@ -182,6 +199,14 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
 
             }
         });
+    }
+
+    private void resetTextSetting(){
+        SharedPreferences preferences= getActivity().getSharedPreferences("memoDetailTextSetting", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=preferences.edit();
+        editor.putFloat("fontSize", fontSize);
+
+        editor.apply();
     }
 
 }
