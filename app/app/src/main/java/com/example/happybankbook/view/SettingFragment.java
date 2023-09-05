@@ -1,20 +1,21 @@
 package com.example.happybankbook.view;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.example.happybankbook.R;
 
@@ -94,6 +95,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         radioGroupFont.setOnCheckedChangeListener(this);
 
         txtEllipsis.setOnClickListener(this);
+        txtPdf.setOnClickListener(this);
+        txtExcel.setOnClickListener(this);
+        txtTxt.setOnClickListener(this);
     }
 
     @Override
@@ -103,6 +107,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             boolean check=!isEllipsize;
             changeEllipsize(check,"textEllipsize1");
             changeEllipsize(check,"textEllipsize2");
+        }else if(v.getId()==R.id.pdf){
+            makeExportDialog("pdf");
+        }else if(v.getId()==R.id.excel){
+            makeExportDialog("excel");
+        }else if(v.getId()==R.id.txt){
+            makeExportDialog("txt");
         }
     }
 
@@ -205,6 +215,43 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         editor.putInt("checkFontSize", checkFontSize);
 
         editor.apply();
+    }
+
+    public void makeExportDialog(String file){
+        AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
+        builder.setMessage(getResources().getText(R.string.doExport));
+        builder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(file=="pdf"){
+                   exportPdf();
+                }else if(file=="excel"){
+                    exportExcel();
+                }else if(file=="txt"){
+                    exportTxt();
+                }
+            }
+        });
+        builder.setNegativeButton(getResources().getText(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog=builder.create();
+        dialog.show();
+    }
+
+    public void exportPdf(){
+
+    }
+
+    public void exportExcel(){
+
+    }
+
+    public void exportTxt(){
+
     }
 
 }
