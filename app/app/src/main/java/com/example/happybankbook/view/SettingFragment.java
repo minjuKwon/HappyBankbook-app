@@ -1,7 +1,11 @@
 package com.example.happybankbook.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -20,7 +24,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     private RadioGroup radioGroupLine, radioGroupFont;
     private RadioButton radioSingle, radioMull, radioOne, radioTwo, radioThree;
 
-    boolean isEllipsize=false;
+    private boolean isEllipsize=false;
+    private int checkLine, checkFontSize;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,6 +33,39 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
        View view=inflater.inflate(R.layout.fragment_setting, container, false);
        init(view);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        SharedPreferences preferences= getActivity().getSharedPreferences("settingInfo",Context.MODE_PRIVATE);
+        isEllipsize=preferences.getBoolean("isEllipsize",true);
+        checkLine=preferences.getInt("checkLine",R.id.radioLineMul);
+        checkFontSize=preferences.getInt("checkFontSize",R.id.radioFontOne);
+
+        setEllipsize();
+
+        if(checkLine==R.id.radioLineSingle){
+            radioLine(true, false, R.color.black, R.color.gray);
+        }else if(checkLine==R.id.radioLineMul){
+            radioLine(false, true, R.color.darkGray, R.color.black);
+        }
+
+        if(checkFontSize==R.id.radioFontOne){
+            radioFont(true, false, false, R.color.black, R.color.gray, R.color.gray);
+        }else if(checkFontSize==R.id.radioFontTwo){
+            radioFont(false, true, false, R.color.gray, R.color.black, R.color.gray);
+        }else if(checkFontSize==R.id.radioFontThree){
+            radioFont(false, false, true, R.color.gray, R.color.gray, R.color.black);
+        }
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        resetRadioButton();
     }
 
     private void init(View view){
@@ -76,10 +114,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
                 radioLine(true, false, R.color.black, R.color.gray);
                 changeTextLine(1,"textLine1");
                 changeTextLine(1,"textLine2");
+                checkLine=R.id.radioLineSingle;
             }else if(checkedId==R.id.radioLineMul){
                 radioLine(false, true, R.color.darkGray, R.color.black);
                 changeTextLine(2,"textLine1");
                 changeTextLine(2,"textLine2");
+                checkLine=R.id.radioLineMul;
             }
         }
 
@@ -90,18 +130,21 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
                 changeFont(15,"fontSize2");
                 changeFont(12,"fontSize3");
                 changeFont(12,"fontSize4");
+                checkFontSize=R.id.radioFontOne;
             }else if(checkedId==R.id.radioFontTwo){
                 radioFont(false, true, false, R.color.gray, R.color.black, R.color.gray);
                 changeFont(18,"fontSize1");
                 changeFont(18,"fontSize2");
                 changeFont(15,"fontSize3");
                 changeFont(15,"fontSize4");
+                checkFontSize=R.id.radioFontTwo;
             }else if(checkedId==R.id.radioFontThree){
                 radioFont(false, false, true, R.color.gray, R.color.gray, R.color.black);
                 changeFont(21,"fontSize1");
                 changeFont(21,"fontSize2");
                 changeFont(18,"fontSize3");
                 changeFont(18,"fontSize4");
+                checkFontSize=R.id.radioFontThree;
             }
         }
 
@@ -152,6 +195,16 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         bundle.putBoolean("textEllipsize", check);
 
         getParentFragmentManager().setFragmentResult(key, bundle);
+    }
+
+    public void resetRadioButton(){
+        SharedPreferences preferences= getActivity().getSharedPreferences("settingInfo", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=preferences.edit();
+        editor.putBoolean("isEllipsize", !isEllipsize);
+        editor.putInt("checkLine", checkLine);
+        editor.putInt("checkFontSize", checkFontSize);
+
+        editor.apply();
     }
 
 }
