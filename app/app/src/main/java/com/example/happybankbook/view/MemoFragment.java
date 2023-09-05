@@ -3,7 +3,9 @@ package com.example.happybankbook.view;
 import static android.app.Activity.RESULT_OK;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -70,12 +72,22 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         super.onViewCreated(view, savedInstanceState);
         ((MainActivity)getActivity()).setNowDate(txtDate);
         getGallery();
+
+        SharedPreferences preferences= getActivity().getSharedPreferences("memoTextSetting",Context.MODE_PRIVATE);
+        fontSize=preferences.getFloat("fontSize",12);
+        editContent.setTextSize(fontSize);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         editContent.setText("");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        resetTextSetting();
     }
 
     @Override
@@ -204,6 +216,14 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
         dialog.show();
 
+    }
+
+    private void resetTextSetting(){
+        SharedPreferences preferences= getActivity().getSharedPreferences("memoTextSetting", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=preferences.edit();
+        editor.putFloat("fontSize", fontSize);
+
+        editor.apply();
     }
 
 }
