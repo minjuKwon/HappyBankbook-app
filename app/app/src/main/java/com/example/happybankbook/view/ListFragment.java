@@ -1,5 +1,7 @@
 package com.example.happybankbook.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -112,12 +114,27 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        SharedPreferences preferences= getActivity().getSharedPreferences("listTextSetting",Context.MODE_PRIVATE);
+        textEllipsize=preferences.getBoolean("textEllipsize",true);
+        textLine=preferences.getInt("textLine",2);
+        fontSize=preferences.getFloat("fontSize",15);
+
+        adapter.setTextEllipsize(textEllipsize);
+        adapter.setTextLine(textLine);
+        adapter.setFont(fontSize);
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         //onStop()때 ConditionFragment 값 초기화
         Bundle bundle=new Bundle();
         bundle.putBoolean("stop",true);
         getParentFragmentManager().setFragmentResult("recyclerStop", bundle);
+        resetTextSetting();
     }
 
     @Override
@@ -167,6 +184,16 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     @Override
     public void setItems(ArrayList<MemoData> items) {
         adapter.setItems(items);
+    }
+
+    private void resetTextSetting(){
+        SharedPreferences preferences= getActivity().getSharedPreferences("listTextSetting", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=preferences.edit();
+        editor.putBoolean("textEllipsize", textEllipsize);
+        editor.putInt("textLine", textLine);
+        editor.putFloat("fontSize", fontSize);
+
+        editor.apply();
     }
 
 }
