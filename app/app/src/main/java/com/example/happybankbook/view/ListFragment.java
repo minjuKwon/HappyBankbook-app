@@ -39,6 +39,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     private int addFragment=1;
     private int textLine=2;
     private float fontSize=15;
+    private boolean textEllipsize=true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,6 +93,14 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
                 adapter.setTextLine(textLine);
             }
         });
+        //변경 text ellipsize 값
+        getParentFragmentManager().setFragmentResultListener("textEllipsize1", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                textEllipsize=result.getBoolean("textEllipsize");
+                adapter.setTextEllipsize(textEllipsize);
+            }
+        });
     }
 
     @Override
@@ -127,7 +136,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         txtCondition.setOnClickListener(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, fontSize, textLine);
+        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, fontSize, textLine, textEllipsize);
         recyclerView.setAdapter(adapter);
 
         presenter=new ListPresenter();

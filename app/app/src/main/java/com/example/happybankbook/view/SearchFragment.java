@@ -38,6 +38,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     private MemoAdapter adapter;
     private float fontSize=15;
     private int textLine=2;
+    private boolean textEllipsize=true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +56,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 textLine=result.getInt("textLine");
                 adapter.setTextLine(textLine);
+            }
+        });
+        //변경 text ellipsize 값
+        getParentFragmentManager().setFragmentResultListener("textEllipsize2", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                textEllipsize=result.getBoolean("textEllipsize");
+                adapter.setTextEllipsize(textEllipsize);
             }
         });
     }
@@ -89,7 +98,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
         presenter.setView(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, fontSize, textLine);
+        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, fontSize, textLine, textEllipsize);
         recyclerView.setAdapter(adapter);
 
         adapter.clear();

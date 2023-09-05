@@ -20,6 +20,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     private RadioGroup radioGroupLine, radioGroupFont;
     private RadioButton radioSingle, radioMull, radioOne, radioTwo, radioThree;
 
+    boolean isEllipsize=false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,11 +54,18 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
         radioGroupLine.setOnCheckedChangeListener(this);
         radioGroupFont.setOnCheckedChangeListener(this);
+
+        txtEllipsis.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-
+        if(v.getId()==R.id.ellipsis){
+            setEllipsize();
+            boolean check=!isEllipsize;
+            changeEllipsize(check,"textEllipsize1");
+            changeEllipsize(check,"textEllipsize2");
+        }
     }
 
     @Override
@@ -127,5 +136,22 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
        getParentFragmentManager().setFragmentResult(key, bundle);
    }
+
+   public void setEllipsize(){
+        if(isEllipsize){
+            txtEllipsis.setTextColor(ContextCompat.getColor(getContext(),R.color.black));
+            isEllipsize=false;
+        }else{
+            txtEllipsis.setTextColor(ContextCompat.getColor(getContext(),R.color.gray));
+            isEllipsize=true;
+        }
+   }
+
+    public void changeEllipsize(boolean check, String key){
+        Bundle bundle=new Bundle();
+        bundle.putBoolean("textEllipsize", check);
+
+        getParentFragmentManager().setFragmentResult(key, bundle);
+    }
 
 }

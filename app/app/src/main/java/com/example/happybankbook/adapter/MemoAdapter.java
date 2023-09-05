@@ -26,6 +26,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
     private boolean isFirst=true;
     private float fontSize;
     private int textLine;
+    private boolean textEllipsize;
 
     public MemoAdapter(Context context, MemoType memoType, float fontSize){
         this.context=context;
@@ -33,11 +34,12 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         this.fontSize=fontSize;
     }
 
-    public MemoAdapter(Context context, MemoType memoType, float fontSize, int textLine){
+    public MemoAdapter(Context context, MemoType memoType, float fontSize, int textLine, boolean textEllipsize){
         this.context=context;
         this.memoType=memoType;
         this.fontSize=fontSize;
         this.textLine=textLine;
+        this.textEllipsize=textEllipsize;
     }
 
     @NonNull
@@ -65,7 +67,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
         if(holder instanceof RecyclerViewHolder){
             RecyclerViewHolder recyclerViewHolder=(RecyclerViewHolder)holder;
-            recyclerViewHolder.onBind(data, context, position, fontSize, textLine);
+            recyclerViewHolder.onBind(data, context, position, fontSize, textLine, textEllipsize);
             //recyclerview position 얻기 위한 클릭 이벤트
             recyclerViewHolder.setOnItemClickListener(new OnItemClickListener() {
                 @Override
@@ -117,6 +119,10 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
     public void setTextLine(int line){
         this.textLine=line;
+    }
+
+    public void setTextEllipsize(boolean check){
+        this.textEllipsize=check;
     }
 
 }

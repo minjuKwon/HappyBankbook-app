@@ -3,6 +3,7 @@ package com.example.happybankbook.adapter;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
@@ -40,7 +41,7 @@ public class RecyclerViewHolder extends BaseItemView{
         });
     }
 
-    public void onBind(BaseItem data, Context context, int position, float fontSize, int textLine){
+    public void onBind(BaseItem data, Context context, int position, float fontSize, int textLine, boolean textEllipsize){
 
         this.data=(MemoData)data;
 
@@ -52,6 +53,16 @@ public class RecyclerViewHolder extends BaseItemView{
         txtIdx.setMaxLines(textLine);
         txtContent.setMaxLines(textLine);
         txtPrice.setMaxLines(textLine);
+
+        if(textEllipsize){
+            txtIdx.setEllipsize(TextUtils.TruncateAt.END);
+            txtContent.setEllipsize(TextUtils.TruncateAt.END);
+            txtPrice.setEllipsize(TextUtils.TruncateAt.END);
+        }else{
+            txtIdx.setEllipsize(null);
+            txtContent.setEllipsize(null);
+            txtPrice.setEllipsize(null);
+        }
 
         txtIdx.setText(Integer.toString(this.data.getNum()));
 
