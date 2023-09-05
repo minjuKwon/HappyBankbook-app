@@ -73,7 +73,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
         if(group.getId()==R.id.radioLineDisplay){
             if(checkedId==R.id.radioLineSingle){
-                radioLine(true, false, R.color.black, R.color.darkGray);
+                radioLine(true, false, R.color.black, R.color.gray);
                 changeTextLine(1,"textLine1");
                 changeTextLine(1,"textLine2");
             }else if(checkedId==R.id.radioLineMul){
@@ -85,19 +85,19 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
         else if(group.getId()==R.id.radioFont){
             if(checkedId==R.id.radioFontOne){
-                radioFont(true, false, false, R.color.black, R.color.darkGray, R.color.darkGray);
+                radioFont(true, false, false, R.color.black, R.color.gray, R.color.gray);
                 changeFont(15,"fontSize1");
                 changeFont(15,"fontSize2");
                 changeFont(12,"fontSize3");
                 changeFont(12,"fontSize4");
             }else if(checkedId==R.id.radioFontTwo){
-                radioFont(false, true, false, R.color.darkGray, R.color.black, R.color.darkGray);
+                radioFont(false, true, false, R.color.gray, R.color.black, R.color.gray);
                 changeFont(18,"fontSize1");
                 changeFont(18,"fontSize2");
                 changeFont(15,"fontSize3");
                 changeFont(15,"fontSize4");
             }else if(checkedId==R.id.radioFontThree){
-                radioFont(false, false, true, R.color.darkGray, R.color.darkGray, R.color.black);
+                radioFont(false, false, true, R.color.gray, R.color.gray, R.color.black);
                 changeFont(21,"fontSize1");
                 changeFont(21,"fontSize2");
                 changeFont(18,"fontSize3");
