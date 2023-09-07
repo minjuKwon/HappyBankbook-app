@@ -18,7 +18,7 @@ public class OutputPresenter implements OutputContract.Presenter {
 
     private CompositeDisposable disposable;
 
-    GetReturnValue getReturnValue;
+    private GetReturnValue getReturnValue;
 
     public OutputPresenter(){
         this.disposable=new CompositeDisposable();
