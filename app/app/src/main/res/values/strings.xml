@@ -44,7 +44,7 @@
     <string name="three">3</string>
     <string name="export">내보내기</string>
     <string name="pdf">pdf</string>
-    <string name="excel">excel</string>
+    <string name="excel">csv</string>
     <string name="txt">txt</string>
     <string name="openSource">오픈 소스</string>
     <string name="doExport">정말 내보내겠습니까?</string>
