@@ -47,7 +47,11 @@
     <string name="excel">csv</string>
     <string name="txt">txt</string>
     <string name="openSource">오픈 소스</string>
-    <string name="doExport">정말 내보내겠습니까?</string>
+    <string name="doExport">정말 파일을 생성하시겠습니까?</string>
+    <string name="noMemo">저장된 메모 내역이 없습니다</string>
+    <string name="savePermissionYes">파일 생성을 시작합니다</string>
+    <string name="savePermissionNo">저장 접근 권한을 취소하였습니다 \n 파일 생성을 위해 허용해 주세요</string>
+    <string name="completeSaving">파일 생성이 완료되었습니다</string>
 
     <string name="list">메모 내역</string>
     <string name="add">추가하기</string>
