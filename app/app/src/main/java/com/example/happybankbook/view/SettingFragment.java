@@ -1,32 +1,82 @@
 package com.example.happybankbook.view;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.happybankbook.GetReturnValue;
 import com.example.happybankbook.R;
+import com.example.happybankbook.db.RoomDB;
+import com.example.happybankbook.presenter.OutputPresenter;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class SettingFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener{
+
+    private class FileRunnable implements Runnable{
+        private StringBuffer content;
+        private String extension;
+        public FileRunnable(StringBuffer content, String extension){
+            this.content=content;
+            this.extension=extension;
+        }
+        @Override
+        public void run() {
+            makeFile(content, extension);
+        }
+    }
+
+    private String fileExtension;
+    private ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), check -> {
+                if(check){
+                    Toast.makeText(getContext(),getResources().getText(R.string.savePermissionYes),Toast.LENGTH_SHORT).show();
+                    if("pdf".equals(fileExtension)){
+                        exportPdf();
+                    }else if("excel".equals(fileExtension)){
+                       exportTxtFile(',',".csv");
+                    }else if("txt".equals(fileExtension)){
+                        exportTxtFile(' ',".txt");
+                    }
+                }else{
+                    Toast.makeText(getContext(),getResources().getText(R.string.savePermissionNo),Toast.LENGTH_LONG).show();
+                }
+            });
 
     private TextView txtManual, txtEllipsis, txtPdf, txtExcel, txtTxt, txtOpenSource;
     private RadioGroup radioGroupLine, radioGroupFont;
     private RadioButton radioSingle, radioMull, radioOne, radioTwo, radioThree;
 
+    private OutputPresenter presenter;
+    private FileRunnable fileRunnable;
+    private Thread fileThread;
+
     private boolean isEllipsize=false;
     private int checkLine, checkFontSize;
+    private final String PERMISSION= Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
+    private StringBuffer buffer;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +117,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     public void onStop() {
         super.onStop();
         resetRadioButton();
+        presenter.releaseView();
     }
 
     private void init(View view){
@@ -83,6 +134,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         radioOne=view.findViewById(R.id.radioFontOne);
         radioTwo=view.findViewById(R.id.radioFontTwo);
         radioThree=view.findViewById(R.id.radioFontThree);
+
+        presenter=new OutputPresenter();
 
         radioSingle.setChecked(false);
         radioMull.setChecked(true);
@@ -108,11 +161,14 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             changeEllipsize(check,"textEllipsize1");
             changeEllipsize(check,"textEllipsize2");
         }else if(v.getId()==R.id.pdf){
-            makeExportDialog("pdf");
+            fileExtension="pdf";
+            makeExportDialog();
         }else if(v.getId()==R.id.excel){
-            makeExportDialog("excel");
+            fileExtension="excel";
+            makeExportDialog();
         }else if(v.getId()==R.id.txt){
-            makeExportDialog("txt");
+            fileExtension="txt";
+            makeExportDialog();
         }
     }
 
@@ -217,19 +273,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         editor.apply();
     }
 
-    public void makeExportDialog(String file){
+    public void makeExportDialog(){
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
         builder.setMessage(getResources().getText(R.string.doExport));
         builder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(file=="pdf"){
-                   exportPdf();
-                }else if(file=="excel"){
-                    exportExcel();
-                }else if(file=="txt"){
-                    exportTxt();
-                }
+                requestPermissionLauncher.launch(PERMISSION);
             }
         });
         builder.setNegativeButton(getResources().getText(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -246,11 +296,62 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     }
 
-    public void exportExcel(){
+    public void exportTxtFile(char split, String extension){
+        buffer=new StringBuffer();
+        presenter.getDataToFile(RoomDB.getInstance(getContext()).memoDao(),split);
 
+        presenter.setGetReturnValue(new GetReturnValue() {
+            @Override
+            public void getStringBuffer(StringBuffer stringBuffer) {
+                buffer=stringBuffer;
+                fileRunnable=new FileRunnable(buffer, extension);
+                fileThread=new Thread(fileRunnable);
+                fileThread.start();
+            }
+        });
     }
 
-    public void exportTxt(){
+    public void makeFile(StringBuffer content, String extension){
+        File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/HappyBank");
+        int count=0;
+
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        if(directory.listFiles()!=null){
+            count=directory.listFiles().length;
+        }
+
+        final String fileName="happy bank memo";
+
+        File file = new File(directory, fileName+"_"+(count+1) + extension);
+
+        FileWriter fw=null;
+        BufferedWriter writer=null;
+
+        try{
+            file.createNewFile();
+
+            fw = new FileWriter(file);
+            writer = new BufferedWriter(fw);
+
+            String strContent = String.valueOf(content);
+            if("null".equals(strContent)||"".equals(strContent)){
+               Toast.makeText(getContext(),getResources().getText(R.string.noMemo),Toast.LENGTH_LONG).show();
+            }else{
+                writer.write(strContent);
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }finally{
+            try {
+                if(writer!=null){writer.close();}
+                if(fw!=null){fw.close();}
+            }catch (IOException e2){
+                e2.printStackTrace();
+            }
+        }
 
     }
 
