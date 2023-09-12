@@ -1,12 +1,19 @@
 package com.example.happybankbook.view;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +35,7 @@ import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.OutputPresenter;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -36,19 +44,34 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     private class FileRunnable implements Runnable{
         private StringBuffer content;
         private String extension;
+        private Uri uri;
+        private int branch=0;
+
         public FileRunnable(StringBuffer content, String extension){
             this.content=content;
             this.extension=extension;
+            branch=1;
+        }
+        public FileRunnable(Uri uri, StringBuffer content){
+            this.uri=uri;
+            this.content=content;
+            branch=2;
         }
         @Override
         public void run() {
-            makeFile(content, extension);
+            Log.d("Memo","run()");
+            if(branch==1){
+                makeFile(content, extension);
+            }else if(branch==2){
+                makeFile(uri, content);
+            }
         }
     }
 
     private String fileExtension;
     private ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), check -> {
+                Log.d("Memo","requestPermissionLauncher");
                 if(check){
                     Toast.makeText(getContext(),getResources().getText(R.string.savePermissionYes),Toast.LENGTH_SHORT).show();
                     if("pdf".equals(fileExtension)){
@@ -77,6 +100,22 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     private StringBuffer buffer;
 
+    private ActivityResultLauncher<Intent> activityResultLauncher
+            =registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result->{
+            if(result.getResultCode()==RESULT_OK){
+                Uri uri=result.getData().getData();
+                Log.d("Memo","result.getData : "+result.getData());
+                Log.d("Memo","result.getData.getData : "+result.getData().getData());
+                Log.d("Memo","uri : "+uri);
+                if("pdf".equals(fileExtension)){
+                    exportPdf();
+                }else if("excel".equals(fileExtension)){
+                    exportTxtFile(uri,',');
+                }else if("txt".equals(fileExtension)){
+                    exportTxtFile(uri,' ');
+                }
+            }
+    });
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -162,13 +201,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             changeEllipsize(check,"textEllipsize2");
         }else if(v.getId()==R.id.pdf){
             fileExtension="pdf";
-            makeExportDialog();
+            makeExportDialog(Build.VERSION.SDK_INT,"");
         }else if(v.getId()==R.id.excel){
             fileExtension="excel";
-            makeExportDialog();
+            makeExportDialog(Build.VERSION.SDK_INT,"text/comma-separated-values");
         }else if(v.getId()==R.id.txt){
             fileExtension="txt";
-            makeExportDialog();
+            makeExportDialog(Build.VERSION.SDK_INT,"text/plain");
         }
     }
 
@@ -273,13 +312,21 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         editor.apply();
     }
 
-    public void makeExportDialog(){
+    public void makeExportDialog(int androidVersion, String type){
+        Log.d("Memo","MakeExportDialog");
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
         builder.setMessage(getResources().getText(R.string.doExport));
         builder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                requestPermissionLauncher.launch(PERMISSION);
+                if(androidVersion>=Build.VERSION_CODES.Q){
+                    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType(type);
+                    intent.putExtra(Intent.EXTRA_TITLE,"happy bank memo");
+                }else{
+                    requestPermissionLauncher.launch(PERMISSION);
+                }
             }
         });
         builder.setNegativeButton(getResources().getText(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -297,6 +344,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     }
 
     public void exportTxtFile(char split, String extension){
+        Log.d("Memo","exportTxt()");
         buffer=new StringBuffer();
         presenter.getDataToFile(RoomDB.getInstance(getContext()).memoDao(),split);
 
@@ -307,11 +355,60 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
                 fileRunnable=new FileRunnable(buffer, extension);
                 fileThread=new Thread(fileRunnable);
                 fileThread.start();
+                Log.d("Memo","thread start");
             }
         });
     }
 
+    public void exportTxtFile(Uri uri, char split){
+        Log.d("Memo","exportTxt()");
+        buffer=new StringBuffer();
+        presenter.getDataToFile(RoomDB.getInstance(getContext()).memoDao(),split);
+
+        presenter.setGetReturnValue(new GetReturnValue() {
+            @Override
+            public void getStringBuffer(StringBuffer stringBuffer) {
+                buffer=stringBuffer;
+                fileRunnable=new FileRunnable(uri, buffer);
+                fileThread=new Thread(fileRunnable);
+                fileThread.start();
+                Log.d("Memo","thread start");
+            }
+        });
+    }
+    public void makeFile(Uri uri, StringBuffer content){
+        Log.d("Memo","makeFile()");
+        ParcelFileDescriptor pfd=null;
+        FileOutputStream fileOutputStream=null;
+        try{
+            pfd = getActivity().getContentResolver().openFileDescriptor(uri, "w");
+            Log.d("Memo","pfd : "+pfd);
+            fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
+            Log.d("Memo","pfd.getFileDescriptor() : "+pfd.getFileDescriptor());
+
+            String strContent = String.valueOf(content);
+            if("null".equals(strContent)||"".equals(strContent)){
+                Toast.makeText(getContext(),getResources().getText(R.string.noMemo),Toast.LENGTH_LONG).show();
+            }else{
+                fileOutputStream.write(strContent.getBytes());
+                Log.d("Memo","write()");
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }finally{
+            try {
+                if(fileOutputStream!=null){fileOutputStream.close();}
+                if(pfd!=null){pfd.close();}
+                Log.d("Memo","생성 완료");
+            }catch (IOException e2){
+                e2.printStackTrace();
+            }
+        }
+
+    }
+
     public void makeFile(StringBuffer content, String extension){
+        Log.d("Memo","makeFile()");
         File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/HappyBank");
         int count=0;
 
@@ -320,19 +417,21 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         }
 
         if(directory.listFiles()!=null){
+            Log.d("Memo","directory.listFiles : "+directory.listFiles());
             count=directory.listFiles().length;
+            Log.d("Memo","count : "+count);
         }
 
         final String fileName="happy bank memo";
 
         File file = new File(directory, fileName+"_"+(count+1) + extension);
-
+        Log.d("Memo","file : "+file.exists());
         FileWriter fw=null;
         BufferedWriter writer=null;
 
         try{
             file.createNewFile();
-
+            Log.d("Memo","file : "+file.exists());
             fw = new FileWriter(file);
             writer = new BufferedWriter(fw);
 
@@ -341,6 +440,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
                Toast.makeText(getContext(),getResources().getText(R.string.noMemo),Toast.LENGTH_LONG).show();
             }else{
                 writer.write(strContent);
+                Log.d("Memo","write()");
             }
         }catch(IOException e){
             e.printStackTrace();
@@ -348,6 +448,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             try {
                 if(writer!=null){writer.close();}
                 if(fw!=null){fw.close();}
+                Log.d("Memo","생성 완료");
             }catch (IOException e2){
                 e2.printStackTrace();
             }
