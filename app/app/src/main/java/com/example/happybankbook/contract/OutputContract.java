@@ -12,5 +12,6 @@ public interface OutputContract {
 
     interface Presenter extends BasePresenter {
         void getDataToFile(MemoDao memoDao, char split);
+        void getDataToPdf(MemoDao memoDao);
     }
 }
