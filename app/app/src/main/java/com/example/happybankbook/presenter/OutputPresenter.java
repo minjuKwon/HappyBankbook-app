@@ -2,15 +2,13 @@ package com.example.happybankbook.presenter;
 
 import android.util.Log;
 
-import com.example.happybankbook.GetReturnValue;
+import com.example.happybankbook.GetReturnStringBuffer;
 import com.example.happybankbook.contract.OutputContract;
 import com.example.happybankbook.db.MemoDao;
 import com.example.happybankbook.db.MemoData;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -18,7 +16,7 @@ public class OutputPresenter implements OutputContract.Presenter {
 
     private CompositeDisposable disposable;
 
-    private GetReturnValue getReturnValue;
+    private GetReturnStringBuffer getReturnStringBuffer;
 
     public OutputPresenter(){
         this.disposable=new CompositeDisposable();
@@ -43,15 +41,15 @@ public class OutputPresenter implements OutputContract.Presenter {
                                                 .append(data.getContent()).append(split)
                                                 .append(data.getPrice()).append('\n');
                                     }
-                                    getReturnValue.getStringBuffer(stringBuffer);
+                                    getReturnStringBuffer.getStringBuffer(stringBuffer);
                                 },
                                 error->{Log.d("Memo","export file data error : "+error);}
                         )
         );
     }
 
-    public void setGetReturnValue(GetReturnValue getReturnValue){
-        this.getReturnValue=getReturnValue;
+    public void setGetReturnValue(GetReturnStringBuffer getReturnStringBuffer){
+        this.getReturnStringBuffer = getReturnStringBuffer;
     }
 
 }

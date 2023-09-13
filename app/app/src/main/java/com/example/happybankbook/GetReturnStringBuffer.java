@@ -1,5 +1,5 @@
 package com.example.happybankbook;
 
-public interface GetReturnValue{
+public interface GetReturnStringBuffer {
     void getStringBuffer(StringBuffer stringBuffer);
 }

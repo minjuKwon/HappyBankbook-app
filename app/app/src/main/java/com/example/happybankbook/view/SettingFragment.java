@@ -29,7 +29,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.happybankbook.GetReturnValue;
+import com.example.happybankbook.GetReturnStringBuffer;
 import com.example.happybankbook.R;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.OutputPresenter;
@@ -45,7 +45,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         private StringBuffer content;
         private String extension;
         private Uri uri;
-        private int branch=0;
+        private int branch;
 
         public FileRunnable(StringBuffer content, String extension){
             this.content=content;
@@ -57,6 +57,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             this.content=content;
             branch=2;
         }
+
         @Override
         public void run() {
             Log.d("Memo","run()");
@@ -348,7 +349,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         buffer=new StringBuffer();
         presenter.getDataToFile(RoomDB.getInstance(getContext()).memoDao(),split);
 
-        presenter.setGetReturnValue(new GetReturnValue() {
+        presenter.setGetReturnValue(new GetReturnStringBuffer() {
             @Override
             public void getStringBuffer(StringBuffer stringBuffer) {
                 buffer=stringBuffer;
@@ -365,7 +366,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         buffer=new StringBuffer();
         presenter.getDataToFile(RoomDB.getInstance(getContext()).memoDao(),split);
 
-        presenter.setGetReturnValue(new GetReturnValue() {
+        presenter.setGetReturnValue(new GetReturnStringBuffer() {
             @Override
             public void getStringBuffer(StringBuffer stringBuffer) {
                 buffer=stringBuffer;
@@ -376,10 +377,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             }
         });
     }
+
     public void makeFile(Uri uri, StringBuffer content){
         Log.d("Memo","makeFile()");
         ParcelFileDescriptor pfd=null;
         FileOutputStream fileOutputStream=null;
+
         try{
             pfd = getActivity().getContentResolver().openFileDescriptor(uri, "w");
             Log.d("Memo","pfd : "+pfd);
