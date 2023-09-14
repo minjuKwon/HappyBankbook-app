@@ -8,12 +8,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +31,11 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.happybankbook.GetReturnMemoDataList;
 import com.example.happybankbook.GetReturnStringBuffer;
+import com.example.happybankbook.PdfRunnable;
 import com.example.happybankbook.R;
+import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.OutputPresenter;
 import java.io.BufferedWriter;
@@ -38,6 +43,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class SettingFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener{
 
@@ -70,13 +76,14 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     }
 
     private String fileExtension;
+
     private ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), check -> {
                 Log.d("Memo","requestPermissionLauncher");
                 if(check){
                     Toast.makeText(getContext(),getResources().getText(R.string.savePermissionYes),Toast.LENGTH_SHORT).show();
                     if("pdf".equals(fileExtension)){
-                        exportPdf();
+                        exportPdf(".pdf");
                     }else if("excel".equals(fileExtension)){
                        exportTxtFile(',',".csv");
                     }else if("txt".equals(fileExtension)){
@@ -86,6 +93,23 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
                     Toast.makeText(getContext(),getResources().getText(R.string.savePermissionNo),Toast.LENGTH_LONG).show();
                 }
             });
+    
+    private ActivityResultLauncher<Intent> activityResultLauncher
+            =registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result->{
+        if(result.getResultCode()==RESULT_OK){
+            Uri uri=result.getData().getData();
+            Log.d("Memo","result.getData : "+result.getData());
+            Log.d("Memo","result.getData.getData : "+result.getData().getData());
+            Log.d("Memo","uri : "+uri);
+            if("pdf".equals(fileExtension)){
+                exportPdf(uri);
+            }else if("excel".equals(fileExtension)){
+                exportTxtFile(uri,',');
+            }else if("txt".equals(fileExtension)){
+                exportTxtFile(uri,' ');
+            }
+        }
+    });
 
     private TextView txtManual, txtEllipsis, txtPdf, txtExcel, txtTxt, txtOpenSource;
     private RadioGroup radioGroupLine, radioGroupFont;
@@ -100,23 +124,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     private final String PERMISSION= Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
     private StringBuffer buffer;
-
-    private ActivityResultLauncher<Intent> activityResultLauncher
-            =registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result->{
-            if(result.getResultCode()==RESULT_OK){
-                Uri uri=result.getData().getData();
-                Log.d("Memo","result.getData : "+result.getData());
-                Log.d("Memo","result.getData.getData : "+result.getData().getData());
-                Log.d("Memo","uri : "+uri);
-                if("pdf".equals(fileExtension)){
-                    exportPdf();
-                }else if("excel".equals(fileExtension)){
-                    exportTxtFile(uri,',');
-                }else if("txt".equals(fileExtension)){
-                    exportTxtFile(uri,' ');
-                }
-            }
-    });
+    private ParcelFileDescriptor pfd;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -150,7 +158,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         }else if(checkFontSize==R.id.radioFontThree){
             radioFont(false, false, true, R.color.gray, R.color.gray, R.color.black);
         }
-
     }
 
     @Override
@@ -202,7 +209,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             changeEllipsize(check,"textEllipsize2");
         }else if(v.getId()==R.id.pdf){
             fileExtension="pdf";
-            makeExportDialog(Build.VERSION.SDK_INT,"");
+            makeExportDialog(Build.VERSION.SDK_INT,"application/pdf");
         }else if(v.getId()==R.id.excel){
             fileExtension="excel";
             makeExportDialog(Build.VERSION.SDK_INT,"text/comma-separated-values");
@@ -325,6 +332,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
                     intent.setType(type);
                     intent.putExtra(Intent.EXTRA_TITLE,"happy bank memo");
+                    activityResultLauncher.launch(intent);
                 }else{
                     requestPermissionLauncher.launch(PERMISSION);
                 }
@@ -340,8 +348,28 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         dialog.show();
     }
 
-    public void exportPdf(){
+    public void exportPdf(String extension){
+        presenter.getDataToPdf(RoomDB.getInstance(getContext()).memoDao());
+        presenter.setReturnMemoDataList(new GetReturnMemoDataList() {
+            @Override
+            public void getMemoDataList(ArrayList<MemoData> list) {
+                PdfRunnable runnable=new PdfRunnable(list, getContext(), extension);
+                Thread thread=new Thread(runnable);
+                thread.start();
+            }
+        });
+    }
 
+    public void exportPdf(Uri uri){
+        presenter.getDataToPdf(RoomDB.getInstance(getContext()).memoDao());
+        presenter.setReturnMemoDataList(new GetReturnMemoDataList() {
+            @Override
+            public void getMemoDataList(ArrayList<MemoData> list) {
+                PdfRunnable runnable=new PdfRunnable(list, getContext(),uri);
+                Thread thread=new Thread(runnable);
+                thread.start();
+            }
+        });
     }
 
     public void exportTxtFile(char split, String extension){
@@ -380,14 +408,11 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     public void makeFile(Uri uri, StringBuffer content){
         Log.d("Memo","makeFile()");
-        ParcelFileDescriptor pfd=null;
+        pfd=null;
         FileOutputStream fileOutputStream=null;
 
         try{
-            pfd = getActivity().getContentResolver().openFileDescriptor(uri, "w");
-            Log.d("Memo","pfd : "+pfd);
-            fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
-            Log.d("Memo","pfd.getFileDescriptor() : "+pfd.getFileDescriptor());
+            fileOutputStream=getDirectory(uri, getContext());
 
             String strContent = String.valueOf(content);
             if("null".equals(strContent)||"".equals(strContent)){
@@ -412,22 +437,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     public void makeFile(StringBuffer content, String extension){
         Log.d("Memo","makeFile()");
-        File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/HappyBank");
-        int count=0;
-
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-
-        if(directory.listFiles()!=null){
-            Log.d("Memo","directory.listFiles : "+directory.listFiles());
-            count=directory.listFiles().length;
-            Log.d("Memo","count : "+count);
-        }
-
-        final String fileName="happy bank memo";
-
-        File file = new File(directory, fileName+"_"+(count+1) + extension);
+        File file=getDirectory(extension);
         Log.d("Memo","file : "+file.exists());
         FileWriter fw=null;
         BufferedWriter writer=null;
@@ -457,6 +467,41 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             }
         }
 
+    }
+
+    public FileOutputStream getDirectory(Uri uri, Context context) {
+        Log.d("Memo","getDirectory");
+        FileOutputStream fileOutputStream=null;
+        try {
+            pfd = context.getContentResolver().openFileDescriptor(uri, "w");
+            Log.d("Memo", "pfd : " + pfd);
+            fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
+            Log.d("Memo", "pfd.getFileDescriptor() : " + pfd.getFileDescriptor());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fileOutputStream;
+    }
+
+    public File getDirectory(String extension){
+        Log.d("Memo","getDirectory");
+        File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/HappyBank");
+        int count=0;
+
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        if(directory.listFiles()!=null){
+            Log.d("Memo","directory.listFiles : "+directory.listFiles());
+            count=directory.listFiles().length;
+            Log.d("Memo","count : "+count);
+        }
+
+        final String fileName="happy bank memo";
+
+        File file = new File(directory, fileName+"_"+(count+1) + extension);
+        return file;
     }
 
 }
