@@ -3,16 +3,13 @@ package com.example.happybankbook;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.pdf.PdfDocument;
-import android.os.Environment;
+import android.net.Uri;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
@@ -28,12 +25,24 @@ public class PdfRunnable implements Runnable{
 
     private ArrayList<MemoData> dataList;
     private Context context;
+    private Uri uri;
+    private String extension;
+    private int branch;
     private int width=1080;
     private int height=1920;
 
-    public PdfRunnable(ArrayList<MemoData> dataList, Context context){
+    public PdfRunnable(ArrayList<MemoData> dataList, Context context, Uri uri){
         this.dataList=dataList;
         this.context=context;
+        this.uri=uri;
+        branch=1;
+    }
+
+    public PdfRunnable(ArrayList<MemoData> dataList, Context context, String extension){
+        this.dataList=dataList;
+        this.context=context;
+        this.extension=extension;
+        branch=2;
     }
 
     @Override
@@ -45,7 +54,6 @@ public class PdfRunnable implements Runnable{
         Canvas canvas;
 
         for(int i=0;i<dataList.size();i++){
-
             pageInfo=new PdfDocument.PageInfo.Builder(width, height, 1).create();
             page=pdfDocument.startPage(pageInfo);
 
@@ -108,6 +116,29 @@ public class PdfRunnable implements Runnable{
             clover.draw(canvas);
 
             pdfDocument.finishPage(page);
+        }
+
+        SettingFragment fragment=new SettingFragment();
+
+        if(branch==1){
+
+            FileOutputStream fileOutputStream=fragment.getDirectory(uri,context);
+            try {
+                pdfDocument.writeTo(fileOutputStream);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
+        else if(branch==2){
+
+            File file=fragment.getDirectory(extension);
+            try {
+                pdfDocument.writeTo(new FileOutputStream(file));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
         }
 
