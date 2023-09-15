@@ -8,14 +8,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +64,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
         @Override
         public void run() {
-            Log.d("Memo","run()");
             if(branch==1){
                 makeFile(content, extension);
             }else if(branch==2){
@@ -80,7 +76,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     private ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), check -> {
-                Log.d("Memo","requestPermissionLauncher");
                 if(check){
                     Toast.makeText(getContext(),getResources().getText(R.string.savePermissionYes),Toast.LENGTH_SHORT).show();
                     if("pdf".equals(fileExtension)){
@@ -99,9 +94,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             =registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result->{
         if(result.getResultCode()==RESULT_OK){
             Uri uri=result.getData().getData();
-            Log.d("Memo","result.getData : "+result.getData());
-            Log.d("Memo","result.getData.getData : "+result.getData().getData());
-            Log.d("Memo","uri : "+uri);
             if("pdf".equals(fileExtension)){
                 exportPdf(uri);
             }else if("excel".equals(fileExtension)){
@@ -322,7 +314,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     }
 
     public void makeExportDialog(int androidVersion, String type){
-        Log.d("Memo","MakeExportDialog");
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
         builder.setMessage(fileExtension+" "+getResources().getText(R.string.doExport));
         builder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
@@ -374,7 +365,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     }
 
     public void exportTxtFile(char split, String extension){
-        Log.d("Memo","exportTxt()");
         buffer=new StringBuffer();
         presenter.getDataToFile(RoomDB.getInstance(getContext()).memoDao(),split);
 
@@ -385,13 +375,11 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
                 fileRunnable=new FileRunnable(buffer, extension);
                 fileThread=new Thread(fileRunnable);
                 fileThread.start();
-                Log.d("Memo","thread start");
             }
         });
     }
 
     public void exportTxtFile(Uri uri, char split){
-        Log.d("Memo","exportTxt()");
         buffer=new StringBuffer();
         presenter.getDataToFile(RoomDB.getInstance(getContext()).memoDao(),split);
 
@@ -402,25 +390,21 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
                 fileRunnable=new FileRunnable(uri, buffer);
                 fileThread=new Thread(fileRunnable);
                 fileThread.start();
-                Log.d("Memo","thread start");
             }
         });
     }
 
     public void makeFile(Uri uri, StringBuffer content){
-        Log.d("Memo","makeFile()");
         pfd=null;
         FileOutputStream fileOutputStream=null;
 
         try{
-            fileOutputStream=getDirectory(uri, getContext());
-
             String strContent = String.valueOf(content);
+            fileOutputStream=getDirectory(uri, getContext());
             if("null".equals(strContent)||"".equals(strContent)){
                 Toast.makeText(getContext(),getResources().getText(R.string.noMemo),Toast.LENGTH_LONG).show();
             }else{
                 fileOutputStream.write(strContent.getBytes());
-                Log.d("Memo","write()");
             }
         }catch(IOException e){
             e.printStackTrace();
@@ -428,7 +412,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             try {
                 if(fileOutputStream!=null){fileOutputStream.close();}
                 if(pfd!=null){pfd.close();}
-                Log.d("Memo","생성 완료");
             }catch (IOException e2){
                 e2.printStackTrace();
             }
@@ -443,15 +426,14 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     }
 
     public void makeFile(StringBuffer content, String extension){
-        Log.d("Memo","makeFile()");
         File file=getDirectory(extension);
-        Log.d("Memo","file : "+file.exists());
+
         FileWriter fw=null;
         BufferedWriter writer=null;
 
         try{
             file.createNewFile();
-            Log.d("Memo","file : "+file.exists());
+
             fw = new FileWriter(file);
             writer = new BufferedWriter(fw);
 
@@ -460,7 +442,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
                Toast.makeText(getContext(),getResources().getText(R.string.noMemo),Toast.LENGTH_LONG).show();
             }else{
                 writer.write(strContent);
-                Log.d("Memo","write()");
             }
         }catch(IOException e){
             e.printStackTrace();
@@ -468,7 +449,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             try {
                 if(writer!=null){writer.close();}
                 if(fw!=null){fw.close();}
-                Log.d("Memo","생성 완료");
             }catch (IOException e2){
                 e2.printStackTrace();
             }
@@ -483,13 +463,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     }
 
     public FileOutputStream getDirectory(Uri uri, Context context) {
-        Log.d("Memo","getDirectory");
         FileOutputStream fileOutputStream=null;
         try {
             pfd = context.getContentResolver().openFileDescriptor(uri, "w");
-            Log.d("Memo", "pfd : " + pfd);
             fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
-            Log.d("Memo", "pfd.getFileDescriptor() : " + pfd.getFileDescriptor());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -497,7 +474,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     }
 
     public File getDirectory(String extension){
-        Log.d("Memo","getDirectory");
         File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/HappyBank");
         int count=0;
 
@@ -506,9 +482,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         }
 
         if(directory.listFiles()!=null){
-            Log.d("Memo","directory.listFiles : "+directory.listFiles());
             count=directory.listFiles().length;
-            Log.d("Memo","count : "+count);
         }
 
         final String fileName="happy bank memo";
