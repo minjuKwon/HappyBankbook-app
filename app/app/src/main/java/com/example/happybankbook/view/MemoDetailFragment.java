@@ -32,14 +32,14 @@ import java.util.ArrayList;
 
 public class MemoDetailFragment extends Fragment implements ListContract.View,View.OnClickListener{
 
-    //일정 시간 후 화살표 이미지 투명화 위한 Runnable class
-    private class PostRunnable implements Runnable{
+    //일정 시간 후 화살표 이미지 투명화 위한 Runnable
+    private Runnable postRunnable =new Runnable(){
         @Override
         public void run() {
             imgForward.setColorFilter(Color.TRANSPARENT);
             imgBack.setColorFilter(Color.TRANSPARENT);
         }
-    }
+    };
 
     private ViewPager2 viewPager;
     private ImageView imgForward;
@@ -49,7 +49,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     private ListPresenter presenter;
     private MemoAdapter adapter;
 
-    private PostRunnable postRunnable;
     private Handler handler;
 
     private int currentPosition;
@@ -63,7 +62,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        postRunnable=new PostRunnable();
         handler=new Handler();
 
         //ConditionFragment 정렬 값 받기
@@ -158,11 +156,11 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         if(v.getId()==R.id.imgForward){
             imgForward.setColorFilter(ContextCompat.getColor(getContext(),R.color.darkerGray));
             viewPager.setCurrentItem(currentPosition-1,false);
-            handler.postDelayed(postRunnable,5000);
+            handler.postDelayed(postRunnable,3000);
         }else if(v.getId()==R.id.imgBack){
             imgBack.setColorFilter(ContextCompat.getColor(getContext(),R.color.darkerGray));
             viewPager.setCurrentItem(currentPosition+1,false);
-            handler.postDelayed(postRunnable,5000);
+            handler.postDelayed(postRunnable,3000);
         }else if(v.getId()==R.id.memoDetailPrevious){
             ((MainActivity)getActivity()).replaceFragment(new ListFragment());
         }
