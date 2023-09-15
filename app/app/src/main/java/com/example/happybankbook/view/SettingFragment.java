@@ -94,6 +94,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             =registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result->{
         if(result.getResultCode()==RESULT_OK){
             Uri uri=result.getData().getData();
+            Toast.makeText(getContext(),getResources().getText(R.string.savePermissionYes),Toast.LENGTH_SHORT).show();
             if("pdf".equals(fileExtension)){
                 exportPdf(uri);
             }else if("excel".equals(fileExtension)){
