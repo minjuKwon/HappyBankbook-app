@@ -323,7 +323,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     public void makeExportDialog(int androidVersion, String type){
         Log.d("Memo","MakeExportDialog");
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
-        builder.setMessage(getResources().getText(R.string.doExport));
+        builder.setMessage(fileExtension+" "+getResources().getText(R.string.doExport));
         builder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
