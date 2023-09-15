@@ -7,6 +7,7 @@ import com.example.happybankbook.R;
 import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.MemoDao;
 import com.example.happybankbook.db.MemoData;
+import com.example.happybankbook.presenterReturnInterface.GetReturnLong;
 
 import java.util.ArrayList;
 
@@ -19,8 +20,8 @@ public class ListPresenter implements ListContract.Presenter {
 
     private ListContract.View view;
     private CompositeDisposable disposable;
+    private GetReturnLong getReturnLong;
     private int result;
-    private long price;
 
     public ListPresenter(){this.disposable=new CompositeDisposable();}
 
@@ -89,18 +90,21 @@ public class ListPresenter implements ListContract.Presenter {
     }
 
     @Override
-    public long getSumPrice(MemoDao memoDao, Context context) {
+    public void getSumPrice(MemoDao memoDao, Context context) {
         disposable.add(
                 Observable.just(memoDao)
                         .subscribeOn(Schedulers.io())
                         .subscribe(
-                                value->{price=value.getTotalPrice();},
+                                value->{getReturnLong.getLong(value.getTotalPrice());},
                                 err->{
                                     Toast.makeText(context,context.getResources().getText(R.string.totalPriceOver),Toast.LENGTH_LONG).show();
                                 }
                         )
         );
-        try{Thread.sleep(500);}catch (InterruptedException  e){}
-        return price;
     }
+
+    public void setReturnLong(GetReturnLong getReturnLong){
+        this.getReturnLong=getReturnLong;
+    }
+
 }
