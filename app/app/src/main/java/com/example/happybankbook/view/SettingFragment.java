@@ -28,8 +28,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.happybankbook.GetReturnMemoDataList;
-import com.example.happybankbook.GetReturnStringBuffer;
+import com.example.happybankbook.presenterReturnInterface.GetReturnMemoDataList;
+import com.example.happybankbook.presenterReturnInterface.GetReturnStringBuffer;
 import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.PdfRunnable;
 import com.example.happybankbook.R;
