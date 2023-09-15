@@ -10,6 +10,7 @@ import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
@@ -143,6 +144,12 @@ public class PdfRunnable implements Runnable{
         }
 
         pdfDocument.close();
+
+        ((MainActivity)context).runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(context,context.getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

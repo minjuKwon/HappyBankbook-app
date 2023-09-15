@@ -33,6 +33,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.happybankbook.GetReturnMemoDataList;
 import com.example.happybankbook.GetReturnStringBuffer;
+import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.PdfRunnable;
 import com.example.happybankbook.R;
 import com.example.happybankbook.db.MemoData;
@@ -433,6 +434,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             }
         }
 
+        ((MainActivity)getContext()).runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(getContext(),getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     public void makeFile(StringBuffer content, String extension){
@@ -466,6 +473,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
                 e2.printStackTrace();
             }
         }
+
+        ((MainActivity)getContext()).runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(getContext(),getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
