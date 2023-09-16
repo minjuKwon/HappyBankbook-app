@@ -57,6 +57,27 @@
     <string name="add">추가하기</string>
     <string name="setting">설정</string>
 
+    //fragment requestKey
+    <string name="fontSize1">fontSize1</string>
+    <string name="fontSize2">fontSize2</string>
+    <string name="fontSize3">fontSize3</string>
+    <string name="fontSize4">fontSize4</string>
+    <string name="textLine1">textLine1</string>
+    <string name="textLine2">textLine2</string>
+    <string name="textEllipsize1">textEllipsize1</string>
+    <string name="textEllipsize2">textEllipsize2</string>
+
+    //SharedPreferences name
+    <string name="settingInfo">settingInfo</string>
+
+    //bundle, editor key
+    <string name="isEllipsize">isEllipsize</string>
+    <string name="checkLine">checkLine</string>
+    <string name="checkFontSize">checkFontSize</string>
+    <string name="textEllipsize">textEllipsize</string>
+    <string name="textLine">textLine</string>
+    <string name="fontSize">fontSize</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

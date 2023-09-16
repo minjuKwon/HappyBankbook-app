@@ -113,6 +113,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     private FileRunnable fileRunnable;
     private Thread fileThread;
 
+    private final String pdfType="application/pdf";
+    private final String csvType="text/comma-separated-values";
+    private final String txtType="text/plain";
+
     private boolean isEllipsize=false;
     private int checkLine, checkFontSize;
     private final String PERMISSION= Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -132,10 +136,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= getActivity().getSharedPreferences("settingInfo",Context.MODE_PRIVATE);
-        isEllipsize=preferences.getBoolean("isEllipsize",true);
-        checkLine=preferences.getInt("checkLine",R.id.radioLineMul);
-        checkFontSize=preferences.getInt("checkFontSize",R.id.radioFontOne);
+        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.settingInfo),Context.MODE_PRIVATE);
+        isEllipsize=preferences.getBoolean(getResources().getString(R.string.isEllipsize),true);
+        checkLine=preferences.getInt(getResources().getString(R.string.checkLine),R.id.radioLineMul);
+        checkFontSize=preferences.getInt(getResources().getString(R.string.checkFontSize),R.id.radioFontOne);
 
         setEllipsize();
 
@@ -199,17 +203,17 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         if(v.getId()==R.id.ellipsis){
             setEllipsize();
             boolean check=!isEllipsize;
-            changeEllipsize(check,"textEllipsize1");
-            changeEllipsize(check,"textEllipsize2");
+            changeEllipsize(check,getResources().getString(R.string.textEllipsize1));
+            changeEllipsize(check,getResources().getString(R.string.textEllipsize2));
         }else if(v.getId()==R.id.pdf){
             fileExtension="pdf";
-            makeExportDialog(Build.VERSION.SDK_INT,"application/pdf");
+            makeExportDialog(Build.VERSION.SDK_INT, pdfType);
         }else if(v.getId()==R.id.excel){
             fileExtension="excel";
-            makeExportDialog(Build.VERSION.SDK_INT,"text/comma-separated-values");
+            makeExportDialog(Build.VERSION.SDK_INT, csvType);
         }else if(v.getId()==R.id.txt){
             fileExtension="txt";
-            makeExportDialog(Build.VERSION.SDK_INT,"text/plain");
+            makeExportDialog(Build.VERSION.SDK_INT, txtType);
         }
     }
 
@@ -219,13 +223,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         if(group.getId()==R.id.radioLineDisplay){
             if(checkedId==R.id.radioLineSingle){
                 radioLine(true, false, R.color.black, R.color.gray);
-                changeTextLine(1,"textLine1");
-                changeTextLine(1,"textLine2");
+                changeTextLine(1,getResources().getString(R.string.textLine1));
+                changeTextLine(1,getResources().getString(R.string.textLine2));
                 checkLine=R.id.radioLineSingle;
             }else if(checkedId==R.id.radioLineMul){
                 radioLine(false, true, R.color.darkGray, R.color.black);
-                changeTextLine(2,"textLine1");
-                changeTextLine(2,"textLine2");
+                changeTextLine(2,getResources().getString(R.string.textLine1));
+                changeTextLine(2,getResources().getString(R.string.textLine2));
                 checkLine=R.id.radioLineMul;
             }
         }
@@ -233,24 +237,24 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         else if(group.getId()==R.id.radioFont){
             if(checkedId==R.id.radioFontOne){
                 radioFont(true, false, false, R.color.black, R.color.gray, R.color.gray);
-                changeFont(15,"fontSize1");
-                changeFont(15,"fontSize2");
-                changeFont(12,"fontSize3");
-                changeFont(12,"fontSize4");
+                changeFont(15,getResources().getString(R.string.fontSize1));
+                changeFont(15,getResources().getString(R.string.fontSize2));
+                changeFont(12,getResources().getString(R.string.fontSize3));
+                changeFont(12,getResources().getString(R.string.fontSize4));
                 checkFontSize=R.id.radioFontOne;
             }else if(checkedId==R.id.radioFontTwo){
                 radioFont(false, true, false, R.color.gray, R.color.black, R.color.gray);
-                changeFont(18,"fontSize1");
-                changeFont(18,"fontSize2");
-                changeFont(15,"fontSize3");
-                changeFont(15,"fontSize4");
+                changeFont(18,getResources().getString(R.string.fontSize1));
+                changeFont(18,getResources().getString(R.string.fontSize2));
+                changeFont(15,getResources().getString(R.string.fontSize3));
+                changeFont(15,getResources().getString(R.string.fontSize4));
                 checkFontSize=R.id.radioFontTwo;
             }else if(checkedId==R.id.radioFontThree){
                 radioFont(false, false, true, R.color.gray, R.color.gray, R.color.black);
-                changeFont(21,"fontSize1");
-                changeFont(21,"fontSize2");
-                changeFont(18,"fontSize3");
-                changeFont(18,"fontSize4");
+                changeFont(21,getResources().getString(R.string.fontSize1));
+                changeFont(21,getResources().getString(R.string.fontSize2));
+                changeFont(18,getResources().getString(R.string.fontSize3));
+                changeFont(18,getResources().getString(R.string.fontSize4));
                 checkFontSize=R.id.radioFontThree;
             }
         }
@@ -275,14 +279,14 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     public void changeFont(float size, String key){
         Bundle bundle=new Bundle();
-        bundle.putFloat("fontSize",size);
+        bundle.putFloat(getResources().getString(R.string.fontSize),size);
 
         getParentFragmentManager().setFragmentResult(key, bundle);
     }
 
    public void changeTextLine(int line, String key){
        Bundle bundle=new Bundle();
-       bundle.putInt("textLine", line);
+       bundle.putInt(getResources().getString(R.string.textLine), line);
 
        getParentFragmentManager().setFragmentResult(key, bundle);
    }
@@ -299,17 +303,17 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     public void changeEllipsize(boolean check, String key){
         Bundle bundle=new Bundle();
-        bundle.putBoolean("textEllipsize", check);
+        bundle.putBoolean(getResources().getString(R.string.textEllipsize), check);
 
         getParentFragmentManager().setFragmentResult(key, bundle);
     }
 
     public void resetRadioButton(){
-        SharedPreferences preferences= getActivity().getSharedPreferences("settingInfo", Context.MODE_PRIVATE);
+        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.settingInfo), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean("isEllipsize", !isEllipsize);
-        editor.putInt("checkLine", checkLine);
-        editor.putInt("checkFontSize", checkFontSize);
+        editor.putBoolean(getResources().getString(R.string.isEllipsize), !isEllipsize);
+        editor.putInt(getResources().getString(R.string.checkLine), checkLine);
+        editor.putInt(getResources().getString(R.string.checkFontSize), checkFontSize);
 
         editor.apply();
     }
@@ -475,7 +479,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     }
 
     public File getDirectory(String extension){
-        File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/HappyBank");
+        final String directoryName="/HappyBank";
+        File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+directoryName);
         int count=0;
 
         if (!directory.exists()) {
@@ -487,7 +492,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         }
 
         final String fileName="happy bank memo";
-
         File file = new File(directory, fileName+"_"+(count+1) + extension);
         return file;
     }
