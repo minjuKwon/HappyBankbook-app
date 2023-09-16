@@ -27,6 +27,7 @@ import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.ListPresenter;
+import com.example.happybankbook.presenterReturnInterface.GetReturnInt;
 
 import java.util.ArrayList;
 
@@ -51,10 +52,12 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
 
     private Handler handler;
 
-    private int currentPosition;
     private int count;
-    private int adapterPosition;
+    private int fromDate;
+    private int toDate;
     private int rowCnt;
+    private int currentPosition;
+    private int adapterPosition;
     private boolean isFirst=true;
     private float fontSize=12;
 
@@ -68,8 +71,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         getParentFragmentManager().setFragmentResultListener("memoRequestKey2", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                int fromDate=result.getInt("fromDate");
-                int toDate=result.getInt("toDate");
+                fromDate=result.getInt("fromDate");
+                toDate=result.getInt("toDate");
                 count=result.getInt("count");
                 boolean isNewSort=result.getBoolean("sort");
 
@@ -80,14 +83,25 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
                 }
 
                 if(count==0){
-                    count=presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
+                    presenter.setReturnInt(new GetReturnInt() {
+                        @Override
+                        public void getInt(int value) {
+                            if(isNewSort){
+                                presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,value);
+                            }else{
+                                presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,value);
+                            }
+                        }
+                    });
+                    presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
+                }else{
+                    if(isNewSort){
+                        presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
+                    }else{
+                        presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
+                    }
                 }
 
-                if(isNewSort){
-                    presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
-                }else{
-                    presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
-                }
             }
         });
         //변경 font size 값
@@ -147,7 +161,15 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         viewPager.setAdapter(adapter);
 
         adapterPosition= adapter.getLocation();
-        rowCnt=presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
+
+        presenter.setReturnInt(new GetReturnInt() {
+            @Override
+            public void getInt(int value) {
+                rowCnt=value;
+            }
+        });
+        presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
+
         changePage();
     }
 

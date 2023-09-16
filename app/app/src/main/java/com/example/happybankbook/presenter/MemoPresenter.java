@@ -3,6 +3,7 @@ package com.example.happybankbook.presenter;
 import com.example.happybankbook.contract.MemoContract;
 import com.example.happybankbook.db.MemoDao;
 import com.example.happybankbook.db.MemoData;
+import com.example.happybankbook.presenterReturnInterface.GetReturnInt;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -11,8 +12,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class MemoPresenter implements MemoContract.Presenter {
 
     private CompositeDisposable disposable;
-    private int range;
-
+    private GetReturnInt getReturnInt;
 
     public MemoPresenter(){this.disposable=new CompositeDisposable();}
 
@@ -27,24 +27,21 @@ public class MemoPresenter implements MemoContract.Presenter {
                 Observable.just(memoData)
                         .subscribeOn(Schedulers.io())
                         .subscribe(
-                            item->{
-                                memoDao.insert(memoData);
-                            }
+                            item-> memoDao.insert(memoData)
+
                         )
         );
     }
 
     @Override
-    public int getDataRange(MemoDao memoDao, int date) {
+    public void getDataRange(MemoDao memoDao, int date) {
         disposable.add(
                 Observable.just(memoDao)
                         .subscribeOn(Schedulers.io())
                         .subscribe(
-                                value->{range=value.getRangeCount(date);}
+                                value->getReturnInt.getInt(value.getRangeCount(date))
                         )
         );
-        try{Thread.sleep(500);}catch (InterruptedException  e){}
-        return range;
     }
 
     @Override
@@ -53,9 +50,13 @@ public class MemoPresenter implements MemoContract.Presenter {
                 Observable.just(memoDao)
                         .subscribeOn(Schedulers.io())
                         .subscribe(
-                                value->{value.changeNum(date);}
+                                value->value.changeNum(date)
                         )
         );
+    }
+
+    public void setReturnInt(GetReturnInt getReturnInt){
+        this.getReturnInt=getReturnInt;
     }
 
 }

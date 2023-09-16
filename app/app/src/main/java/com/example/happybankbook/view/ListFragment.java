@@ -24,6 +24,7 @@ import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.ListPresenter;
+import com.example.happybankbook.presenterReturnInterface.GetReturnInt;
 import com.example.happybankbook.presenterReturnInterface.GetReturnLong;
 
 import java.text.DecimalFormat;
@@ -39,6 +40,9 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     private ListPresenter presenter;
     private MemoAdapter adapter;
 
+    private int count;
+    private int fromDate;
+    private int toDate;
     private int addFragment=1;
     private int textLine=2;
     private float fontSize=15;
@@ -51,9 +55,9 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         getParentFragmentManager().setFragmentResultListener("memoRequestKey", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                int fromDate=result.getInt("fromDate");
-                int toDate=result.getInt("toDate");
-                int count=result.getInt("count");
+                fromDate=result.getInt("fromDate");
+                toDate=result.getInt("toDate");
+                count=result.getInt("count");
                 boolean isNewSort=result.getBoolean("sort");
 
                 if(fromDate>toDate){
@@ -63,14 +67,25 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
                 }
 
                 if(count==0){
-                    count=presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
+                    presenter.setReturnInt(new GetReturnInt() {
+                        @Override
+                        public void getInt(int value) {
+                            if(isNewSort){
+                                presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,value);
+                            }else{
+                                presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,value);
+                            }
+                        }
+                    });
+                    presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
+                }else{
+                    if(isNewSort){
+                        presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
+                    }else{
+                        presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
+                    }
                 }
 
-                if(isNewSort){
-                    presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
-                }else{
-                    presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
-                }
             }
         });
         //ConditionFragment 클릭 시 한 개의 Fragment만 생성하기 위한 변수 받기
