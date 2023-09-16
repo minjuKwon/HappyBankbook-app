@@ -59,6 +59,8 @@
     <string name="setting">설정</string>
 
     //fragment requestKey
+    <string name="removeFragment">removeFragment</string>
+    <string name="recyclerStop">recyclerStop</string>
     <string name="fontSize1">fontSize1</string>
     <string name="fontSize2">fontSize2</string>
     <string name="fontSize3">fontSize3</string>
@@ -67,15 +69,19 @@
     <string name="textLine2">textLine2</string>
     <string name="textEllipsize1">textEllipsize1</string>
     <string name="textEllipsize2">textEllipsize2</string>
+    <string name="memoRequestKey">memoRequestKey</string>
     <string name="memoRequestKey2">memoRequestKey2</string>
 
     //SharedPreferences name
+    <string name="listTextSetting">listTextSetting</string>
     <string name="settingInfo">settingInfo</string>
     <string name="searchTextSetting">searchTextSetting</string>
     <string name="memoTextSetting">memoTextSetting</string>
     <string name="memoDetailTextSetting">memoDetailTextSetting</string>
 
     //bundle, editor key
+    <string name="ConditionFragment">ConditionFragment</string>
+    <string name="stop">stop</string>
     <string name="isEllipsize">isEllipsize</string>
     <string name="checkLine">checkLine</string>
     <string name="checkFontSize">checkFontSize</string>

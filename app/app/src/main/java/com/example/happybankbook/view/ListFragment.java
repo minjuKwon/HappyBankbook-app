@@ -52,13 +52,13 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //ConditionFragment 정렬 값 받기
-        getParentFragmentManager().setFragmentResultListener("memoRequestKey", this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.memoRequestKey), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fromDate=result.getInt("fromDate");
-                toDate=result.getInt("toDate");
-                count=result.getInt("count");
-                boolean isNewSort=result.getBoolean("sort");
+                fromDate=result.getInt(getResources().getString(R.string.fromDate));
+                toDate=result.getInt(getResources().getString(R.string.toDate));
+                count=result.getInt(getResources().getString(R.string.memoCount));
+                boolean isNewSort=result.getBoolean(getResources().getString(R.string.memoSort));
 
                 if(fromDate>toDate){
                     int temp=fromDate;
@@ -89,33 +89,33 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
             }
         });
         //ConditionFragment 클릭 시 한 개의 Fragment만 생성하기 위한 변수 받기
-        getParentFragmentManager().setFragmentResultListener("removeFragment", this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.removeFragment), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                addFragment=result.getInt("ConditionFragment");
+                addFragment=result.getInt(getResources().getString(R.string.ConditionFragment));
             }
         });
         //변경 font size 값
-        getParentFragmentManager().setFragmentResultListener("fontSize1", this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.fontSize1), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fontSize=result.getFloat("fontSize");
+                fontSize=result.getFloat(getResources().getString(R.string.fontSize));
                 adapter.setFont(fontSize);
             }
         });
         //변경 text line 값
-        getParentFragmentManager().setFragmentResultListener("textLine1", this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.textLine1), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                textLine=result.getInt("textLine");
+                textLine=result.getInt(getResources().getString(R.string.textLine));
                 adapter.setTextLine(textLine);
             }
         });
         //변경 text ellipsize 값
-        getParentFragmentManager().setFragmentResultListener("textEllipsize1", this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.textEllipsize1), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                textEllipsize=result.getBoolean("textEllipsize");
+                textEllipsize=result.getBoolean(getResources().getString(R.string.textEllipsize));
                 adapter.setTextEllipsize(textEllipsize);
             }
         });
@@ -133,10 +133,10 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= getActivity().getSharedPreferences("listTextSetting",Context.MODE_PRIVATE);
-        textEllipsize=preferences.getBoolean("textEllipsize",true);
-        textLine=preferences.getInt("textLine",2);
-        fontSize=preferences.getFloat("fontSize",15);
+        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.listTextSetting),Context.MODE_PRIVATE);
+        textEllipsize=preferences.getBoolean(getResources().getString(R.string.textEllipsize),true);
+        textLine=preferences.getInt(getResources().getString(R.string.textLine),2);
+        fontSize=preferences.getFloat(getResources().getString(R.string.fontSize),15);
 
         adapter.setTextEllipsize(textEllipsize);
         adapter.setTextLine(textLine);
@@ -148,8 +148,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         super.onStop();
         //onStop()때 ConditionFragment 값 초기화
         Bundle bundle=new Bundle();
-        bundle.putBoolean("stop",true);
-        getParentFragmentManager().setFragmentResult("recyclerStop", bundle);
+        bundle.putBoolean(getResources().getString(R.string.stop),true);
+        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.recyclerStop), bundle);
         resetTextSetting();
     }
 
@@ -181,7 +181,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
             @Override
             public void getLong(long value) {
                 long totalPrice=value;
-                DecimalFormat priceFormat = new DecimalFormat("###,###");
+                String priceFormatPattern="###,###";
+                DecimalFormat priceFormat = new DecimalFormat(priceFormatPattern);
                 String strPrice= priceFormat.format(totalPrice);
                 txtPrice.setText(strPrice);
             }
@@ -209,11 +210,11 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     }
 
     private void resetTextSetting(){
-        SharedPreferences preferences= getActivity().getSharedPreferences("listTextSetting", Context.MODE_PRIVATE);
+        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.listTextSetting), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean("textEllipsize", textEllipsize);
-        editor.putInt("textLine", textLine);
-        editor.putFloat("fontSize", fontSize);
+        editor.putBoolean(getResources().getString(R.string.textEllipsize), textEllipsize);
+        editor.putInt(getResources().getString(R.string.textLine), textLine);
+        editor.putFloat(getResources().getString(R.string.fontSize), fontSize);
 
         editor.apply();
     }
