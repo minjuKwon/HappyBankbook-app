@@ -74,6 +74,7 @@
 
     //SharedPreferences name
     <string name="listTextSetting">listTextSetting</string>
+    <string name="sortInfo">sortInfo</string>
     <string name="settingInfo">settingInfo</string>
     <string name="searchTextSetting">searchTextSetting</string>
     <string name="memoTextSetting">memoTextSetting</string>
@@ -82,6 +83,7 @@
     //bundle, editor key
     <string name="ConditionFragment">ConditionFragment</string>
     <string name="stop">stop</string>
+    <string name="isClick">isClick</string>
     <string name="isEllipsize">isEllipsize</string>
     <string name="checkLine">checkLine</string>
     <string name="checkFontSize">checkFontSize</string>

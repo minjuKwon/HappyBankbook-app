@@ -46,10 +46,10 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         super.onCreate(savedInstanceState);
 
         //ListFragment에서 recyclerStop 받을 때는 SharedPreferences 대신 값 초기화
-        getParentFragmentManager().setFragmentResultListener("recyclerStop", this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.recyclerStop), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                boolean value=result.getBoolean("stop");
+                boolean value=result.getBoolean(getResources().getString(R.string.stop));
                 if(value){
                     reset();
                 }
@@ -74,20 +74,20 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         ((MainActivity)getActivity()).setNowDate(txtToDuration);
 
         //SharedPreferences에 저장된 정렬 값 가져오기
-        SharedPreferences preferences= getActivity().getSharedPreferences("sortInfo",Context.MODE_PRIVATE);
+        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.sortInfo),Context.MODE_PRIVATE);
 
-        boolean click=preferences.getBoolean("isClick",true);
+        boolean click=preferences.getBoolean(getResources().getString(R.string.isClick),true);
         isClick=(!click);
         clickDuration();
 
-        txtFromDuration.setText(preferences.getString("fromDate",((MainActivity)getActivity()).setNowDate()));
-        txtToDuration.setText(preferences.getString("toDate",((MainActivity)getActivity()).setNowDate()));
+        txtFromDuration.setText(preferences.getString(getResources().getString(R.string.fromDate),((MainActivity)getActivity()).setNowDate()));
+        txtToDuration.setText(preferences.getString(getResources().getString(R.string.toDate),((MainActivity)getActivity()).setNowDate()));
 
-        boolean newCheck=preferences.getBoolean("sort",true);
+        boolean newCheck=preferences.getBoolean(getResources().getString(R.string.memoSort),true);
         radioNew.setChecked(newCheck);
         radioOld.setChecked(!newCheck);
 
-        editCount.setText(preferences.getString("count",null));
+        editCount.setText(preferences.getString(getResources().getString(R.string.memoCount),null));
 
     }
 
@@ -96,8 +96,8 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         super.onDestroy();
         //ConditionFragment 중복 생성을 막기 위한 변수 전달
         Bundle bundle=new Bundle();
-        bundle.putInt("ConditionFragment",1);
-        getParentFragmentManager().setFragmentResult("removeFragment",bundle);
+        bundle.putInt(getResources().getString(R.string.ConditionFragment),1);
+        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.removeFragment),bundle);
 
     }
 
@@ -220,23 +220,23 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
 
     public void sendBundle(int fromDate, int toDate, int count, boolean sort){
         Bundle bundle=new Bundle();
-        bundle.putInt("fromDate",fromDate);
-        bundle.putInt("toDate",toDate);
-        bundle.putInt("count",count);
-        bundle.putBoolean("sort",sort);
+        bundle.putInt(getResources().getString(R.string.fromDate),fromDate);
+        bundle.putInt(getResources().getString(R.string.toDate),toDate);
+        bundle.putInt(getResources().getString(R.string.memoCount),count);
+        bundle.putBoolean(getResources().getString(R.string.memoSort),sort);
 
-        getParentFragmentManager().setFragmentResult("memoRequestKey", bundle);
-        getParentFragmentManager().setFragmentResult("memoRequestKey2", bundle);
+        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.memoRequestKey), bundle);
+        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.memoRequestKey2), bundle);
     }
 
     public void setSharedPreferences(){
-        SharedPreferences preferences= getActivity().getSharedPreferences("sortInfo", Context.MODE_PRIVATE);
+        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.sortInfo), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean("isClick",isClick);
-        editor.putString("fromDate",txtFromDuration.getText().toString());
-        editor.putString("toDate",txtToDuration.getText().toString());
-        editor.putBoolean("sort",radioNew.isChecked());
-        editor.putString("count",editCount.getText().toString());
+        editor.putBoolean(getResources().getString(R.string.isClick),isClick);
+        editor.putString(getResources().getString(R.string.fromDate),txtFromDuration.getText().toString());
+        editor.putString(getResources().getString(R.string.toDate),txtToDuration.getText().toString());
+        editor.putBoolean(getResources().getString(R.string.memoSort),radioNew.isChecked());
+        editor.putString(getResources().getString(R.string.memoCount),editCount.getText().toString());
         editor.apply();
     }
 
