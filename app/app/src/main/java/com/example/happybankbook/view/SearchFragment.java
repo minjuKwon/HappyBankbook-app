@@ -44,26 +44,26 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getParentFragmentManager().setFragmentResultListener("fontSize2", this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.fontSize2), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fontSize=result.getFloat("fontSize");
+                fontSize=result.getFloat(getResources().getString(R.string.fontSize));
                 adapter.setFont(fontSize);
             }
         });
         //변경 text line 값
-        getParentFragmentManager().setFragmentResultListener("textLine2", this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.textLine2), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                textLine=result.getInt("textLine");
+                textLine=result.getInt(getResources().getString(R.string.textLine));
                 adapter.setTextLine(textLine);
             }
         });
         //변경 text ellipsize 값
-        getParentFragmentManager().setFragmentResultListener("textEllipsize2", this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.textEllipsize2), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                textEllipsize=result.getBoolean("textEllipsize");
+                textEllipsize=result.getBoolean(getResources().getString(R.string.textEllipsize));
                 adapter.setTextEllipsize(textEllipsize);
             }
         });
@@ -81,10 +81,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= getActivity().getSharedPreferences("searchTextSetting",Context.MODE_PRIVATE);
-        textEllipsize=preferences.getBoolean("textEllipsize",true);
-        textLine=preferences.getInt("textLine",2);
-        fontSize=preferences.getFloat("fontSize",15);
+        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.searchTextSetting),Context.MODE_PRIVATE);
+        textEllipsize=preferences.getBoolean(getResources().getString(R.string.textEllipsize),true);
+        textLine=preferences.getInt(getResources().getString(R.string.textLine),2);
+        fontSize=preferences.getFloat(getResources().getString(R.string.fontSize),15);
 
         adapter.setTextEllipsize(textEllipsize);
         adapter.setTextLine(textLine);
@@ -160,11 +160,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     }
 
     private void resetTextSetting(){
-        SharedPreferences preferences= getActivity().getSharedPreferences("searchTextSetting", Context.MODE_PRIVATE);
+        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.searchTextSetting), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean("textEllipsize", textEllipsize);
-        editor.putInt("textLine", textLine);
-        editor.putFloat("fontSize", fontSize);
+        editor.putBoolean(getResources().getString(R.string.textEllipsize), textEllipsize);
+        editor.putInt(getResources().getString(R.string.textLine), textLine);
+        editor.putFloat(getResources().getString(R.string.fontSize), fontSize);
 
         editor.apply();
     }

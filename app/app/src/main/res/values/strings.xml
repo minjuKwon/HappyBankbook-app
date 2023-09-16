@@ -69,6 +69,7 @@
 
     //SharedPreferences name
     <string name="settingInfo">settingInfo</string>
+    <string name="searchTextSetting">searchTextSetting</string>
 
     //bundle, editor key
     <string name="isEllipsize">isEllipsize</string>
