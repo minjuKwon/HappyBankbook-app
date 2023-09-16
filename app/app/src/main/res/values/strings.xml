@@ -29,6 +29,7 @@
     <string name="memoContentEmpty">"행복을 메모해 주세요:)"</string>
     <string name="memoPriceEmpty">"얼마나 행복하셨나요?:D"</string>
     <string name="memoPriceOver">"최대 2,147,483,647까지 입력할 수 있습니다 ;) \n 물론 여러분의 행복 가격은 무한대이지만요 B-)"</string>
+    <string name="cantLoadImg">"이미지를 불러올 수 없습니다"</string>
 
     <string name="arrowForward">앞으로 이동</string>
     <string name="arrowBack">뒤로 이동</string>
@@ -70,6 +71,7 @@
     //SharedPreferences name
     <string name="settingInfo">settingInfo</string>
     <string name="searchTextSetting">searchTextSetting</string>
+    <string name="memoTextSetting">memoTextSetting</string>
 
     //bundle, editor key
     <string name="isEllipsize">isEllipsize</string>

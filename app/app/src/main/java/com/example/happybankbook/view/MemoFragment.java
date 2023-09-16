@@ -46,15 +46,16 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private MemoPresenter presenter;
     private float fontSize=12;
+    private final String imgType="image/*";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //변경 font size 값
-        getParentFragmentManager().setFragmentResultListener("fontSize3", this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.fontSize3), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fontSize=result.getFloat("fontSize");
+                fontSize=result.getFloat(getResources().getString(R.string.fontSize));
                 editContent.setTextSize(fontSize);
             }
         });
@@ -74,8 +75,8 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         ((MainActivity)getActivity()).setNowDate(txtDate);
         getGallery();
 
-        SharedPreferences preferences= getActivity().getSharedPreferences("memoTextSetting",Context.MODE_PRIVATE);
-        fontSize=preferences.getFloat("fontSize",12);
+        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.memoTextSetting),Context.MODE_PRIVATE);
+        fontSize=preferences.getFloat(getResources().getString(R.string.fontSize),12);
         editContent.setTextSize(fontSize);
     }
 
@@ -105,7 +106,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
                 Uri imageUri=result.getData().getData();
                 Glide.with(getContext()).load(imageUri).into(img);
             }else if(result.getData()!=null){
-                Toast.makeText(getContext(),"이미지를 불러올 수 없습니다",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),getResources().getString(R.string.cantLoadImg),Toast.LENGTH_LONG).show();
             }
         });
 
@@ -138,7 +139,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
     public void loadImage(){
         Intent intent=new Intent(Intent.ACTION_GET_CONTENT).
-                setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
+                setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imgType);
         Intent createChooserIntent=Intent.createChooser(intent,null);
         activityResultLauncher.launch(createChooserIntent);
     }
@@ -225,9 +226,9 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     }
 
     private void resetTextSetting(){
-        SharedPreferences preferences= getActivity().getSharedPreferences("memoTextSetting", Context.MODE_PRIVATE);
+        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.memoTextSetting), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putFloat("fontSize", fontSize);
+        editor.putFloat(getResources().getString(R.string.fontSize), fontSize);
 
         editor.apply();
     }
