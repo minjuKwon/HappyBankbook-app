@@ -68,13 +68,13 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         handler=new Handler();
 
         //ConditionFragment 정렬 값 받기
-        getParentFragmentManager().setFragmentResultListener("memoRequestKey2", this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.memoRequestKey2), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fromDate=result.getInt("fromDate");
-                toDate=result.getInt("toDate");
-                count=result.getInt("count");
-                boolean isNewSort=result.getBoolean("sort");
+                fromDate=result.getInt(getResources().getString(R.string.fromDate));
+                toDate=result.getInt(getResources().getString(R.string.toDate));
+                count=result.getInt(getResources().getString(R.string.memoCount));
+                boolean isNewSort=result.getBoolean(getResources().getString(R.string.memoSort));
 
                 if(fromDate>toDate){
                     int temp=fromDate;
@@ -105,10 +105,10 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             }
         });
         //변경 font size 값
-        getParentFragmentManager().setFragmentResultListener("fontSize4", this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.fontSize4), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fontSize=result.getFloat("fontSize");
+                fontSize=result.getFloat(getResources().getString(R.string.fontSize));
                 adapter.setFont(fontSize);
             }
         });
@@ -127,8 +127,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= getActivity().getSharedPreferences("memoDetailTextSetting",Context.MODE_PRIVATE);
-        fontSize=preferences.getFloat("fontSize",12);
+        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.memoDetailTextSetting),Context.MODE_PRIVATE);
+        fontSize=preferences.getFloat(getResources().getString(R.string.fontSize),12);
         adapter.setFont(fontSize);
     }
 
@@ -222,9 +222,9 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     }
 
     private void resetTextSetting(){
-        SharedPreferences preferences= getActivity().getSharedPreferences("memoDetailTextSetting", Context.MODE_PRIVATE);
+        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.memoDetailTextSetting), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putFloat("fontSize", fontSize);
+        editor.putFloat(getResources().getString(R.string.fontSize), fontSize);
 
         editor.apply();
     }

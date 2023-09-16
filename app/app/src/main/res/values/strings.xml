@@ -67,11 +67,13 @@
     <string name="textLine2">textLine2</string>
     <string name="textEllipsize1">textEllipsize1</string>
     <string name="textEllipsize2">textEllipsize2</string>
+    <string name="memoRequestKey2">memoRequestKey2</string>
 
     //SharedPreferences name
     <string name="settingInfo">settingInfo</string>
     <string name="searchTextSetting">searchTextSetting</string>
     <string name="memoTextSetting">memoTextSetting</string>
+    <string name="memoDetailTextSetting">memoDetailTextSetting</string>
 
     //bundle, editor key
     <string name="isEllipsize">isEllipsize</string>
@@ -80,6 +82,10 @@
     <string name="textEllipsize">textEllipsize</string>
     <string name="textLine">textLine</string>
     <string name="fontSize">fontSize</string>
+    <string name="fromDate">fromDate</string>
+    <string name="toDate">toDate</string>
+    <string name="memoCount">count</string>
+    <string name="memoSort">sort</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
