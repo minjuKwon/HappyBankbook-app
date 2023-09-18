@@ -27,6 +27,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
     private float fontSize;
     private int textLine;
     private boolean textEllipsize;
+    private boolean condition=true;
 
     public MemoAdapter(Context context, MemoType memoType, float fontSize){
         this.context=context;
@@ -80,11 +81,13 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         }else if(holder instanceof ViewPagerViewHolder){
             ViewPagerViewHolder viewPagerViewHolder=(ViewPagerViewHolder) holder;
             //recyclerview position, viewpager position 더하여 클릭한 메모를 시작점으로 viewpager 화면 넘기게 하기 위한 초기 값
-            if(isFirst){
-                data=dataList.get(holder.getAdapterPosition()+location);
-                isFirst=false;
+            if(condition){
+                if(isFirst){
+                    data=dataList.get(holder.getAdapterPosition()+location);
+                    isFirst=false;
+                }
+                viewPagerViewHolder.onBind(data, context, fontSize);
             }
-            viewPagerViewHolder.onBind(data, context, fontSize);
         }
     }
 
@@ -123,6 +126,10 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
     public void setTextEllipsize(boolean check){
         this.textEllipsize=check;
+    }
+
+    public void setCondition(boolean condition){
+        this.condition=condition;
     }
 
 }

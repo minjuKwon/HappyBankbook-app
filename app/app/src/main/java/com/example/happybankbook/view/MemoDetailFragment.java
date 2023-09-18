@@ -71,6 +71,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.memoRequestKey2), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                adapter.setCondition(false);
+
                 fromDate=result.getInt(getResources().getString(R.string.fromDate));
                 toDate=result.getInt(getResources().getString(R.string.toDate));
                 count=result.getInt(getResources().getString(R.string.memoCount));
@@ -191,6 +193,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     @Override
     public void setItems(ArrayList<MemoData> items) {
         adapter.setItems(items);
+        adapter.setCondition(true);
     }
 
     public void changePage(){
