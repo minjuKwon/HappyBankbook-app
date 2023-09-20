@@ -59,7 +59,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
             return new ViewPagerViewHolder(view);
         }
 
-        return null;
+        throw new AssertionError("impossible viewType : "+viewType);
 
     }
 
