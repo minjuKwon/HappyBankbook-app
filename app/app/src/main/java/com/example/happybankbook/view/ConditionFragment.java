@@ -40,11 +40,21 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
     private Button init;
 
     private boolean isClick=true;
+    private boolean visitedViewPager=false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //viewPager 후 recyclerView로 돌아 왔을 때 condition 값을 유지 하기 위한 변수 얻기
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.viewpagerCondition), this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                visitedViewPager=result.getBoolean(getResources().getString(R.string.memoSort));
+                if(!visitedViewPager){
+                    reset();
+                }
+            }
+        });
         //ListFragment에서 recyclerStop 받을 때는 SharedPreferences 대신 값 초기화
         getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.recyclerStop), this, new FragmentResultListener() {
             @Override

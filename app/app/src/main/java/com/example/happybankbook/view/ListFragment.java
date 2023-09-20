@@ -46,11 +46,17 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     private int addFragment=1;
     private int textLine=2;
     private float fontSize=15;
+    private boolean isNewSort;
     private boolean textEllipsize=true;
+    private boolean isStop;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.isStop),Context.MODE_PRIVATE);
+        isStop=preferences.getBoolean(getResources().getString(R.string.stop),false);
+
         //ConditionFragment 정렬 값 받기
         getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.memoRequestKey), this, new FragmentResultListener() {
             @Override
@@ -58,34 +64,9 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
                 fromDate=result.getInt(getResources().getString(R.string.fromDate));
                 toDate=result.getInt(getResources().getString(R.string.toDate));
                 count=result.getInt(getResources().getString(R.string.memoCount));
-                boolean isNewSort=result.getBoolean(getResources().getString(R.string.memoSort));
+                isNewSort=result.getBoolean(getResources().getString(R.string.memoSort));
 
-                if(fromDate>toDate){
-                    int temp=fromDate;
-                    fromDate=toDate;
-                    toDate=temp;
-                }
-
-                if(count==0){
-                    presenter.setReturnInt(new GetReturnInt() {
-                        @Override
-                        public void getInt(int value) {
-                            if(isNewSort){
-                                presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,value);
-                            }else{
-                                presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,value);
-                            }
-                        }
-                    });
-                    presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
-                }else{
-                    if(isNewSort){
-                        presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
-                    }else{
-                        presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
-                    }
-                }
-
+                keepCondition();
             }
         });
         //ConditionFragment 클릭 시 한 개의 Fragment만 생성하기 위한 변수 받기
@@ -146,11 +127,18 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     @Override
     public void onStop() {
         super.onStop();
+
         //onStop()때 ConditionFragment 값 초기화
         Bundle bundle=new Bundle();
         bundle.putBoolean(getResources().getString(R.string.stop),true);
         getParentFragmentManager().setFragmentResult(getResources().getString(R.string.recyclerStop), bundle);
         resetTextSetting();
+
+        isStop=true;
+        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.isStop), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=preferences.edit();
+        editor.putBoolean(getResources().getString(R.string.stop),isStop);
+        editor.apply();
     }
 
     @Override
@@ -174,7 +162,15 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
 
         presenter=new ListPresenter();
         presenter.setView(this);
-        presenter.getData(RoomDB.getInstance(getContext()).memoDao());
+
+        boolean visitedViewpager=adapter.getVisitedViewpager();
+        //viewpager 방문 후 ListFragment 돌아온 경우 검색 조건 값 유지
+        //viewpager 제외한 다른 프래그먼트 방문 후, ListFragment 돌아온 경우는 데이터 조건을 초기화하여 모든 데이터 보여줌
+        if(!visitedViewpager||isStop){
+            presenter.getData(RoomDB.getInstance(getContext()).memoDao());
+        }else{
+            keepCondition();
+        }
 
         //메모 총합 표시
         presenter.setReturnLong(new GetReturnLong() {
@@ -207,6 +203,34 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     @Override
     public void setItems(ArrayList<MemoData> items) {
         adapter.setItems(items);
+    }
+
+    private void keepCondition(){
+        if(fromDate>toDate){
+            int temp=fromDate;
+            fromDate=toDate;
+            toDate=temp;
+        }
+
+        if(count==0){
+            presenter.setReturnInt(new GetReturnInt() {
+                @Override
+                public void getInt(int value) {
+                    if(isNewSort){
+                        presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,value);
+                    }else{
+                        presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,value);
+                    }
+                }
+            });
+            presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
+        }else{
+            if(isNewSort){
+                presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
+            }else{
+                presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
+            }
+        }
     }
 
     private void resetTextSetting(){

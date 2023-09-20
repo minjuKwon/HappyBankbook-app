@@ -137,6 +137,11 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     @Override
     public void onStop() {
         super.onStop();
+
+        Bundle bundle=new Bundle();
+        bundle.putBoolean(getResources().getString(R.string.memoSort),true);
+        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.viewpagerCondition), bundle);
+
         resetTextSetting();
     }
 
@@ -186,7 +191,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             viewPager.setCurrentItem(currentPosition+1,false);
             handler.postDelayed(postRunnable,3000);
         }else if(v.getId()==R.id.memoDetailPrevious){
-            ((MainActivity)getActivity()).replaceFragment(new ListFragment());
+            ((MainActivity)getActivity()).removeFragment(this);
         }
     }
 

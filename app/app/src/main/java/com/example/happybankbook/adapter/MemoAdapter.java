@@ -28,6 +28,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
     private int textLine;
     private boolean textEllipsize;
     private boolean condition=true;
+    private boolean visitedViewpager;
 
     public MemoAdapter(Context context, MemoType memoType, float fontSize){
         this.context=context;
@@ -54,6 +55,8 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
             return new RecyclerViewHolder(view);
         }else if(memoType==MemoType.VIEWPAGER){
             view=LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_memo_detail_item,parent,false);
+            //viewPager 후 recyclerView로 돌아 왔을 때 condition 값을 유지 하기 위한 변수
+            visitedViewpager=true;
             return new ViewPagerViewHolder(view);
         }
 
@@ -130,6 +133,10 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
     public void setCondition(boolean condition){
         this.condition=condition;
+    }
+
+    public boolean getVisitedViewpager(){
+        return visitedViewpager;
     }
 
 }

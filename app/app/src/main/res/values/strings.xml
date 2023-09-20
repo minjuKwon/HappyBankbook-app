@@ -71,6 +71,7 @@
     <string name="textEllipsize2">textEllipsize2</string>
     <string name="memoRequestKey">memoRequestKey</string>
     <string name="memoRequestKey2">memoRequestKey2</string>
+    <string name="viewpagerCondition">viewpagerCondition</string>
 
     //SharedPreferences name
     <string name="listTextSetting">listTextSetting</string>
@@ -79,6 +80,7 @@
     <string name="searchTextSetting">searchTextSetting</string>
     <string name="memoTextSetting">memoTextSetting</string>
     <string name="memoDetailTextSetting">memoDetailTextSetting</string>
+    <string name="isStop">isStop</string>
 
     //bundle, editor key
     <string name="ConditionFragment">ConditionFragment</string>
