@@ -29,12 +29,7 @@ public class RecyclerViewHolder extends BaseItemView{
         txtPrice=view.findViewById(R.id.inputTxtDeposit);
         ConstraintLayout recyclerContainer=view.findViewById(R.id.recyclerContainer);
 
-        recyclerContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemClickListener.onItemClick();
-            }
-        });
+        recyclerContainer.setOnClickListener(v -> onItemClickListener.onItemClick());
     }
 
     public void onBind(BaseItem data, Context context, int position, float fontSize, int textLine, boolean textEllipsize){
