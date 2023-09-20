@@ -1,13 +1,8 @@
 package com.example.happybankbook.presenter;
 
-import android.util.Log;
-
-import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.contract.SearchContract;
 import com.example.happybankbook.db.MemoDao;
 import com.example.happybankbook.db.MemoData;
-
-import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 
