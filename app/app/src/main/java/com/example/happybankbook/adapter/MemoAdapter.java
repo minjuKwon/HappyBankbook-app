@@ -17,8 +17,8 @@ import java.util.List;
 
 public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
-    private Context context;
-    private MemoType memoType;
+    private final Context context;
+    private final MemoType memoType;
     static private List<MemoData> dataList=new ArrayList<>();
 
     private static int location;
