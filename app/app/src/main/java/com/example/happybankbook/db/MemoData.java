@@ -11,7 +11,7 @@ public class MemoData extends BaseItem {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    public int idx;
+    public Integer idx;
     public int num;
     public int date;
     public int price=0;
