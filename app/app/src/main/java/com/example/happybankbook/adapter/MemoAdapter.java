@@ -106,7 +106,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
     }
 
     public void setItems(ArrayList<MemoData>data){
-        this.dataList=data;
+        dataList=data;
         notifyDataSetChanged();
     }
 
