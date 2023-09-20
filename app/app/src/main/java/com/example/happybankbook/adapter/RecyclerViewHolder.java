@@ -17,8 +17,8 @@ import com.example.happybankbook.db.MemoData;
 
 public class RecyclerViewHolder extends BaseItemView{
 
-    private TextView txtIdx,txtDate,txtContent,txtPrice;
-    private ConstraintLayout recyclerContainer;
+    private final TextView txtIdx,txtDate,txtContent,txtPrice;
+    private final ConstraintLayout recyclerContainer;
 
     private MemoData data;
 
