@@ -17,8 +17,8 @@ import com.example.happybankbook.db.MemoData;
 
 public class ViewPagerViewHolder extends BaseItemView {
 
-    private TextView txtDetailDate, txtDetailContent, txtDetailPrice;
-    private ImageView imgDetail;
+    private final TextView txtDetailDate, txtDetailContent, txtDetailPrice;
+    private final ImageView imgDetail;
 
     public ViewPagerViewHolder(@NonNull View view){
         super(view);
