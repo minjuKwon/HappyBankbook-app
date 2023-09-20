@@ -18,10 +18,6 @@ import com.example.happybankbook.db.MemoData;
 public class RecyclerViewHolder extends BaseItemView{
 
     private final TextView txtIdx,txtDate,txtContent,txtPrice;
-    private final ConstraintLayout recyclerContainer;
-
-    private MemoData data;
-
     private OnItemClickListener onItemClickListener;
 
     public RecyclerViewHolder(@NonNull View view){
@@ -31,7 +27,7 @@ public class RecyclerViewHolder extends BaseItemView{
         txtDate=view.findViewById(R.id.inputTxtDate);
         txtContent=view.findViewById(R.id.inputTxtContent);
         txtPrice=view.findViewById(R.id.inputTxtDeposit);
-        recyclerContainer=view.findViewById(R.id.recyclerContainer);
+        ConstraintLayout recyclerContainer=view.findViewById(R.id.recyclerContainer);
 
         recyclerContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,8 +38,7 @@ public class RecyclerViewHolder extends BaseItemView{
     }
 
     public void onBind(BaseItem data, Context context, int position, float fontSize, int textLine, boolean textEllipsize){
-
-        this.data=(MemoData)data;
+        MemoData memoData=(MemoData)data;
 
         txtIdx.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
         txtDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
@@ -64,19 +59,19 @@ public class RecyclerViewHolder extends BaseItemView{
             txtPrice.setEllipsize(null);
         }
 
-        txtIdx.setText(Integer.toString(this.data.getNum()));
+        txtIdx.setText(Integer.toString(memoData.getNum()));
 
-        txtDate.setText(Long.toString(this.data.getDate()).substring(2));
+        txtDate.setText(Long.toString(memoData.getDate()).substring(2));
 
-        txtContent.setText(this.data.getContent());
+        txtContent.setText(memoData.getContent());
 
-        if(this.data.getImage()!=null){
-            Drawable img=new BitmapDrawable(context.getResources(),this.data.getImage());
+        if(memoData.getImage()!=null){
+            Drawable img=new BitmapDrawable(context.getResources(),memoData.getImage());
             img.setBounds(0,0,100,100);
             txtContent.setCompoundDrawables(img,null,null,null);
         }
 
-        txtPrice.setText(Integer.toString(this.data.getPrice()));
+        txtPrice.setText(Integer.toString(memoData.getPrice()));
 
         if(position%2==0){
             txtIdx.setBackgroundResource(R.drawable.memo_list_content_background_cream);
