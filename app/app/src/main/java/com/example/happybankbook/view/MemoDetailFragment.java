@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -132,6 +133,11 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.memoDetailTextSetting),Context.MODE_PRIVATE);
         fontSize=preferences.getFloat(getResources().getString(R.string.fontSize),12);
         adapter.setFont(fontSize);
+        
+        //SearchFragment에서 검색 후 키보드 내리지 않고 바로 viewpager 이동 하면,
+        //계속 키보드 올려지는 경우 방지
+        InputMethodManager imm=(InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override
