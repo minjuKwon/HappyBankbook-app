@@ -20,8 +20,6 @@ public class ViewPagerViewHolder extends BaseItemView {
     private TextView txtDetailDate, txtDetailContent, txtDetailPrice;
     private ImageView imgDetail;
 
-    private MemoData data;
-
     public ViewPagerViewHolder(@NonNull View view){
         super(view);
 
@@ -32,23 +30,22 @@ public class ViewPagerViewHolder extends BaseItemView {
     }
 
     public void onBind(BaseItem data, Context context, float fontSize){
-
-        this.data=(MemoData)data;
+        MemoData memoData=(MemoData)data;
 
         txtDetailContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 
-        String date=Integer.toString(this.data.getDate());
+        String date=Integer.toString(memoData.getDate());
         String year=date.substring(0,4);
         String month=date.substring(4,6);
         String day=date.substring(6);
         txtDetailDate.setText(String.format("%s.%s.%s",year,month,day));
 
-        txtDetailContent.setText(this.data.getContent());
+        txtDetailContent.setText(memoData.getContent());
 
-        txtDetailPrice.setText(Integer.toString(this.data.getPrice()));
+        txtDetailPrice.setText(Integer.toString(memoData.getPrice()));
 
-        if(this.data.getImage()!=null){
-            Drawable img=new BitmapDrawable(context.getResources(),this.data.getImage());
+        if(memoData.getImage()!=null){
+            Drawable img=new BitmapDrawable(context.getResources(),memoData.getImage());
             imgDetail.setImageDrawable(img);
         }
 
