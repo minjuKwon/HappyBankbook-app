@@ -173,10 +173,9 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         presenter.setReturnLong(new GetReturnLong() {
             @Override
             public void getLong(long value) {
-                long totalPrice=value;
                 String priceFormatPattern="###,###";
                 DecimalFormat priceFormat = new DecimalFormat(priceFormatPattern);
-                String strPrice= priceFormat.format(totalPrice);
+                String strPrice= priceFormat.format(value);
                 txtPrice.setText(strPrice);
             }
         });
