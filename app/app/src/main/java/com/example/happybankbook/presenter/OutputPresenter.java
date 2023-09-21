@@ -15,7 +15,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class OutputPresenter implements OutputContract.Presenter {
 
-    private CompositeDisposable disposable;
+    private final CompositeDisposable disposable;
 
     private GetReturnStringBuffer getReturnStringBuffer;
     private GetReturnMemoDataList getReturnMemoDataList;

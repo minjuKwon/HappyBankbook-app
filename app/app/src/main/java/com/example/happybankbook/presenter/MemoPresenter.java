@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MemoPresenter implements MemoContract.Presenter {
 
-    private CompositeDisposable disposable;
+    private final CompositeDisposable disposable;
     private GetReturnInt getReturnInt;
 
     public MemoPresenter(){this.disposable=new CompositeDisposable();}

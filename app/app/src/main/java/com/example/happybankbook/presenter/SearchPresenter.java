@@ -13,7 +13,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class SearchPresenter implements SearchContract.Presenter {
 
     private SearchContract.View view;
-    private CompositeDisposable disposable;
+    private final CompositeDisposable disposable;
 
     public SearchPresenter(){this.disposable=new CompositeDisposable();}
 

@@ -20,7 +20,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class ListPresenter implements ListContract.Presenter {
 
     private ListContract.View view;
-    private CompositeDisposable disposable;
+    private final CompositeDisposable disposable;
     private GetReturnLong getReturnLong;
     private GetReturnInt getReturnInt;
 
