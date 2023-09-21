@@ -45,7 +45,7 @@ public class OutputPresenter implements OutputContract.Presenter {
                                     }
                                     getReturnStringBuffer.getStringBuffer(stringBuffer);
                                 },
-                                error->{Log.d("Memo","export file data error : "+error);}
+                                error->Log.d("Memo","export file data error : "+error)
                         )
         );
     }
@@ -56,9 +56,8 @@ public class OutputPresenter implements OutputContract.Presenter {
           memoDao.getAll()
                   .subscribeOn(Schedulers.io())
                   .subscribe(
-                        item->{
-                            getReturnMemoDataList.getMemoDataList((ArrayList<MemoData>)item);
-                        }
+                        item->getReturnMemoDataList.getMemoDataList((ArrayList<MemoData>)item)
+
                   )
         );
     }

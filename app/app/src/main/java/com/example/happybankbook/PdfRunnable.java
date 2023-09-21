@@ -145,11 +145,7 @@ public class PdfRunnable implements Runnable{
 
         pdfDocument.close();
 
-        ((MainActivity)context).runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(context,context.getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show();
-            }
-        });
+        ((MainActivity)context).runOnUiThread(()-> Toast.makeText(context,context.getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show());
 
     }
 

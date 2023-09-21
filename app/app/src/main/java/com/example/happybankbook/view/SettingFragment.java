@@ -335,12 +335,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
                 }
             }
         });
-        builder.setNegativeButton(getResources().getText(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setNegativeButton(getResources().getText(R.string.cancel), (dialog, which)-> dialog.dismiss());
         AlertDialog dialog=builder.create();
         dialog.show();
     }
@@ -422,11 +417,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             }
         }
 
-        ((MainActivity)getContext()).runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(getContext(),getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show();
-            }
-        });
+        ((MainActivity)getContext()).runOnUiThread(()->Toast.makeText(getContext(),getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show());
 
     }
 
@@ -459,11 +450,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             }
         }
 
-        ((MainActivity)getContext()).runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(getContext(),getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show();
-            }
-        });
+        ((MainActivity)getContext()).runOnUiThread(()-> Toast.makeText(getContext(),getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show());
 
     }
 

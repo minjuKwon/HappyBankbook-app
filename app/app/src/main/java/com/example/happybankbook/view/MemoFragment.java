@@ -214,12 +214,8 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
             }
         });
-        txtCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+
+        txtCancel.setOnClickListener((v)-> dialog.dismiss());
 
         dialog.show();
 

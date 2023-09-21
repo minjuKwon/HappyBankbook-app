@@ -33,9 +33,8 @@ public class SearchPresenter implements SearchContract.Presenter {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                item->{
-                                    view.setItems((ArrayList<MemoData>)item);
-                                }
+                                item-> view.setItems((ArrayList<MemoData>)item)
+
                         )
         );
     }
