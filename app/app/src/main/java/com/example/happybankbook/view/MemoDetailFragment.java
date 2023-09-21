@@ -35,7 +35,7 @@ import java.util.ArrayList;
 public class MemoDetailFragment extends Fragment implements ListContract.View,View.OnClickListener{
 
     //일정 시간 후 화살표 이미지 투명화 위한 Runnable
-    private Runnable postRunnable =new Runnable(){
+    private final Runnable postRunnable =new Runnable(){
         @Override
         public void run() {
             imgForward.setColorFilter(Color.TRANSPARENT);
