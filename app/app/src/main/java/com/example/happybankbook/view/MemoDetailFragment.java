@@ -46,7 +46,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     private ViewPager2 viewPager;
     private ImageView imgForward;
     private ImageView imgBack;
-    private TextView txtPrevious;
 
     private ListPresenter presenter;
     private MemoAdapter adapter;
@@ -161,7 +160,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         viewPager=view.findViewById(R.id.viewPager2);
         imgForward=view.findViewById(R.id.imgForward);
         imgBack=view.findViewById(R.id.imgBack);
-        txtPrevious=view.findViewById(R.id.memoDetailPrevious);
+        TextView txtPrevious=view.findViewById(R.id.memoDetailPrevious);
 
         imgForward.setOnClickListener(this);
         imgBack.setOnClickListener(this);
