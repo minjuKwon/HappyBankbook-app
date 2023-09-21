@@ -1,5 +1,6 @@
 package com.example.happybankbook.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -36,6 +37,18 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
 
     private boolean isClick=true;
     private boolean visitedViewPager=false;
+
+    private Context mContext;
+    private Activity mActivity;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext=context;
+        if (context instanceof Activity) {
+            mActivity = (Activity)context;
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,18 +88,18 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         super.onViewCreated(view, savedInstanceState);
 
         //조회 날짜 기본 값 설정
-        ((MainActivity)getActivity()).setNowDate(txtFromDuration);
-        ((MainActivity)getActivity()).setNowDate(txtToDuration);
+        ((MainActivity)mActivity).setNowDate(txtFromDuration);
+        ((MainActivity)mActivity).setNowDate(txtToDuration);
 
         //SharedPreferences에 저장된 정렬 값 가져오기
-        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.sortInfo),Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.sortInfo),Context.MODE_PRIVATE);
 
         boolean click=preferences.getBoolean(getResources().getString(R.string.isClick),true);
         isClick=(!click);
         clickDuration();
 
-        txtFromDuration.setText(preferences.getString(getResources().getString(R.string.fromDate),((MainActivity)getActivity()).setNowDate()));
-        txtToDuration.setText(preferences.getString(getResources().getString(R.string.toDate),((MainActivity)getActivity()).setNowDate()));
+        txtFromDuration.setText(preferences.getString(getResources().getString(R.string.fromDate),((MainActivity)mActivity).setNowDate()));
+        txtToDuration.setText(preferences.getString(getResources().getString(R.string.toDate),((MainActivity)mActivity).setNowDate()));
 
         boolean newCheck=preferences.getBoolean(getResources().getString(R.string.memoSort),true);
         radioNew.setChecked(newCheck);
@@ -103,7 +116,13 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         Bundle bundle=new Bundle();
         bundle.putInt(getResources().getString(R.string.ConditionFragment),1);
         getParentFragmentManager().setFragmentResult(getResources().getString(R.string.removeFragment),bundle);
+    }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext=null;
+        mActivity=null;
     }
 
     private void init(View view){
@@ -136,13 +155,13 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
     public void onClick(View v) {
         if(v.getId()==R.id.close){
             hideKeyboard();
-            ((MainActivity)getActivity()).removeFragment(this);
+            ((MainActivity)mActivity).removeFragment(this);
         }else if(v.getId()==R.id.duration){
             clickDuration();
         }else if(v.getId()==R.id.toDuration){
-            ((MainActivity)getActivity()).setDate(txtToDuration,getContext());
+            ((MainActivity)mActivity).setDate(txtToDuration,getContext());
         }else if(v.getId()==R.id.fromDuration){
-            ((MainActivity)getActivity()).setDate(txtFromDuration,getContext());
+            ((MainActivity)mActivity).setDate(txtFromDuration,getContext());
         }else if(v.getId()==R.id.buttonSubmit){
             submit();
         }else if(v.getId()==R.id.buttonInit){
@@ -155,13 +174,13 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         if(checkedId==R.id.radioNewest){
             radioNew.setChecked(true);
             radioOld.setChecked(false);
-            radioNew.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.green));
-            radioOld.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.radio_sort));
+            radioNew.setBackgroundColor(ContextCompat.getColor(mContext,R.color.green));
+            radioOld.setBackground(ContextCompat.getDrawable(mContext,R.drawable.radio_sort));
         }else if(checkedId==R.id.radioOldest){
             radioOld.setChecked(true);
             radioNew.setChecked(false);
-            radioOld.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.green));
-            radioNew.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.radio_sort));
+            radioOld.setBackgroundColor(ContextCompat.getColor(mContext,R.color.green));
+            radioNew.setBackground(ContextCompat.getDrawable(mContext,R.drawable.radio_sort));
         }
     }
 
@@ -180,8 +199,8 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         if(isClick){
             fromDate=0; toDate=30000000;
         }else{
-            fromDate=((MainActivity)getActivity()).dateIntToString(txtFromDuration);
-            toDate=((MainActivity)getActivity()).dateIntToString(txtToDuration);
+            fromDate=((MainActivity)mActivity).dateIntToString(txtFromDuration);
+            toDate=((MainActivity)mActivity).dateIntToString(txtToDuration);
         }
         //조회할 메모 개수 얻기
         if(!TextUtils.isEmpty(editCount.getText().toString())){
@@ -194,12 +213,12 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
 
         hideKeyboard();
 
-        ((MainActivity)getActivity()).removeFragment(this);
+        ((MainActivity)mActivity).removeFragment(this);
     }
 
     public void reset(){
-        ((MainActivity)getActivity()).setNowDate(txtFromDuration);
-        ((MainActivity)getActivity()).setNowDate(txtToDuration);
+        ((MainActivity)mActivity).setNowDate(txtFromDuration);
+        ((MainActivity)mActivity).setNowDate(txtToDuration);
         isNotDurationClick();
         radioNew.setChecked(true);
         editCount.setText(null);
@@ -210,14 +229,14 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
     }
 
     public void isDurationClick(){
-        txtDuration.setTextColor(ContextCompat.getColor(getContext(),R.color.black));
+        txtDuration.setTextColor(ContextCompat.getColor(mContext,R.color.black));
         txtFromDuration.setVisibility(View.VISIBLE);
         txtToDuration.setVisibility(View.VISIBLE);
         isClick=false;
     }
 
     public void isNotDurationClick(){
-        txtDuration.setTextColor(ContextCompat.getColor(getContext(),R.color.darkGray));
+        txtDuration.setTextColor(ContextCompat.getColor(mContext,R.color.darkGray));
         txtFromDuration.setVisibility(View.GONE);
         txtToDuration.setVisibility(View.GONE);
         isClick=true;
@@ -235,7 +254,7 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
     }
 
     public void setSharedPreferences(){
-        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.sortInfo), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.sortInfo), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putBoolean(getResources().getString(R.string.isClick),isClick);
         editor.putString(getResources().getString(R.string.fromDate),txtFromDuration.getText().toString());
@@ -246,7 +265,7 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
     }
 
     public void hideKeyboard(){
-        InputMethodManager imm=(InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm=(InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editCount.getWindowToken(),0);
     }
 
