@@ -1,5 +1,6 @@
 package com.example.happybankbook.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -60,6 +61,18 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     private int adapterPosition;
     private boolean isFirst=true;
     private float fontSize=12;
+
+    private Context mContext;
+    private Activity mActivity;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext=context;
+        if(context instanceof Activity){
+            mActivity=(Activity)context;
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,13 +142,13 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.memoDetailTextSetting),Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.memoDetailTextSetting),Context.MODE_PRIVATE);
         fontSize=preferences.getFloat(getResources().getString(R.string.fontSize),12);
         adapter.setFont(fontSize);
         
         //SearchFragment에서 검색 후 키보드 내리지 않고 바로 viewpager 이동 하면,
         //계속 키보드 올려지는 경우 방지
-        InputMethodManager imm=(InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm=(InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
@@ -154,6 +167,13 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     public void onDestroy() {
         super.onDestroy();
         presenter.releaseView();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext=null;
+        mActivity=null;
     }
 
     public void init(View view){
@@ -188,15 +208,15 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.imgForward){
-            imgForward.setColorFilter(ContextCompat.getColor(getContext(),R.color.darkerGray));
+            imgForward.setColorFilter(ContextCompat.getColor(mContext,R.color.darkerGray));
             viewPager.setCurrentItem(currentPosition-1,false);
             handler.postDelayed(postRunnable,3000);
         }else if(v.getId()==R.id.imgBack){
-            imgBack.setColorFilter(ContextCompat.getColor(getContext(),R.color.darkerGray));
+            imgBack.setColorFilter(ContextCompat.getColor(mContext,R.color.darkerGray));
             viewPager.setCurrentItem(currentPosition+1,false);
             handler.postDelayed(postRunnable,3000);
         }else if(v.getId()==R.id.memoDetailPrevious){
-            ((MainActivity)getActivity()).removeFragment(this);
+            ((MainActivity)mActivity).removeFragment(this);
         }
     }
 
@@ -235,7 +255,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     }
 
     private void resetTextSetting(){
-        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.memoDetailTextSetting), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.memoDetailTextSetting), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putFloat(getResources().getString(R.string.fontSize), fontSize);
 
