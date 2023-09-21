@@ -27,16 +27,12 @@ import com.example.happybankbook.R;
 
 public class ConditionFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
-    private ImageView imgClose;
     private TextView txtDuration;
     private TextView txtFromDuration;
     private TextView txtToDuration;
-    private RadioGroup radioGroupSort;
     private RadioButton radioOld;
     private RadioButton radioNew;
     private EditText editCount;
-    private Button submit;
-    private Button init;
 
     private boolean isClick=true;
     private boolean visitedViewPager=false;
@@ -111,16 +107,16 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
     }
 
     private void init(View view){
-        imgClose=view.findViewById(R.id.close);
+        ImageView imgClose=view.findViewById(R.id.close);
         txtDuration=view.findViewById(R.id.duration);
         txtFromDuration=view.findViewById(R.id.fromDuration);
         txtToDuration=view.findViewById(R.id.toDuration);
         radioOld=view.findViewById(R.id.radioOldest);
-        radioGroupSort=view.findViewById(R.id.radioGroupSort);
+        RadioGroup radioGroupSort=view.findViewById(R.id.radioGroupSort);
         radioNew=view.findViewById(R.id.radioNewest);
         editCount=view.findViewById(R.id.editCount);
-        submit=view.findViewById(R.id.buttonSubmit);
-        init=view.findViewById(R.id.buttonInit);
+        Button submit=view.findViewById(R.id.buttonSubmit);
+        Button init=view.findViewById(R.id.buttonInit);
 
         radioNew.setChecked(true);
         radioOld.setChecked(false);
