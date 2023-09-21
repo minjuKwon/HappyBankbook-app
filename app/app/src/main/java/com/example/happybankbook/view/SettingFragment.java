@@ -72,38 +72,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         }
     }
 
-    private String fileExtension;
-
-    private ActivityResultLauncher<String> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), check -> {
-                if(check){
-                    Toast.makeText(getContext(),getResources().getText(R.string.savePermissionYes),Toast.LENGTH_SHORT).show();
-                    if("pdf".equals(fileExtension)){
-                        exportPdf(".pdf");
-                    }else if("excel".equals(fileExtension)){
-                       exportTxtFile(',',".csv");
-                    }else if("txt".equals(fileExtension)){
-                        exportTxtFile(' ',".txt");
-                    }
-                }else{
-                    Toast.makeText(getContext(),getResources().getText(R.string.savePermissionNo),Toast.LENGTH_LONG).show();
-                }
-            });
-    
-    private ActivityResultLauncher<Intent> activityResultLauncher
-            =registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result->{
-        if(result.getResultCode()==RESULT_OK){
-            Uri uri=result.getData().getData();
-            Toast.makeText(getContext(),getResources().getText(R.string.savePermissionYes),Toast.LENGTH_SHORT).show();
-            if("pdf".equals(fileExtension)){
-                exportPdf(uri);
-            }else if("excel".equals(fileExtension)){
-                exportTxtFile(uri,',');
-            }else if("txt".equals(fileExtension)){
-                exportTxtFile(uri,' ');
-            }
-        }
-    });
+    private ActivityResultLauncher<String> requestPermissionLauncher ;
+    private ActivityResultLauncher<Intent> activityResultLauncher;
 
     private TextView txtManual, txtEllipsis, txtPdf, txtExcel, txtTxt, txtOpenSource;
     private RadioGroup radioGroupLine, radioGroupFont;
@@ -116,13 +86,51 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     private final String pdfType="application/pdf";
     private final String csvType="text/comma-separated-values";
     private final String txtType="text/plain";
+    private final String PERMISSION= Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
+    private String fileExtension;
     private boolean isEllipsize=false;
     private int checkLine, checkFontSize;
-    private final String PERMISSION= Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
     private StringBuffer buffer;
     private ParcelFileDescriptor pfd;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        requestPermissionLauncher =
+                registerForActivityResult(new ActivityResultContracts.RequestPermission(), check -> {
+                    if(check){
+                        Toast.makeText(getContext(),getResources().getText(R.string.savePermissionYes),Toast.LENGTH_SHORT).show();
+                        if("pdf".equals(fileExtension)){
+                            exportPdf(".pdf");
+                        }else if("excel".equals(fileExtension)){
+                            exportTxtFile(',',".csv");
+                        }else if("txt".equals(fileExtension)){
+                            exportTxtFile(' ',".txt");
+                        }
+                    }else{
+                        Toast.makeText(getContext(),getResources().getText(R.string.savePermissionNo),Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        activityResultLauncher
+                =registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result->{
+            if(result.getResultCode()==RESULT_OK){
+                Uri uri=result.getData().getData();
+                Toast.makeText(getContext(),getResources().getText(R.string.savePermissionYes),Toast.LENGTH_SHORT).show();
+                if("pdf".equals(fileExtension)){
+                    exportPdf(uri);
+                }else if("excel".equals(fileExtension)){
+                    exportTxtFile(uri,',');
+                }else if("txt".equals(fileExtension)){
+                    exportTxtFile(uri,' ');
+                }
+            }
+        });
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
