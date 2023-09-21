@@ -1,5 +1,6 @@
 package com.example.happybankbook.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -47,11 +48,21 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     private boolean textEllipsize=true;
     private boolean isStop;
 
+    private Activity mActivity;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity) {
+            mActivity = (Activity)context;
+        }
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.isStop),Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.isStop),Context.MODE_PRIVATE);
         isStop=preferences.getBoolean(getResources().getString(R.string.stop),false);
 
         //ConditionFragment 정렬 값 받기
@@ -111,7 +122,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.listTextSetting),Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.listTextSetting),Context.MODE_PRIVATE);
         textEllipsize=preferences.getBoolean(getResources().getString(R.string.textEllipsize),true);
         textLine=preferences.getInt(getResources().getString(R.string.textLine),2);
         fontSize=preferences.getFloat(getResources().getString(R.string.fontSize),15);
@@ -132,7 +143,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         resetTextSetting();
 
         isStop=true;
-        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.isStop), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.isStop), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putBoolean(getResources().getString(R.string.stop),isStop);
         editor.apply();
@@ -142,6 +153,12 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     public void onDestroy() {
         super.onDestroy();
         presenter.releaseView();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mActivity=null;
     }
 
     private void init(View v){
@@ -186,11 +203,11 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.txtSearch){
-            ((MainActivity)getActivity()).replaceFragment(new SearchFragment());
+            ((MainActivity)mActivity).replaceFragment(new SearchFragment());
         }else if(v.getId()==R.id.txtCondition){
             //addFragment 1일 때만 addFragment()하여 여러 번 클릭 시 중복 생성을 막음
             if(addFragment==1){
-                ((MainActivity)getActivity()).addFragment(new ConditionFragment());
+                ((MainActivity)mActivity).addFragment(new ConditionFragment());
                 ++addFragment;
             }
         }
@@ -230,7 +247,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     }
 
     private void resetTextSetting(){
-        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.listTextSetting), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.listTextSetting), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putBoolean(getResources().getString(R.string.textEllipsize), textEllipsize);
         editor.putInt(getResources().getString(R.string.textLine), textLine);
