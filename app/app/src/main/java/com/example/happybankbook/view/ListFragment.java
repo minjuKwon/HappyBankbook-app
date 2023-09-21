@@ -32,10 +32,7 @@ import java.util.ArrayList;
 
 public class ListFragment extends Fragment implements View.OnClickListener, ListContract.View{
 
-    private TextView txtSearch;
-    private TextView txtCondition;
     private TextView txtPrice;
-    private RecyclerView recyclerView;
 
     private ListPresenter presenter;
     private MemoAdapter adapter;
@@ -148,10 +145,10 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     }
 
     private void init(View v){
-        txtSearch=v.findViewById(R.id.txtSearch);
-        txtCondition=v.findViewById(R.id.txtCondition);
+        TextView txtSearch=v.findViewById(R.id.txtSearch);
+        TextView txtCondition=v.findViewById(R.id.txtCondition);
         txtPrice=v.findViewById(R.id.priceTotalTxt);
-        recyclerView=v.findViewById(R.id.recyclerMemo);
+        RecyclerView recyclerView=v.findViewById(R.id.recyclerMemo);
 
         txtSearch.setOnClickListener(this);
         txtCondition.setOnClickListener(this);
