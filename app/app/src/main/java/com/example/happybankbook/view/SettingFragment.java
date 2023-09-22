@@ -48,10 +48,10 @@ import java.util.ArrayList;
 public class SettingFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener{
 
     private class FileRunnable implements Runnable{
-        private StringBuffer content;
+        private final StringBuffer content;
         private String extension;
         private Uri uri;
-        private int branch;
+        private final int branch;
 
         public FileRunnable(StringBuffer content, String extension){
             this.content=content;
