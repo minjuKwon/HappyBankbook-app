@@ -199,7 +199,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
                 if(!TextUtils.isEmpty(content)&&!TextUtils.isEmpty(strPrice)){
                     try{
-                        Integer price=Integer.parseInt(strPrice);
+                        int price=Integer.parseInt(strPrice);
                         data.setPrice(price);
 
                         presenter.insertMemo(RoomDB.getInstance(getContext()).memoDao(),data);
