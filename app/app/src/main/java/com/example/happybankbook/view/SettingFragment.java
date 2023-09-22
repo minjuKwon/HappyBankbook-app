@@ -200,6 +200,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         radioGroupLine.setOnCheckedChangeListener(this);
         radioGroupFont.setOnCheckedChangeListener(this);
 
+        txtManual.setOnClickListener(this);
         txtEllipsis.setOnClickListener(this);
         txtPdf.setOnClickListener(this);
         txtExcel.setOnClickListener(this);
@@ -222,7 +223,17 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         }else if(v.getId()==R.id.txt){
             fileExtension="txt";
             makeExportDialog(Build.VERSION.SDK_INT, txtType);
+        }else if(v.getId()==R.id.manual){
+            showManual();
         }
+    }
+
+    public void showManual(){
+        AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
+        builder.setMessage(getResources().getText(R.string.manualDialog));
+        builder.setNeutralButton(getResources().getText(R.string.close), (dialog, which)-> dialog.dismiss());
+        AlertDialog dialog=builder.create();
+        dialog.show();
     }
 
     @Override
