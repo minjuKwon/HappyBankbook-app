@@ -77,17 +77,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     private ActivityResultLauncher<String> requestPermissionLauncher ;
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
-    private TextView txtManual, txtEllipsis, txtPdf, txtExcel, txtTxt, txtOpenSource;
-    private RadioGroup radioGroupLine, radioGroupFont;
+    private TextView txtEllipsis;
     private RadioButton radioSingle, radioMull, radioOne, radioTwo, radioThree;
 
     private OutputPresenter presenter;
     private FileRunnable fileRunnable;
     private Thread fileThread;
 
-    private final String pdfType="application/pdf";
-    private final String csvType="text/comma-separated-values";
-    private final String txtType="text/plain";
     private final String PERMISSION= Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
     private String fileExtension;
@@ -176,16 +172,16 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     }
 
     private void init(View view){
-        txtManual=view.findViewById(R.id.manual);
+        TextView txtManual=view.findViewById(R.id.manual);
         txtEllipsis=view.findViewById(R.id.ellipsis);
-        txtPdf=view.findViewById(R.id.pdf);
-        txtExcel=view.findViewById(R.id.excel);
-        txtTxt=view.findViewById(R.id.txt);
-        txtOpenSource=view.findViewById(R.id.openSource);
-        radioGroupLine=view.findViewById(R.id.radioLineDisplay);
+        TextView txtPdf=view.findViewById(R.id.pdf);
+        TextView txtExcel=view.findViewById(R.id.excel);
+        TextView txtTxt=view.findViewById(R.id.txt);
+        TextView txtOpenSource=view.findViewById(R.id.openSource);
+        RadioGroup radioGroupLine=view.findViewById(R.id.radioLineDisplay);
         radioSingle=view.findViewById(R.id.radioLineSingle);
         radioMull=view.findViewById(R.id.radioLineMul);
-        radioGroupFont=view.findViewById(R.id.radioFont);
+        RadioGroup radioGroupFont=view.findViewById(R.id.radioFont);
         radioOne=view.findViewById(R.id.radioFontOne);
         radioTwo=view.findViewById(R.id.radioFontTwo);
         radioThree=view.findViewById(R.id.radioFontThree);
@@ -212,6 +208,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     @Override
     public void onClick(View v) {
+        final String pdfType="application/pdf";
+        final String csvType="text/comma-separated-values";
+        final String txtType="text/plain";
+
         if(v.getId()==R.id.ellipsis){
             setEllipsize();
             boolean check=!isEllipsize;
@@ -231,14 +231,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         }else if(v.getId()==R.id.openSource){
             startActivity(new Intent(getContext(), OssLicensesMenuActivity.class));
         }
-    }
-
-    public void showManual(){
-        AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
-        builder.setMessage(getResources().getText(R.string.manualDialog));
-        builder.setNeutralButton(getResources().getText(R.string.close), (dialog, which)-> dialog.dismiss());
-        AlertDialog dialog=builder.create();
-        dialog.show();
     }
 
     @Override
@@ -283,6 +275,14 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             }
         }
 
+    }
+
+    public void showManual(){
+        AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
+        builder.setMessage(getResources().getText(R.string.manualDialog));
+        builder.setNeutralButton(getResources().getText(R.string.close), (dialog, which)-> dialog.dismiss());
+        AlertDialog dialog=builder.create();
+        dialog.show();
     }
 
     public void radioLine(boolean b1, boolean b2, int c1, int c2){
