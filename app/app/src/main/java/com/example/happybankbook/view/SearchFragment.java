@@ -1,5 +1,6 @@
 package com.example.happybankbook.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -38,6 +39,17 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     private float fontSize=15;
     private int textLine=2;
     private boolean textEllipsize=true;
+    private Context mContext;
+    private Activity mActivity;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext=context;
+        if(context instanceof Activity){
+            mActivity=(Activity)context;
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,7 +91,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.searchTextSetting),Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.searchTextSetting),Context.MODE_PRIVATE);
         textEllipsize=preferences.getBoolean(getResources().getString(R.string.textEllipsize),true);
         textLine=preferences.getInt(getResources().getString(R.string.textLine),2);
         fontSize=preferences.getFloat(getResources().getString(R.string.fontSize),15);
@@ -99,6 +111,13 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     public void onDestroy() {
         super.onDestroy();
         presenter.releaseView();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext=null;
+        mActivity=null;
     }
 
     private void init(View view){
@@ -125,7 +144,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.previousSearch){ ((MainActivity)getActivity()).replaceFragment(new ListFragment()); }
+        if(v.getId()==R.id.previousSearch){ ((MainActivity)mActivity).replaceFragment(new ListFragment()); }
     }
 
     @Override
@@ -147,7 +166,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if(hasFocus){
-            InputMethodManager imm=(InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm=(InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(v.findFocus(),InputMethodManager.SHOW_IMPLICIT);
         }
     }
@@ -158,7 +177,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     }
 
     private void resetTextSetting(){
-        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.searchTextSetting), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.searchTextSetting), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putBoolean(getResources().getString(R.string.textEllipsize), textEllipsize);
         editor.putInt(getResources().getString(R.string.textLine), textLine);
