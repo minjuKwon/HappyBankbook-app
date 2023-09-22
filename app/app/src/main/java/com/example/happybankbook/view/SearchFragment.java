@@ -32,8 +32,6 @@ import java.util.ArrayList;
 
 public class SearchFragment extends Fragment implements View.OnClickListener, View.OnFocusChangeListener,SearchView.OnQueryTextListener, SearchContract.View {
 
-    private TextView txtPrevious;
-    private SearchView searchView;
     private RecyclerView recyclerView;
     private SearchPresenter presenter;
     private MemoAdapter adapter;
@@ -104,8 +102,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     }
 
     private void init(View view){
-        txtPrevious=view.findViewById(R.id.previousSearch);
-        searchView=view.findViewById(R.id.searchView);
+        TextView txtPrevious=view.findViewById(R.id.previousSearch);
+        SearchView searchView=view.findViewById(R.id.searchView);
         recyclerView=view.findViewById(R.id.recyclerSearch);
 
         txtPrevious.setOnClickListener(this);
