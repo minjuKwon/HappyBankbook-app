@@ -36,6 +36,8 @@ import com.example.happybankbook.R;
 import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.OutputPresenter;
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -205,6 +207,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         txtPdf.setOnClickListener(this);
         txtExcel.setOnClickListener(this);
         txtTxt.setOnClickListener(this);
+        txtOpenSource.setOnClickListener(this);
     }
 
     @Override
@@ -225,6 +228,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             makeExportDialog(Build.VERSION.SDK_INT, txtType);
         }else if(v.getId()==R.id.manual){
             showManual();
+        }else if(v.getId()==R.id.openSource){
+            startActivity(new Intent(getContext(), OssLicensesMenuActivity.class));
         }
     }
 
