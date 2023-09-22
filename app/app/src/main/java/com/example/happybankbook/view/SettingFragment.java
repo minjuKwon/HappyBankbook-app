@@ -3,6 +3,7 @@ package com.example.happybankbook.view;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -93,6 +94,18 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     private StringBuffer buffer;
     private ParcelFileDescriptor pfd;
 
+    private Context mContext;
+    private Activity mActivity;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext=context;
+        if(context instanceof Activity){
+            mActivity=(Activity)context;
+        }
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,7 +155,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.settingInfo),Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.settingInfo),Context.MODE_PRIVATE);
         isEllipsize=preferences.getBoolean(getResources().getString(R.string.isEllipsize),true);
         checkLine=preferences.getInt(getResources().getString(R.string.checkLine),R.id.radioLineMul);
         checkFontSize=preferences.getInt(getResources().getString(R.string.checkFontSize),R.id.radioFontOne);
@@ -169,6 +182,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         super.onStop();
         resetRadioButton();
         presenter.releaseView();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext=null;
+        mActivity=null;
     }
 
     private void init(View view){
@@ -288,17 +308,17 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     public void radioLine(boolean b1, boolean b2, int c1, int c2){
         radioSingle.setChecked(b1);
         radioMull.setChecked(b2);
-        radioSingle.setTextColor(ContextCompat.getColor(getContext(),c1));
-        radioMull.setTextColor(ContextCompat.getColor(getContext(),c2));
+        radioSingle.setTextColor(ContextCompat.getColor(mContext,c1));
+        radioMull.setTextColor(ContextCompat.getColor(mContext,c2));
     }
 
     public void radioFont(boolean b1, boolean b2, boolean b3, int c1, int c2, int c3){
         radioOne.setChecked(b1);
         radioTwo.setChecked(b2);
         radioThree.setChecked(b3);
-        radioOne.setTextColor(ContextCompat.getColor(getContext(),c1));
-        radioTwo.setTextColor(ContextCompat.getColor(getContext(),c2));
-        radioThree.setTextColor(ContextCompat.getColor(getContext(),c3));
+        radioOne.setTextColor(ContextCompat.getColor(mContext,c1));
+        radioTwo.setTextColor(ContextCompat.getColor(mContext,c2));
+        radioThree.setTextColor(ContextCompat.getColor(mContext,c3));
     }
 
     public void changeFont(float size, String key){
@@ -317,10 +337,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
    public void setEllipsize(){
         if(isEllipsize){
-            txtEllipsis.setTextColor(ContextCompat.getColor(getContext(),R.color.black));
+            txtEllipsis.setTextColor(ContextCompat.getColor(mContext,R.color.black));
             isEllipsize=false;
         }else{
-            txtEllipsis.setTextColor(ContextCompat.getColor(getContext(),R.color.gray));
+            txtEllipsis.setTextColor(ContextCompat.getColor(mContext,R.color.gray));
             isEllipsize=true;
         }
    }
@@ -333,7 +353,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     }
 
     public void resetRadioButton(){
-        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.settingInfo), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.settingInfo), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putBoolean(getResources().getString(R.string.isEllipsize), !isEllipsize);
         editor.putInt(getResources().getString(R.string.checkLine), checkLine);
@@ -424,7 +444,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
         try{
             String strContent = String.valueOf(content);
-            fileOutputStream=getDirectory(uri, getContext());
+            fileOutputStream=getDirectory(uri, mContext);
             if("null".equals(strContent)||"".equals(strContent)){
                 Toast.makeText(getContext(),getResources().getText(R.string.noMemo),Toast.LENGTH_LONG).show();
             }else{
@@ -441,7 +461,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             }
         }
 
-        ((MainActivity)getContext()).runOnUiThread(()->Toast.makeText(getContext(),getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show());
+        ((MainActivity)mContext).runOnUiThread(()->Toast.makeText(getContext(),getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show());
 
     }
 
@@ -474,7 +494,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             }
         }
 
-        ((MainActivity)getContext()).runOnUiThread(()-> Toast.makeText(getContext(),getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show());
+        ((MainActivity)mContext).runOnUiThread(()-> Toast.makeText(getContext(),getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show());
 
     }
 
