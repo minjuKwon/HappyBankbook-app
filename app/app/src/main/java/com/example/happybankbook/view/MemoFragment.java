@@ -39,14 +39,11 @@ import com.example.happybankbook.presenterReturnInterface.GetReturnInt;
 public class MemoFragment extends Fragment implements View.OnClickListener{
 
     private TextView txtDate;
-    private TextView txtAddPicture;
-    private TextView txtSave;
     private ImageView img;
     private EditText editContent;
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private MemoPresenter presenter;
     private float fontSize=12;
-    private final String imgType="image/*";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,8 +111,8 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
     private void init(View view){
         txtDate=view.findViewById(R.id.txtMemoDate);
-        txtAddPicture=view.findViewById(R.id.addPicture);
-        txtSave=view.findViewById(R.id.save);
+        TextView txtAddPicture=view.findViewById(R.id.addPicture);
+        TextView txtSave=view.findViewById(R.id.save);
         img=view.findViewById(R.id.imageView);
         editContent=view.findViewById(R.id.editMemo);
 
@@ -138,6 +135,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     }
 
     public void loadImage(){
+        final String imgType="image/*";
         Intent intent=new Intent(Intent.ACTION_GET_CONTENT).
                 setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imgType);
         Intent createChooserIntent=Intent.createChooser(intent,null);
