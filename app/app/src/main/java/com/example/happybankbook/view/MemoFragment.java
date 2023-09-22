@@ -2,6 +2,7 @@ package com.example.happybankbook.view;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -44,6 +45,17 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private MemoPresenter presenter;
     private float fontSize=12;
+    private Context mContext;
+    private Activity mActivity;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext=context;
+        if(context instanceof Activity){
+            mActivity=(Activity)context;
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,10 +81,10 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((MainActivity)getActivity()).setNowDate(txtDate);
+        ((MainActivity)mActivity).setNowDate(txtDate);
         getGallery();
 
-        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.memoTextSetting),Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.memoTextSetting),Context.MODE_PRIVATE);
         fontSize=preferences.getFloat(getResources().getString(R.string.fontSize),12);
         editContent.setTextSize(fontSize);
     }
@@ -95,13 +107,20 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         presenter.releaseView();
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext=null;
+        mActivity=null;
+    }
+
     public void getGallery(){
 
         activityResultLauncher=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result -> {
-            if(result.getResultCode()==RESULT_OK&&result!=null&&result.getData()!=null){
+            if(result.getResultCode()==RESULT_OK&&result.getData()!=null){
                 img.setVisibility(View.VISIBLE);
                 Uri imageUri=result.getData().getData();
-                Glide.with(getContext()).load(imageUri).into(img);
+                Glide.with(mContext).load(imageUri).into(img);
             }else if(result.getData()!=null){
                 Toast.makeText(getContext(),getResources().getString(R.string.cantLoadImg),Toast.LENGTH_LONG).show();
             }
@@ -126,7 +145,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
        if(v.getId()==R.id.txtMemoDate){
-           ((MainActivity)getActivity()).setDate(txtDate,getContext());
+           ((MainActivity)mActivity).setDate(txtDate,getContext());
        }else if(v.getId()==R.id.addPicture){
            loadImage();
        }else if(v.getId()==R.id.save){
@@ -154,7 +173,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
         MemoData data=new MemoData();
 
-        int intDate=((MainActivity)getActivity()).dateIntToString(txtDate);
+        int intDate=((MainActivity)mActivity).dateIntToString(txtDate);
         data.setDate(intDate);
 
         presenter.setReturnInt(new GetReturnInt() {
@@ -166,7 +185,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         presenter.getDataRange(RoomDB.getInstance(getContext()).memoDao(), intDate);
 
         //현재 날짜 받기
-        String strNowDate=((MainActivity)getActivity()).setNowDate();
+        String strNowDate=((MainActivity)mActivity).setNowDate();
         String [] strDate=strNowDate.split("\\.");
         int intNowDate=Integer.parseInt(strDate[0]+strDate[1]+strDate[2]);
 
@@ -204,7 +223,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
                         presenter.insertMemo(RoomDB.getInstance(getContext()).memoDao(),data);
                         dialog.dismiss();
-                        ((MainActivity)getActivity()).navigation(R.id.mainMenu);
+                        ((MainActivity)mActivity).navigation(R.id.mainMenu);
                     }catch(NumberFormatException e){
                         Toast.makeText(getContext(),getResources().getText(R.string.memoPriceOver),Toast.LENGTH_LONG).show();
                     }
@@ -220,7 +239,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     }
 
     private void resetTextSetting(){
-        SharedPreferences preferences= getActivity().getSharedPreferences(getResources().getString(R.string.memoTextSetting), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.memoTextSetting), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putFloat(getResources().getString(R.string.fontSize), fontSize);
 
