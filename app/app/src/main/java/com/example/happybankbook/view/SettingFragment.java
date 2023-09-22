@@ -128,7 +128,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
         activityResultLauncher
                 =registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result->{
-            if(result.getResultCode()==RESULT_OK){
+            if(result.getResultCode()==RESULT_OK&&result.getData()!=null){
                 Uri uri=result.getData().getData();
                 Toast.makeText(getContext(),getResources().getText(R.string.savePermissionYes),Toast.LENGTH_SHORT).show();
                 if("pdf".equals(fileExtension)){
@@ -472,16 +472,17 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         BufferedWriter writer=null;
 
         try{
-            file.createNewFile();
+            boolean isFile=file.createNewFile();
+            if(isFile){
+                fw = new FileWriter(file);
+                writer = new BufferedWriter(fw);
 
-            fw = new FileWriter(file);
-            writer = new BufferedWriter(fw);
-
-            String strContent = String.valueOf(content);
-            if("null".equals(strContent)||"".equals(strContent)){
-               Toast.makeText(getContext(),getResources().getText(R.string.noMemo),Toast.LENGTH_LONG).show();
-            }else{
-                writer.write(strContent);
+                String strContent = String.valueOf(content);
+                if("null".equals(strContent)||"".equals(strContent)){
+                    Toast.makeText(getContext(),getResources().getText(R.string.noMemo),Toast.LENGTH_LONG).show();
+                }else{
+                    writer.write(strContent);
+                }
             }
         }catch(IOException e){
             e.printStackTrace();
@@ -518,8 +519,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             directory.mkdirs();
         }
 
-        if(directory.listFiles()!=null){
-            count=directory.listFiles().length;
+        File[] files = directory.listFiles();
+        if(files!=null){
+            count=files.length;
         }
 
         final String fileName="happy bank memo";
