@@ -29,8 +29,6 @@ public class PdfRunnable implements Runnable{
     private Uri uri;
     private String extension;
     private final int branch;
-    private int width=1080;
-    private int height=1920;
 
     public PdfRunnable(ArrayList<MemoData> dataList, Context context, Uri uri){
         this.dataList=dataList;
@@ -53,6 +51,9 @@ public class PdfRunnable implements Runnable{
         PdfDocument.PageInfo pageInfo;
         PdfDocument.Page page;
         Canvas canvas;
+
+        int width=1080;
+        int height=1920;
 
         for(int i=0;i<dataList.size();i++){
             pageInfo=new PdfDocument.PageInfo.Builder(width, height, 1).create();
