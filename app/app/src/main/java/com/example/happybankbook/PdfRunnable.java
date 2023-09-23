@@ -66,8 +66,10 @@ public class PdfRunnable implements Runnable{
             //canvas 배경 drawable 지정
             int dy=height/15;
             Drawable backgroundColor=ContextCompat.getDrawable(context,R.drawable.memo_writing);
-            backgroundColor.setBounds(0, dy, width, height-dy);
-            backgroundColor.draw(canvas);
+            if(backgroundColor!=null){
+                backgroundColor.setBounds(0, dy, width, height-dy);
+                backgroundColor.draw(canvas);
+            }
 
             //date
             int date=dataList.get(i).getDate();
@@ -114,8 +116,10 @@ public class PdfRunnable implements Runnable{
 
             //clover
             Drawable clover=ContextCompat.getDrawable(context,R.drawable.clover_30);
-            clover.setBounds(width/2-220, height-dy+40, width/2-160, height-dy+100);
-            clover.draw(canvas);
+            if(clover!=null){
+                clover.setBounds(width/2-220, height-dy+40, width/2-160, height-dy+100);
+                clover.draw(canvas);
+            }
 
             pdfDocument.finishPage(page);
         }
