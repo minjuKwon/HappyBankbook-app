@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HappyBankbook</string>
+    <string name="app_name">행복통장</string>
 
     <string name="previous">이전 화면</string>
     <string name="search">검색하기</string>
