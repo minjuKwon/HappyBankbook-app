@@ -82,7 +82,7 @@ public class PdfRunnable implements Runnable{
             paintDate.setTextSize(64);
             paintDate.setTextAlign(Paint.Align.CENTER);
             paintDate.setUnderlineText(true);
-            canvas.drawText(String.format("%d.%02d.%02d",year,month,day),width/2, dy+180, paintDate);
+            canvas.drawText(String.format(java.util.Locale.getDefault(),"%d.%02d.%02d",year,month,day),width/2, dy+180, paintDate);
 
             //image
             if(dataList.get(i).getImage()!=null){
