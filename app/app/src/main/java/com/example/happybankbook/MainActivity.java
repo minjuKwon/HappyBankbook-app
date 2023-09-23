@@ -95,13 +95,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public String setNowDate(){
-        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd");
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd",java.util.Locale.getDefault());
         Date date=new Date();
         return dateFormat.format(date);
     }
 
     public void setNowDate(TextView textView){
-        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd");
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd",java.util.Locale.getDefault());
         Date date=new Date();
         textView.setText(dateFormat.format(date));
     }
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener calendarListener=new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                textview.setText(String.format("%d.%02d.%02d",year,month+1,dayOfMonth));
+                textview.setText(String.format(java.util.Locale.getDefault(),"%d.%02d.%02d",year,month+1,dayOfMonth));
             }
         };
 
