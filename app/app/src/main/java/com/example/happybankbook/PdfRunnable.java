@@ -82,14 +82,14 @@ public class PdfRunnable implements Runnable{
             paintDate.setTextSize(64);
             paintDate.setTextAlign(Paint.Align.CENTER);
             paintDate.setUnderlineText(true);
-            canvas.drawText(String.format(java.util.Locale.getDefault(),"%d.%02d.%02d",year,month,day),width/2, dy+180, paintDate);
+            canvas.drawText(String.format(java.util.Locale.getDefault(),"%d.%02d.%02d",year,month,day),(float)(width/2), dy+180, paintDate);
 
             //image
             if(dataList.get(i).getImage()!=null){
                 Bitmap img=resizeBitmap(dataList.get(i).getImage(), 560, 420);
                 Paint paintImg=new Paint();
                 paintImg.setAntiAlias(true);
-                canvas.drawBitmap(img,(width-img.getWidth())/2,dy+240, paintImg);
+                canvas.drawBitmap(img,(float)(width-img.getWidth())/2,dy+240, paintImg);
 
             }
 
@@ -102,7 +102,7 @@ public class PdfRunnable implements Runnable{
                     content, 0, content.length(), paintContent, width-400);
             StaticLayout staticLayout=builder.build();
             canvas.save();
-            canvas.translate(width/2, 928);
+            canvas.translate((float)(width/2), 928);
             staticLayout.draw(canvas);
             canvas.restore();
 
@@ -112,7 +112,7 @@ public class PdfRunnable implements Runnable{
             paintPrice.setTextSize(54);
             paintPrice.setTypeface(Typeface.create(Typeface.DEFAULT,Typeface.BOLD));
             paintPrice.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText(String.valueOf(price),width/2, height-dy+87, paintPrice);
+            canvas.drawText(Integer.toString(price),(float)(width/2), height-dy+87, paintPrice);
 
             //clover
             Drawable clover=ContextCompat.getDrawable(context,R.drawable.clover_30);
