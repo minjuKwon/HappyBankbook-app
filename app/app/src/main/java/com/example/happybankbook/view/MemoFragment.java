@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -120,6 +121,9 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
             if(result.getResultCode()==RESULT_OK&&result.getData()!=null){
                 img.setVisibility(View.VISIBLE);
                 Uri imageUri=result.getData().getData();
+                final MimeTypeMap mime = MimeTypeMap.getSingleton();
+                String extension = mime.getExtensionFromMimeType(mContext.getContentResolver().getType(imageUri));
+                img.setTag(extension);
                 Glide.with(mContext).load(imageUri).into(img);
             }else if(result.getData()!=null){
                 Toast.makeText(getContext(),getResources().getString(R.string.cantLoadImg),Toast.LENGTH_LONG).show();
@@ -197,10 +201,17 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         String content=editContent.getText().toString();
         data.setContent(content);
 
+        boolean type=true;
         if(img.getVisibility()==View.VISIBLE){
-            BitmapDrawable drawable = (BitmapDrawable)img.getDrawable();
-            Bitmap bitmap = drawable.getBitmap();
-            data.setBitmap(bitmap);
+            //image mime type 확인
+            if(!img.getTag().equals("png")&&!img.getTag().equals("jpeg")&&!img.getTag().equals("jpg")){
+                Toast.makeText(mContext,getText(R.string.imageType),Toast.LENGTH_SHORT).show();
+                type=false;
+            }else{
+                BitmapDrawable drawable = (BitmapDrawable)img.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+                data.setBitmap(bitmap);
+            }
         }
 
         txtOk.setOnClickListener(new View.OnClickListener() {
@@ -234,7 +245,9 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
         txtCancel.setOnClickListener((v)-> dialog.dismiss());
 
-        dialog.show();
+        if(type){
+            dialog.show();
+        }
 
     }
 
