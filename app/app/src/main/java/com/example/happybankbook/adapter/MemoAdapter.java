@@ -68,22 +68,24 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
     @Override
     public void onBindViewHolder(@NonNull BaseItemView holder, int position) {
 
-        MemoData data=dataList.get(holder.getAdapterPosition());
+        MemoData data;
 
         if(holder instanceof RecyclerViewHolder){
             RecyclerViewHolder recyclerViewHolder=(RecyclerViewHolder)holder;
+            data=dataList.get(recyclerViewHolder.getAdapterPosition());
             recyclerViewHolder.onBind(data, context, position, fontSize, textLine, textEllipsize);
             //recyclerview position 얻기 위한 클릭 이벤트
             recyclerViewHolder.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick() {
                     ((MainActivity)context).addFragment(new MemoDetailFragment());
-                    location= holder.getAdapterPosition();
+                    location= recyclerViewHolder.getAdapterPosition();
                 }
             });
 
         }else if(holder instanceof ViewPagerViewHolder){
             ViewPagerViewHolder viewPagerViewHolder=(ViewPagerViewHolder) holder;
+            data=dataList.get(viewPagerViewHolder.getAdapterPosition());
             //recyclerview position, viewpager position 더하여 클릭한 메모를 시작점으로 viewpager 화면 넘기게 하기 위한 초기 값
             if(condition){
                 if(isFirst){
@@ -97,6 +99,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
                         }
                     }
                 }
+                Log.d("Memo","==A== isFirst : "+isFirst+", holder.getAdapterPosition-"+holder.getAdapterPosition()+", location-"+location);
                 viewPagerViewHolder.onBind(data, context, fontSize);
                 isFirst=false;
             }
