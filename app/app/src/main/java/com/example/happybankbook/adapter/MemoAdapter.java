@@ -23,9 +23,10 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
     static private List<MemoData> dataList=new ArrayList<>();
 
     private static int location;
-    private boolean isFirst=true;
     private float fontSize;
     private int textLine;
+    private boolean isFirst=true;
+    private boolean isFirst2=true;
     private boolean textEllipsize;
     private boolean condition=true;
     private boolean visitedViewpager;
@@ -86,15 +87,17 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
             //recyclerview position, viewpager position 더하여 클릭한 메모를 시작점으로 viewpager 화면 넘기게 하기 위한 초기 값
             if(condition){
                 if(isFirst){
-                    data=dataList.get(holder.getAdapterPosition()+location);
-                    viewPagerViewHolder.onBind(data, context, fontSize);
-                    holder.setIsRecyclable(false);
-                    Log.d("Memo","isFirst : "+isFirst+", holder.getAdapterPosition-"+holder.getAdapterPosition()+", location-"+location);
+                    data=dataList.get(viewPagerViewHolder.getAdapterPosition()+location);
+                    viewPagerViewHolder.setIsRecyclable(false);
                 }else{
-                    viewPagerViewHolder.onBind(data, context, fontSize);
-                    Log.d("Memo","isFirst : "+isFirst+", holder.getAdapterPosition-"+holder.getAdapterPosition()+", location-"+location);
+                    if(isFirst2){
+                        if(viewPagerViewHolder.getAdapterPosition()==0||viewPagerViewHolder.getAdapterPosition()+location>=4){
+                            viewPagerViewHolder.setIsRecyclable(true);
+                            isFirst2=false;
+                        }
+                    }
                 }
-
+                viewPagerViewHolder.onBind(data, context, fontSize);
                 isFirst=false;
             }
         }
