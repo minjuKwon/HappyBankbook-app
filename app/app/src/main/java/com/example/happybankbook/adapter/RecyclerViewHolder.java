@@ -64,6 +64,8 @@ public class RecyclerViewHolder extends BaseItemView{
             Drawable img=new BitmapDrawable(context.getResources(),memoData.getImage());
             img.setBounds(0,0,100,100);
             txtContent.setCompoundDrawables(img,null,null,null);
+        }else{
+            txtContent.setCompoundDrawables(null,null,null,null);
         }
 
         txtPrice.setText(Integer.toString(memoData.getPrice()));
