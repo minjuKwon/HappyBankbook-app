@@ -60,6 +60,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     private int currentPosition;
     private int adapterPosition;
     private boolean isFirst=true;
+    private boolean isFirst2=true;
     private float fontSize=12;
 
     private Context mContext;
@@ -209,7 +210,15 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     public void onClick(View v) {
         if(v.getId()==R.id.imgForward){
             imgForward.setColorFilter(ContextCompat.getColor(mContext,R.color.darkerGray));
-            viewPager.setCurrentItem(currentPosition-1,false);
+            //처음 1번째 아이템 클릭하여 이동한 viewpager에서 이전 데이터로 이동하지 않은 오류 해결
+            if(!isFirst&&isFirst2&&adapterPosition==1&&currentPosition==1){
+                //notifyItemChanged 호출하면 화면 버벅거림
+                adapter.notifyDataSetChanged();
+                viewPager.setCurrentItem(0,false);
+                isFirst2=false;
+            }else{
+                viewPager.setCurrentItem(currentPosition-1,false);
+            }
             handler.postDelayed(postRunnable,3000);
         }else if(v.getId()==R.id.imgBack){
             imgBack.setColorFilter(ContextCompat.getColor(mContext,R.color.darkerGray));
