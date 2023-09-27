@@ -1,7 +1,6 @@
 package com.example.happybankbook.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,7 +98,6 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
                         }
                     }
                 }
-                Log.d("Memo","==A== isFirst : "+isFirst+", holder.getAdapterPosition-"+holder.getAdapterPosition()+", location-"+location);
                 viewPagerViewHolder.onBind(data, context, fontSize);
                 isFirst=false;
             }
