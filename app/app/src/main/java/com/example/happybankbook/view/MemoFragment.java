@@ -45,9 +45,10 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     private EditText editContent;
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private MemoPresenter presenter;
-    private float fontSize=12;
     private Context mContext;
     private Activity mActivity;
+    private float fontSize=12;
+    private boolean isEditClear=false;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -69,6 +70,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
                 editContent.setTextSize(fontSize);
             }
         });
+       isEditClear=true;
     }
 
     @Override
@@ -93,13 +95,14 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onStart() {
         super.onStart();
-        editContent.setText("");
+        if(isEditClear){ editContent.setText("");}
     }
 
     @Override
     public void onStop() {
         super.onStop();
         resetTextSetting();
+        isEditClear=false;
     }
 
     @Override
