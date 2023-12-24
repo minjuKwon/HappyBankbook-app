@@ -44,6 +44,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 public class SettingFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener{
@@ -441,6 +442,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     public void makeFile(Uri uri, StringBuffer content){
         pfd=null;
         FileOutputStream fileOutputStream=null;
+        BufferedWriter bufferedWriter=null;
 
         try{
             String strContent = String.valueOf(content);
@@ -448,12 +450,14 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             if("null".equals(strContent)||"".equals(strContent)){
                 Toast.makeText(getContext(),getResources().getText(R.string.noMemo),Toast.LENGTH_LONG).show();
             }else{
-                fileOutputStream.write(strContent.getBytes());
+                bufferedWriter=new BufferedWriter(new OutputStreamWriter(fileOutputStream));
+                bufferedWriter.write(strContent);
             }
         }catch(IOException e){
             e.printStackTrace();
         }finally{
             try {
+                if(bufferedWriter!=null){bufferedWriter.flush();bufferedWriter.close();}
                 if(fileOutputStream!=null){fileOutputStream.flush();fileOutputStream.close();}
                 if(pfd!=null){pfd.close();}
             }catch (IOException e2){
