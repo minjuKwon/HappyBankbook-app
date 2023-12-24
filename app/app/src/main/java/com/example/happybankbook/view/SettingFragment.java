@@ -454,7 +454,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             e.printStackTrace();
         }finally{
             try {
-                if(fileOutputStream!=null){fileOutputStream.close();}
+                if(fileOutputStream!=null){fileOutputStream.flush();fileOutputStream.close();}
                 if(pfd!=null){pfd.close();}
             }catch (IOException e2){
                 e2.printStackTrace();
@@ -488,8 +488,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             e.printStackTrace();
         }finally{
             try {
-                if(writer!=null){writer.close();}
-                if(fw!=null){fw.close();}
+                if(writer!=null){writer.flush();writer.close();}
+                if(fw!=null){fw.flush();fw.close();}
             }catch (IOException e2){
                 e2.printStackTrace();
             }
