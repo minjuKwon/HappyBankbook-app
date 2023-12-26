@@ -56,27 +56,28 @@
             android:text="@string/memoDateTo"
             android:textSize="32sp"
             app:layout_constraintEnd_toEndOf="@id/memoView"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="@id/memoView"
             app:layout_constraintTop_toTopOf="@id/memoView" />
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="280dp"
-            android:layout_height="210dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="15dp"
             android:contentDescription="@string/picture"
             android:scaleType="centerInside"
             android:visibility="gone"
-            tools:src="@tools:sample/avatars"
-            app:layout_constraintTop_toBottomOf="@id/txtMemoDate"
             app:layout_constraintBottom_toTopOf="@id/editMemo"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/txtMemoDate"
+            tools:src="@tools:sample/avatars" />
 
         <EditText
             android:id="@+id/editMemo"
-            android:layout_width="300dp"
-            android:layout_height="220dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="15dp"
             android:gravity="center_horizontal"
             android:background="@color/white"
             android:inputType="textMultiLine"

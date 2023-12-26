@@ -101,7 +101,10 @@
 
         <TextView
             android:id="@+id/textCount"
-            android:layout_margin="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="10dp"
             android:text="@string/count"
             style="@style/defaultFont"
             app:layout_constraintTop_toBottomOf="@id/radioGroupSort"
@@ -111,9 +114,9 @@
 
         <EditText
             android:id="@+id/editCount"
-            android:layout_width="290dp"
+            android:layout_width="0dp"
             android:layout_height="48dp"
-            android:layout_margin="20dp"
+            android:layout_margin="25dp"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:clickable="true"
@@ -124,11 +127,12 @@
             tools:ignore="LabelFor"
             app:layout_constraintTop_toBottomOf="@id/radioGroupSort"
             app:layout_constraintStart_toEndOf="@id/textCount"
+            app:layout_constraintEnd_toEndOf="parent"
             />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonSubmit"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="30dp"
             android:background="@color/green"
@@ -142,7 +146,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonInit"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="30dp"
             android:background="@color/green"

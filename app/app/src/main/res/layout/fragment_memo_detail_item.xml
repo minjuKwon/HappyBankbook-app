@@ -32,12 +32,12 @@
 
     <ImageView
         android:id="@+id/memoDetailImg"
-        android:layout_width="280dp"
-        android:layout_height="210dp"
-        android:layout_marginTop="5dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="15dp"
         android:contentDescription="@string/picture"
         android:scaleType="centerInside"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/memoDetailContent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,9 +46,9 @@
 
     <TextView
         android:id="@+id/memoDetailContent"
-        android:layout_width="300dp"
-        android:layout_height="220dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="15dp"
         android:gravity="center_horizontal"
         android:background="@color/white"
         android:text="@string/content"
