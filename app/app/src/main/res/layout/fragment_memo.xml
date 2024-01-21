@@ -78,7 +78,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="15dp"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:background="@color/white"
             android:inputType="textMultiLine"
             android:hint="@string/memo"
