@@ -47,6 +47,7 @@ public class ViewPagerViewHolder extends BaseItemView {
         if(memoData.getImage()!=null){
             Drawable img=new BitmapDrawable(context.getResources(),memoData.getImage());
             imgDetail.setImageDrawable(img);
+            imgDetail.setVisibility(View.VISIBLE);
         }
 
     }
