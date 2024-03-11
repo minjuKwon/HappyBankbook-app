@@ -39,8 +39,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     private final Runnable postRunnable =new Runnable(){
         @Override
         public void run() {
-            imgForward.setColorFilter(Color.TRANSPARENT);
-            imgBack.setColorFilter(Color.TRANSPARENT);
+            imgForward.setImageAlpha(0);
+            imgBack.setImageAlpha(0);
         }
     };
 
@@ -209,7 +209,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.imgForward){
-            imgForward.setColorFilter(ContextCompat.getColor(mContext,R.color.darkerGray));
+            imgForward.setImageAlpha(255);
             //처음 1번째 아이템 클릭하여 이동한 viewpager 에서 이전 데이터로 이동하지 않은 오류 해결
             if(!isFirst&&isFirst2&&adapterPosition==1&&currentPosition==1){
                 //notifyItemChanged 호출하면 화면 버벅거림
@@ -219,7 +219,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             viewPager.setCurrentItem(currentPosition-1,false);
             handler.postDelayed(postRunnable,3000);
         }else if(v.getId()==R.id.imgBack){
-            imgBack.setColorFilter(ContextCompat.getColor(mContext,R.color.darkerGray));
+            imgBack.setImageAlpha(255);
             viewPager.setCurrentItem(currentPosition+1,false);
             handler.postDelayed(postRunnable,3000);
         }else if(v.getId()==R.id.memoDetailPrevious){
