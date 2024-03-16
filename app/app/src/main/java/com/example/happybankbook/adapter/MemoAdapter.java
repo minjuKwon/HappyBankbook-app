@@ -66,7 +66,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseItemView holder, int position) {
-
+        //Log.d("data","onBindViewHolder");
         MemoData data;
 
         if(holder instanceof RecyclerViewHolder){
@@ -85,21 +85,19 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         }else if(holder instanceof ViewPagerViewHolder){
             ViewPagerViewHolder viewPagerViewHolder=(ViewPagerViewHolder) holder;
             data=dataList.get(viewPagerViewHolder.getAdapterPosition());
-            //recyclerview position, viewpager position 더하여 클릭한 메모를 시작점으로 viewpager 화면 넘기게 하기 위한 초기 값
-            if(condition){
+            if(condition){//메모 정렬 후 onBind 호출하기 위한 변수.
+                //recyclerview position, viewpager position 더하여 클릭한 메모를 시작점으로 viewpager 화면 넘기게 하기 위한 초기 값
                 if(isFirst){
                     data=dataList.get(viewPagerViewHolder.getAdapterPosition()+location);
-                    viewPagerViewHolder.setIsRecyclable(false);
-                }else{
-                    if(isFirst2){
-                        if(viewPagerViewHolder.getAdapterPosition()==0||viewPagerViewHolder.getAdapterPosition()+location>=4){
-                            viewPagerViewHolder.setIsRecyclable(true);
-                            isFirst2=false;
-                        }
-                    }
                 }
+                //viewpager에서 제일 첫번째 위치로 이동하면 처음 클릭한 데이터(0번째)로 재활용 방지
+                if(viewPagerViewHolder.getAdapterPosition()==0){
+                    isFirst2=false;
+                }
+                viewPagerViewHolder.setIsRecyclable(isFirst2);
                 viewPagerViewHolder.onBind(data, context, fontSize);
                 isFirst=false;
+                isFirst2=true;
             }
         }
     }

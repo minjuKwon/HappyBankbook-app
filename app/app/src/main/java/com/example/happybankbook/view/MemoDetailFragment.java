@@ -3,12 +3,10 @@ package com.example.happybankbook.view;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.viewpager2.widget.ViewPager2;
@@ -210,13 +208,18 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     public void onClick(View v) {
         if(v.getId()==R.id.imgForward){
             imgForward.setImageAlpha(255);
+            viewPager.setCurrentItem(currentPosition-1,false);
             //처음 1번째 아이템 클릭하여 이동한 viewpager 에서 이전 데이터로 이동하지 않은 오류 해결
             if(!isFirst&&isFirst2&&adapterPosition==1&&currentPosition==1){
                 //notifyItemChanged 호출하면 화면 버벅거림
                 adapter.notifyDataSetChanged();
                 isFirst2=false;
+                //1번째 아이템이라도 viewpager 입장에서는 0번째라서 이전 버튼 누르면
+                //페이지 변화가 없기 때문에 임의로 변경.
+                currentPosition=0;
+                viewPager.setCurrentItem(currentPosition);
+                imgForward.setVisibility(View.INVISIBLE);
             }
-            viewPager.setCurrentItem(currentPosition-1,false);
             handler.postDelayed(postRunnable,3000);
         }else if(v.getId()==R.id.imgBack){
             imgBack.setImageAlpha(255);
@@ -245,7 +248,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
                     currentPosition=position;
                 }
                 isFirst=false;
-
+                
                 if(currentPosition==0){
                     imgForward.setVisibility(View.INVISIBLE);
                     imgBack.setVisibility(View.VISIBLE);
