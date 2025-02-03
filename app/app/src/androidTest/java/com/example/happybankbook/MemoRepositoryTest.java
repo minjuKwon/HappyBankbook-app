@@ -33,14 +33,15 @@ public class MemoRepositoryTest {
     public void createDb(){
         Context contest = InstrumentationRegistry.getInstrumentation().getTargetContext();
         db= Room.inMemoryDatabaseBuilder(contest, RoomDB.class)
-                .allowMainThreadQueries()
                 .build();
         dao=db.memoDao();
+        RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
     }
 
     @After
     public void closeDb(){
         if (db!=null&&db.isOpen()) {
+            db.clearAllTables();
             db.close();
         }
     }
