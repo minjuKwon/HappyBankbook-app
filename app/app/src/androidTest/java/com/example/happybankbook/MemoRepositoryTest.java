@@ -20,6 +20,9 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.plugins.RxJavaPlugins;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 @RunWith(AndroidJUnit4.class)
 public class MemoRepositoryTest {
 
@@ -67,6 +70,29 @@ public class MemoRepositoryTest {
     }
 
     @Test
+    public void givenEmptyMemoList_whenGetToRowCount_thenSizeIsZero(){
+        int cnt=dao.getRowCount();
+
+        assertEquals(0,cnt);
+    }
+
+    @Test
+    public void givenEmptyMemoList_whenMemoAdded_thenReturnsRowCount() {
+        dao.insert(createTempData(1,10,20250101,"content1"));
+        int cnt=dao.getRowCount();
+
+        assertEquals(1,cnt);
+    }
+
+    @Test
+    public void givenEmptyMemoList_whenMultipleMemoAdded_thenReturnsRowCount(){
+        insertDataList();
+        int cnt=dao.getRowCount();
+
+        assertEquals(5,cnt);
+    }
+
+    @Test
     public void givenEmptyMemoList_whenGetTotalCount_thenReturnsZero(){
         long actualPrice=dao.getTotalPrice();
 
@@ -95,6 +121,9 @@ public class MemoRepositoryTest {
         List<MemoData> list=dao.searchKeyword("memo").blockingFirst();
 
         assertEquals(3,list.size());
+        assertEquals(1, list.get(0).getNum());
+        assertEquals(3, list.get(1).getNum());
+        assertEquals(4, list.get(2).getNum());
     }
 
     @Test
@@ -116,6 +145,55 @@ public class MemoRepositoryTest {
         assertEquals(2,list.size());
         assertEquals(1,list.get(0).getNum());
         assertEquals(2,list.get(1).getNum());
+    }
+
+    @Test
+    public void givenMemoAdded_whenSortDescAndCnt_thenReturnsSortedList(){
+        insertDataList();
+        List<MemoData> list=dao.searchDesc(20250101, 20250501,3).blockingFirst();
+
+        assertEquals(3,list.size());
+        assertEquals(5,list.get(0).getNum());
+        assertEquals(4,list.get(1).getNum());
+        assertEquals(3,list.get(2).getNum());
+    }
+
+    @Test
+    public void givenMemoAdded_whenSortDescAndDate_thenReturnsSortedList(){
+        insertDataList();
+        List<MemoData> list=dao.searchDesc(20250101, 20250201,5).blockingFirst();
+
+        assertEquals(2,list.size());
+        assertEquals(2,list.get(0).getNum());
+        assertEquals(1,list.get(1).getNum());
+    }
+
+    @Test
+    public void givenMemoAdded_whenFilterDate_thenReturnsFilteredListCount(){
+        insertDataList();
+        int cnt=dao.getRangeCount(20250301);
+
+        assertEquals(3,cnt);
+    }
+
+    @Test
+    public void givenMemoAdded_whenChangeNum_thenReturnsNumSortedList(){
+        List<MemoData> list=new ArrayList<>();
+        list.add(createTempData(1,20,20250301,"memo 2"));
+        list.add(createTempData(1,10,20250201,"content 2"));
+
+        for(MemoData data:list){
+            dao.insert(data);
+        }
+
+        dao.changeNum(20250201);
+
+        List<MemoData> result= dao.getAll().blockingFirst();
+        assertEquals(2,result.size());
+        assertEquals(2, result.get(0).getNum());
+        assertEquals(20, result.get(0).getPrice());
+        assertEquals(1, result.get(1).getNum());
+        assertEquals(10, result.get(1).getPrice());
     }
 
     public MemoData createTempData(int num, int price, int date, String content){
