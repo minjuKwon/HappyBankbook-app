@@ -197,7 +197,7 @@ public class MemoRepositoryTest {
         assertEquals(10, result.get(1).getPrice());
     }
 
-    public MemoData createTempData(int num, int price, int date, String content){
+    private MemoData createTempData(int num, int price, int date, String content){
         MemoData data=new MemoData();
         data.setNum(num);
         data.setPrice(price);
@@ -206,7 +206,7 @@ public class MemoRepositoryTest {
         return data;
     }
 
-    public void insertDataList(){
+    private void insertDataList(){
         List<MemoData> list=new ArrayList<>();
         list.add(createTempData(1,10,20250101,"memo 1"));
         list.add(createTempData(2,20,20250201,"content 2"));
