@@ -2,17 +2,24 @@ package com.example.happybankbook;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isFocused;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import android.view.View;
+
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,10 +75,83 @@ public class MemoSaveTest {
         onView(withId(R.id.howHappy)).check(doesNotExist());
     }
 
+    @Test
+    public void givenMemoWithoutPrice_whenClickOkButtonInDialog_thenCorrectToastIsShown(){
+        ToastMatcher toast=new ToastMatcher();
+
+        onView(withId(R.id.editMemo)).perform(typeText("memo"));
+        onView(withId(R.id.save)).perform(click());
+        onView(withId(R.id.ok)).perform(click());
+
+        onView(withText(R.string.memoPriceEmpty))
+                .inRoot(toast)
+                .check(matches(ViewMatchers.isDisplayed()));
+    }
+
+    @Test
+    public void givenMemoWithoutContent_whenClickOkButtonInDialog_thenCorrectToastIsShown(){
+        ToastMatcher toast=new ToastMatcher();
+
+        onView(withId(R.id.save)).perform(click());
+        onView(withId(R.id.editHappy)).perform(typeText("123"));
+        onView(withId(R.id.ok)).perform(click());
+
+        onView(isRoot()).perform(waitFor(1000));
+        onView(withText(R.string.memoContentEmpty))
+                .inRoot(toast)
+                .check(matches(ViewMatchers.isDisplayed()));
+    }
+
+    @Test
+    public void givenMemoWithoutPriceAndContent_whenClickOkButtonInDialog_thenCorrectToastIsShown(){
+        ToastMatcher toast=new ToastMatcher();
+
+        onView(withId(R.id.save)).perform(click());
+        onView(withId(R.id.ok)).perform(click());
+
+        onView(withText(R.string.memoContentEmpty))
+                .inRoot(toast)
+                .check(matches(ViewMatchers.isDisplayed()));
+    }
+
+    @Test
+    public void givenMemoWithOverPrice_whenClickOkButtonInDialog_thenCorrectToastIsShown(){
+        ToastMatcher toast =new ToastMatcher();
+
+        onView(withId(R.id.editMemo)).perform(typeText("memo"));
+        onView(withId(R.id.save)).perform(click());
+        onView(withId(R.id.editHappy)).perform(typeText("2147483648"));
+        onView(withId(R.id.ok)).perform(click());
+
+        onView(withText(R.string.memoPriceOver))
+                .inRoot(toast)
+                .check(matches(ViewMatchers.isDisplayed()));
+    }
+
     private String getCurrentDate(){
         SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd",java.util.Locale.getDefault());
         Date date=new Date();
         return dateFormat.format(date);
+    }
+
+    // 커스텀 waitFor() 구현
+    public static ViewAction waitFor(final long millis) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isRoot();
+            }
+
+            @Override
+            public String getDescription() {
+                return "Wait for " + millis + " milliseconds.";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                uiController.loopMainThreadForAtLeast(millis);
+            }
+        };
     }
 
 }
