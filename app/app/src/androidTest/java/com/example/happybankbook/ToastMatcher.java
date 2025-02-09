@@ -10,12 +10,9 @@ import org.hamcrest.TypeSafeMatcher;
 public class ToastMatcher extends TypeSafeMatcher<Root> {
     @Override
     public boolean matchesSafely(Root root) {
-        // WindowToken 및 ApplicationToken 가져오기
-        IBinder windowToken = root.getDecorView().getWindowToken();
-        IBinder appToken = root.getDecorView().getApplicationWindowToken();
-
-        // Root의 windowToken과 appToken이 동일하면 Toast
-        return windowToken == appToken && !root.getDecorView().hasWindowFocus();
+        /*경우에 따라 Toast의 windowToken와 appToken이 같을 수도 다를 수도 있음
+        * 동일 테스트 결과를 위해 단일 조건 사용*/
+        return !root.getDecorView().hasWindowFocus();
     }
     @Override
     public void describeTo(Description description) {
