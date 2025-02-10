@@ -55,16 +55,12 @@ public class MemoSaveTest {
     public void setUp() {
         scenario = ActivityScenario.launch(MainActivity.class);
         Intents.init();
-    }
-
-    @Before
-    public void moveToMemoFragment(){
         onView(withId(R.id.addMenu)).check(matches(isDisplayed()));
         onView(withId(R.id.addMenu)).perform(click());
     }
 
     @After
-    public void closeActivityScenario(){
+    public void closeResource(){
         if(scenario!=null)
             scenario.close();
         Intents.release();
