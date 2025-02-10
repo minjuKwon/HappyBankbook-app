@@ -163,7 +163,7 @@ public class MemoSaveTest {
     @Test
     public void givenSaveMemoScreen_whenClickDateText_thenDateIsChanged(){
         //날짜 텍스트 클릭 후 날짜 변경
-        selectDay(6);
+        util.selectDay(6);
         //해당 날짜 일치 여부 확인
         onView(withId(R.id.txtMemoDate))
                 .check(matches(withText("2025.02.06")));
@@ -189,9 +189,9 @@ public class MemoSaveTest {
     @Test
     public void givenMemoWithOtherDate_whenClickOkButtonInDialog_thenCorrectMemoIsSaved(){
         //메모 저장
-        saveMemoWithDay(memo1, price1, 6);
+        util.saveMemoWithDay(false, memo1, price1, 6);
         onView(withId(R.id.addMenu)).perform(click());
-        saveMemoWithDay(memo2, price2, 5);
+        util.saveMemoWithDay(false, memo2, price2, 5);
         //저장 후 화면 이동 확인, 저장한 메모 클릭.
         onView(withId(R.id.mainMenu)).check(matches(ViewMatchers.isSelected()));
         onView(withId(R.id.recyclerMemo)).perform(actionOnItemAtPosition(0,click()));
@@ -216,18 +216,6 @@ public class MemoSaveTest {
         SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd",java.util.Locale.getDefault());
         Date date=new Date();
         return dateFormat.format(date);
-    }
-
-    private void selectDay(int day){
-        onView(withId(R.id.txtMemoDate)).perform(click());
-        onView(withClassName(org.hamcrest.Matchers.equalTo(DatePicker.class.getName())))
-                .perform(setDate(2025, 2, day));
-        onView(withText("확인")).perform(click());
-    }
-
-    private void saveMemoWithDay(String memo, String price, int day){
-        selectDay(day);
-        util.saveMemo(false,memo, price);
     }
 
 }
