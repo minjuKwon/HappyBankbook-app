@@ -2,7 +2,6 @@ package com.example.happybankbook;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isSelected;
@@ -17,6 +16,7 @@ import org.junit.Test;
 
 public class MainScreenTest {
 
+    private static final TestUtil util=new TestUtil();
     private ActivityScenario<MainActivity> scenario;
 
     @Before
@@ -53,20 +53,11 @@ public class MainScreenTest {
 
     @Test
     public void givenAddedMultipleMemo_whenMainScreenIsDisplayed_thenCorrectPriceIsDisplayed(){
-        saveMemo("a","12");
-        saveMemo("b","0");
-        saveMemo("c","6");
+        util.saveMemo(true,"a","12");
+        util.saveMemo(true,"b","0");
+        util.saveMemo(true,"c","6");
 
         onView(withId(R.id.priceTotalTxt)).check(matches(withText("18")));
-    }
-
-    private void saveMemo(String memo, String price){
-        onView(withId(R.id.addMenu)).perform(click());
-
-        onView(withId(R.id.editMemo)).perform(typeText(memo));
-        onView(withId(R.id.save)).perform(click());
-        onView(withId(R.id.editHappy)).perform(typeText(price));
-        onView(withId(R.id.ok)).perform(click());
     }
 
 }

@@ -19,22 +19,20 @@ import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static com.example.happybankbook.TestUtil.waitFor;
+
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.net.Uri;
-import android.view.View;
 import android.widget.DatePicker;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.UiController;
-import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,6 +44,7 @@ import java.util.Date;
 @RunWith(AndroidJUnit4.class)
 public class MemoSaveTest {
 
+    private static final TestUtil util=new TestUtil();
     private ActivityScenario<MainActivity> scenario;
     private final String memo1="...?";
     private final String memo2=".,.,";
@@ -139,10 +138,7 @@ public class MemoSaveTest {
     public void givenMemoWithOverPrice_whenClickOkButtonInDialog_thenCorrectToastIsShown(){
         ToastMatcher toast =new ToastMatcher();
 
-        onView(withId(R.id.editMemo)).perform(typeText("memo"));
-        onView(withId(R.id.save)).perform(click());
-        onView(withId(R.id.editHappy)).perform(typeText("2147483648"));
-        onView(withId(R.id.ok)).perform(click());
+        util.saveMemo(false, "memo","2147483648" );
 
         onView(withText(R.string.memoPriceOver))
                 .inRoot(toast)
@@ -180,7 +176,7 @@ public class MemoSaveTest {
     @Test
     public void givenMemoWithoutPicture_whenClickOkButtonInDialog_thenCorrectMemoIsSaved(){
         //메모 저장
-        saveMemo(memo1,price1);
+        util.saveMemo(false, memo1,price1);
         //저장 후 화면 이동 확인, 저장한 메모 클릭.
         onView(withId(R.id.mainMenu)).check(matches(ViewMatchers.isSelected()));
         onView(withText(R.string.condition)).check(matches(isDisplayed()));
@@ -210,9 +206,9 @@ public class MemoSaveTest {
     @Test
     public void givenMultipleMemo_whenClickOkButtonInDialog_thenCorrectMemoIsSaved(){
         //메모 저장
-        saveMemo(memo1, price1);
+        util.saveMemo(false, memo1, price1);
         onView(withId(R.id.addMenu)).perform(click());
-        saveMemo(memo2, price2);
+        util.saveMemo(false, memo2, price2);
         //저장 후 화면 이동 확인, 저장한 메모 클릭.
         onView(withId(R.id.mainMenu)).check(matches(ViewMatchers.isSelected()));
         onView(withId(R.id.recyclerMemo)).perform(actionOnItemAtPosition(0,click()));
@@ -233,36 +229,9 @@ public class MemoSaveTest {
         onView(withText("확인")).perform(click());
     }
 
-    private void saveMemo(String memo, String price){
-        onView(withId(R.id.editMemo)).perform(typeText(memo));
-        onView(withId(R.id.save)).perform(click());
-        onView(withId(R.id.editHappy)).perform(typeText(price));
-        onView(withId(R.id.ok)).perform(click());
-    }
-
     private void saveMemoWithDay(String memo, String price, int day){
         selectDay(day);
-        saveMemo(memo, price);
-    }
-
-    // 커스텀 waitFor() 구현
-    public static ViewAction waitFor(final long millis) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isRoot();
-            }
-
-            @Override
-            public String getDescription() {
-                return "Wait for " + millis + " milliseconds.";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                uiController.loopMainThreadForAtLeast(millis);
-            }
-        };
+        util.saveMemo(false,memo, price);
     }
 
 }
