@@ -20,6 +20,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static com.example.happybankbook.CustomerMatcher.withToast;
+import static com.example.happybankbook.TestUtil.getCurrentDate;
 import static com.example.happybankbook.TestUtil.waitFor;
 
 import android.app.Activity;
@@ -156,7 +157,7 @@ public class MemoSaveTest {
     @Test
     public void givenSaveMemoScreen_whenClickDateText_thenDateIsChanged(){
         //날짜 텍스트 클릭 후 날짜 변경
-        util.selectDay(6);
+        util.selectDay(R.id.txtMemoDate,6);
         //해당 날짜 일치 여부 확인
         onView(withId(R.id.txtMemoDate))
                 .check(matches(withText("2025.02.06")));
@@ -203,12 +204,6 @@ public class MemoSaveTest {
         onView(withId(R.id.recyclerMemo)).perform(actionOnItemAtPosition(0,click()));
         //저장된 메모 일치 여부 확인
         onView(withId(R.id.memoDetailPriceTxt)).check(matches((withText(price2))));
-    }
-
-    private String getCurrentDate(){
-        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd",java.util.Locale.getDefault());
-        Date date=new Date();
-        return dateFormat.format(date);
     }
 
 }

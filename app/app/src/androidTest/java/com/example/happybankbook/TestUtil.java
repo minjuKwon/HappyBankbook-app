@@ -17,6 +17,9 @@ import androidx.test.espresso.ViewAction;
 
 import org.hamcrest.Matcher;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class TestUtil {
 
     // 커스텀 waitFor() 구현
@@ -39,6 +42,12 @@ public class TestUtil {
         };
     }
 
+    public static String getCurrentDate(){
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd",java.util.Locale.getDefault());
+        Date date=new Date();
+        return dateFormat.format(date);
+    }
+
     public void saveMemo(boolean isMain, String memo, String price){
         if(isMain){
             onView(withId(R.id.addMenu)).perform(click());
@@ -49,8 +58,8 @@ public class TestUtil {
         onView(withId(R.id.ok)).perform(click());
     }
 
-    public void selectDay(int day){
-        onView(withId(R.id.txtMemoDate)).perform(click());
+    public void selectDay(int id, int day){
+        onView(withId(id)).perform(click());
         onView(withClassName(org.hamcrest.Matchers.equalTo(DatePicker.class.getName())))
                 .perform(setDate(2025, 2, day));
         onView(withText("확인")).perform(click());
@@ -60,7 +69,7 @@ public class TestUtil {
         if(isMain){
             onView(withId(R.id.addMenu)).perform(click());
         }
-        selectDay(day);
+        selectDay(R.id.txtMemoDate,day);
         saveMemo(false,memo, price);
     }
 
