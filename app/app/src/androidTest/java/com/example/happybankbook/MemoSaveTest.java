@@ -19,6 +19,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static com.example.happybankbook.CustomerMatcher.withToast;
 import static com.example.happybankbook.TestUtil.waitFor;
 
 import android.app.Activity;
@@ -93,51 +94,43 @@ public class MemoSaveTest {
 
     @Test
     public void givenMemoWithoutPrice_whenClickOkButtonInDialog_thenCorrectToastIsShown(){
-        ToastMatcher toast=new ToastMatcher();
-
         onView(withId(R.id.editMemo)).perform(typeText("memo"));
         onView(withId(R.id.save)).perform(click());
         onView(withId(R.id.ok)).perform(click());
 
         onView(withText(R.string.memoPriceEmpty))
-                .inRoot(toast)
+                .inRoot(withToast())
                 .check(matches(isDisplayed()));
     }
 
     @Test
     public void givenMemoWithoutContent_whenClickOkButtonInDialog_thenCorrectToastIsShown(){
-        ToastMatcher toast=new ToastMatcher();
-
         onView(withId(R.id.save)).perform(click());
         onView(withId(R.id.editHappy)).perform(typeText("123"));
         onView(withId(R.id.ok)).perform(click());
 
         onView(isRoot()).perform(waitFor(1000));
         onView(withText(R.string.memoContentEmpty))
-                .inRoot(toast)
+                .inRoot(withToast())
                 .check(matches(isDisplayed()));
     }
 
     @Test
     public void givenMemoWithoutPriceAndContent_whenClickOkButtonInDialog_thenCorrectToastIsShown(){
-        ToastMatcher toast=new ToastMatcher();
-
         onView(withId(R.id.save)).perform(click());
         onView(withId(R.id.ok)).perform(click());
 
         onView(withText(R.string.memoContentEmpty))
-                .inRoot(toast)
+                .inRoot(withToast())
                 .check(matches(isDisplayed()));
     }
 
     @Test
     public void givenMemoWithOverPrice_whenClickOkButtonInDialog_thenCorrectToastIsShown(){
-        ToastMatcher toast =new ToastMatcher();
-
         util.saveMemo(false, "memo","2147483648" );
 
         onView(withText(R.string.memoPriceOver))
-                .inRoot(toast)
+                .inRoot(withToast())
                 .check(matches(isDisplayed()));
     }
 
