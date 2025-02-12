@@ -1,6 +1,11 @@
 package com.example.happybankbook;
 
+import android.view.View;
+import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.Root;
+import androidx.test.espresso.matcher.BoundedMatcher;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -19,6 +24,35 @@ public class CustomerMatcher {
             @Override
             public void describeTo(Description description) {
                 description.appendText("is a toast");
+            }
+        };
+    }
+
+    static Matcher<View> withTextColor(final int expectedColor){
+        return new BoundedMatcher<View, TextView>(TextView.class){
+            @Override
+            protected boolean matchesSafely(TextView item) {
+                return item.getCurrentTextColor()==expectedColor;
+            }
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("expected text color : "+expectedColor);
+            }
+        };
+    }
+
+    static Matcher<View> atPosition(final int position, final Matcher<View> itemMatcher){
+        return new TypeSafeMatcher<View>() {
+            @Override
+            protected boolean matchesSafely(View item) {
+                RecyclerView recyclerview= (RecyclerView) item;
+                RecyclerView.ViewHolder viewHolder=
+                        recyclerview.findViewHolderForAdapterPosition(position);
+                return viewHolder!=null&& itemMatcher.matches(viewHolder.itemView);
+            }
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("position is "+position);
             }
         };
     }
