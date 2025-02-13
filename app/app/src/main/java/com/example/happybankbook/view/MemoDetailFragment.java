@@ -208,7 +208,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     public void onClick(View v) {
         if(v.getId()==R.id.imgForward){
             imgForward.setImageAlpha(255);
-            viewPager.setCurrentItem(currentPosition-1,false);
             //처음 1번째 아이템 클릭하여 이동한 viewpager 에서 이전 데이터로 이동하지 않은 오류 해결
             if(!isFirst&&isFirst2&&adapterPosition==1&&currentPosition==1){
                 //notifyItemChanged 호출하면 화면 버벅거림
@@ -219,6 +218,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
                 currentPosition=0;
                 viewPager.setCurrentItem(currentPosition);
                 imgForward.setVisibility(View.INVISIBLE);
+            }else{
+                viewPager.setCurrentItem(currentPosition-1,false);
             }
             handler.postDelayed(postRunnable,3000);
         }else if(v.getId()==R.id.imgBack){
