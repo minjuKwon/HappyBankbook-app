@@ -1,6 +1,7 @@
 package com.example.happybankbook;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,6 +54,19 @@ public class CustomerMatcher {
             @Override
             public void describeTo(Description description) {
                 description.appendText("position is "+position);
+            }
+        };
+    }
+
+    static Matcher<View> withImageAlpha(final int expectedAlpha){
+        return new BoundedMatcher<View, ImageView>(ImageView.class) {
+            @Override
+            protected boolean matchesSafely(ImageView item) {
+                return item.getImageAlpha()==expectedAlpha;
+            }
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("image alpha is "+expectedAlpha);
             }
         };
     }
