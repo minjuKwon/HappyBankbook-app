@@ -14,6 +14,11 @@ import android.widget.DatePicker;
 
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiSelector;
 
 import org.hamcrest.Matcher;
 
@@ -46,6 +51,24 @@ public class TestUtil {
         SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd",java.util.Locale.getDefault());
         Date date=new Date();
         return dateFormat.format(date);
+    }
+
+    static void clickUiButton(){
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        String [] textsToFind={"허용","저장"};
+
+        // 해당 버튼 클릭
+        for(String text:textsToFind){
+            UiObject allowButton = device.findObject(new UiSelector().text(text));
+            try {
+                if (allowButton.exists() && allowButton.isEnabled()) {
+                    allowButton.click();
+                    break;
+                }
+            } catch (UiObjectNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void saveMemo(boolean isMain, String memo, String price){
