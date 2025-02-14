@@ -166,7 +166,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         if(checkLine==R.id.radioLineSingle){
             radioLine(true, false, R.color.black, R.color.gray);
         }else if(checkLine==R.id.radioLineMul){
-            radioLine(false, true, R.color.darkGray, R.color.black);
+            radioLine(false, true, R.color.gray, R.color.black);
         }
 
         if(checkFontSize==R.id.radioFontOne){
@@ -264,7 +264,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
                 changeTextLine(1,getResources().getString(R.string.textLine2));
                 checkLine=R.id.radioLineSingle;
             }else if(checkedId==R.id.radioLineMul){
-                radioLine(false, true, R.color.darkGray, R.color.black);
+                radioLine(false, true, R.color.gray, R.color.black);
                 changeTextLine(2,getResources().getString(R.string.textLine1));
                 changeTextLine(2,getResources().getString(R.string.textLine2));
                 checkLine=R.id.radioLineMul;
