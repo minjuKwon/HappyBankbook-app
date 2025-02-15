@@ -1,4 +1,4 @@
-package com.example.happybankbook;
+package com.example.happybankbook.test;
 
 import static org.junit.Assert.assertEquals;
 

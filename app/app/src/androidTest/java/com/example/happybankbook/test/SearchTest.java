@@ -1,4 +1,4 @@
-package com.example.happybankbook;
+package com.example.happybankbook.test;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -16,6 +16,11 @@ import android.widget.SearchView;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.matcher.ViewMatchers;
+
+import com.example.happybankbook.MainActivity;
+import com.example.happybankbook.R;
+import com.example.happybankbook.util.TestUtil;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,7 +45,7 @@ public class SearchTest {
             isMemoSaved=true;
         }
 
-        onView(withId(R.id.txtSearch)).perform(click());
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.txtSearch)).perform(click());
     }
 
     @After
@@ -50,7 +55,7 @@ public class SearchTest {
 
     @Test
     public void givenSearchScreen_whenSearchedNothing_thenEmptyListIsDisplayed(){
-        onView(withId(R.id.recyclerSearch)).check(matches(hasChildCount(0)));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerSearch)).check(matches(hasChildCount(0)));
     }
 
     @Test
@@ -66,10 +71,10 @@ public class SearchTest {
     @Test
     public void givenSearchScreenWithList_whenGoToMainScreenAndComeBack_thenScreenIsInitialed(){
         searchKeyword("content",2);
-        onView(withId(R.id.previousSearch)).perform(click());
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.previousSearch)).perform(click());
 
-        onView(withId(R.id.txtSearch)).check(matches(isDisplayed()));
-        onView(withId(R.id.txtSearch)).perform(click());
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.txtSearch)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.txtSearch)).perform(click());
 
         searchKeyword("",0);
     }
@@ -79,23 +84,23 @@ public class SearchTest {
         String keyword="memo";
         searchKeyword(keyword,3);
 
-        onView(withId(R.id.recyclerSearch)).perform(actionOnItemAtPosition(0,click()));
-        onView(withId(R.id.memoDetailPriceTxt)).check(matches((withText("10"))));
-        onView(withId(R.id.memoDetailPrevious)).perform(click());
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerSearch)).perform(actionOnItemAtPosition(0,click()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailPriceTxt)).check(matches((withText("10"))));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailPrevious)).perform(click());
 
-        onView(withId(R.id.previousSearch)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.previousSearch)).check(matches(isDisplayed()));
         //searchView의 text를 찾지 못하여 assertEquals() 사용
         Espresso.onIdle();scenario.onActivity(activity -> {
-            SearchView searchView = activity.findViewById(R.id.searchView);
+            SearchView searchView = activity.findViewById(com.example.happybankbook.R.id.searchView);
             String query = searchView.getQuery().toString();
             assertEquals(keyword, query);
         });
-        onView(withId(R.id.recyclerSearch)).check(matches(hasChildCount(3)));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerSearch)).check(matches(hasChildCount(3)));
     }
 
     private void searchKeyword(String keyword, int count){
-        onView(withId(R.id.searchView)).perform(typeText(keyword));
-        onView(withId(R.id.recyclerSearch)).check(matches(hasChildCount(count)));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.searchView)).perform(typeText(keyword));
+        onView(ViewMatchers.withId(R.id.recyclerSearch)).check(matches(hasChildCount(count)));
     }
 
 }

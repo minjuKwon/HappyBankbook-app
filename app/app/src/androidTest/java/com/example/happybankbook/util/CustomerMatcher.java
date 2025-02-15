@@ -1,4 +1,4 @@
-package com.example.happybankbook;
+package com.example.happybankbook.util;
 
 import android.content.Context;
 import android.util.TypedValue;
@@ -17,7 +17,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 public class CustomerMatcher {
 
-    static Matcher<Root> withToast(){
+    public static Matcher<Root> withToast(){
         return new TypeSafeMatcher<Root>() {
             @Override
             protected boolean matchesSafely(Root item) {
@@ -32,7 +32,7 @@ public class CustomerMatcher {
         };
     }
 
-    static Matcher<View> withTextColor(final int expectedColor){
+    public static Matcher<View> withTextColor(final int expectedColor){
         return new BoundedMatcher<View, TextView>(TextView.class){
             @Override
             protected boolean matchesSafely(TextView item) {
@@ -45,7 +45,7 @@ public class CustomerMatcher {
         };
     }
 
-    static Matcher<View> withRadioButtonColor(final int expectedColor){
+    public static Matcher<View> withRadioButtonColor(final int expectedColor){
         return new BoundedMatcher<View, RadioButton>(RadioButton.class){
             @Override
             protected boolean matchesSafely(RadioButton item) {
@@ -58,7 +58,7 @@ public class CustomerMatcher {
         };
     }
 
-    static Matcher<View> withImageAlpha(final int expectedAlpha){
+    public static Matcher<View> withImageAlpha(final int expectedAlpha){
         return new BoundedMatcher<View, ImageView>(ImageView.class) {
             @Override
             protected boolean matchesSafely(ImageView item) {
@@ -71,7 +71,7 @@ public class CustomerMatcher {
         };
     }
 
-    static Matcher<View> atPosition(final int position, final Matcher<View> itemMatcher){
+    public static Matcher<View> atPosition(final int position, final Matcher<View> itemMatcher){
         return new TypeSafeMatcher<View>() {
             @Override
             protected boolean matchesSafely(View item) {
@@ -87,7 +87,7 @@ public class CustomerMatcher {
         };
     }
 
-    static Matcher<View> isEllipsized(){
+    public static Matcher<View> isEllipsized(){
         return new BoundedMatcher<View, TextView>(TextView.class) {
             @Override
             protected boolean matchesSafely(TextView item) {
@@ -106,7 +106,7 @@ public class CustomerMatcher {
         };
     }
 
-    static Matcher<View> isNotEllipsized(){
+    public static Matcher<View> isNotEllipsized(){
         return new BoundedMatcher<View, TextView>(TextView.class) {
             @Override
             protected boolean matchesSafely(TextView item) {
@@ -125,7 +125,7 @@ public class CustomerMatcher {
         };
     }
 
-    static Matcher<View> hasAtMostLines(final int expectedLines){
+    public static Matcher<View> hasAtMostLines(final int expectedLines){
         return new BoundedMatcher<View, TextView>(TextView.class) {
             @Override
             protected boolean matchesSafely(TextView item) {
@@ -138,7 +138,7 @@ public class CustomerMatcher {
         };
     }
 
-    static Matcher<View> hasTextSizeSp(final Context context, final float expectedSize){
+    public static Matcher<View> hasTextSizeSp(final Context context, final float expectedSize){
         return new BoundedMatcher<View, TextView>(TextView.class) {
             @Override
             protected boolean matchesSafely(TextView item) {

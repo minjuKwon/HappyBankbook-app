@@ -1,4 +1,4 @@
-package com.example.happybankbook;
+package com.example.happybankbook.util;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -14,11 +14,14 @@ import android.widget.DatePicker;
 
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
+
+import com.example.happybankbook.R;
 
 import org.hamcrest.Matcher;
 
@@ -53,7 +56,7 @@ public class TestUtil {
         return dateFormat.format(date);
     }
 
-    static void clickUiButton(){
+    public static void clickUiButton(){
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         String [] textsToFind={"허용","저장"};
 
@@ -73,7 +76,7 @@ public class TestUtil {
 
     public void saveMemo(boolean isMain, String memo, String price){
         if(isMain){
-            onView(withId(R.id.addMenu)).perform(click());
+            onView(ViewMatchers.withId(R.id.addMenu)).perform(click());
         }
         onView(withId(R.id.editMemo)).perform(typeText(memo));
         onView(withId(R.id.save)).perform(click());
