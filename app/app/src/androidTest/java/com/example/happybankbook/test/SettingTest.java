@@ -29,6 +29,7 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.example.happybankbook.MainActivity;
+import com.example.happybankbook.helper.TestMemoData;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 
 import org.junit.After;
@@ -48,9 +49,11 @@ public class SettingTest {
         if(!isMemoSaved){
             saveMemo(
                     true,
-                    "Twinkle, twinkle, little star,\n" +
-                            "How I wonder what you are",
-                    "1987654321");
+                    new TestMemoData(
+                            "Twinkle, twinkle, little star,\n" +
+                                    "How I wonder what you are",
+                            "1987654321")
+                    );
 
             isMemoSaved=true;
         }
@@ -65,37 +68,59 @@ public class SettingTest {
     @Test
     public void givenSettingScreen_whenClickedNothing_thenScreenIsInitialed(){
         //화면 텍스트 요소 확인
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.manual)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineSingle)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineMul)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.ellipsis)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontSize)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontOne)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontTwo)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontThree)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.export)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.pdf)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.excel)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.txt)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.openSource)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.manual))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineSingle))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineMul))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.ellipsis))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontSize))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontOne))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontTwo))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontThree))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.export))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.pdf))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.excel))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.txt))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.openSource))
+                .check(matches(isDisplayed()));
 
         //radio 확인
         Espresso.onIdle();
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineSingle)).check(matches(withRadioButtonColor(gray)));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineMul)).check(matches(isChecked()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineMul)).check(matches(withRadioButtonColor(black)));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontOne)).check(matches(isChecked()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontOne)).check(matches(withRadioButtonColor(black)));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontTwo)).check(matches(withRadioButtonColor(gray)));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontThree)).check(matches(withRadioButtonColor(gray)));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineSingle))
+                .check(matches(withRadioButtonColor(gray)));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineMul))
+                .check(matches(isChecked()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineMul))
+                .check(matches(withRadioButtonColor(black)));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontOne))
+                .check(matches(isChecked()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontOne))
+                .check(matches(withRadioButtonColor(black)));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontTwo))
+                .check(matches(withRadioButtonColor(gray)));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontThree))
+                .check(matches(withRadioButtonColor(gray)));
     }
 
     @Test
     public void givenSettingScreen_whenClickedManual_thenCorrectDialogIsShown(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.manual)).perform(click());
-        onView(ViewMatchers.withText(com.example.happybankbook.R.string.manualDialog)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withText(com.example.happybankbook.R.string.manualDialog))
+                .check(matches(isDisplayed()));
         onView(ViewMatchers.withText(com.example.happybankbook.R.string.close)).perform(click());
-        onView(ViewMatchers.withText(com.example.happybankbook.R.string.manual)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withText(com.example.happybankbook.R.string.manual))
+                .check(matches(isDisplayed()));
     }
 
     @Test
@@ -124,7 +149,8 @@ public class SettingTest {
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.ellipsis)).perform(click());
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.ellipsis)).perform(click());
 
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.ellipsis)).check(matches(withTextColor(black)));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.ellipsis))
+                .check(matches(withTextColor(black)));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineSingle)).perform(click());
 
         checkTextEllipsize(isEllipsized(),keyword);
@@ -135,7 +161,8 @@ public class SettingTest {
     @Test
     public void givenSettingScreen_whenNotClickedEllipsize_thenCorrectEllipsizeIsShown(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.ellipsis)).perform(click());
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.ellipsis)).check(matches(withTextColor(gray)));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.ellipsis))
+                .check(matches(withTextColor(gray)));
 
         checkTextEllipsize(isNotEllipsized(),keyword);
 

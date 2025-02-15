@@ -97,16 +97,16 @@ public class ConditionTestHelper {
                 .check(matches(withText(text)));
     }
 
-    public static void checkTempConditionList(){
+    public static void checkTempConditionList(String price0, String price1, String price2){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
                 .check(matches(hasChildCount(3)));
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
-                .check(matches(atPosition(0, hasDescendant(withText("20")))));
+                .check(matches(atPosition(0, hasDescendant(withText(price0)))));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
-                .check(matches(atPosition(1, hasDescendant(withText("30")))));
+                .check(matches(atPosition(1, hasDescendant(withText(price1)))));
         onView(ViewMatchers.withId(R.id.recyclerMemo))
-                .check(matches(atPosition(2, hasDescendant(withText("40")))));
+                .check(matches(atPosition(2, hasDescendant(withText(price2)))));
     }
 
 }

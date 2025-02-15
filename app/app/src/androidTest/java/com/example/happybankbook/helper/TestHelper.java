@@ -25,13 +25,13 @@ public class TestHelper {
             ContextCompat.getColor( ApplicationProvider.getApplicationContext(),
                     com.example.happybankbook.R.color.gray   );
 
-    public static void saveMemo(boolean isMain, String memo, String price){
+    public static void saveMemo(boolean isMain, TestMemoData data){
         if(isMain){
             onView(ViewMatchers.withId(R.id.addMenu)).perform(click());
         }
-        onView(withId(R.id.editMemo)).perform(typeText(memo));
+        onView(withId(R.id.editMemo)).perform(typeText(data.getMemo()));
         onView(withId(R.id.save)).perform(click());
-        onView(withId(R.id.editHappy)).perform(typeText(price));
+        onView(withId(R.id.editHappy)).perform(typeText(data.getPrice()));
         onView(withId(R.id.ok)).perform(click());
     }
 
@@ -42,12 +42,12 @@ public class TestHelper {
         onView(withText("확인")).perform(click());
     }
 
-    public static void saveMemoWithDay(boolean isMain, String memo, String price, int day){
+    public static void saveMemoWithDay(boolean isMain, TestMemoWithDayData data){
         if(isMain){
             onView(withId(R.id.addMenu)).perform(click());
         }
-        selectDay(R.id.txtMemoDate,day);
-        saveMemo(false,memo, price);
+        selectDay(R.id.txtMemoDate,data.getDay());
+        saveMemo(false,data);
     }
 
 }

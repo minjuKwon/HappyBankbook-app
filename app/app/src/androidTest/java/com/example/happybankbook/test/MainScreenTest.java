@@ -14,6 +14,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.R;
+import com.example.happybankbook.helper.TestMemoData;
 
 import org.junit.After;
 import org.junit.Before;
@@ -21,6 +22,11 @@ import org.junit.Test;
 
 public class MainScreenTest {
 
+    private static final TestMemoData[] data= {
+            new TestMemoData("a","12"),
+            new TestMemoData("b","0"),
+            new TestMemoData("c","6")
+    };
     private ActivityScenario<MainActivity> scenario;
 
     @Before
@@ -57,11 +63,17 @@ public class MainScreenTest {
 
     @Test
     public void givenAddedMultipleMemo_whenMainScreenIsDisplayed_thenCorrectPriceIsDisplayed(){
-        saveMemo(true,"a","12");
-        saveMemo(true,"b","0");
-        saveMemo(true,"c","6");
+        int totalPrice=0;
+        for(TestMemoData price:data){
+            totalPrice+=Integer.parseInt(price.getPrice());
+        }
 
-        onView(ViewMatchers.withId(R.id.priceTotalTxt)).check(matches(withText("18")));
+        saveMemo(true,data[0]);
+        saveMemo(true,data[1]);
+        saveMemo(true,data[2]);
+
+        onView(ViewMatchers.withId(R.id.priceTotalTxt))
+                .check(matches(withText(String.valueOf(totalPrice))));
     }
 
 }

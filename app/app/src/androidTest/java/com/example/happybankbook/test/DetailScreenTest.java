@@ -19,12 +19,28 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.example.happybankbook.MainActivity;
+import com.example.happybankbook.helper.TestMemoData;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class DetailScreenTest {
+
+    private static final TestMemoData[] data= {
+            new TestMemoData("memo 1", "10"),
+            new TestMemoData("memo 2", "20"),
+            new TestMemoData("memo 3", "30"),
+            new TestMemoData("memo 4", "40"),
+            new TestMemoData("memo 5", "50"),
+    };
+    private static final List<String> dataPriceList= Arrays.stream(data)
+            .map(TestMemoData::getPrice)
+            .collect(Collectors.toList());
 
     private static boolean isMemoSaved=false;
     private ActivityScenario<MainActivity> scenario;
@@ -33,11 +49,11 @@ public class DetailScreenTest {
     public void setUp(){
         scenario=ActivityScenario.launch(MainActivity.class);
         if(!isMemoSaved){
-            saveMemo(true, "1", "10");
-            saveMemo(true, "2", "20");
-            saveMemo(true, "3", "30");
-            saveMemo(true, "4", "40");
-            saveMemo(true, "5", "50");
+            saveMemo(true, data[0]);
+            saveMemo(true, data[1]);
+            saveMemo(true, data[2]);
+            saveMemo(true, data[3]);
+            saveMemo(true, data[4]);
             isMemoSaved=true;
         }
     }
@@ -71,7 +87,7 @@ public class DetailScreenTest {
     public void given0thItemDetailScreen_whenClickedBackBtnAndComeBack_thenCorrectScreenIsDisplayed(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(0,click()));
 
-        checkFirstScreen();
+        checkFirstScreen(dataPriceList.get(4));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack)).perform(click());
 
         for(int i=4;i>1;i--){
@@ -79,7 +95,7 @@ public class DetailScreenTest {
             checkDetailScreenClickedBack(txt);
         }
 
-        checkLastScreen();
+        checkLastScreen(dataPriceList.get(0));
 
         for(int i=2;i<5;i++){
             String txt=String.valueOf(i*10);
@@ -87,7 +103,7 @@ public class DetailScreenTest {
         }
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgForward)).perform(click());
-        checkFirstScreen();
+        checkFirstScreen(dataPriceList.get(4));
     }
 
     @Test
@@ -99,7 +115,7 @@ public class DetailScreenTest {
             checkDetailScreenClickedBack(txt);
         }
 
-        checkLastScreen();
+        checkLastScreen(dataPriceList.get(0));
 
         for(int i=2;i<5;i++){
             String txt=String.valueOf(i*10);
@@ -113,13 +129,13 @@ public class DetailScreenTest {
     public void given1thItemDetailScreen_whenClickedForwardBtnAndComeBack_thenCorrectScreenIsDisplayed(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(1,click()));
 
-        checkMiddleScreen("40");
+        checkMiddleScreen(dataPriceList.get(3));
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgForward)).perform(click());
-        checkFirstScreen();
+        checkFirstScreen(dataPriceList.get(4));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack)).perform(click());
 
-        checkMiddleScreen("40");
+        checkMiddleScreen(dataPriceList.get(3));
     }
 
     @Test
@@ -131,7 +147,7 @@ public class DetailScreenTest {
             checkDetailScreenClickedBack(txt);
         }
 
-        checkLastScreen();
+        checkLastScreen(dataPriceList.get(0));
 
         for(int i=2;i<3;i++){
             String txt=String.valueOf(i*10);
@@ -139,38 +155,38 @@ public class DetailScreenTest {
         }
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgForward)).perform(click());
-        checkMiddleScreen("30");
+        checkMiddleScreen(dataPriceList.get(2));
     }
 
     @Test
     public void given2ndItemDetailScreen_whenClickedForwardBtnAndComeBack_thenCorrectScreenIsDisplayed(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(2,click()));
 
-        checkMiddleScreen("30");
-        checkDetailScreenClickedForward("40");
+        checkMiddleScreen(dataPriceList.get(2));
+        checkDetailScreenClickedForward(dataPriceList.get(3));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgForward)).perform(click());
 
-        checkFirstScreen();
+        checkFirstScreen(dataPriceList.get(4));
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack)).perform(click());
-        checkDetailScreenClickedBack("40");
-        checkMiddleScreen("30");
+        checkDetailScreenClickedBack(dataPriceList.get(3));
+        checkMiddleScreen(dataPriceList.get(2));
     }
 
     @Test
     public void given3rdItemDetailScreen_whenClickedBackBtnAndComeBack_thenCorrectScreenIsDisplayed(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(3,click()));
 
-        checkDetailScreenClickedBack("20");
-        checkLastScreen();
-        checkDetailScreenClickedForward("20");
+        checkDetailScreenClickedBack(dataPriceList.get(1));
+        checkLastScreen(dataPriceList.get(0));
+        checkDetailScreenClickedForward(dataPriceList.get(1));
     }
 
     @Test
     public void given3rdItemDetailScreen_whenClickedForwardBtnAndComeBack_thenCorrectScreenIsDisplayed(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(3,click()));
 
-        checkMiddleScreen("20");
+        checkMiddleScreen(dataPriceList.get(1));
 
         for(int i=3;i<5;i++){
             String txt=String.valueOf(i*10);
@@ -178,7 +194,7 @@ public class DetailScreenTest {
         }
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgForward)).perform(click());
-        checkFirstScreen();
+        checkFirstScreen(dataPriceList.get(4));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack)).perform(click());
 
         for(int i=4;i>1;i--){
@@ -192,7 +208,7 @@ public class DetailScreenTest {
     public void given4thItemDetailScreen_whenClickedForwardBtnAndComeBack_thenCorrectScreenIsDisplayed(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(4,click()));
 
-        checkLastScreen();
+        checkLastScreen(dataPriceList.get(0));
 
         for(int i=2;i<5;i++){
             String txt=String.valueOf(i*10);
@@ -200,7 +216,7 @@ public class DetailScreenTest {
         }
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgForward)).perform(click());
-        checkFirstScreen();
+        checkFirstScreen(dataPriceList.get(4));
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack)).perform(click());
         for(int i=4;i>1;i--){
@@ -208,7 +224,7 @@ public class DetailScreenTest {
             checkDetailScreenClickedBack(txt);
         }
 
-        checkLastScreen();
+        checkLastScreen(dataPriceList.get(0));
     }
 
 }

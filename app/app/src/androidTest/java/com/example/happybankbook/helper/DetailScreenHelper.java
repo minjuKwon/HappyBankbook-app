@@ -24,24 +24,24 @@ public class DetailScreenHelper {
         checkMiddleScreen(txt);
     }
 
-    public static void checkFirstScreen(){
+    public static void checkFirstScreen(String price){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgForward))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         onView(isRoot()).perform(waitFor(500));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailPriceTxt))
-                .check(matches(withText("50")));
+                .check(matches(withText(price)));
     }
 
-    public static void checkLastScreen(){
+    public static void checkLastScreen(String price){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgForward))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
         onView(isRoot()).perform(waitFor(500));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailPriceTxt))
-                .check(matches(withText("10")));
+                .check(matches(withText(price)));
     }
 
     public static void checkMiddleScreen(String txt){

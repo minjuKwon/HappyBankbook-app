@@ -35,6 +35,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.R;
+import com.example.happybankbook.helper.TestMemoData;
+import com.example.happybankbook.helper.TestMemoWithDayData;
 
 import org.junit.After;
 import org.junit.Before;
@@ -44,17 +46,23 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class MemoSaveTest {
 
+    private static final TestMemoData[] data= {
+            new TestMemoData("...?", "100"),
+            new TestMemoData(".,.,", "200"),
+    };
+    private static final TestMemoWithDayData[] dataWithDay= {
+            new TestMemoWithDayData("...?", "100",6),
+            new TestMemoWithDayData(".,.,", "200",5),
+    };
+
     private ActivityScenario<MainActivity> scenario;
-    private final String memo1="...?";
-    private final String memo2=".,.,";
-    private final String price1="100";
-    private final String price2="200";
 
     @Before
     public void setUp() {
         scenario = ActivityScenario.launch(MainActivity.class);
         Intents.init();
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.addMenu)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.addMenu))
+                .check(matches(isDisplayed()));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.addMenu)).perform(click());
     }
 
@@ -67,32 +75,43 @@ public class MemoSaveTest {
 
     @Test
     public void givenAppIsLaunched_whenMemoFragmentIsDisplayed_thenCorrectInitialScreenIsShown(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.addPicture)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.save)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.txtMemoDate)).check(matches(withText(getCurrentDate())));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.editMemo)).check(matches(ViewMatchers.withHint((com.example.happybankbook.R.string.memo))));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.addPicture))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.save))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.txtMemoDate))
+                .check(matches(withText(getCurrentDate())));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.editMemo))
+                .check(matches(ViewMatchers.withHint((com.example.happybankbook.R.string.memo))));
     }
 
     @Test
     public void givenMemoFragment_whenClickSaveButton_thenCorrectDialogScreenIsShown(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.save)).perform(click());
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.howHappy)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.editHappy)).check(matches(isFocused()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.ok)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.cancel)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.howHappy))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.editHappy))
+                .check(matches(isFocused()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.ok))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.cancel))
+                .check(matches(isDisplayed()));
     }
 
     @Test
     public void givenMemoFragment_whenClickCancelButtonInDialog_thenDialogScreenIsDismissed(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.save)).perform(click());
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.howHappy)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.howHappy))
+                .check(matches(isDisplayed()));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.cancel)).perform(click());
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.howHappy)).check(doesNotExist());
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.howHappy))
+                .check(doesNotExist());
     }
 
     @Test
     public void givenMemoWithoutPrice_whenClickOkButtonInDialog_thenCorrectToastIsShown(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.editMemo)).perform(typeText("memo"));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.editMemo))
+                .perform(typeText("memo"));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.save)).perform(click());
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.ok)).perform(click());
 
@@ -104,7 +123,8 @@ public class MemoSaveTest {
     @Test
     public void givenMemoWithoutContent_whenClickOkButtonInDialog_thenCorrectToastIsShown(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.save)).perform(click());
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.editHappy)).perform(typeText("123"));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.editHappy))
+                .perform(typeText("123"));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.ok)).perform(click());
 
         onView(isRoot()).perform(waitFor(1000));
@@ -125,7 +145,7 @@ public class MemoSaveTest {
 
     @Test
     public void givenMemoWithOverPrice_whenClickOkButtonInDialog_thenCorrectToastIsShown(){
-        saveMemo(false, "memo","2147483648" );
+        saveMemo(false, new TestMemoData("memo","2147483648" ));
 
         onView(ViewMatchers.withText(com.example.happybankbook.R.string.memoPriceOver))
                 .inRoot(withToast())
@@ -163,44 +183,51 @@ public class MemoSaveTest {
     @Test
     public void givenMemoWithoutPicture_whenClickOkButtonInDialog_thenCorrectMemoIsSaved(){
         //메모 저장
-        saveMemo(false, memo1,price1);
+        saveMemo(false,data[0]);
         //저장 후 화면 이동 확인, 저장한 메모 클릭.
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.mainMenu)).check(matches(ViewMatchers.isSelected()));
-        onView(ViewMatchers.withText(com.example.happybankbook.R.string.condition)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).check(matches(hasMinimumChildCount(1)));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(0,click()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.mainMenu)).
+                check(matches(ViewMatchers.isSelected()));
+        onView(ViewMatchers.withText(com.example.happybankbook.R.string.condition))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .check(matches(hasMinimumChildCount(1)));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(0,click()));
         //저장된 메모 일치 여부 확인
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailDate)).check(matches((withText(getCurrentDate()))));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailDate))
+                .check(matches((withText(getCurrentDate()))));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailImg))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailContent)).check(matches((withText(memo1))));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailPriceTxt)).check(matches((withText(price1))));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailContent))
+                .check(matches((withText(data[0].getMemo()))));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailPriceTxt))
+                .check(matches((withText(data[0].getPrice()))));
     }
 
     @Test
     public void givenMemoWithOtherDate_whenClickOkButtonInDialog_thenCorrectMemoIsSaved(){
         //메모 저장
-        saveMemoWithDay(false, memo1, price1, 6);
+        saveMemoWithDay(false,dataWithDay[0]);
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.addMenu)).perform(click());
-        saveMemoWithDay(false, memo2, price2, 5);
+        saveMemoWithDay(false, dataWithDay[1]);
 
         checkSavedMemo();
 
         //저장된 메모 일치 여부 확인
-        checkSavedMemoValue(price1);
+        checkSavedMemoValue(dataWithDay[0].getPrice());
     }
 
     @Test
     public void givenMultipleMemo_whenClickOkButtonInDialog_thenCorrectMemoIsSaved(){
         //메모 저장
-        saveMemo(false, memo1, price1);
+        saveMemo(false, data[0]);
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.addMenu)).perform(click());
-        saveMemo(false, memo2, price2);
+        saveMemo(false, data[1]);
 
         checkSavedMemo();
 
         //저장된 메모 일치 여부 확인
-        checkSavedMemoValue(price2);
+        checkSavedMemoValue(data[1].getPrice());
     }
 
     private void checkSavedMemo(){

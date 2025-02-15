@@ -28,13 +28,28 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.example.happybankbook.MainActivity;
+import com.example.happybankbook.helper.TestMemoWithDayData;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ConditionTest {
 
+    private static final TestMemoWithDayData [] data= {
+            new TestMemoWithDayData("memo 1", "10", 3),
+            new TestMemoWithDayData("memo 2", "20", 5),
+            new TestMemoWithDayData("memo 3", "30", 8),
+            new TestMemoWithDayData("memo 4", "40", 9),
+            new TestMemoWithDayData("memo 5", "50", 9),
+            };
+    private static final List<String> dataPriceList= Arrays.stream(data)
+                                                            .map(TestMemoWithDayData::getPrice)
+                                                            .collect(Collectors.toList());
     private static boolean isMemoSaved=false;
     private ActivityScenario<MainActivity> scenario;
 
@@ -43,11 +58,11 @@ public class ConditionTest {
         scenario= ActivityScenario.launch(MainActivity.class);
 
         if(!isMemoSaved){
-            saveMemoWithDay(true, "memo 1", "10", 3);
-            saveMemoWithDay(true, "memo 2", "20", 5);
-            saveMemoWithDay(true, "memo 3", "30", 8);
-            saveMemoWithDay(true, "memo 4", "40", 9);
-            saveMemoWithDay(true, "memo 5", "50", 9);
+            saveMemoWithDay(true, data[0]);
+            saveMemoWithDay(true, data[1]);
+            saveMemoWithDay(true, data[2]);
+            saveMemoWithDay(true, data[3]);
+            saveMemoWithDay(true, data[4]);
             isMemoSaved=true;
         }
 
@@ -103,11 +118,11 @@ public class ConditionTest {
 
         //viewpager 확인
         moveToFirstDetailScreen();
-        checkViewpagerItemBack("50");
-        checkViewpagerItemBack("40");
-        checkViewpagerItemCurrent("30");
-        checkViewpagerItemForward("40");
-        checkViewpagerItemForward("50");
+        checkViewpagerItemBack(dataPriceList.get(4));
+        checkViewpagerItemBack(dataPriceList.get(3));
+        checkViewpagerItemCurrent(dataPriceList.get(2));
+        checkViewpagerItemForward(dataPriceList.get(3));
+        checkViewpagerItemForward(dataPriceList.get(4));
 
         resetCondition();
     }
@@ -121,14 +136,14 @@ public class ConditionTest {
 
         //recyclerview 확인
         checkRecyclerviewSize(2);
-        checkRecyclerViewItemPrice(0, "30");
-        checkRecyclerViewItemPrice(1, "20");
+        checkRecyclerViewItemPrice(0, dataPriceList.get(2));
+        checkRecyclerViewItemPrice(1, dataPriceList.get(1));
 
         //viewpager 확인
         moveToFirstDetailScreen();
-        checkViewpagerItemBack("30");
-        checkViewpagerItemCurrent("20");
-        checkViewpagerItemForward("30");
+        checkViewpagerItemBack(dataPriceList.get(2));
+        checkViewpagerItemCurrent(dataPriceList.get(1));
+        checkViewpagerItemForward(dataPriceList.get(2));
 
         resetCondition();
     }
@@ -152,7 +167,7 @@ public class ConditionTest {
             String str=String.valueOf(10*i);
             checkViewpagerItemBack(str);
         }
-        checkViewpagerItemCurrent("50");
+        checkViewpagerItemCurrent(dataPriceList.get(4));
         for(int i=4;i>0;i--){
             String str=String.valueOf(10*i);
             checkViewpagerItemForward(str);
@@ -177,9 +192,9 @@ public class ConditionTest {
 
         //viewpager 확인
         moveToFirstDetailScreen();
-        checkViewpagerItemBack("10");
-        checkViewpagerItemCurrent("20");
-        checkViewpagerItemForward("10");
+        checkViewpagerItemBack(dataPriceList.get(0));
+        checkViewpagerItemCurrent(dataPriceList.get(1));
+        checkViewpagerItemForward(dataPriceList.get(0));
 
         resetCondition();
     }
@@ -201,9 +216,9 @@ public class ConditionTest {
 
         //viewpager 확인
         moveToFirstDetailScreen();
-        checkViewpagerItemBack("10");
-        checkViewpagerItemCurrent("20");
-        checkViewpagerItemForward("10");
+        checkViewpagerItemBack(dataPriceList.get(0));
+        checkViewpagerItemCurrent(dataPriceList.get(1));
+        checkViewpagerItemForward(dataPriceList.get(0));
 
         resetCondition();
     }
@@ -223,13 +238,13 @@ public class ConditionTest {
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.buttonSubmit))
                 .perform(click());
 
-        checkTempConditionList();
+        checkTempConditionList(dataPriceList.get(1), dataPriceList.get(2), dataPriceList.get(3));
 
         moveToFirstDetailScreen();
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailPrevious))
                 .perform(click());
 
-        checkTempConditionList();
+        checkTempConditionList(dataPriceList.get(1), dataPriceList.get(2), dataPriceList.get(3));
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.txtCondition)).perform(click());
 
