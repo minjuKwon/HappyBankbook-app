@@ -5,21 +5,20 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static com.example.happybankbook.helper.DetailScreenHelper.checkDetailScreenClickedBack;
+import static com.example.happybankbook.helper.DetailScreenHelper.checkDetailScreenClickedForward;
+import static com.example.happybankbook.helper.DetailScreenHelper.checkFirstScreen;
+import static com.example.happybankbook.helper.DetailScreenHelper.checkLastScreen;
+import static com.example.happybankbook.helper.DetailScreenHelper.checkMiddleScreen;
+import static com.example.happybankbook.helper.TestHelper.saveMemo;
 import static com.example.happybankbook.util.CustomerMatcher.withImageAlpha;
 import static com.example.happybankbook.util.TestUtil.waitFor;
-
-import android.util.Log;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.example.happybankbook.MainActivity;
-import com.example.happybankbook.R;
-import com.example.happybankbook.util.TestUtil;
 
 import org.junit.After;
 import org.junit.Before;
@@ -27,7 +26,6 @@ import org.junit.Test;
 
 public class DetailScreenTest {
 
-    private static final TestUtil util=new TestUtil();
     private static boolean isMemoSaved=false;
     private ActivityScenario<MainActivity> scenario;
 
@@ -35,11 +33,11 @@ public class DetailScreenTest {
     public void setUp(){
         scenario=ActivityScenario.launch(MainActivity.class);
         if(!isMemoSaved){
-            util.saveMemo(true, "1", "10");
-            util.saveMemo(true, "2", "20");
-            util.saveMemo(true, "3", "30");
-            util.saveMemo(true, "4", "40");
-            util.saveMemo(true, "5", "50");
+            saveMemo(true, "1", "10");
+            saveMemo(true, "2", "20");
+            saveMemo(true, "3", "30");
+            saveMemo(true, "4", "40");
+            saveMemo(true, "5", "50");
             isMemoSaved=true;
         }
     }
@@ -104,7 +102,6 @@ public class DetailScreenTest {
         checkLastScreen();
 
         for(int i=2;i<5;i++){
-            Log.d("dd","i: "+i);
             String txt=String.valueOf(i*10);
             checkDetailScreenClickedForward(txt);
             onView(isRoot()).perform(waitFor(300));
@@ -212,43 +209,6 @@ public class DetailScreenTest {
         }
 
         checkLastScreen();
-    }
-
-
-    private void checkDetailScreenClickedBack(String txt){
-        checkMiddleScreen(txt);
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack)).perform(click());
-    }
-
-    private void checkDetailScreenClickedForward(String txt){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgForward)).perform(click());
-        checkMiddleScreen(txt);
-    }
-
-    private void checkFirstScreen(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgForward))
-                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack))
-                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-        onView(isRoot()).perform(waitFor(500));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailPriceTxt)).check(matches(withText("50")));
-    }
-
-    private void checkLastScreen(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgForward))
-                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack))
-                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
-        onView(isRoot()).perform(waitFor(500));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailPriceTxt)).check(matches(withText("10")));
-    }
-
-    private void checkMiddleScreen(String txt){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgForward)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack))
-                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-        onView(isRoot()).perform(waitFor(500));
-        onView(ViewMatchers.withId(R.id.memoDetailPriceTxt)).check(matches(withText(txt)));
     }
 
 }

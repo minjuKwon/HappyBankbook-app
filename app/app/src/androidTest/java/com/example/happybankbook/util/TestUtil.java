@@ -74,29 +74,4 @@ public class TestUtil {
         }
     }
 
-    public void saveMemo(boolean isMain, String memo, String price){
-        if(isMain){
-            onView(ViewMatchers.withId(R.id.addMenu)).perform(click());
-        }
-        onView(withId(R.id.editMemo)).perform(typeText(memo));
-        onView(withId(R.id.save)).perform(click());
-        onView(withId(R.id.editHappy)).perform(typeText(price));
-        onView(withId(R.id.ok)).perform(click());
-    }
-
-    public void selectDay(int id, int day){
-        onView(withId(id)).perform(click());
-        onView(withClassName(org.hamcrest.Matchers.equalTo(DatePicker.class.getName())))
-                .perform(setDate(2025, 2, day));
-        onView(withText("확인")).perform(click());
-    }
-
-    public void saveMemoWithDay(boolean isMain, String memo, String price, int day){
-        if(isMain){
-            onView(withId(R.id.addMenu)).perform(click());
-        }
-        selectDay(R.id.txtMemoDate,day);
-        saveMemo(false,memo, price);
-    }
-
 }

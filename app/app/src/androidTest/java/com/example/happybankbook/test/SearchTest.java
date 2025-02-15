@@ -7,20 +7,18 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static com.example.happybankbook.helper.TestHelper.saveMemo;
 import static org.junit.Assert.assertEquals;
 
 import android.widget.SearchView;
 
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.Espresso;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.R;
-import com.example.happybankbook.util.TestUtil;
 
 import org.junit.After;
 import org.junit.Before;
@@ -28,7 +26,6 @@ import org.junit.Test;
 
 public class SearchTest {
 
-    private static final TestUtil util=new TestUtil();
     private static boolean isMemoSaved=false;
     private ActivityScenario<MainActivity> scenario;
 
@@ -37,11 +34,12 @@ public class SearchTest {
         scenario= ActivityScenario.launch(MainActivity.class);
 
         if(!isMemoSaved){
-            util.saveMemo(true,"memo 1", "10");
-            util.saveMemo(true,"content 2", "20");
-            util.saveMemo(true,"memo 3", "30");
-            util.saveMemo(true, "content 4", "40");
-            util.saveMemo(true,"memo 5", "50");
+            saveMemo(true,"memo 1", "10");
+            saveMemo(true,"content 2", "20");
+            saveMemo(true,"memo 3", "30");
+            saveMemo(true, "content 4", "40");
+            saveMemo(true,"memo 5", "50");
+
             isMemoSaved=true;
         }
 
@@ -90,7 +88,7 @@ public class SearchTest {
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.previousSearch)).check(matches(isDisplayed()));
         //searchView의 text를 찾지 못하여 assertEquals() 사용
-        Espresso.onIdle();scenario.onActivity(activity -> {
+        scenario.onActivity(activity -> {
             SearchView searchView = activity.findViewById(com.example.happybankbook.R.id.searchView);
             String query = searchView.getQuery().toString();
             assertEquals(keyword, query);

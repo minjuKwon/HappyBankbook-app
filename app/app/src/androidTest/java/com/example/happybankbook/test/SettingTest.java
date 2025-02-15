@@ -2,56 +2,43 @@ package com.example.happybankbook.test;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import static com.example.happybankbook.util.CustomerMatcher.hasAtMostLines;
-import static com.example.happybankbook.util.CustomerMatcher.hasTextSizeSp;
+import static com.example.happybankbook.helper.SettingTestHelper.checkExportIsSuccess;
+import static com.example.happybankbook.helper.SettingTestHelper.checkTextEllipsize;
+import static com.example.happybankbook.helper.SettingTestHelper.checkTextFont;
+import static com.example.happybankbook.helper.SettingTestHelper.checkTextFontSetting;
+import static com.example.happybankbook.helper.SettingTestHelper.checkTextLine;
+import static com.example.happybankbook.helper.SettingTestHelper.checkTextLineSetting;
+import static com.example.happybankbook.helper.SettingTestHelper.reset;
+import static com.example.happybankbook.helper.TestHelper.black;
+import static com.example.happybankbook.helper.TestHelper.gray;
+import static com.example.happybankbook.helper.TestHelper.saveMemo;
 import static com.example.happybankbook.util.CustomerMatcher.isEllipsized;
 import static com.example.happybankbook.util.CustomerMatcher.isNotEllipsized;
 import static com.example.happybankbook.util.CustomerMatcher.withRadioButtonColor;
 import static com.example.happybankbook.util.CustomerMatcher.withTextColor;
-import static com.example.happybankbook.util.CustomerMatcher.withToast;
-import static com.example.happybankbook.util.TestUtil.clickUiButton;
-import static com.example.happybankbook.util.TestUtil.waitFor;
 
-import android.content.Context;
-import android.view.View;
-
-import androidx.core.content.ContextCompat;
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.example.happybankbook.MainActivity;
-import com.example.happybankbook.R;
-import com.example.happybankbook.util.TestUtil;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class SettingTest {
 
-    private static final TestUtil util=new TestUtil();
     private static final String keyword="twinkle";
     private static final int [] fontSize={12,15,18,21};
-    private static final int black = ContextCompat
-            .getColor(ApplicationProvider.getApplicationContext(), com.example.happybankbook.R.color.black);
-    private static final int gray = ContextCompat
-            .getColor(ApplicationProvider.getApplicationContext(), com.example.happybankbook.R.color.gray);
     private static boolean isMemoSaved=false;
     private ActivityScenario<MainActivity> scenario;
 
@@ -59,11 +46,12 @@ public class SettingTest {
     public void setUp(){
         scenario = ActivityScenario.launch(MainActivity.class);
         if(!isMemoSaved){
-            util.saveMemo(
+            saveMemo(
                     true,
                     "Twinkle, twinkle, little star,\n" +
                             "How I wonder what you are",
                     "1987654321");
+
             isMemoSaved=true;
         }
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.settingMenu)).perform(click());
@@ -116,7 +104,7 @@ public class SettingTest {
 
         checkTextLineSetting(black, gray);
 
-        checkTextLine(1);
+        checkTextLine(1,keyword);
 
         reset(com.example.happybankbook.R.id.radioLineMul);
     }
@@ -127,7 +115,7 @@ public class SettingTest {
 
         checkTextLineSetting(gray, black);
 
-        checkTextLine(2);
+        checkTextLine(2,keyword);
     }
 
     @Test
@@ -139,7 +127,7 @@ public class SettingTest {
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.ellipsis)).check(matches(withTextColor(black)));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineSingle)).perform(click());
 
-        checkTextEllipsize(isEllipsized());
+        checkTextEllipsize(isEllipsized(),keyword);
 
         reset(com.example.happybankbook.R.id.radioLineMul);
     }
@@ -149,7 +137,7 @@ public class SettingTest {
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.ellipsis)).perform(click());
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.ellipsis)).check(matches(withTextColor(gray)));
 
-        checkTextEllipsize(isNotEllipsized());
+        checkTextEllipsize(isNotEllipsized(),keyword);
 
         reset(com.example.happybankbook.R.id.ellipsis);
     }
@@ -160,7 +148,7 @@ public class SettingTest {
 
         checkTextFontSetting(black, gray, gray);
 
-        checkTextFont(fontSize[0], fontSize[1]);
+        checkTextFont(fontSize[0], fontSize[1],keyword);
     }
 
     @Test
@@ -169,7 +157,7 @@ public class SettingTest {
 
         checkTextFontSetting(gray, black, gray);
 
-        checkTextFont(fontSize[1], fontSize[2]);
+        checkTextFont(fontSize[1], fontSize[2],keyword);
 
         reset(com.example.happybankbook.R.id.radioFontOne);
     }
@@ -180,7 +168,7 @@ public class SettingTest {
 
         checkTextFontSetting(gray, gray, black);
 
-        checkTextFont(fontSize[2], fontSize[3]);
+        checkTextFont(fontSize[2], fontSize[3],keyword);
 
         reset(com.example.happybankbook.R.id.radioFontOne);
     }
@@ -206,96 +194,6 @@ public class SettingTest {
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.openSource)).perform(click());
         intended(hasComponent(OssLicensesMenuActivity.class.getName()));
         Intents.release();
-    }
-
-    private void checkTextLineSetting(int lineSingleColor, int lineMulColor){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineSingle)).check(matches(withTextColor(lineSingleColor)));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineMul)).check(matches(withTextColor(lineMulColor)));
-    }
-
-    private void checkTextFontSetting(int fontOneColor, int fontTwoColor, int fontThreeColor){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontOne)).check(matches(withTextColor(fontOneColor)));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontTwo)).check(matches(withTextColor(fontTwoColor)));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontThree)).check(matches(withTextColor(fontThreeColor)));
-    }
-
-    private void checkTextLine(int line){
-        checkMemoListTextStyle(hasAtMostLines(line));
-
-        searchKeyword();
-
-        checkSearchListTextStyle(hasAtMostLines(line));
-    }
-
-    private void checkTextEllipsize(Matcher<View> matcher){
-        checkMemoListTextStyle(matcher);
-
-        searchKeyword();
-
-        checkSearchListTextStyle(matcher);
-    }
-
-    private void checkTextFont(int sizeSmaller, int sizeLarger){
-        Context context=ApplicationProvider.getApplicationContext();
-
-        //메모 추가 화면 검사
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.addMenu)).perform(click());
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.editMemo)).check(matches(hasTextSizeSp(context,sizeSmaller)));
-
-        //메모 리스트 화면 검사
-        checkMemoListTextStyle(hasTextSizeSp(context,sizeLarger));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.inputTxtDate)).check(matches(hasTextSizeSp(context,sizeLarger)));
-
-        //메모 상세 화면 검사
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(0,click()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailContent)).check(matches(hasTextSizeSp(context,sizeSmaller)));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailPrevious)).perform(click());
-
-        searchKeyword();
-
-        //검색 화면 검사
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.inputTxtDate)).check(matches(hasTextSizeSp(context,sizeLarger)));
-        checkSearchListTextStyle(hasTextSizeSp(context,sizeLarger));
-    }
-
-    private void checkMemoListTextStyle(Matcher<View> matcher){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.mainMenu)).perform(click());
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.inputTxtContent)).check(matches(matcher));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.inputTxtDeposit)).check(matches(matcher));
-    }
-
-    private void checkSearchListTextStyle(Matcher<View> matcher){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.inputTxtContent)).check(matches(matcher));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.inputTxtDeposit)).check(matches(matcher));
-    }
-
-    private void searchKeyword(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.txtSearch)).perform(click());
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.searchView)).perform(typeText(keyword));
-    }
-
-    private void reset(int id){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.settingMenu)).perform(click());
-        onView(withId(id)).perform(click());
-    }
-
-    private void checkExportIsSuccess(int id,String type){
-        onView(withId(id)).perform(click());
-
-        String str=type+" "+ApplicationProvider.getApplicationContext().getString(com.example.happybankbook.R.string.doExport);
-        onView(withText(str)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withText(com.example.happybankbook.R.string.OK)).perform(click());
-        clickUiButton();
-
-        onView(ViewMatchers.withText(com.example.happybankbook.R.string.savePermissionYes))
-                .inRoot(withToast())
-                .check(matches(isDisplayed()));
-
-        onView(isRoot()).perform(waitFor(2000));
-
-        onView(ViewMatchers.withText(R.string.completeSaving))
-                .inRoot(withToast())
-                .check(matches(isDisplayed()));
     }
 
 }
