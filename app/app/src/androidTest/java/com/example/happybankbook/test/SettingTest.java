@@ -15,8 +15,8 @@ import static com.example.happybankbook.helper.SettingTestHelper.checkTextFontSe
 import static com.example.happybankbook.helper.SettingTestHelper.checkTextLine;
 import static com.example.happybankbook.helper.SettingTestHelper.checkTextLineSetting;
 import static com.example.happybankbook.helper.SettingTestHelper.reset;
-import static com.example.happybankbook.helper.TestHelper.black;
-import static com.example.happybankbook.helper.TestHelper.gray;
+import static com.example.happybankbook.helper.TestHelper.BLACK;
+import static com.example.happybankbook.helper.TestHelper.GRAY;
 import static com.example.happybankbook.helper.TestHelper.saveMemo;
 import static com.example.happybankbook.util.CustomerMatcher.isEllipsized;
 import static com.example.happybankbook.util.CustomerMatcher.isNotEllipsized;
@@ -98,19 +98,19 @@ public class SettingTest {
         //radio 확인
         Espresso.onIdle();
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineSingle))
-                .check(matches(withRadioButtonColor(gray)));
+                .check(matches(withRadioButtonColor(GRAY)));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineMul))
                 .check(matches(isChecked()));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineMul))
-                .check(matches(withRadioButtonColor(black)));
+                .check(matches(withRadioButtonColor(BLACK)));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontOne))
                 .check(matches(isChecked()));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontOne))
-                .check(matches(withRadioButtonColor(black)));
+                .check(matches(withRadioButtonColor(BLACK)));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontTwo))
-                .check(matches(withRadioButtonColor(gray)));
+                .check(matches(withRadioButtonColor(GRAY)));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontThree))
-                .check(matches(withRadioButtonColor(gray)));
+                .check(matches(withRadioButtonColor(GRAY)));
     }
 
     @Test
@@ -127,7 +127,7 @@ public class SettingTest {
     public void givenSettingScreen_whenClickedOneTextLine_thenCorrectTextLineIsShown(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineSingle)).perform(click());
 
-        checkTextLineSetting(black, gray);
+        checkTextLineSetting(BLACK, GRAY);
 
         checkTextLine(1,keyword);
 
@@ -138,7 +138,7 @@ public class SettingTest {
     public void givenSettingScreen_whenClickedTwoTextLine_thenCorrectTextLineIsShown(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineMul)).perform(click());
 
-        checkTextLineSetting(gray, black);
+        checkTextLineSetting(GRAY, BLACK);
 
         checkTextLine(2,keyword);
     }
@@ -150,7 +150,7 @@ public class SettingTest {
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.ellipsis)).perform(click());
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.ellipsis))
-                .check(matches(withTextColor(black)));
+                .check(matches(withTextColor(BLACK)));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineSingle)).perform(click());
 
         checkTextEllipsize(isEllipsized(),keyword);
@@ -162,7 +162,7 @@ public class SettingTest {
     public void givenSettingScreen_whenNotClickedEllipsize_thenCorrectEllipsizeIsShown(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.ellipsis)).perform(click());
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.ellipsis))
-                .check(matches(withTextColor(gray)));
+                .check(matches(withTextColor(GRAY)));
 
         checkTextEllipsize(isNotEllipsized(),keyword);
 
@@ -173,7 +173,7 @@ public class SettingTest {
     public void givenSettingScreen_whenClickedOneFontSize_thenCorrectFontSizeIsShown(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontOne)).perform(click());
 
-        checkTextFontSetting(black, gray, gray);
+        checkTextFontSetting(BLACK, GRAY, GRAY);
 
         checkTextFont(fontSize[0], fontSize[1],keyword);
     }
@@ -182,7 +182,7 @@ public class SettingTest {
     public void givenSettingScreen_whenClickedTwoFontSize_thenCorrectFontSizeIsShown(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontTwo)).perform(click());
 
-        checkTextFontSetting(gray, black, gray);
+        checkTextFontSetting(GRAY, BLACK, GRAY);
 
         checkTextFont(fontSize[1], fontSize[2],keyword);
 
@@ -193,7 +193,7 @@ public class SettingTest {
     public void givenSettingScreen_whenClickedThreeFontSize_thenCorrectFontSizeIsShown(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioFontThree)).perform(click());
 
-        checkTextFontSetting(gray, gray, black);
+        checkTextFontSetting(GRAY, GRAY, BLACK);
 
         checkTextFont(fontSize[2], fontSize[3],keyword);
 

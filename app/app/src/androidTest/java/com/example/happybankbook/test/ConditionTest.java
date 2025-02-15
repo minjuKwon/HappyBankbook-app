@@ -19,7 +19,7 @@ import static com.example.happybankbook.helper.ConditionTestHelper.resetConditio
 import static com.example.happybankbook.helper.ConditionTestHelper.setCountCondition;
 import static com.example.happybankbook.helper.ConditionTestHelper.setDateCondition;
 import static com.example.happybankbook.helper.ConditionTestHelper.setTempCondition;
-import static com.example.happybankbook.helper.TestHelper.black;
+import static com.example.happybankbook.helper.TestHelper.BLACK;
 import static com.example.happybankbook.helper.TestHelper.saveMemoWithDay;
 import static com.example.happybankbook.util.CustomerMatcher.withTextColor;
 import static com.example.happybankbook.util.TestUtil.getCurrentDate;
@@ -89,7 +89,7 @@ public class ConditionTest {
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.duration)).perform(click());
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.duration))
-                .check(matches(withTextColor(black)));
+                .check(matches(withTextColor(BLACK)));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.fromDuration))
                 .check(matches(isDisplayed()));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.toDuration))
@@ -250,7 +250,7 @@ public class ConditionTest {
 
         //조건 유지 확인
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.duration))
-                .check(matches(withTextColor(black)));
+                .check(matches(withTextColor(BLACK)));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.fromDuration))
                 .check(matches(withText("2025.02.05")));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.toDuration))
