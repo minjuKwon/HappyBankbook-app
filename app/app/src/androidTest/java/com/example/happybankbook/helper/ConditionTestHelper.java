@@ -27,10 +27,6 @@ public class ConditionTestHelper {
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.buttonInit)).perform(click());
     }
 
-    public static void moveToFirstDetailScreen(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
-                .perform(actionOnItemAtPosition(0,click()));
-    }
 
     public static void checkInitialCondition(){
         int expectedColor = ContextCompat

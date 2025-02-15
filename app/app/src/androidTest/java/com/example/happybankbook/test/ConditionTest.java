@@ -3,6 +3,7 @@ package com.example.happybankbook.test;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -14,7 +15,6 @@ import static com.example.happybankbook.helper.ConditionTestHelper.checkTempCond
 import static com.example.happybankbook.helper.ConditionTestHelper.checkViewpagerItemBack;
 import static com.example.happybankbook.helper.ConditionTestHelper.checkViewpagerItemCurrent;
 import static com.example.happybankbook.helper.ConditionTestHelper.checkViewpagerItemForward;
-import static com.example.happybankbook.helper.ConditionTestHelper.moveToFirstDetailScreen;
 import static com.example.happybankbook.helper.ConditionTestHelper.resetCondition;
 import static com.example.happybankbook.helper.ConditionTestHelper.setCountCondition;
 import static com.example.happybankbook.helper.ConditionTestHelper.setDateCondition;
@@ -121,7 +121,8 @@ public class ConditionTest {
         }
 
         //viewpager 확인
-        moveToFirstDetailScreen();
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(0,click()));
         checkViewpagerItemBack(dataPriceList.get(4));
         checkViewpagerItemBack(dataPriceList.get(3));
         checkViewpagerItemCurrent(dataPriceList.get(2));
@@ -145,7 +146,8 @@ public class ConditionTest {
         checkRecyclerViewItemPrice(1, dataPriceList.get(1));
 
         //viewpager 확인
-        moveToFirstDetailScreen();
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(0,click()));
         checkViewpagerItemBack(dataPriceList.get(2));
         checkViewpagerItemCurrent(dataPriceList.get(1));
         checkViewpagerItemForward(dataPriceList.get(2));
@@ -169,7 +171,8 @@ public class ConditionTest {
         }
 
         //viewpager 확인
-        moveToFirstDetailScreen();
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(0,click()));
         for(int i=1;i<len;i++){
             String str=String.valueOf(10*i);
             checkViewpagerItemBack(str);
@@ -199,7 +202,8 @@ public class ConditionTest {
         }
 
         //viewpager 확인
-        moveToFirstDetailScreen();
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(0,click()));
         checkViewpagerItemBack(dataPriceList.get(0));
         checkViewpagerItemCurrent(dataPriceList.get(1));
         checkViewpagerItemForward(dataPriceList.get(0));
@@ -224,7 +228,8 @@ public class ConditionTest {
         }
 
         //viewpager 확인
-        moveToFirstDetailScreen();
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(0,click()));
         checkViewpagerItemBack(dataPriceList.get(0));
         checkViewpagerItemCurrent(dataPriceList.get(1));
         checkViewpagerItemForward(dataPriceList.get(0));
@@ -252,7 +257,8 @@ public class ConditionTest {
 
         checkTempConditionList(dataPriceList.get(1), dataPriceList.get(2), dataPriceList.get(3),count);
 
-        moveToFirstDetailScreen();
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(0,click()));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailPrevious))
                 .perform(click());
 
