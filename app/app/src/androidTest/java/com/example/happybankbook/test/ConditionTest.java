@@ -20,6 +20,9 @@ import static com.example.happybankbook.helper.ConditionTestHelper.setCountCondi
 import static com.example.happybankbook.helper.ConditionTestHelper.setDateCondition;
 import static com.example.happybankbook.helper.ConditionTestHelper.setTempCondition;
 import static com.example.happybankbook.helper.TestHelper.BLACK;
+import static com.example.happybankbook.helper.TestHelper.MONTH;
+import static com.example.happybankbook.helper.TestHelper.YEAR;
+import static com.example.happybankbook.helper.TestHelper.dateFormat;
 import static com.example.happybankbook.helper.TestHelper.saveMemoWithDay;
 import static com.example.happybankbook.util.CustomerMatcher.withTextColor;
 import static com.example.happybankbook.util.TestUtil.getCurrentDate;
@@ -107,11 +110,12 @@ public class ConditionTest {
     @Test
     public void givenConditionScreen_whenInputCnt_thenCorrectFilteredListIsDisplayed(){
         //조건
-        setCountCondition("3");
+        int count=3;
+        setCountCondition(String.valueOf(count));
 
         //recyclerview 확인
-        checkRecyclerviewSize(3);
-        for(int i=0;i<3;i++){
+        checkRecyclerviewSize(count);
+        for(int i=0;i<count;i++){
             String str=String.valueOf(10*(5-i));
             checkRecyclerViewItemPrice(i, str);
         }
@@ -132,10 +136,11 @@ public class ConditionTest {
         //조건
         setDateCondition(3,8);
 
-        setCountCondition("2");
+        int count=2;
+        setCountCondition(String.valueOf(count));
 
         //recyclerview 확인
-        checkRecyclerviewSize(2);
+        checkRecyclerviewSize(count);
         checkRecyclerViewItemPrice(0, dataPriceList.get(2));
         checkRecyclerViewItemPrice(1, dataPriceList.get(1));
 
@@ -154,21 +159,23 @@ public class ConditionTest {
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioOldest)).perform(click());
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.buttonSubmit)).perform(click());
 
+        int len=data.length;
+
         //recyclerview 확인
-        checkRecyclerviewSize(5);
-        for(int i=0;i<5;i++){
+        checkRecyclerviewSize(len);
+        for(int i=0;i<len;i++){
             String str=String.valueOf(10*(i+1));
             checkRecyclerViewItemPrice(i, str);
         }
 
         //viewpager 확인
         moveToFirstDetailScreen();
-        for(int i=1;i<5;i++){
+        for(int i=1;i<len;i++){
             String str=String.valueOf(10*i);
             checkViewpagerItemBack(str);
         }
         checkViewpagerItemCurrent(dataPriceList.get(4));
-        for(int i=4;i>0;i--){
+        for(int i=len-1;i>0;i--){
             String str=String.valueOf(10*i);
             checkViewpagerItemForward(str);
         }
@@ -181,11 +188,12 @@ public class ConditionTest {
         //조건
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioOldest)).perform(click());
 
-        setCountCondition("2");
+        int count=2;
+        setCountCondition(String.valueOf(count));
 
         //recyclerview 확인
         checkRecyclerviewSize(2);
-        for(int i=0;i<2;i++){
+        for(int i=0;i<count;i++){
             String str=String.valueOf(10*(i+1));
             checkRecyclerViewItemPrice(i, str);
         }
@@ -205,11 +213,12 @@ public class ConditionTest {
         setDateCondition(3,8);
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioOldest)).perform(click());
-        setCountCondition("2");
+        int count=2;
+        setCountCondition(String.valueOf(count));
 
         //recyclerview 확인
-        checkRecyclerviewSize(2);
-        for(int i=0;i<2;i++){
+        checkRecyclerviewSize(count);
+        for(int i=0;i<count;i++){
             String str=String.valueOf(10*(i+1));
             checkRecyclerViewItemPrice(i, str);
         }
@@ -225,7 +234,7 @@ public class ConditionTest {
 
     @Test
     public void givenConditionScreen_whenClickedInitialBtn_thenScreenIsInitialed(){
-        setTempCondition();
+        setTempCondition(5,9,3);
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.buttonInit)).perform(click());
 
@@ -234,17 +243,20 @@ public class ConditionTest {
 
     @Test
     public void givenConditionScreenWithFilter_whenClickedListItem_thenConditionIsRetained(){
-        setTempCondition();
+        int fromDay=5;
+        int toDay=9;
+        int count=3;
+        setTempCondition(fromDay,toDay,count);
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.buttonSubmit))
                 .perform(click());
 
-        checkTempConditionList(dataPriceList.get(1), dataPriceList.get(2), dataPriceList.get(3));
+        checkTempConditionList(dataPriceList.get(1), dataPriceList.get(2), dataPriceList.get(3),count);
 
         moveToFirstDetailScreen();
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailPrevious))
                 .perform(click());
 
-        checkTempConditionList(dataPriceList.get(1), dataPriceList.get(2), dataPriceList.get(3));
+        checkTempConditionList(dataPriceList.get(1), dataPriceList.get(2), dataPriceList.get(3),count);
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.txtCondition)).perform(click());
 
@@ -252,26 +264,26 @@ public class ConditionTest {
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.duration))
                 .check(matches(withTextColor(BLACK)));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.fromDuration))
-                .check(matches(withText("2025.02.05")));
+                .check(matches(withText(String.format(dateFormat,YEAR, MONTH, fromDay))));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.toDuration))
-                .check(matches(withText("2025.02.09")));
+                .check(matches(withText(String.format(dateFormat,YEAR, MONTH, toDay))));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioOldest))
                 .check(matches(isChecked()));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.editCount))
-                .check(matches(withText("3")));
+                .check(matches(withText(String.valueOf(count))));
 
         resetCondition();
     }
 
     @Test
     public void givenConditionScreenWithFilter_whenMovedOtherScreen_thenConditionIsInitialed(){
-        setTempCondition();
+        setTempCondition(5,9,3);
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.buttonSubmit)).perform(click());
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.addMenu)).perform(click());
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.mainMenu)).perform(click());
 
-        checkRecyclerviewSize(5);
+        checkRecyclerviewSize(data.length);
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.txtCondition)).perform(click());
 

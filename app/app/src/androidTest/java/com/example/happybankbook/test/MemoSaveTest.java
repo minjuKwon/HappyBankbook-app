@@ -15,6 +15,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static com.example.happybankbook.helper.TestHelper.MONTH;
+import static com.example.happybankbook.helper.TestHelper.YEAR;
+import static com.example.happybankbook.helper.TestHelper.dateFormat;
 import static com.example.happybankbook.helper.TestHelper.saveMemo;
 import static com.example.happybankbook.helper.TestHelper.saveMemoWithDay;
 import static com.example.happybankbook.helper.TestHelper.selectDay;
@@ -174,10 +177,11 @@ public class MemoSaveTest {
     @Test
     public void givenSaveMemoScreen_whenClickDateText_thenDateIsChanged(){
         //날짜 텍스트 클릭 후 날짜 변경
-        selectDay(com.example.happybankbook.R.id.txtMemoDate,6);
+        int day=6;
+        selectDay(com.example.happybankbook.R.id.txtMemoDate,day);
         //해당 날짜 일치 여부 확인
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.txtMemoDate))
-                .check(matches(withText("2025.02.06")));
+                .check(matches(withText(String.format(dateFormat,YEAR, MONTH, day))));
     }
 
     @Test

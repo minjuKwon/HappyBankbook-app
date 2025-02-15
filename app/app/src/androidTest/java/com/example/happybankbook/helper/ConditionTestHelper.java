@@ -61,15 +61,15 @@ public class ConditionTestHelper {
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.buttonSubmit)).perform(click());
     }
 
-    public static void setTempCondition(){
+    public static void setTempCondition(int fromDay, int toDay, int count){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.duration)).perform(click());
-        selectDay(com.example.happybankbook.R.id.fromDuration, 5);
-        selectDay(com.example.happybankbook.R.id.toDuration, 9);
+        selectDay(com.example.happybankbook.R.id.fromDuration, fromDay);
+        selectDay(com.example.happybankbook.R.id.toDuration, toDay);
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioOldest)).perform(click());
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.editCount))
-                .perform(typeText("3"));
+                .perform(typeText(String.valueOf(count)));
     }
 
     public static void checkRecyclerviewSize(int size){
@@ -97,9 +97,9 @@ public class ConditionTestHelper {
                 .check(matches(withText(text)));
     }
 
-    public static void checkTempConditionList(String price0, String price1, String price2){
+    public static void checkTempConditionList(String price0, String price1, String price2, int count){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
-                .check(matches(hasChildCount(3)));
+                .check(matches(hasChildCount(count)));
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
                 .check(matches(atPosition(0, hasDescendant(withText(price0)))));

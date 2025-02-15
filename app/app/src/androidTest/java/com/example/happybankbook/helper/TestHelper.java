@@ -24,6 +24,9 @@ public class TestHelper {
     public static final int GRAY =
             ContextCompat.getColor( ApplicationProvider.getApplicationContext(),
                     com.example.happybankbook.R.color.gray   );
+    public static final int YEAR=2025;
+    public static final int MONTH=2;
+    public static final String dateFormat="%d.%02d.%02d";
 
     public static void saveMemo(boolean isMain, TestMemoData data){
         if(isMain){
@@ -38,7 +41,7 @@ public class TestHelper {
     public static void selectDay(int id, int day){
         onView(withId(id)).perform(click());
         onView(withClassName(org.hamcrest.Matchers.equalTo(DatePicker.class.getName())))
-                .perform(setDate(2025, 2, day));
+                .perform(setDate(YEAR, MONTH, day));
         onView(withText("확인")).perform(click());
     }
 
