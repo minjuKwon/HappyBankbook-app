@@ -27,38 +27,38 @@ import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.ListPresenter;
-import com.example.happybankbook.presenterReturnInterface.GetReturnInt;
+import com.example.happybankbook.presenterReturnInterface.IntResultCallback;
 
 import java.util.ArrayList;
 
 public class MemoDetailFragment extends Fragment implements ListContract.View,View.OnClickListener{
 
     //일정 시간 후 화살표 이미지 투명화 위한 Runnable
-    private final Runnable postRunnable =new Runnable(){
+    private final Runnable changeImgAlphaRunnable =new Runnable(){
         @Override
         public void run() {
-            imgForward.setImageAlpha(0);
-            imgBack.setImageAlpha(0);
+            forwardImageView.setImageAlpha(0);
+            backImageView.setImageAlpha(0);
         }
     };
 
     private ViewPager2 viewPager;
-    private ImageView imgForward;
-    private ImageView imgBack;
+    private ImageView forwardImageView;
+    private ImageView backImageView;
 
     private ListPresenter presenter;
     private MemoAdapter adapter;
 
     private Handler handler;
 
-    private int count;
+    private int itemCount;
     private int fromDate;
     private int toDate;
-    private int rowCnt;
+    private int rowCount;
     private int currentPosition;
     private int adapterPosition;
-    private boolean isFirst=true;
-    private boolean isFirst2=true;
+    private boolean isFirstInteraction=true;
+    private boolean hasVisitedFirstPosition=true;
     private float fontSize=12;
 
     private Context mContext;
@@ -87,8 +87,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
 
                 fromDate=result.getInt(getResources().getString(R.string.fromDate));
                 toDate=result.getInt(getResources().getString(R.string.toDate));
-                count=result.getInt(getResources().getString(R.string.memoCount));
-                boolean isNewSort=result.getBoolean(getResources().getString(R.string.memoSort));
+                itemCount=result.getInt(getResources().getString(R.string.memoCount));
+                boolean isNewestSort=result.getBoolean(getResources().getString(R.string.memoSort));
 
                 if(fromDate>toDate){
                     int temp=fromDate;
@@ -96,11 +96,11 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
                     toDate=temp;
                 }
 
-                if(count==0){
-                    presenter.setReturnInt(new GetReturnInt() {
+                if(itemCount==0){
+                    presenter.setIntResultCallback(new IntResultCallback() {
                         @Override
-                        public void getInt(int value) {
-                            if(isNewSort){
+                        public void onIntResult(int value) {
+                            if(isNewestSort){
                                 presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,value);
                             }else{
                                 presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,value);
@@ -109,10 +109,10 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
                     });
                     presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
                 }else{
-                    if(isNewSort){
-                        presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
+                    if(isNewestSort){
+                        presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,itemCount);
                     }else{
-                        presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
+                        presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,itemCount);
                     }
                 }
 
@@ -147,8 +147,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         
         //SearchFragment에서 검색 후 키보드 내리지 않고 바로 viewpager 이동 하면,
         //계속 키보드 올려지는 경우 방지
-        InputMethodManager imm=(InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        InputMethodManager inputMethodManager=(InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override
@@ -177,13 +177,13 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
 
     public void init(View view){
         viewPager=view.findViewById(R.id.viewPager2);
-        imgForward=view.findViewById(R.id.imgForward);
-        imgBack=view.findViewById(R.id.imgBack);
-        TextView txtPrevious=view.findViewById(R.id.memoDetailPrevious);
+        forwardImageView=view.findViewById(R.id.imgForward);
+        backImageView=view.findViewById(R.id.imgBack);
+        TextView previousTextView=view.findViewById(R.id.memoDetailPrevious);
 
-        imgForward.setOnClickListener(this);
-        imgBack.setOnClickListener(this);
-        txtPrevious.setOnClickListener(this);
+        forwardImageView.setOnClickListener(this);
+        backImageView.setOnClickListener(this);
+        previousTextView.setOnClickListener(this);
 
         presenter=new ListPresenter();
         presenter.setView(this);
@@ -191,12 +191,12 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         adapter=new MemoAdapter(getContext(), MemoType.VIEWPAGER, fontSize);
         viewPager.setAdapter(adapter);
 
-        adapterPosition= adapter.getLocation();
+        adapterPosition= adapter.getRecyclerviewPosition();
 
-        presenter.setReturnInt(new GetReturnInt() {
+        presenter.setIntResultCallback(new IntResultCallback() {
             @Override
-            public void getInt(int value) {
-                rowCnt=value;
+            public void onIntResult(int value) {
+                rowCount=value;
             }
         });
         presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
@@ -207,25 +207,25 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.imgForward){
-            imgForward.setImageAlpha(255);
+            forwardImageView.setImageAlpha(255);
             //처음 1번째 아이템 클릭하여 이동한 viewpager 에서 이전 데이터로 이동하지 않은 오류 해결
-            if(!isFirst&&isFirst2&&adapterPosition==1&&currentPosition==1){
+            if(!isFirstInteraction&&hasVisitedFirstPosition&&adapterPosition==1&&currentPosition==1){
                 //notifyItemChanged 호출하면 화면 버벅거림
                 adapter.notifyDataSetChanged();
-                isFirst2=false;
+                hasVisitedFirstPosition=false;
                 //1번째 아이템이라도 viewpager 입장에서는 0번째라서 이전 버튼 누르면
                 //페이지 변화가 없기 때문에 임의로 변경.
                 currentPosition=0;
                 viewPager.setCurrentItem(currentPosition);
-                imgForward.setVisibility(View.INVISIBLE);
+                forwardImageView.setVisibility(View.INVISIBLE);
             }else{
                 viewPager.setCurrentItem(currentPosition-1,false);
             }
-            handler.postDelayed(postRunnable,3000);
+            handler.postDelayed(changeImgAlphaRunnable,3000);
         }else if(v.getId()==R.id.imgBack){
-            imgBack.setImageAlpha(255);
+            backImageView.setImageAlpha(255);
             viewPager.setCurrentItem(currentPosition+1,false);
-            handler.postDelayed(postRunnable,3000);
+            handler.postDelayed(changeImgAlphaRunnable,3000);
         }else if(v.getId()==R.id.memoDetailPrevious){
             ((MainActivity)mActivity).removeFragment(this);
         }
@@ -243,22 +243,22 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 //recyclerview position, viewpager position 더하여 클릭된 메모 데이터에서 슬라이드 하였을 때 다음 데이터 로딩 하기 위한 초기 값
-                if(isFirst){
+                if(isFirstInteraction){
                     currentPosition=position+adapterPosition;
                 }else{
                     currentPosition=position;
                 }
-                isFirst=false;
+                isFirstInteraction=false;
                 
                 if(currentPosition==0){
-                    imgForward.setVisibility(View.INVISIBLE);
-                    imgBack.setVisibility(View.VISIBLE);
-                }else if(currentPosition==(rowCnt-1)){
-                    imgForward.setVisibility(View.VISIBLE);
-                    imgBack.setVisibility(View.INVISIBLE);
+                    forwardImageView.setVisibility(View.INVISIBLE);
+                    backImageView.setVisibility(View.VISIBLE);
+                }else if(currentPosition==(rowCount-1)){
+                    forwardImageView.setVisibility(View.VISIBLE);
+                    backImageView.setVisibility(View.INVISIBLE);
                 }else{
-                    imgForward.setVisibility(View.VISIBLE);
-                    imgBack.setVisibility(View.VISIBLE);
+                    forwardImageView.setVisibility(View.VISIBLE);
+                    backImageView.setVisibility(View.VISIBLE);
                 }
 
             }

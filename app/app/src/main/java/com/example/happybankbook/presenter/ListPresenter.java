@@ -7,8 +7,8 @@ import com.example.happybankbook.R;
 import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.MemoDao;
 import com.example.happybankbook.db.MemoData;
-import com.example.happybankbook.presenterReturnInterface.GetReturnInt;
-import com.example.happybankbook.presenterReturnInterface.GetReturnLong;
+import com.example.happybankbook.presenterReturnInterface.IntResultCallback;
+import com.example.happybankbook.presenterReturnInterface.LongResultCallback;
 
 import java.util.ArrayList;
 
@@ -21,8 +21,8 @@ public class ListPresenter implements ListContract.Presenter {
 
     private ListContract.View view;
     private final CompositeDisposable disposable;
-    private GetReturnLong getReturnLong;
-    private GetReturnInt getReturnInt;
+    private LongResultCallback longResultCallback;
+    private IntResultCallback intResultCallback;
 
     public ListPresenter(){this.disposable=new CompositeDisposable();}
 
@@ -77,7 +77,7 @@ public class ListPresenter implements ListContract.Presenter {
                 Observable.just(memoDao)
                     .subscribeOn(Schedulers.io())
                     .subscribe(
-                        value->getReturnInt.getInt(value.getRowCount())
+                        value-> intResultCallback.onIntResult(value.getRowCount())
                     )
         );
     }
@@ -88,18 +88,18 @@ public class ListPresenter implements ListContract.Presenter {
                 Observable.just(memoDao)
                     .subscribeOn(Schedulers.io())
                     .subscribe(
-                        value->getReturnLong.getLong(value.getTotalPrice()),
+                        value-> longResultCallback.onLongResult(value.getTotalPrice()),
                         err->Toast.makeText(context,context.getResources().getText(R.string.totalPriceOver),Toast.LENGTH_LONG).show()
                     )
         );
     }
 
-    public void setReturnLong(GetReturnLong getReturnLong){
-        this.getReturnLong=getReturnLong;
+    public void setLongResultCallback(LongResultCallback callback){
+        this.longResultCallback = callback;
     }
 
-    public void setReturnInt(GetReturnInt getReturnInt){
-        this.getReturnInt=getReturnInt;
+    public void setIntResultCallback(IntResultCallback callback){
+        this.intResultCallback = callback;
     }
 
 }

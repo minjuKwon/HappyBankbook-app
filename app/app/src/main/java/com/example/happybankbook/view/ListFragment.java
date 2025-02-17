@@ -25,28 +25,28 @@ import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.ListPresenter;
-import com.example.happybankbook.presenterReturnInterface.GetReturnInt;
-import com.example.happybankbook.presenterReturnInterface.GetReturnLong;
+import com.example.happybankbook.presenterReturnInterface.IntResultCallback;
+import com.example.happybankbook.presenterReturnInterface.LongResultCallback;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ListFragment extends Fragment implements View.OnClickListener, ListContract.View{
 
-    private TextView txtPrice;
+    private TextView totalPriceTextView;
 
     private ListPresenter presenter;
     private MemoAdapter adapter;
 
-    private int count;
+    private int itemCount;
     private int fromDate;
     private int toDate;
-    private int addFragment=1;
+    private int clickCountCondition=1;
     private int textLine=2;
     private float fontSize=15;
-    private boolean isNewSort;
-    private boolean textEllipsize=true;
-    private boolean isStop;
+    private boolean isNewestSort;
+    private boolean hasTextEllipsize=true;
+    private boolean isInitialization;
 
     private Activity mActivity;
 
@@ -63,7 +63,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         super.onCreate(savedInstanceState);
 
         SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.isStop),Context.MODE_PRIVATE);
-        isStop=preferences.getBoolean(getResources().getString(R.string.stop),false);
+        isInitialization=preferences.getBoolean(getResources().getString(R.string.stop),false);
 
         //ConditionFragment 정렬 값 받기
         getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.memoRequestKey), this, new FragmentResultListener() {
@@ -71,8 +71,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 fromDate=result.getInt(getResources().getString(R.string.fromDate));
                 toDate=result.getInt(getResources().getString(R.string.toDate));
-                count=result.getInt(getResources().getString(R.string.memoCount));
-                isNewSort=result.getBoolean(getResources().getString(R.string.memoSort));
+                itemCount=result.getInt(getResources().getString(R.string.memoCount));
+                isNewestSort =result.getBoolean(getResources().getString(R.string.memoSort));
 
                 keepCondition();
             }
@@ -81,7 +81,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.removeFragment), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                addFragment=result.getInt(getResources().getString(R.string.ConditionFragment));
+                clickCountCondition=result.getInt(getResources().getString(R.string.ConditionFragment));
             }
         });
         //변경 font size 값
@@ -104,8 +104,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.textEllipsize1), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                textEllipsize=result.getBoolean(getResources().getString(R.string.textEllipsize));
-                adapter.setTextEllipsize(textEllipsize);
+                hasTextEllipsize=result.getBoolean(getResources().getString(R.string.textEllipsize));
+                adapter.setTextEllipsize(hasTextEllipsize);
             }
         });
     }
@@ -123,11 +123,11 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         super.onViewCreated(view, savedInstanceState);
 
         SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.listTextSetting),Context.MODE_PRIVATE);
-        textEllipsize=preferences.getBoolean(getResources().getString(R.string.textEllipsize),true);
+        hasTextEllipsize=preferences.getBoolean(getResources().getString(R.string.textEllipsize),true);
         textLine=preferences.getInt(getResources().getString(R.string.textLine),2);
         fontSize=preferences.getFloat(getResources().getString(R.string.fontSize),15);
 
-        adapter.setTextEllipsize(textEllipsize);
+        adapter.setTextEllipsize(hasTextEllipsize);
         adapter.setTextLine(textLine);
         adapter.setFont(fontSize);
     }
@@ -142,10 +142,10 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         getParentFragmentManager().setFragmentResult(getResources().getString(R.string.recyclerStop), bundle);
         resetTextSetting();
 
-        isStop=true;
+        isInitialization=true;
         SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.isStop), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(getResources().getString(R.string.stop),isStop);
+        editor.putBoolean(getResources().getString(R.string.stop),isInitialization);
         editor.apply();
     }
 
@@ -162,38 +162,38 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     }
 
     private void init(View v){
-        TextView txtSearch=v.findViewById(R.id.txtSearch);
-        TextView txtCondition=v.findViewById(R.id.txtCondition);
-        txtPrice=v.findViewById(R.id.priceTotalTxt);
+        TextView searchTextView=v.findViewById(R.id.txtSearch);
+        TextView conditionTextView=v.findViewById(R.id.txtCondition);
+        totalPriceTextView=v.findViewById(R.id.priceTotalTxt);
         RecyclerView recyclerView=v.findViewById(R.id.recyclerMemo);
 
-        txtSearch.setOnClickListener(this);
-        txtCondition.setOnClickListener(this);
+        searchTextView.setOnClickListener(this);
+        conditionTextView.setOnClickListener(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, fontSize, textLine, textEllipsize);
+        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, fontSize, textLine, hasTextEllipsize);
         recyclerView.setAdapter(adapter);
 
         presenter=new ListPresenter();
         presenter.setView(this);
 
-        boolean visitedViewpager=adapter.getVisitedViewpager();
+        boolean hasVisitedViewPager=adapter.hasVisitedViewpager();
         //viewpager 방문 후 ListFragment 돌아온 경우 검색 조건 값 유지
         //viewpager 제외한 다른 프래그먼트 방문 후, ListFragment 돌아온 경우는 데이터 조건을 초기화하여 모든 데이터 보여줌
-        if(!visitedViewpager||isStop){
+        if(!hasVisitedViewPager||isInitialization){
             presenter.getData(RoomDB.getInstance(getContext()).memoDao());
         }else{
             keepCondition();
         }
 
         //메모 총합 표시
-        presenter.setReturnLong(new GetReturnLong() {
+        presenter.setLongResultCallback(new LongResultCallback() {
             @Override
-            public void getLong(long value) {
+            public void onLongResult(long value) {
                 String priceFormatPattern="###,###";
                 DecimalFormat priceFormat = new DecimalFormat(priceFormatPattern);
                 String strPrice= priceFormat.format(value);
-                txtPrice.setText(strPrice);
+                totalPriceTextView.setText(strPrice);
             }
         });
         presenter.getSumPrice(RoomDB.getInstance(getContext()).memoDao(), getContext());
@@ -206,9 +206,9 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
             ((MainActivity)mActivity).replaceFragment(new SearchFragment());
         }else if(v.getId()==R.id.txtCondition){
             //addFragment 1일 때만 addFragment()하여 여러 번 클릭 시 중복 생성을 막음
-            if(addFragment==1){
+            if(clickCountCondition==1){
                 ((MainActivity)mActivity).addFragment(new ConditionFragment());
-                ++addFragment;
+                ++clickCountCondition;
             }
         }
     }
@@ -225,11 +225,11 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
             toDate=temp;
         }
 
-        if(count==0){
-            presenter.setReturnInt(new GetReturnInt() {
+        if(itemCount==0){
+            presenter.setIntResultCallback(new IntResultCallback() {
                 @Override
-                public void getInt(int value) {
-                    if(isNewSort){
+                public void onIntResult(int value) {
+                    if(isNewestSort){
                         presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,value);
                     }else{
                         presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,value);
@@ -238,10 +238,10 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
             });
             presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
         }else{
-            if(isNewSort){
-                presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
+            if(isNewestSort){
+                presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,itemCount);
             }else{
-                presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,count);
+                presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,itemCount);
             }
         }
     }
@@ -249,7 +249,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     private void resetTextSetting(){
         SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.listTextSetting), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(getResources().getString(R.string.textEllipsize), textEllipsize);
+        editor.putBoolean(getResources().getString(R.string.textEllipsize), hasTextEllipsize);
         editor.putInt(getResources().getString(R.string.textLine), textLine);
         editor.putFloat(getResources().getString(R.string.fontSize), fontSize);
 

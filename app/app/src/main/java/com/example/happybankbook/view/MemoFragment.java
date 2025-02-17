@@ -36,19 +36,19 @@ import com.example.happybankbook.R;
 import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.MemoPresenter;
-import com.example.happybankbook.presenterReturnInterface.GetReturnInt;
+import com.example.happybankbook.presenterReturnInterface.IntResultCallback;
 
 public class MemoFragment extends Fragment implements View.OnClickListener{
 
-    private TextView txtDate;
-    private ImageView img;
-    private EditText editContent;
+    private TextView dateTextView;
+    private ImageView contentImageView;
+    private EditText contentEditText;
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private MemoPresenter presenter;
     private Context mContext;
     private Activity mActivity;
     private float fontSize=12;
-    private boolean isEditClear=false;
+    private boolean isClearContentTxt=false;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -67,10 +67,10 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 fontSize=result.getFloat(getResources().getString(R.string.fontSize));
-                editContent.setTextSize(fontSize);
+                contentEditText.setTextSize(fontSize);
             }
         });
-       isEditClear=true;
+        isClearContentTxt=true;
     }
 
     @Override
@@ -84,25 +84,25 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((MainActivity)mActivity).setNowDate(txtDate);
+        ((MainActivity)mActivity).setCurrentDate(dateTextView);
         getGallery();
 
         SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.memoTextSetting),Context.MODE_PRIVATE);
         fontSize=preferences.getFloat(getResources().getString(R.string.fontSize),12);
-        editContent.setTextSize(fontSize);
+        contentEditText.setTextSize(fontSize);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        if(isEditClear){ editContent.setText("");}
+        if(isClearContentTxt){ contentEditText.setText("");}
     }
 
     @Override
     public void onStop() {
         super.onStop();
         resetTextSetting();
-        isEditClear=false;
+        isClearContentTxt=false;
     }
 
     @Override
@@ -122,12 +122,12 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
         activityResultLauncher=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result -> {
             if(result.getResultCode()==RESULT_OK&&result.getData()!=null){
-                img.setVisibility(View.VISIBLE);
+                contentImageView.setVisibility(View.VISIBLE);
                 Uri imageUri=result.getData().getData();
                 final MimeTypeMap mime = MimeTypeMap.getSingleton();
                 String extension = mime.getExtensionFromMimeType(mContext.getContentResolver().getType(imageUri));
-                img.setTag(extension);
-                Glide.with(mContext).load(imageUri).into(img);
+                contentImageView.setTag(extension);
+                Glide.with(mContext).load(imageUri).into(contentImageView);
             }else if(result.getData()!=null){
                 Toast.makeText(getContext(),getResources().getString(R.string.cantLoadImg),Toast.LENGTH_LONG).show();
             }
@@ -136,23 +136,23 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     }
 
     private void init(View view){
-        txtDate=view.findViewById(R.id.txtMemoDate);
-        TextView txtAddPicture=view.findViewById(R.id.addPicture);
-        TextView txtSave=view.findViewById(R.id.save);
-        img=view.findViewById(R.id.imageView);
-        editContent=view.findViewById(R.id.editMemo);
+        dateTextView=view.findViewById(R.id.txtMemoDate);
+        TextView addPictureTextView=view.findViewById(R.id.addPicture);
+        TextView saveTextView=view.findViewById(R.id.save);
+        contentImageView=view.findViewById(R.id.imageView);
+        contentEditText=view.findViewById(R.id.editMemo);
 
         presenter=new MemoPresenter();
 
-        txtDate.setOnClickListener(this);
-        txtAddPicture.setOnClickListener(this);
-        txtSave.setOnClickListener(this);
+        dateTextView.setOnClickListener(this);
+        addPictureTextView.setOnClickListener(this);
+        saveTextView.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
        if(v.getId()==R.id.txtMemoDate){
-           ((MainActivity)mActivity).setDate(txtDate,getContext());
+           ((MainActivity)mActivity).setDate(dateTextView,getContext());
        }else if(v.getId()==R.id.addPicture){
            loadImage();
        }else if(v.getId()==R.id.save){
@@ -174,50 +174,50 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_happy);
 
-        TextView txtOk=dialog.findViewById(R.id.ok);
-        TextView txtCancel=dialog.findViewById(R.id.cancel);
-        EditText editHappy=dialog.findViewById(R.id.editHappy);
+        TextView okTextView=dialog.findViewById(R.id.ok);
+        TextView cancelTextView=dialog.findViewById(R.id.cancel);
+        EditText happyValueEditText=dialog.findViewById(R.id.editHappy);
 
         MemoData data=new MemoData();
 
-        int intDate=((MainActivity)mActivity).dateIntToString(txtDate);
-        data.setDate(intDate);
+        int dateInt=((MainActivity)mActivity).convertDateToInt(dateTextView);
+        data.setDate(dateInt);
 
-        presenter.setReturnInt(new GetReturnInt() {
+        presenter.setIntResultCallback(new IntResultCallback() {
             @Override
-            public void getInt(int value) {
+            public void onIntResult(int value) {
                 data.setNum(value+1);
             }
         });
-        presenter.getDataRange(RoomDB.getInstance(getContext()).memoDao(), intDate);
+        presenter.getDataRange(RoomDB.getInstance(getContext()).memoDao(), dateInt);
 
         //현재 날짜 받기
-        String strNowDate=((MainActivity)mActivity).setNowDate();
-        String [] strDate=strNowDate.split("\\.");
-        int intNowDate=Integer.parseInt(strDate[0]+strDate[1]+strDate[2]);
+        String currentDateStr=((MainActivity)mActivity).setCurrentDate();
+        String [] dateStr=currentDateStr.split("\\.");
+        int currentDateInt=Integer.parseInt(dateStr[0]+dateStr[1]+dateStr[2]);
 
         //설정한 날짜가 현재 날짜와 다르면, 중간에 메모가 삽입이 되는 것처럼 보이게 하기 위해 table num 값 update
-        if(intDate!=intNowDate){
-            presenter.changeNum(RoomDB.getInstance(getContext()).memoDao(), intDate);
+        if(dateInt!=currentDateInt){
+            presenter.changeNum(RoomDB.getInstance(getContext()).memoDao(), dateInt);
         }
 
-        String content=editContent.getText().toString();
+        String content=contentEditText.getText().toString();
         data.setContent(content);
 
-        boolean type=true;
-        if(img.getVisibility()==View.VISIBLE){
+        boolean hasCorrectType=true;
+        if(contentImageView.getVisibility()==View.VISIBLE){
             //image mime type 확인
-            if(!img.getTag().equals("png")&&!img.getTag().equals("jpeg")&&!img.getTag().equals("jpg")){
+            if(!contentImageView.getTag().equals("png")&&!contentImageView.getTag().equals("jpeg")&&!contentImageView.getTag().equals("jpg")){
                 Toast.makeText(mContext,getText(R.string.imageType),Toast.LENGTH_SHORT).show();
-                type=false;
+                hasCorrectType=false;
             }else{
-                BitmapDrawable drawable = (BitmapDrawable)img.getDrawable();
+                BitmapDrawable drawable = (BitmapDrawable)contentImageView.getDrawable();
                 Bitmap bitmap = drawable.getBitmap();
                 data.setBitmap(bitmap);
             }
         }
 
-        txtOk.setOnClickListener(new View.OnClickListener() {
+        okTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -225,15 +225,15 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
                     Toast.makeText(getContext(),getResources().getText(R.string.memoContentEmpty),Toast.LENGTH_SHORT).show();
                 }
 
-                String strPrice=editHappy.getText().toString().trim();
-                if(TextUtils.isEmpty(strPrice)){
+                String priceStr=happyValueEditText.getText().toString().trim();
+                if(TextUtils.isEmpty(priceStr)){
                     Toast.makeText(getContext(),getResources().getText(R.string.memoPriceEmpty),Toast.LENGTH_SHORT).show();
                 }
 
-                if(!TextUtils.isEmpty(content)&&!TextUtils.isEmpty(strPrice)){
+                if(!TextUtils.isEmpty(content)&&!TextUtils.isEmpty(priceStr)){
                     try{
-                        int price=Integer.parseInt(strPrice);
-                        data.setPrice(price);
+                        int priceInt=Integer.parseInt(priceStr);
+                        data.setPrice(priceInt);
 
                         presenter.insertMemo(RoomDB.getInstance(getContext()).memoDao(),data);
                         dialog.dismiss();
@@ -246,9 +246,9 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
             }
         });
 
-        txtCancel.setOnClickListener((v)-> dialog.dismiss());
+        cancelTextView.setOnClickListener((v)-> dialog.dismiss());
 
-        if(type){
+        if(hasCorrectType){
             dialog.show();
         }
 

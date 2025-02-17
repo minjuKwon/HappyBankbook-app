@@ -3,7 +3,7 @@ package com.example.happybankbook.presenter;
 import com.example.happybankbook.contract.MemoContract;
 import com.example.happybankbook.db.MemoDao;
 import com.example.happybankbook.db.MemoData;
-import com.example.happybankbook.presenterReturnInterface.GetReturnInt;
+import com.example.happybankbook.presenterReturnInterface.IntResultCallback;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -12,7 +12,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class MemoPresenter implements MemoContract.Presenter {
 
     private final CompositeDisposable disposable;
-    private GetReturnInt getReturnInt;
+    private IntResultCallback callback;
 
     public MemoPresenter(){this.disposable=new CompositeDisposable();}
 
@@ -39,7 +39,7 @@ public class MemoPresenter implements MemoContract.Presenter {
                 Observable.just(memoDao)
                         .subscribeOn(Schedulers.io())
                         .subscribe(
-                                value->getReturnInt.getInt(value.getRangeCount(date))
+                                value-> callback.onIntResult(value.getRangeCount(date))
                         )
         );
     }
@@ -55,8 +55,8 @@ public class MemoPresenter implements MemoContract.Presenter {
         );
     }
 
-    public void setReturnInt(GetReturnInt getReturnInt){
-        this.getReturnInt=getReturnInt;
+    public void setIntResultCallback(IntResultCallback callback){
+        this.callback = callback;
     }
 
 }

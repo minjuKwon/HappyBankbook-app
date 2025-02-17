@@ -29,8 +29,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.happybankbook.presenterReturnInterface.GetReturnMemoDataList;
-import com.example.happybankbook.presenterReturnInterface.GetReturnStringBuffer;
+import com.example.happybankbook.presenterReturnInterface.MemoDataListCallback;
+import com.example.happybankbook.presenterReturnInterface.StringBufferResultCallback;
 import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.PdfRunnable;
 import com.example.happybankbook.R;
@@ -79,8 +79,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     private ActivityResultLauncher<String> requestPermissionLauncher ;
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
-    private TextView txtEllipsis;
-    private RadioButton radioSingle, radioMull, radioOne, radioTwo, radioThree;
+    private TextView ellipsisTextView;
+    private RadioButton singleLineRadioButton, MultiLineRadioButton, fontOneRadioButton, fontTwoRadioButton, fontThreeRadioButton;
 
     private OutputPresenter presenter;
     private FileRunnable fileRunnable;
@@ -89,7 +89,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     private final String PERMISSION= Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
     private String fileExtension;
-    private boolean isEllipsize=false;
+    private boolean hasEllipsize=false;
     private int checkLine, checkFontSize;
 
     private StringBuffer buffer;
@@ -157,24 +157,24 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         super.onViewCreated(view, savedInstanceState);
 
         SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.settingInfo),Context.MODE_PRIVATE);
-        isEllipsize=preferences.getBoolean(getResources().getString(R.string.isEllipsize),true);
+        hasEllipsize=preferences.getBoolean(getResources().getString(R.string.isEllipsize),true);
         checkLine=preferences.getInt(getResources().getString(R.string.checkLine),R.id.radioLineMul);
         checkFontSize=preferences.getInt(getResources().getString(R.string.checkFontSize),R.id.radioFontOne);
 
         setEllipsize();
 
         if(checkLine==R.id.radioLineSingle){
-            radioLine(true, false, R.color.black, R.color.gray);
+            setLineRadioButton(true, false, R.color.black, R.color.gray);
         }else if(checkLine==R.id.radioLineMul){
-            radioLine(false, true, R.color.gray, R.color.black);
+            setLineRadioButton(false, true, R.color.gray, R.color.black);
         }
 
         if(checkFontSize==R.id.radioFontOne){
-            radioFont(true, false, false, R.color.black, R.color.gray, R.color.gray);
+            setFontRadioButton(true, false, false, R.color.black, R.color.gray, R.color.gray);
         }else if(checkFontSize==R.id.radioFontTwo){
-            radioFont(false, true, false, R.color.gray, R.color.black, R.color.gray);
+            setFontRadioButton(false, true, false, R.color.gray, R.color.black, R.color.gray);
         }else if(checkFontSize==R.id.radioFontThree){
-            radioFont(false, false, true, R.color.gray, R.color.gray, R.color.black);
+            setFontRadioButton(false, false, true, R.color.gray, R.color.gray, R.color.black);
         }
     }
 
@@ -193,38 +193,38 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     }
 
     private void init(View view){
-        TextView txtManual=view.findViewById(R.id.manual);
-        txtEllipsis=view.findViewById(R.id.ellipsis);
-        TextView txtPdf=view.findViewById(R.id.pdf);
-        TextView txtExcel=view.findViewById(R.id.excel);
-        TextView txtTxt=view.findViewById(R.id.txt);
-        TextView txtOpenSource=view.findViewById(R.id.openSource);
+        TextView manualTextView=view.findViewById(R.id.manual);
+        ellipsisTextView=view.findViewById(R.id.ellipsis);
+        TextView pdfTextView=view.findViewById(R.id.pdf);
+        TextView excelTextView=view.findViewById(R.id.excel);
+        TextView txtTextView=view.findViewById(R.id.txt);
+        TextView openSourceTextView=view.findViewById(R.id.openSource);
         RadioGroup radioGroupLine=view.findViewById(R.id.radioLineDisplay);
-        radioSingle=view.findViewById(R.id.radioLineSingle);
-        radioMull=view.findViewById(R.id.radioLineMul);
+        singleLineRadioButton=view.findViewById(R.id.radioLineSingle);
+        MultiLineRadioButton=view.findViewById(R.id.radioLineMul);
         RadioGroup radioGroupFont=view.findViewById(R.id.radioFont);
-        radioOne=view.findViewById(R.id.radioFontOne);
-        radioTwo=view.findViewById(R.id.radioFontTwo);
-        radioThree=view.findViewById(R.id.radioFontThree);
+        fontOneRadioButton=view.findViewById(R.id.radioFontOne);
+        fontTwoRadioButton=view.findViewById(R.id.radioFontTwo);
+        fontThreeRadioButton=view.findViewById(R.id.radioFontThree);
 
         presenter=new OutputPresenter();
 
-        radioSingle.setChecked(false);
-        radioMull.setChecked(true);
+        singleLineRadioButton.setChecked(false);
+        MultiLineRadioButton.setChecked(true);
 
-        radioOne.setChecked(true);
-        radioTwo.setChecked(false);
-        radioThree.setChecked(false);
+        fontOneRadioButton.setChecked(true);
+        fontTwoRadioButton.setChecked(false);
+        fontThreeRadioButton.setChecked(false);
 
         radioGroupLine.setOnCheckedChangeListener(this);
         radioGroupFont.setOnCheckedChangeListener(this);
 
-        txtManual.setOnClickListener(this);
-        txtEllipsis.setOnClickListener(this);
-        txtPdf.setOnClickListener(this);
-        txtExcel.setOnClickListener(this);
-        txtTxt.setOnClickListener(this);
-        txtOpenSource.setOnClickListener(this);
+        manualTextView.setOnClickListener(this);
+        ellipsisTextView.setOnClickListener(this);
+        pdfTextView.setOnClickListener(this);
+        excelTextView.setOnClickListener(this);
+        txtTextView.setOnClickListener(this);
+        openSourceTextView.setOnClickListener(this);
     }
 
     @Override
@@ -235,9 +235,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
         if(v.getId()==R.id.ellipsis){
             setEllipsize();
-            boolean check=!isEllipsize;
-            changeEllipsize(check,getResources().getString(R.string.textEllipsize1));
-            changeEllipsize(check,getResources().getString(R.string.textEllipsize2));
+            boolean isCheckEllipsize=!hasEllipsize;
+            changeEllipsize(isCheckEllipsize,getResources().getString(R.string.textEllipsize1));
+            changeEllipsize(isCheckEllipsize,getResources().getString(R.string.textEllipsize2));
         }else if(v.getId()==R.id.pdf){
             fileExtension="pdf";
             makeExportDialog(Build.VERSION.SDK_INT, pdfType);
@@ -259,12 +259,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
         if(group.getId()==R.id.radioLineDisplay){
             if(checkedId==R.id.radioLineSingle){
-                radioLine(true, false, R.color.black, R.color.gray);
+                setLineRadioButton(true, false, R.color.black, R.color.gray);
                 changeTextLine(1,getResources().getString(R.string.textLine1));
                 changeTextLine(1,getResources().getString(R.string.textLine2));
                 checkLine=R.id.radioLineSingle;
             }else if(checkedId==R.id.radioLineMul){
-                radioLine(false, true, R.color.gray, R.color.black);
+                setLineRadioButton(false, true, R.color.gray, R.color.black);
                 changeTextLine(2,getResources().getString(R.string.textLine1));
                 changeTextLine(2,getResources().getString(R.string.textLine2));
                 checkLine=R.id.radioLineMul;
@@ -273,21 +273,21 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
         else if(group.getId()==R.id.radioFont){
             if(checkedId==R.id.radioFontOne){
-                radioFont(true, false, false, R.color.black, R.color.gray, R.color.gray);
+                setFontRadioButton(true, false, false, R.color.black, R.color.gray, R.color.gray);
                 changeFont(15,getResources().getString(R.string.fontSize1));
                 changeFont(15,getResources().getString(R.string.fontSize2));
                 changeFont(12,getResources().getString(R.string.fontSize3));
                 changeFont(12,getResources().getString(R.string.fontSize4));
                 checkFontSize=R.id.radioFontOne;
             }else if(checkedId==R.id.radioFontTwo){
-                radioFont(false, true, false, R.color.gray, R.color.black, R.color.gray);
+                setFontRadioButton(false, true, false, R.color.gray, R.color.black, R.color.gray);
                 changeFont(18,getResources().getString(R.string.fontSize1));
                 changeFont(18,getResources().getString(R.string.fontSize2));
                 changeFont(15,getResources().getString(R.string.fontSize3));
                 changeFont(15,getResources().getString(R.string.fontSize4));
                 checkFontSize=R.id.radioFontTwo;
             }else if(checkedId==R.id.radioFontThree){
-                radioFont(false, false, true, R.color.gray, R.color.gray, R.color.black);
+                setFontRadioButton(false, false, true, R.color.gray, R.color.gray, R.color.black);
                 changeFont(21,getResources().getString(R.string.fontSize1));
                 changeFont(21,getResources().getString(R.string.fontSize2));
                 changeFont(18,getResources().getString(R.string.fontSize3));
@@ -306,20 +306,20 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         dialog.show();
     }
 
-    public void radioLine(boolean b1, boolean b2, int c1, int c2){
-        radioSingle.setChecked(b1);
-        radioMull.setChecked(b2);
-        radioSingle.setTextColor(ContextCompat.getColor(mContext,c1));
-        radioMull.setTextColor(ContextCompat.getColor(mContext,c2));
+    public void setLineRadioButton(boolean b1, boolean b2, int c1, int c2){
+        singleLineRadioButton.setChecked(b1);
+        MultiLineRadioButton.setChecked(b2);
+        singleLineRadioButton.setTextColor(ContextCompat.getColor(mContext,c1));
+        MultiLineRadioButton.setTextColor(ContextCompat.getColor(mContext,c2));
     }
 
-    public void radioFont(boolean b1, boolean b2, boolean b3, int c1, int c2, int c3){
-        radioOne.setChecked(b1);
-        radioTwo.setChecked(b2);
-        radioThree.setChecked(b3);
-        radioOne.setTextColor(ContextCompat.getColor(mContext,c1));
-        radioTwo.setTextColor(ContextCompat.getColor(mContext,c2));
-        radioThree.setTextColor(ContextCompat.getColor(mContext,c3));
+    public void setFontRadioButton(boolean b1, boolean b2, boolean b3, int c1, int c2, int c3){
+        fontOneRadioButton.setChecked(b1);
+        fontTwoRadioButton.setChecked(b2);
+        fontThreeRadioButton.setChecked(b3);
+        fontOneRadioButton.setTextColor(ContextCompat.getColor(mContext,c1));
+        fontTwoRadioButton.setTextColor(ContextCompat.getColor(mContext,c2));
+        fontThreeRadioButton.setTextColor(ContextCompat.getColor(mContext,c3));
     }
 
     public void changeFont(float size, String key){
@@ -337,12 +337,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
    }
 
    public void setEllipsize(){
-        if(isEllipsize){
-            txtEllipsis.setTextColor(ContextCompat.getColor(mContext,R.color.black));
-            isEllipsize=false;
+        if(hasEllipsize){
+            ellipsisTextView.setTextColor(ContextCompat.getColor(mContext,R.color.black));
+            hasEllipsize=false;
         }else{
-            txtEllipsis.setTextColor(ContextCompat.getColor(mContext,R.color.gray));
-            isEllipsize=true;
+            ellipsisTextView.setTextColor(ContextCompat.getColor(mContext,R.color.gray));
+            hasEllipsize=true;
         }
    }
 
@@ -356,7 +356,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     public void resetRadioButton(){
         SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.settingInfo), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(getResources().getString(R.string.isEllipsize), !isEllipsize);
+        editor.putBoolean(getResources().getString(R.string.isEllipsize), !hasEllipsize);
         editor.putInt(getResources().getString(R.string.checkLine), checkLine);
         editor.putInt(getResources().getString(R.string.checkFontSize), checkFontSize);
 
@@ -386,10 +386,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     }
 
     public void exportPdf(String extension){
-        presenter.getDataToPdf(RoomDB.getInstance(getContext()).memoDao());
-        presenter.setReturnMemoDataList(new GetReturnMemoDataList() {
+        presenter.getConvertedPdf(RoomDB.getInstance(getContext()).memoDao());
+        presenter.setMemoDataListCallback(new MemoDataListCallback() {
             @Override
-            public void getMemoDataList(ArrayList<MemoData> list) {
+            public void onMemoDataListResult(ArrayList<MemoData> list) {
                 PdfRunnable runnable=new PdfRunnable(list, getContext(), extension);
                 Thread thread=new Thread(runnable);
                 thread.start();
@@ -398,10 +398,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     }
 
     public void exportPdf(Uri uri){
-        presenter.getDataToPdf(RoomDB.getInstance(getContext()).memoDao());
-        presenter.setReturnMemoDataList(new GetReturnMemoDataList() {
+        presenter.getConvertedPdf(RoomDB.getInstance(getContext()).memoDao());
+        presenter.setMemoDataListCallback(new MemoDataListCallback() {
             @Override
-            public void getMemoDataList(ArrayList<MemoData> list) {
+            public void onMemoDataListResult(ArrayList<MemoData> list) {
                 PdfRunnable runnable=new PdfRunnable(list, getContext(),uri);
                 Thread thread=new Thread(runnable);
                 thread.start();
@@ -411,11 +411,11 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     public void exportTxtFile(char split, String extension){
         buffer=new StringBuffer();
-        presenter.getDataToFile(RoomDB.getInstance(getContext()).memoDao(),split);
+        presenter.getConvertedFile(RoomDB.getInstance(getContext()).memoDao(),split);
 
-        presenter.setGetReturnValue(new GetReturnStringBuffer() {
+        presenter.setStringBufferResultCallback(new StringBufferResultCallback() {
             @Override
-            public void getStringBuffer(StringBuffer stringBuffer) {
+            public void onStringBufferResult(StringBuffer stringBuffer) {
                 buffer=stringBuffer;
                 fileRunnable=new FileRunnable(buffer, extension);
                 fileThread=new Thread(fileRunnable);
@@ -426,11 +426,11 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     public void exportTxtFile(Uri uri, char split){
         buffer=new StringBuffer();
-        presenter.getDataToFile(RoomDB.getInstance(getContext()).memoDao(),split);
+        presenter.getConvertedFile(RoomDB.getInstance(getContext()).memoDao(),split);
 
-        presenter.setGetReturnValue(new GetReturnStringBuffer() {
+        presenter.setStringBufferResultCallback(new StringBufferResultCallback() {
             @Override
-            public void getStringBuffer(StringBuffer stringBuffer) {
+            public void onStringBufferResult(StringBuffer stringBuffer) {
                 buffer=stringBuffer;
                 fileRunnable=new FileRunnable(uri, buffer);
                 fileThread=new Thread(fileRunnable);
@@ -445,13 +445,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         BufferedWriter bufferedWriter=null;
 
         try{
-            String strContent = String.valueOf(content);
+            String contentStr = String.valueOf(content);
             fileOutputStream=getDirectory(uri, mContext);
-            if("null".equals(strContent)||"".equals(strContent)){
+            if("null".equals(contentStr)||"".equals(contentStr)){
                 Toast.makeText(getContext(),getResources().getText(R.string.noMemo),Toast.LENGTH_LONG).show();
             }else{
                 bufferedWriter=new BufferedWriter(new OutputStreamWriter(fileOutputStream));
-                bufferedWriter.write(strContent);
+                bufferedWriter.write(contentStr);
             }
         }catch(IOException e){
             e.printStackTrace();
@@ -476,16 +476,16 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         BufferedWriter writer=null;
 
         try{
-            boolean isFile=file.createNewFile();
-            if(isFile){
+            boolean hasFile=file.createNewFile();
+            if(hasFile){
                 fw = new FileWriter(file);
                 writer = new BufferedWriter(fw);
 
-                String strContent = String.valueOf(content);
-                if("null".equals(strContent)||"".equals(strContent)){
+                String contentStr = String.valueOf(content);
+                if("null".equals(contentStr)||"".equals(contentStr)){
                     Toast.makeText(getContext(),getResources().getText(R.string.noMemo),Toast.LENGTH_LONG).show();
                 }else{
-                    writer.write(strContent);
+                    writer.write(contentStr);
                 }
             }
         }catch(IOException e){

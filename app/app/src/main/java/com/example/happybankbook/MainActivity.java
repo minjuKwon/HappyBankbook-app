@@ -94,13 +94,13 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }
 
-    public String setNowDate(){
+    public String setCurrentDate(){
         SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd",java.util.Locale.getDefault());
         Date date=new Date();
         return dateFormat.format(date);
     }
 
-    public void setNowDate(TextView textView){
+    public void setCurrentDate(TextView textView){
         SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd",java.util.Locale.getDefault());
         Date date=new Date();
         textView.setText(dateFormat.format(date));
@@ -124,10 +124,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public int dateIntToString(TextView textView){
-        String [] strDate=textView.getText().toString().split("\\.");
-        int intDate=Integer.parseInt(strDate[0]+strDate[1]+strDate[2]);
-        return intDate;
+    public int convertDateToInt(TextView textView){
+        String [] dateStr=textView.getText().toString().split("\\.");
+        int dateInt=Integer.parseInt(dateStr[0]+dateStr[1]+dateStr[2]);
+        return dateInt;
     }
 
 

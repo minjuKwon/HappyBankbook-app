@@ -17,27 +17,27 @@ import java.util.List;
 
 public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
-    private final Context context;
+    private final Context mContext;
     private final MemoType memoType;
     static private List<MemoData> dataList=new ArrayList<>();
 
-    private static int location;
+    private static int recyclerviewPosition;
     private float fontSize;
     private int textLine;
-    private boolean isFirst=true;
-    private boolean isFirst2=true;
+    private boolean isFirstInteraction=true;
+    private boolean isRecyclable=true;
     private boolean textEllipsize;
-    private boolean condition=true;
-    private boolean visitedViewpager;
+    private boolean hasReceivedCondition=true;
+    private boolean hasVisitedViewPager ;
 
     public MemoAdapter(Context context, MemoType memoType, float fontSize){
-        this.context=context;
+        this.mContext=context;
         this.memoType=memoType;
         this.fontSize=fontSize;
     }
 
     public MemoAdapter(Context context, MemoType memoType, float fontSize, int textLine, boolean textEllipsize){
-        this.context=context;
+        this.mContext=context;
         this.memoType=memoType;
         this.fontSize=fontSize;
         this.textLine=textLine;
@@ -56,7 +56,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         }else if(memoType==MemoType.VIEWPAGER){
             view=LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_memo_detail_item,parent,false);
             //viewPager 후 recyclerView로 돌아 왔을 때 condition 값을 유지 하기 위한 변수
-            visitedViewpager=true;
+            hasVisitedViewPager =true;
             return new ViewPagerViewHolder(view);
         }
 
@@ -72,32 +72,32 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         if(holder instanceof RecyclerViewHolder){
             RecyclerViewHolder recyclerViewHolder=(RecyclerViewHolder)holder;
             data=dataList.get(recyclerViewHolder.getAdapterPosition());
-            recyclerViewHolder.onBind(data, context, position, fontSize, textLine, textEllipsize);
+            recyclerViewHolder.onBind(data, mContext, position, fontSize, textLine, textEllipsize);
             //recyclerview position 얻기 위한 클릭 이벤트
             recyclerViewHolder.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick() {
-                    ((MainActivity)context).addFragment(new MemoDetailFragment());
-                    location= recyclerViewHolder.getAdapterPosition();
+                    ((MainActivity)mContext).addFragment(new MemoDetailFragment());
+                    recyclerviewPosition= recyclerViewHolder.getAdapterPosition();
                 }
             });
 
         }else if(holder instanceof ViewPagerViewHolder){
             ViewPagerViewHolder viewPagerViewHolder=(ViewPagerViewHolder) holder;
             data=dataList.get(viewPagerViewHolder.getAdapterPosition());
-            if(condition){//메모 정렬 후 onBind 호출하기 위한 변수.
+            if(hasReceivedCondition){//메모 정렬 후 onBind 호출하기 위한 변수.
                 //recyclerview position, viewpager position 더하여 클릭한 메모를 시작점으로 viewpager 화면 넘기게 하기 위한 초기 값
-                if(isFirst){
-                    data=dataList.get(viewPagerViewHolder.getAdapterPosition()+location);
+                if(isFirstInteraction){
+                    data=dataList.get(viewPagerViewHolder.getAdapterPosition()+recyclerviewPosition);
                 }
                 //viewpager에서 제일 첫번째 위치로 이동하면 처음 클릭한 데이터(0번째)로 재활용 방지
                 if(viewPagerViewHolder.getAdapterPosition()==0){
-                    isFirst2=false;
+                    isRecyclable=false;
                 }
-                viewPagerViewHolder.setIsRecyclable(isFirst2);
-                viewPagerViewHolder.onBind(data, context, fontSize);
-                isFirst=false;
-                isFirst2=true;
+                viewPagerViewHolder.setIsRecyclable(isRecyclable);
+                viewPagerViewHolder.onBind(data, mContext, fontSize);
+                isFirstInteraction=false;
+                isRecyclable=true;
             }
         }
     }
@@ -119,12 +119,12 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         notifyDataSetChanged();
     }
 
-    public void clear(){
+    public void clearItems(){
         dataList.clear();
     }
 
-    public int getLocation(){
-        return location;
+    public int getRecyclerviewPosition(){
+        return recyclerviewPosition;
     }
 
     public void setFont(float size){
@@ -140,11 +140,11 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
     }
 
     public void setCondition(boolean condition){
-        this.condition=condition;
+        this.hasReceivedCondition=condition;
     }
 
-    public boolean getVisitedViewpager(){
-        return visitedViewpager;
+    public boolean hasVisitedViewpager(){
+        return hasVisitedViewPager ;
     }
 
 }

@@ -17,69 +17,69 @@ import com.example.happybankbook.db.MemoData;
 
 public class RecyclerViewHolder extends BaseItemView{
 
-    private final TextView txtIdx,txtDate,txtContent,txtPrice;
+    private final TextView idxTextView,dateTextView,contentTextView,priceTextView;
     private OnItemClickListener onItemClickListener;
 
     public RecyclerViewHolder(@NonNull View view){
         super(view);
 
-        txtIdx=view.findViewById(R.id.txtNumber);
-        txtDate=view.findViewById(R.id.inputTxtDate);
-        txtContent=view.findViewById(R.id.inputTxtContent);
-        txtPrice=view.findViewById(R.id.inputTxtDeposit);
+        idxTextView=view.findViewById(R.id.txtNumber);
+        dateTextView=view.findViewById(R.id.inputTxtDate);
+        contentTextView=view.findViewById(R.id.inputTxtContent);
+        priceTextView=view.findViewById(R.id.inputTxtDeposit);
         ConstraintLayout recyclerContainer=view.findViewById(R.id.recyclerContainer);
 
         recyclerContainer.setOnClickListener(v -> onItemClickListener.onItemClick());
     }
 
-    public void onBind(BaseItem data, Context context, int position, float fontSize, int textLine, boolean textEllipsize){
+    public void onBind(BaseItem data, Context context, int position, float fontSize, int textLine, boolean hasTextEllipsize){
         MemoData memoData=(MemoData)data;
 
-        txtIdx.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-        txtDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-        txtContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-        txtPrice.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+        idxTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+        dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+        contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+        priceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 
-        txtIdx.setMaxLines(textLine);
-        txtContent.setMaxLines(textLine);
-        txtPrice.setMaxLines(textLine);
+        idxTextView.setMaxLines(textLine);
+        contentTextView.setMaxLines(textLine);
+        priceTextView.setMaxLines(textLine);
 
-        if(textEllipsize){
-            txtIdx.setEllipsize(TextUtils.TruncateAt.END);
-            txtContent.setEllipsize(TextUtils.TruncateAt.END);
-            txtPrice.setEllipsize(TextUtils.TruncateAt.END);
+        if(hasTextEllipsize){
+            idxTextView.setEllipsize(TextUtils.TruncateAt.END);
+            contentTextView.setEllipsize(TextUtils.TruncateAt.END);
+            priceTextView.setEllipsize(TextUtils.TruncateAt.END);
         }else{
-            txtIdx.setEllipsize(null);
-            txtContent.setEllipsize(null);
-            txtPrice.setEllipsize(null);
+            idxTextView.setEllipsize(null);
+            contentTextView.setEllipsize(null);
+            priceTextView.setEllipsize(null);
         }
 
-        txtIdx.setText(Integer.toString(memoData.getNum()));
+        idxTextView.setText(Integer.toString(memoData.getNum()));
 
-        txtDate.setText(Long.toString(memoData.getDate()).substring(2));
+        dateTextView.setText(Long.toString(memoData.getDate()).substring(2));
 
-        txtContent.setText(memoData.getContent());
+        contentTextView.setText(memoData.getContent());
 
         if(memoData.getImage()!=null){
             Drawable img=new BitmapDrawable(context.getResources(),memoData.getImage());
             img.setBounds(0,0,100,100);
-            txtContent.setCompoundDrawables(img,null,null,null);
+            contentTextView.setCompoundDrawables(img,null,null,null);
         }else{
-            txtContent.setCompoundDrawables(null,null,null,null);
+            contentTextView.setCompoundDrawables(null,null,null,null);
         }
 
-        txtPrice.setText(Integer.toString(memoData.getPrice()));
+        priceTextView.setText(Integer.toString(memoData.getPrice()));
 
         if(position%2==0){
-            txtIdx.setBackgroundResource(R.drawable.memo_list_content_background_cream);
-            txtDate.setBackgroundResource(R.drawable.memo_list_content_background_cream);
-            txtContent.setBackgroundResource(R.drawable.memo_list_content_background_cream);
-            txtPrice.setBackgroundResource(R.color.cream);
+            idxTextView.setBackgroundResource(R.drawable.memo_list_content_background_cream);
+            dateTextView.setBackgroundResource(R.drawable.memo_list_content_background_cream);
+            contentTextView.setBackgroundResource(R.drawable.memo_list_content_background_cream);
+            priceTextView.setBackgroundResource(R.color.cream);
         }else{
-            txtIdx.setBackgroundResource(R.drawable.memo_list_content_background_green);
-            txtDate.setBackgroundResource(R.drawable.memo_list_content_background_green);
-            txtContent.setBackgroundResource(R.drawable.memo_list_content_background_green);
-            txtPrice.setBackgroundResource(R.color.green);
+            idxTextView.setBackgroundResource(R.drawable.memo_list_content_background_green);
+            dateTextView.setBackgroundResource(R.drawable.memo_list_content_background_green);
+            contentTextView.setBackgroundResource(R.drawable.memo_list_content_background_green);
+            priceTextView.setBackgroundResource(R.color.green);
         }
     }
 
