@@ -17,37 +17,37 @@ import com.example.happybankbook.db.MemoData;
 
 public class ViewPagerViewHolder extends BaseItemView {
 
-    private TextView txtDetailDate, txtDetailContent, txtDetailPrice;
-    private ImageView imgDetail;
+    private TextView dateTextView, contentTextView, priceTextView;
+    private ImageView contentImg;
 
     public ViewPagerViewHolder(@NonNull View view){
         super(view);
 
-        txtDetailDate=view.findViewById(R.id.memoDetailDate);
-        txtDetailContent=view.findViewById(R.id.memoDetailContent);
-        txtDetailPrice=view.findViewById(R.id.memoDetailPriceTxt);
-        imgDetail=view.findViewById(R.id.memoDetailImg);
+        dateTextView=view.findViewById(R.id.memoDetailDate);
+        contentTextView=view.findViewById(R.id.memoDetailContent);
+        priceTextView=view.findViewById(R.id.memoDetailPriceTxt);
+        contentImg=view.findViewById(R.id.memoDetailImg);
     }
 
     public void onBind(BaseItem data, Context context, float fontSize){
         MemoData memoData=(MemoData)data;
 
-        txtDetailContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+        contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 
         String date=Integer.toString(memoData.getDate());
         String year=date.substring(0,4);
         String month=date.substring(4,6);
         String day=date.substring(6);
-        txtDetailDate.setText(String.format("%s.%s.%s",year,month,day));
+        dateTextView.setText(String.format("%s.%s.%s",year,month,day));
 
-        txtDetailContent.setText(memoData.getContent());
+        contentTextView.setText(memoData.getContent());
 
-        txtDetailPrice.setText(Integer.toString(memoData.getPrice()));
+        priceTextView.setText(Integer.toString(memoData.getPrice()));
 
         if(memoData.getImage()!=null){
             Drawable img=new BitmapDrawable(context.getResources(),memoData.getImage());
-            imgDetail.setImageDrawable(img);
-            imgDetail.setVisibility(View.VISIBLE);
+            contentImg.setImageDrawable(img);
+            contentImg.setVisibility(View.VISIBLE);
         }
 
     }
