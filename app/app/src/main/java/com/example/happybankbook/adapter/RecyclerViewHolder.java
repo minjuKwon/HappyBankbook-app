@@ -17,7 +17,7 @@ import com.example.happybankbook.db.MemoData;
 
 public class RecyclerViewHolder extends BaseItemView{
 
-    private final TextView idxTextView,dateTextView,contentTextView,priceTextView;
+    private TextView idxTextView,dateTextView,contentTextView,priceTextView;
     private OnItemClickListener onItemClickListener;
 
     public RecyclerViewHolder(@NonNull View view){
