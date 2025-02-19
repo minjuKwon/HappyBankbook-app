@@ -63,11 +63,11 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
                 }
             }
         });
-        //ListFragment에서 recyclerStop 받을 때는 SharedPreferences 대신 값 초기화
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.recyclerStop), this, new FragmentResultListener() {
+        //ListFragment에서 isInitialization 받을 때는 SharedPreferences 대신 값 초기화
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.listIsInitialization), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                boolean isInitialization=result.getBoolean(getResources().getString(R.string.stop));
+                boolean isInitialization=result.getBoolean(getResources().getString(R.string.IsInitialization));
                 if(isInitialization){
                     reset();
                 }

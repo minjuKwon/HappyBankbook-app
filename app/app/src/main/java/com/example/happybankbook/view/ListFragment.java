@@ -63,7 +63,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         super.onCreate(savedInstanceState);
 
         SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.isStop),Context.MODE_PRIVATE);
-        isInitialization=preferences.getBoolean(getResources().getString(R.string.stop),false);
+        isInitialization=preferences.getBoolean(getResources().getString(R.string.IsInitialization),false);
 
         //ConditionFragment 정렬 값 받기
         getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.memoRequestKey), this, new FragmentResultListener() {
@@ -138,14 +138,14 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
 
         //onStop()때 ConditionFragment 값 초기화
         Bundle bundle=new Bundle();
-        bundle.putBoolean(getResources().getString(R.string.stop),true);
-        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.recyclerStop), bundle);
+        bundle.putBoolean(getResources().getString(R.string.IsInitialization),true);
+        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.listIsInitialization), bundle);
         resetTextSetting();
 
         isInitialization=true;
         SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.isStop), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(getResources().getString(R.string.stop),isInitialization);
+        editor.putBoolean(getResources().getString(R.string.IsInitialization),isInitialization);
         editor.apply();
     }
 

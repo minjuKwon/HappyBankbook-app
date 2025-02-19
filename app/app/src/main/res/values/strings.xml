@@ -69,7 +69,7 @@
 
     //fragment requestKey
     <string name="removeFragment">removeFragment</string>
-    <string name="recyclerStop">recyclerStop</string>
+    <string name="listIsInitialization">listIsInitialization</string>
     <string name="fontSize1">fontSize1</string>
     <string name="fontSize2">fontSize2</string>
     <string name="fontSize3">fontSize3</string>
@@ -93,7 +93,7 @@
 
     //bundle, editor key
     <string name="ConditionFragment">ConditionFragment</string>
-    <string name="stop">stop</string>
+    <string name="IsInitialization">IsInitialization</string>
     <string name="isClick">isClick</string>
     <string name="isEllipsize">isEllipsize</string>
     <string name="checkLine">checkLine</string>
