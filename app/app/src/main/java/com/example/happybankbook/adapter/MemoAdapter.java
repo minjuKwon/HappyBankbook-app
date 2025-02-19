@@ -66,7 +66,6 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseItemView holder, int position) {
-        //Log.d("data","onBindViewHolder");
         MemoData data;
 
         if(holder instanceof RecyclerViewHolder){

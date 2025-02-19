@@ -37,7 +37,7 @@ public class OutputPresenter implements OutputContract.Presenter {
                         .subscribeOn(Schedulers.io())
                         .subscribe(
                                 item->{
-                                    for(MemoData data : (ArrayList<MemoData>)item){
+                                    for(MemoData data : item){
                                         stringBuffer.append(data.getNum()).append(split)
                                                 .append(data.getDate()).append(split)
                                                 .append(data.getContent()).append(split)

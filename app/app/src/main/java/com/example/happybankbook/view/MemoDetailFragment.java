@@ -58,7 +58,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     private int currentPosition;
     private int adapterPosition;
     private boolean isFirstInteraction=true;
-    private boolean hasVisitedFirstPosition=true;
     private float fontSize=12;
 
     private Context mContext;
@@ -209,10 +208,9 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         if(v.getId()==R.id.imgForward){
             forwardImageView.setImageAlpha(255);
             //처음 1번째 아이템 클릭하여 이동한 viewpager 에서 이전 데이터로 이동하지 않은 오류 해결
-            if(!isFirstInteraction&&hasVisitedFirstPosition&&adapterPosition==1&&currentPosition==1){
+            if(!isFirstInteraction&&adapterPosition==1&&currentPosition==1){
                 //notifyItemChanged 호출하면 화면 버벅거림
                 adapter.notifyDataSetChanged();
-                hasVisitedFirstPosition=false;
                 //1번째 아이템이라도 viewpager 입장에서는 0번째라서 이전 버튼 누르면
                 //페이지 변화가 없기 때문에 임의로 변경.
                 currentPosition=0;
