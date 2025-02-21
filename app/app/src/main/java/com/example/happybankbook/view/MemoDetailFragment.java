@@ -205,6 +205,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
 
     @Override
     public void onClick(View v) {
+        final int delayTime=3000;
         if(v.getId()==R.id.imgForward){
             forwardImageView.setImageAlpha(255);
             //처음 1번째 아이템 클릭하여 이동한 viewpager 에서 이전 데이터로 이동하지 않은 오류 해결
@@ -219,11 +220,11 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             }else{
                 viewPager.setCurrentItem(currentPosition-1,false);
             }
-            handler.postDelayed(changeImgAlphaRunnable,3000);
+            handler.postDelayed(changeImgAlphaRunnable,delayTime);
         }else if(v.getId()==R.id.imgBack){
             backImageView.setImageAlpha(255);
             viewPager.setCurrentItem(currentPosition+1,false);
-            handler.postDelayed(changeImgAlphaRunnable,3000);
+            handler.postDelayed(changeImgAlphaRunnable,delayTime);
         }else if(v.getId()==R.id.memoDetailPrevious){
             ((MainActivity)mActivity).removeFragment(this);
         }

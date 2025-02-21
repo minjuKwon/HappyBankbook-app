@@ -28,6 +28,10 @@ import com.example.happybankbook.R;
 
 public class ConditionFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
+    private static final int DEFAULT_FROM_DATE=0;
+    private static final int DEFAULT_TO_DATE=30000000;
+    private static final int DEFAULT_COUNT=0;
+
     private TextView durationTextView;
     private TextView fromDurationTextView;
     private TextView toDurationTextView;
@@ -193,17 +197,19 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
     }
 
     public void submit(){
-        int count=0;
-        int toDate, fromDate;
+        int toDate, fromDate, count;
         //정렬 날짜 범위 지정
         if(isClickedDuration){
-            fromDate=0; toDate=30000000;
+            fromDate=DEFAULT_FROM_DATE;
+            toDate=DEFAULT_TO_DATE;
         }else{
             fromDate=((MainActivity)mActivity).convertDateToInt(fromDurationTextView);
             toDate=((MainActivity)mActivity).convertDateToInt(toDurationTextView);
         }
         //조회할 메모 개수 얻기
-        if(!TextUtils.isEmpty(itemCountEditText.getText().toString())){
+        if(TextUtils.isEmpty(itemCountEditText.getText().toString())){
+            count= DEFAULT_COUNT;
+        }else{
             count=Integer.parseInt(itemCountEditText.getText().toString());
         }
         //memo recyclerView로 정렬 데이터 전달
@@ -225,7 +231,7 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
 
         setSharedPreferences();
 
-        sendBundle(0,30000000,0,true);
+        sendBundle(DEFAULT_FROM_DATE,DEFAULT_TO_DATE,DEFAULT_COUNT,true);
     }
 
     public void isDurationClick(){

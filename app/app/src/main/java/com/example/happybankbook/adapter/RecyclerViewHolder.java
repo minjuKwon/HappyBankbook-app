@@ -60,9 +60,12 @@ public class RecyclerViewHolder extends BaseItemView{
 
         contentTextView.setText(memoData.getContent());
 
+        final int imageWidth=100;
+        final int imageHeight=100;
+
         if(memoData.getImage()!=null){
             Drawable img=new BitmapDrawable(context.getResources(),memoData.getImage());
-            img.setBounds(0,0,100,100);
+            img.setBounds(0,0,imageWidth,imageHeight);
             contentTextView.setCompoundDrawables(img,null,null,null);
         }else{
             contentTextView.setCompoundDrawables(null,null,null,null);

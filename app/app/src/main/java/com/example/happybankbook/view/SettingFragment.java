@@ -370,10 +370,11 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(androidVersion>=Build.VERSION_CODES.Q){
+                    final String fileTitle="happy bank memo";
                     Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
                     intent.setType(type);
-                    intent.putExtra(Intent.EXTRA_TITLE,"happy bank memo");
+                    intent.putExtra(Intent.EXTRA_TITLE, fileTitle);
                     activityResultLauncher.launch(intent);
                 }else{
                     requestPermissionLauncher.launch(PERMISSION);
