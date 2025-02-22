@@ -62,49 +62,49 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.isStop),Context.MODE_PRIVATE);
-        isInitialization=preferences.getBoolean(getResources().getString(R.string.IsInitialization),false);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_set_initialization),Context.MODE_PRIVATE);
+        isInitialization=preferences.getBoolean(getResources().getString(R.string.is_initialization),false);
 
         //ConditionFragment 정렬 값 받기
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.memoRequestKey), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_recyclerview_sort), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fromDate=result.getInt(getResources().getString(R.string.fromDate));
-                toDate=result.getInt(getResources().getString(R.string.toDate));
-                itemCount=result.getInt(getResources().getString(R.string.memoCount));
-                isNewestSort =result.getBoolean(getResources().getString(R.string.memoSort));
+                fromDate=result.getInt(getResources().getString(R.string.from_date));
+                toDate=result.getInt(getResources().getString(R.string.to_date));
+                itemCount=result.getInt(getResources().getString(R.string.item_count));
+                isNewestSort =result.getBoolean(getResources().getString(R.string.is_newest_sort));
 
                 keepCondition();
             }
         });
         //ConditionFragment 클릭 시 한 개의 Fragment만 생성하기 위한 변수 받기
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.removeFragment), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_remove_fragment), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                clickCountCondition=result.getInt(getResources().getString(R.string.ConditionFragment));
+                clickCountCondition=result.getInt(getResources().getString(R.string.is_clicked_once));
             }
         });
         //변경 font size 값
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.fontSize1), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_recyclerview_text_size), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fontSize=result.getFloat(getResources().getString(R.string.fontSize));
+                fontSize=result.getFloat(getResources().getString(R.string.text_Size));
                 adapter.setFont(fontSize);
             }
         });
         //변경 text line 값
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.textLine1), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_recyclerview_text_line), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                textLine=result.getInt(getResources().getString(R.string.textLine));
+                textLine=result.getInt(getResources().getString(R.string.text_line));
                 adapter.setTextLine(textLine);
             }
         });
         //변경 text ellipsize 값
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.textEllipsize1), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_recyclerview_text_ellipsize), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                hasTextEllipsize=result.getBoolean(getResources().getString(R.string.textEllipsize));
+                hasTextEllipsize=result.getBoolean(getResources().getString(R.string.text_ellipsize));
                 adapter.setTextEllipsize(hasTextEllipsize);
             }
         });
@@ -122,10 +122,10 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.listTextSetting),Context.MODE_PRIVATE);
-        hasTextEllipsize=preferences.getBoolean(getResources().getString(R.string.textEllipsize),true);
-        textLine=preferences.getInt(getResources().getString(R.string.textLine),2);
-        fontSize=preferences.getFloat(getResources().getString(R.string.fontSize),15);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_list_text_style),Context.MODE_PRIVATE);
+        hasTextEllipsize=preferences.getBoolean(getResources().getString(R.string.text_ellipsize),true);
+        textLine=preferences.getInt(getResources().getString(R.string.text_line),2);
+        fontSize=preferences.getFloat(getResources().getString(R.string.text_Size),15);
 
         adapter.setTextEllipsize(hasTextEllipsize);
         adapter.setTextLine(textLine);
@@ -138,14 +138,14 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
 
         //onStop()때 ConditionFragment 값 초기화
         Bundle bundle=new Bundle();
-        bundle.putBoolean(getResources().getString(R.string.IsInitialization),true);
-        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.listIsInitialization), bundle);
+        bundle.putBoolean(getResources().getString(R.string.is_initialization),true);
+        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.request_key_initialization), bundle);
         resetTextSetting();
 
         isInitialization=true;
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.isStop), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_set_initialization), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(getResources().getString(R.string.IsInitialization),isInitialization);
+        editor.putBoolean(getResources().getString(R.string.is_initialization),isInitialization);
         editor.apply();
     }
 
@@ -247,11 +247,11 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     }
 
     private void resetTextSetting(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.listTextSetting), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_list_text_style), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(getResources().getString(R.string.textEllipsize), hasTextEllipsize);
-        editor.putInt(getResources().getString(R.string.textLine), textLine);
-        editor.putFloat(getResources().getString(R.string.fontSize), fontSize);
+        editor.putBoolean(getResources().getString(R.string.text_ellipsize), hasTextEllipsize);
+        editor.putInt(getResources().getString(R.string.text_line), textLine);
+        editor.putFloat(getResources().getString(R.string.text_Size), fontSize);
 
         editor.apply();
     }

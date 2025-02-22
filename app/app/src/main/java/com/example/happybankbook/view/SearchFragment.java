@@ -54,26 +54,26 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.fontSize2), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_search_text_size), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fontSize=result.getFloat(getResources().getString(R.string.fontSize));
+                fontSize=result.getFloat(getResources().getString(R.string.text_Size));
                 adapter.setFont(fontSize);
             }
         });
         //변경 text line 값
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.textLine2), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_search_text_line), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                textLine=result.getInt(getResources().getString(R.string.textLine));
+                textLine=result.getInt(getResources().getString(R.string.text_line));
                 adapter.setTextLine(textLine);
             }
         });
         //변경 text ellipsize 값
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.textEllipsize2), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_search_text_ellipsize), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                hasTextEllipsize=result.getBoolean(getResources().getString(R.string.textEllipsize));
+                hasTextEllipsize=result.getBoolean(getResources().getString(R.string.text_ellipsize));
                 adapter.setTextEllipsize(hasTextEllipsize);
             }
         });
@@ -91,10 +91,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.searchTextSetting),Context.MODE_PRIVATE);
-        hasTextEllipsize=preferences.getBoolean(getResources().getString(R.string.textEllipsize),true);
-        textLine=preferences.getInt(getResources().getString(R.string.textLine),2);
-        fontSize=preferences.getFloat(getResources().getString(R.string.fontSize),15);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_search_text_style),Context.MODE_PRIVATE);
+        hasTextEllipsize=preferences.getBoolean(getResources().getString(R.string.text_ellipsize),true);
+        textLine=preferences.getInt(getResources().getString(R.string.text_line),2);
+        fontSize=preferences.getFloat(getResources().getString(R.string.text_Size),15);
 
         adapter.setTextEllipsize(hasTextEllipsize);
         adapter.setTextLine(textLine);
@@ -177,11 +177,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     }
 
     private void resetTextSetting(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.searchTextSetting), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_search_text_style), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(getResources().getString(R.string.textEllipsize), hasTextEllipsize);
-        editor.putInt(getResources().getString(R.string.textLine), textLine);
-        editor.putFloat(getResources().getString(R.string.fontSize), fontSize);
+        editor.putBoolean(getResources().getString(R.string.text_ellipsize), hasTextEllipsize);
+        editor.putInt(getResources().getString(R.string.text_line), textLine);
+        editor.putFloat(getResources().getString(R.string.text_Size), fontSize);
 
         editor.apply();
     }

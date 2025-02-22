@@ -58,20 +58,20 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //viewPager 후 recyclerView로 돌아 왔을 때 condition 값을 유지 하기 위한 변수 얻기
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.viewpagerCondition), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_retain_sort), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                hasVisitedViewPager=result.getBoolean(getResources().getString(R.string.memoSort));
+                hasVisitedViewPager=result.getBoolean(getResources().getString(R.string.is_newest_sort));
                 if(!hasVisitedViewPager){
                     reset();
                 }
             }
         });
         //ListFragment에서 isInitialization 받을 때는 SharedPreferences 대신 값 초기화
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.listIsInitialization), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_initialization), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                boolean isInitialization=result.getBoolean(getResources().getString(R.string.IsInitialization));
+                boolean isInitialization=result.getBoolean(getResources().getString(R.string.is_initialization));
                 if(isInitialization){
                     reset();
                 }
@@ -96,20 +96,20 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         ((MainActivity)mActivity).setCurrentDate(toDurationTextView);
 
         //SharedPreferences에 저장된 정렬 값 가져오기
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.sortInfo),Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_sort),Context.MODE_PRIVATE);
 
-        boolean isClick=preferences.getBoolean(getResources().getString(R.string.isClick),true);
+        boolean isClick=preferences.getBoolean(getResources().getString(R.string.is_clicked_duration),true);
         isClickedDuration=(!isClick);
         clickDuration();
 
-        fromDurationTextView.setText(preferences.getString(getResources().getString(R.string.fromDate),((MainActivity)mActivity).setCurrentDate()));
-        toDurationTextView.setText(preferences.getString(getResources().getString(R.string.toDate),((MainActivity)mActivity).setCurrentDate()));
+        fromDurationTextView.setText(preferences.getString(getResources().getString(R.string.from_date),((MainActivity)mActivity).setCurrentDate()));
+        toDurationTextView.setText(preferences.getString(getResources().getString(R.string.to_date),((MainActivity)mActivity).setCurrentDate()));
 
-        boolean isCheckedRadioNew=preferences.getBoolean(getResources().getString(R.string.memoSort),true);
+        boolean isCheckedRadioNew=preferences.getBoolean(getResources().getString(R.string.is_newest_sort),true);
         newestSortRadioButton.setChecked(isCheckedRadioNew);
         oldestSortRadioButton.setChecked(!isCheckedRadioNew);
 
-        itemCountEditText.setText(preferences.getString(getResources().getString(R.string.memoCount),null));
+        itemCountEditText.setText(preferences.getString(getResources().getString(R.string.item_count),null));
 
     }
 
@@ -118,8 +118,8 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         super.onDestroy();
         //ConditionFragment 중복 생성을 막기 위한 변수 전달
         Bundle bundle=new Bundle();
-        bundle.putInt(getResources().getString(R.string.ConditionFragment),1);
-        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.removeFragment),bundle);
+        bundle.putInt(getResources().getString(R.string.is_clicked_once),1);
+        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.request_key_remove_fragment),bundle);
     }
 
     @Override
@@ -250,23 +250,23 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
 
     public void sendBundle(int fromDate, int toDate, int count, boolean sort){
         Bundle bundle=new Bundle();
-        bundle.putInt(getResources().getString(R.string.fromDate),fromDate);
-        bundle.putInt(getResources().getString(R.string.toDate),toDate);
-        bundle.putInt(getResources().getString(R.string.memoCount),count);
-        bundle.putBoolean(getResources().getString(R.string.memoSort),sort);
+        bundle.putInt(getResources().getString(R.string.from_date),fromDate);
+        bundle.putInt(getResources().getString(R.string.to_date),toDate);
+        bundle.putInt(getResources().getString(R.string.item_count),count);
+        bundle.putBoolean(getResources().getString(R.string.is_newest_sort),sort);
 
-        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.memoRequestKey), bundle);
-        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.memoRequestKey2), bundle);
+        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.request_key_recyclerview_sort), bundle);
+        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.request_key_viewpager_sort), bundle);
     }
 
     public void setSharedPreferences(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.sortInfo), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_sort), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(getResources().getString(R.string.isClick),isClickedDuration);
-        editor.putString(getResources().getString(R.string.fromDate),fromDurationTextView.getText().toString());
-        editor.putString(getResources().getString(R.string.toDate),toDurationTextView.getText().toString());
-        editor.putBoolean(getResources().getString(R.string.memoSort),newestSortRadioButton.isChecked());
-        editor.putString(getResources().getString(R.string.memoCount),itemCountEditText.getText().toString());
+        editor.putBoolean(getResources().getString(R.string.is_clicked_duration),isClickedDuration);
+        editor.putString(getResources().getString(R.string.from_date),fromDurationTextView.getText().toString());
+        editor.putString(getResources().getString(R.string.to_date),toDurationTextView.getText().toString());
+        editor.putBoolean(getResources().getString(R.string.is_newest_sort),newestSortRadioButton.isChecked());
+        editor.putString(getResources().getString(R.string.item_count),itemCountEditText.getText().toString());
         editor.apply();
     }
 

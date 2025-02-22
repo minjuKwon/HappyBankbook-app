@@ -63,10 +63,10 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //변경 font size 값
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.fontSize3), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_memo_text_size), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fontSize=result.getFloat(getResources().getString(R.string.fontSize));
+                fontSize=result.getFloat(getResources().getString(R.string.text_Size));
                 contentEditText.setTextSize(fontSize);
             }
         });
@@ -87,8 +87,8 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         ((MainActivity)mActivity).setCurrentDate(dateTextView);
         getGallery();
 
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.memoTextSetting),Context.MODE_PRIVATE);
-        fontSize=preferences.getFloat(getResources().getString(R.string.fontSize),12);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_memo_text_style),Context.MODE_PRIVATE);
+        fontSize=preferences.getFloat(getResources().getString(R.string.text_Size),12);
         contentEditText.setTextSize(fontSize);
     }
 
@@ -255,9 +255,9 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     }
 
     private void resetTextSetting(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.memoTextSetting), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_memo_text_style), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putFloat(getResources().getString(R.string.fontSize), fontSize);
+        editor.putFloat(getResources().getString(R.string.text_Size), fontSize);
 
         editor.apply();
     }

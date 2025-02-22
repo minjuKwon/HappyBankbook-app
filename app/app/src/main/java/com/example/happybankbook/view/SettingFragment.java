@@ -156,10 +156,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.settingInfo),Context.MODE_PRIVATE);
-        hasEllipsize=preferences.getBoolean(getResources().getString(R.string.isEllipsize),true);
-        checkLine=preferences.getInt(getResources().getString(R.string.checkLine),R.id.radioLineMul);
-        checkFontSize=preferences.getInt(getResources().getString(R.string.checkFontSize),R.id.radioFontOne);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_set_style),Context.MODE_PRIVATE);
+        hasEllipsize=preferences.getBoolean(getResources().getString(R.string.pref_has_ellipsize),true);
+        checkLine=preferences.getInt(getResources().getString(R.string.pref_text_line_id),R.id.radioLineMul);
+        checkFontSize=preferences.getInt(getResources().getString(R.string.pref_text_size_id),R.id.radioFontOne);
 
         setEllipsize();
 
@@ -236,8 +236,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         if(v.getId()==R.id.ellipsis){
             setEllipsize();
             boolean isCheckEllipsize=!hasEllipsize;
-            changeEllipsize(isCheckEllipsize,getResources().getString(R.string.textEllipsize1));
-            changeEllipsize(isCheckEllipsize,getResources().getString(R.string.textEllipsize2));
+            changeEllipsize(isCheckEllipsize,getResources().getString(R.string.request_key_recyclerview_text_ellipsize));
+            changeEllipsize(isCheckEllipsize,getResources().getString(R.string.request_key_search_text_ellipsize));
         }else if(v.getId()==R.id.pdf){
             fileExtension="pdf";
             makeExportDialog(Build.VERSION.SDK_INT, pdfType);
@@ -260,13 +260,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         if(group.getId()==R.id.radioLineDisplay){
             if(checkedId==R.id.radioLineSingle){
                 setLineRadioButton(true, false, R.color.black, R.color.gray);
-                changeTextLine(1,getResources().getString(R.string.textLine1));
-                changeTextLine(1,getResources().getString(R.string.textLine2));
+                changeTextLine(1,getResources().getString(R.string.request_key_recyclerview_text_line));
+                changeTextLine(1,getResources().getString(R.string.request_key_search_text_line));
                 checkLine=R.id.radioLineSingle;
             }else if(checkedId==R.id.radioLineMul){
                 setLineRadioButton(false, true, R.color.gray, R.color.black);
-                changeTextLine(2,getResources().getString(R.string.textLine1));
-                changeTextLine(2,getResources().getString(R.string.textLine2));
+                changeTextLine(2,getResources().getString(R.string.request_key_recyclerview_text_line));
+                changeTextLine(2,getResources().getString(R.string.request_key_search_text_line));
                 checkLine=R.id.radioLineMul;
             }
         }
@@ -274,24 +274,24 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         else if(group.getId()==R.id.radioFont){
             if(checkedId==R.id.radioFontOne){
                 setFontRadioButton(true, false, false, R.color.black, R.color.gray, R.color.gray);
-                changeFont(15,getResources().getString(R.string.fontSize1));
-                changeFont(15,getResources().getString(R.string.fontSize2));
-                changeFont(12,getResources().getString(R.string.fontSize3));
-                changeFont(12,getResources().getString(R.string.fontSize4));
+                changeFont(15,getResources().getString(R.string.request_key_recyclerview_text_size));
+                changeFont(15,getResources().getString(R.string.request_key_search_text_size));
+                changeFont(12,getResources().getString(R.string.request_key_memo_text_size));
+                changeFont(12,getResources().getString(R.string.request_key_viewpager_text_size));
                 checkFontSize=R.id.radioFontOne;
             }else if(checkedId==R.id.radioFontTwo){
                 setFontRadioButton(false, true, false, R.color.gray, R.color.black, R.color.gray);
-                changeFont(18,getResources().getString(R.string.fontSize1));
-                changeFont(18,getResources().getString(R.string.fontSize2));
-                changeFont(15,getResources().getString(R.string.fontSize3));
-                changeFont(15,getResources().getString(R.string.fontSize4));
+                changeFont(18,getResources().getString(R.string.request_key_recyclerview_text_size));
+                changeFont(18,getResources().getString(R.string.request_key_search_text_size));
+                changeFont(15,getResources().getString(R.string.request_key_memo_text_size));
+                changeFont(15,getResources().getString(R.string.request_key_viewpager_text_size));
                 checkFontSize=R.id.radioFontTwo;
             }else if(checkedId==R.id.radioFontThree){
                 setFontRadioButton(false, false, true, R.color.gray, R.color.gray, R.color.black);
-                changeFont(21,getResources().getString(R.string.fontSize1));
-                changeFont(21,getResources().getString(R.string.fontSize2));
-                changeFont(18,getResources().getString(R.string.fontSize3));
-                changeFont(18,getResources().getString(R.string.fontSize4));
+                changeFont(21,getResources().getString(R.string.request_key_recyclerview_text_size));
+                changeFont(21,getResources().getString(R.string.request_key_search_text_size));
+                changeFont(18,getResources().getString(R.string.request_key_memo_text_size));
+                changeFont(18,getResources().getString(R.string.request_key_viewpager_text_size));
                 checkFontSize=R.id.radioFontThree;
             }
         }
@@ -324,14 +324,14 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     public void changeFont(float size, String key){
         Bundle bundle=new Bundle();
-        bundle.putFloat(getResources().getString(R.string.fontSize),size);
+        bundle.putFloat(getResources().getString(R.string.text_Size),size);
 
         getParentFragmentManager().setFragmentResult(key, bundle);
     }
 
    public void changeTextLine(int line, String key){
        Bundle bundle=new Bundle();
-       bundle.putInt(getResources().getString(R.string.textLine), line);
+       bundle.putInt(getResources().getString(R.string.text_line), line);
 
        getParentFragmentManager().setFragmentResult(key, bundle);
    }
@@ -348,17 +348,17 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     public void changeEllipsize(boolean check, String key){
         Bundle bundle=new Bundle();
-        bundle.putBoolean(getResources().getString(R.string.textEllipsize), check);
+        bundle.putBoolean(getResources().getString(R.string.text_ellipsize), check);
 
         getParentFragmentManager().setFragmentResult(key, bundle);
     }
 
     public void resetRadioButton(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.settingInfo), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_set_style), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(getResources().getString(R.string.isEllipsize), !hasEllipsize);
-        editor.putInt(getResources().getString(R.string.checkLine), checkLine);
-        editor.putInt(getResources().getString(R.string.checkFontSize), checkFontSize);
+        editor.putBoolean(getResources().getString(R.string.pref_has_ellipsize), !hasEllipsize);
+        editor.putInt(getResources().getString(R.string.pref_text_line_id), checkLine);
+        editor.putInt(getResources().getString(R.string.pref_text_size_id), checkFontSize);
 
         editor.apply();
     }

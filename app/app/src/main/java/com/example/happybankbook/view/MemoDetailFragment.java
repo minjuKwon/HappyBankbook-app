@@ -79,15 +79,15 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         handler=new Handler();
 
         //ConditionFragment 정렬 값 받기
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.memoRequestKey2), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_viewpager_sort), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 adapter.setCondition(false);
 
-                fromDate=result.getInt(getResources().getString(R.string.fromDate));
-                toDate=result.getInt(getResources().getString(R.string.toDate));
-                itemCount=result.getInt(getResources().getString(R.string.memoCount));
-                boolean isNewestSort=result.getBoolean(getResources().getString(R.string.memoSort));
+                fromDate=result.getInt(getResources().getString(R.string.from_date));
+                toDate=result.getInt(getResources().getString(R.string.to_date));
+                itemCount=result.getInt(getResources().getString(R.string.item_count));
+                boolean isNewestSort=result.getBoolean(getResources().getString(R.string.is_newest_sort));
 
                 if(fromDate>toDate){
                     int temp=fromDate;
@@ -118,10 +118,10 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             }
         });
         //변경 font size 값
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.fontSize4), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_viewpager_text_size), this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fontSize=result.getFloat(getResources().getString(R.string.fontSize));
+                fontSize=result.getFloat(getResources().getString(R.string.text_Size));
                 adapter.setFont(fontSize);
             }
         });
@@ -140,8 +140,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.memoDetailTextSetting),Context.MODE_PRIVATE);
-        fontSize=preferences.getFloat(getResources().getString(R.string.fontSize),12);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_viewpager_text_style),Context.MODE_PRIVATE);
+        fontSize=preferences.getFloat(getResources().getString(R.string.text_Size),12);
         adapter.setFont(fontSize);
         
         //SearchFragment에서 검색 후 키보드 내리지 않고 바로 viewpager 이동 하면,
@@ -155,8 +155,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         super.onStop();
 
         Bundle bundle=new Bundle();
-        bundle.putBoolean(getResources().getString(R.string.memoSort),true);
-        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.viewpagerCondition), bundle);
+        bundle.putBoolean(getResources().getString(R.string.is_newest_sort),true);
+        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.request_key_retain_sort), bundle);
 
         resetTextSetting();
     }
@@ -265,9 +265,9 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     }
 
     private void resetTextSetting(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.memoDetailTextSetting), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_viewpager_text_style), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putFloat(getResources().getString(R.string.fontSize), fontSize);
+        editor.putFloat(getResources().getString(R.string.text_Size), fontSize);
 
         editor.apply();
     }

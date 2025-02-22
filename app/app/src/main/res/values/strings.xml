@@ -68,43 +68,43 @@
     <string name="setting">설정</string>
 
     //fragment requestKey
-    <string name="removeFragment">removeFragment</string>
-    <string name="listIsInitialization">listIsInitialization</string>
-    <string name="fontSize1">fontSize1</string>
-    <string name="fontSize2">fontSize2</string>
-    <string name="fontSize3">fontSize3</string>
-    <string name="fontSize4">fontSize4</string>
-    <string name="textLine1">textLine1</string>
-    <string name="textLine2">textLine2</string>
-    <string name="textEllipsize1">textEllipsize1</string>
-    <string name="textEllipsize2">textEllipsize2</string>
-    <string name="memoRequestKey">memoRequestKey</string>
-    <string name="memoRequestKey2">memoRequestKey2</string>
-    <string name="viewpagerCondition">viewpagerCondition</string>
+    <string name="request_key_remove_fragment">remove_fragment</string>
+    <string name="request_key_initialization">initialization</string>
+    <string name="request_key_recyclerview_text_size">recyclerview_text_size</string>
+    <string name="request_key_search_text_size">search_text_size</string>
+    <string name="request_key_memo_text_size">memo_text_size</string>
+    <string name="request_key_viewpager_text_size">viewpager_text_size</string>
+    <string name="request_key_recyclerview_text_line">recyclerview_text_line</string>
+    <string name="request_key_search_text_line">search_text_line</string>
+    <string name="request_key_recyclerview_text_ellipsize">recyclerview_text_ellipsize</string>
+    <string name="request_key_search_text_ellipsize">search_text_ellipsize</string>
+    <string name="request_key_recyclerview_sort">recyclerview_sort</string>
+    <string name="request_key_viewpager_sort">viewPager_sort</string>
+    <string name="request_key_retain_sort">retain_sort</string>
 
     //SharedPreferences name
-    <string name="listTextSetting">listTextSetting</string>
-    <string name="sortInfo">sortInfo</string>
-    <string name="settingInfo">settingInfo</string>
-    <string name="searchTextSetting">searchTextSetting</string>
-    <string name="memoTextSetting">memoTextSetting</string>
-    <string name="memoDetailTextSetting">memoDetailTextSetting</string>
-    <string name="isStop">isStop</string>
+    <string name="pref_sort">sort</string>
+    <string name="pref_set_style">set_style</string>
+    <string name="pref_list_text_style">list_text_setting</string>
+    <string name="pref_search_text_style">search_text_style</string>
+    <string name="pref_memo_text_style">memo_text_style</string>
+    <string name="pref_viewpager_text_style">viewpager_text_style</string>
+    <string name="pref_set_initialization">set_initialization</string>
+    <string name="pref_has_ellipsize">has_ellipsize</string>
+    <string name="pref_text_line_id">text_line_id</string>
+    <string name="pref_text_size_id">text_size_id</string>
 
-    //bundle, editor key
-    <string name="ConditionFragment">ConditionFragment</string>
-    <string name="IsInitialization">IsInitialization</string>
-    <string name="isClick">isClick</string>
-    <string name="isEllipsize">isEllipsize</string>
-    <string name="checkLine">checkLine</string>
-    <string name="checkFontSize">checkFontSize</string>
-    <string name="textEllipsize">textEllipsize</string>
-    <string name="textLine">textLine</string>
-    <string name="fontSize">fontSize</string>
-    <string name="fromDate">fromDate</string>
-    <string name="toDate">toDate</string>
-    <string name="memoCount">count</string>
-    <string name="memoSort">sort</string>
+    //bundle
+    <string name="is_clicked_once">is_clicked_once</string>
+    <string name="is_initialization">is_initialization</string>
+    <string name="is_clicked_duration">is_clicked_duration</string>
+    <string name="text_ellipsize">text_ellipsize</string>
+    <string name="text_line">text_line</string>
+    <string name="text_Size">text_Size</string>
+    <string name="from_date">from_date</string>
+    <string name="to_date">to_date</string>
+    <string name="item_count">item_count</string>
+    <string name="is_newest_sort">is_newest_sort</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
