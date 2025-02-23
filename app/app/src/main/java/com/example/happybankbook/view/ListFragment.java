@@ -1,5 +1,12 @@
 package com.example.happybankbook.view;
 
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_INITIALIZATION;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_SORT;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_ELLIPSIZE;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_LINE;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_REMOVE_FRAGMENT;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -66,7 +73,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         isInitialization=preferences.getBoolean(getResources().getString(R.string.is_initialization),false);
 
         //ConditionFragment 정렬 값 받기
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_recyclerview_sort), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RECYCLERVIEW_SORT, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 fromDate=result.getInt(getResources().getString(R.string.from_date));
@@ -78,14 +85,14 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
             }
         });
         //ConditionFragment 클릭 시 한 개의 Fragment만 생성하기 위한 변수 받기
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_remove_fragment), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_REMOVE_FRAGMENT, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 clickCountCondition=result.getInt(getResources().getString(R.string.is_clicked_once));
             }
         });
         //변경 font size 값
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_recyclerview_text_size), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 fontSize=result.getFloat(getResources().getString(R.string.text_Size));
@@ -93,7 +100,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
             }
         });
         //변경 text line 값
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_recyclerview_text_line), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RECYCLERVIEW_TEXT_LINE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 textLine=result.getInt(getResources().getString(R.string.text_line));
@@ -101,7 +108,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
             }
         });
         //변경 text ellipsize 값
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_recyclerview_text_ellipsize), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RECYCLERVIEW_TEXT_ELLIPSIZE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 hasTextEllipsize=result.getBoolean(getResources().getString(R.string.text_ellipsize));
@@ -139,7 +146,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         //onStop()때 ConditionFragment 값 초기화
         Bundle bundle=new Bundle();
         bundle.putBoolean(getResources().getString(R.string.is_initialization),true);
-        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.request_key_initialization), bundle);
+        getParentFragmentManager().setFragmentResult(REQUEST_KEY_INITIALIZATION, bundle);
         resetTextSetting();
 
         isInitialization=true;

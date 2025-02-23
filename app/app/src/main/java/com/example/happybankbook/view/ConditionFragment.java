@@ -1,5 +1,11 @@
 package com.example.happybankbook.view;
 
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_INITIALIZATION;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_SORT;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_REMOVE_FRAGMENT;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RETAIN_SORT;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_SORT;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -58,7 +64,7 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //viewPager 후 recyclerView로 돌아 왔을 때 condition 값을 유지 하기 위한 변수 얻기
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_retain_sort), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RETAIN_SORT, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 hasVisitedViewPager=result.getBoolean(getResources().getString(R.string.is_newest_sort));
@@ -68,7 +74,7 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
             }
         });
         //ListFragment에서 isInitialization 받을 때는 SharedPreferences 대신 값 초기화
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_initialization), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_INITIALIZATION, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 boolean isInitialization=result.getBoolean(getResources().getString(R.string.is_initialization));
@@ -119,7 +125,7 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         //ConditionFragment 중복 생성을 막기 위한 변수 전달
         Bundle bundle=new Bundle();
         bundle.putInt(getResources().getString(R.string.is_clicked_once),1);
-        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.request_key_remove_fragment),bundle);
+        getParentFragmentManager().setFragmentResult(REQUEST_KEY_REMOVE_FRAGMENT,bundle);
     }
 
     @Override
@@ -255,8 +261,8 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         bundle.putInt(getResources().getString(R.string.item_count),count);
         bundle.putBoolean(getResources().getString(R.string.is_newest_sort),sort);
 
-        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.request_key_recyclerview_sort), bundle);
-        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.request_key_viewpager_sort), bundle);
+        getParentFragmentManager().setFragmentResult(REQUEST_KEY_RECYCLERVIEW_SORT, bundle);
+        getParentFragmentManager().setFragmentResult(REQUEST_KEY_VIEWPAGER_SORT, bundle);
     }
 
     public void setSharedPreferences(){

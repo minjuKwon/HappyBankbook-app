@@ -67,21 +67,6 @@
     <string name="add">추가하기</string>
     <string name="setting">설정</string>
 
-    //fragment requestKey
-    <string name="request_key_remove_fragment">remove_fragment</string>
-    <string name="request_key_initialization">initialization</string>
-    <string name="request_key_recyclerview_text_size">recyclerview_text_size</string>
-    <string name="request_key_search_text_size">search_text_size</string>
-    <string name="request_key_memo_text_size">memo_text_size</string>
-    <string name="request_key_viewpager_text_size">viewpager_text_size</string>
-    <string name="request_key_recyclerview_text_line">recyclerview_text_line</string>
-    <string name="request_key_search_text_line">search_text_line</string>
-    <string name="request_key_recyclerview_text_ellipsize">recyclerview_text_ellipsize</string>
-    <string name="request_key_search_text_ellipsize">search_text_ellipsize</string>
-    <string name="request_key_recyclerview_sort">recyclerview_sort</string>
-    <string name="request_key_viewpager_sort">viewPager_sort</string>
-    <string name="request_key_retain_sort">retain_sort</string>
-
     //SharedPreferences name
     <string name="pref_sort">sort</string>
     <string name="pref_set_style">set_style</string>

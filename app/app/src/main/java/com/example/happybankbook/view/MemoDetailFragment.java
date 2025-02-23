@@ -1,5 +1,9 @@
 package com.example.happybankbook.view;
 
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RETAIN_SORT;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_SORT;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_TEXT_SIZE;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -79,7 +83,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         handler=new Handler();
 
         //ConditionFragment 정렬 값 받기
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_viewpager_sort), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_VIEWPAGER_SORT, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 adapter.setCondition(false);
@@ -118,7 +122,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             }
         });
         //변경 font size 값
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_viewpager_text_size), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_VIEWPAGER_TEXT_SIZE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 fontSize=result.getFloat(getResources().getString(R.string.text_Size));
@@ -156,7 +160,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
 
         Bundle bundle=new Bundle();
         bundle.putBoolean(getResources().getString(R.string.is_newest_sort),true);
-        getParentFragmentManager().setFragmentResult(getResources().getString(R.string.request_key_retain_sort), bundle);
+        getParentFragmentManager().setFragmentResult(REQUEST_KEY_RETAIN_SORT, bundle);
 
         resetTextSetting();
     }

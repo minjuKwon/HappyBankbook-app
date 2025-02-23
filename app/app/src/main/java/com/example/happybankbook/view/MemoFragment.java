@@ -2,6 +2,8 @@ package com.example.happybankbook.view;
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_MEMO_TEXT_SIZE;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -63,7 +65,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //변경 font size 값
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_memo_text_size), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_MEMO_TEXT_SIZE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 fontSize=result.getFloat(getResources().getString(R.string.text_Size));

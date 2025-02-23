@@ -2,6 +2,15 @@ package com.example.happybankbook.view;
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_MEMO_TEXT_SIZE;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_ELLIPSIZE;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_LINE;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_ELLIPSIZE;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_LINE;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_SIZE;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_TEXT_SIZE;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -236,8 +245,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         if(v.getId()==R.id.ellipsis){
             setEllipsize();
             boolean isCheckEllipsize=!hasEllipsize;
-            changeEllipsize(isCheckEllipsize,getResources().getString(R.string.request_key_recyclerview_text_ellipsize));
-            changeEllipsize(isCheckEllipsize,getResources().getString(R.string.request_key_search_text_ellipsize));
+            changeEllipsize(isCheckEllipsize,REQUEST_KEY_RECYCLERVIEW_TEXT_ELLIPSIZE);
+            changeEllipsize(isCheckEllipsize,REQUEST_KEY_SEARCH_TEXT_ELLIPSIZE);
         }else if(v.getId()==R.id.pdf){
             fileExtension="pdf";
             makeExportDialog(Build.VERSION.SDK_INT, pdfType);
@@ -260,13 +269,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         if(group.getId()==R.id.radioLineDisplay){
             if(checkedId==R.id.radioLineSingle){
                 setLineRadioButton(true, false, R.color.black, R.color.gray);
-                changeTextLine(1,getResources().getString(R.string.request_key_recyclerview_text_line));
-                changeTextLine(1,getResources().getString(R.string.request_key_search_text_line));
+                changeTextLine(1,REQUEST_KEY_RECYCLERVIEW_TEXT_LINE);
+                changeTextLine(1,REQUEST_KEY_SEARCH_TEXT_LINE);
                 checkLine=R.id.radioLineSingle;
             }else if(checkedId==R.id.radioLineMul){
                 setLineRadioButton(false, true, R.color.gray, R.color.black);
-                changeTextLine(2,getResources().getString(R.string.request_key_recyclerview_text_line));
-                changeTextLine(2,getResources().getString(R.string.request_key_search_text_line));
+                changeTextLine(2,REQUEST_KEY_RECYCLERVIEW_TEXT_LINE);
+                changeTextLine(2,REQUEST_KEY_SEARCH_TEXT_LINE);
                 checkLine=R.id.radioLineMul;
             }
         }
@@ -274,24 +283,24 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         else if(group.getId()==R.id.radioFont){
             if(checkedId==R.id.radioFontOne){
                 setFontRadioButton(true, false, false, R.color.black, R.color.gray, R.color.gray);
-                changeFont(15,getResources().getString(R.string.request_key_recyclerview_text_size));
-                changeFont(15,getResources().getString(R.string.request_key_search_text_size));
-                changeFont(12,getResources().getString(R.string.request_key_memo_text_size));
-                changeFont(12,getResources().getString(R.string.request_key_viewpager_text_size));
+                changeFont(15,REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
+                changeFont(15,REQUEST_KEY_SEARCH_TEXT_SIZE);
+                changeFont(12,REQUEST_KEY_MEMO_TEXT_SIZE);
+                changeFont(12,REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
                 checkFontSize=R.id.radioFontOne;
             }else if(checkedId==R.id.radioFontTwo){
                 setFontRadioButton(false, true, false, R.color.gray, R.color.black, R.color.gray);
-                changeFont(18,getResources().getString(R.string.request_key_recyclerview_text_size));
-                changeFont(18,getResources().getString(R.string.request_key_search_text_size));
-                changeFont(15,getResources().getString(R.string.request_key_memo_text_size));
-                changeFont(15,getResources().getString(R.string.request_key_viewpager_text_size));
+                changeFont(18,REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
+                changeFont(18,REQUEST_KEY_SEARCH_TEXT_SIZE);
+                changeFont(15,REQUEST_KEY_MEMO_TEXT_SIZE);
+                changeFont(15,REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
                 checkFontSize=R.id.radioFontTwo;
             }else if(checkedId==R.id.radioFontThree){
                 setFontRadioButton(false, false, true, R.color.gray, R.color.gray, R.color.black);
-                changeFont(21,getResources().getString(R.string.request_key_recyclerview_text_size));
-                changeFont(21,getResources().getString(R.string.request_key_search_text_size));
-                changeFont(18,getResources().getString(R.string.request_key_memo_text_size));
-                changeFont(18,getResources().getString(R.string.request_key_viewpager_text_size));
+                changeFont(21,REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
+                changeFont(21,REQUEST_KEY_SEARCH_TEXT_SIZE);
+                changeFont(18,REQUEST_KEY_MEMO_TEXT_SIZE);
+                changeFont(18,REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
                 checkFontSize=R.id.radioFontThree;
             }
         }

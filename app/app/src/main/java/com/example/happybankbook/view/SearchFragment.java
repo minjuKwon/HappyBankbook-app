@@ -1,5 +1,9 @@
 package com.example.happybankbook.view;
 
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_ELLIPSIZE;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_LINE;
+import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_SIZE;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -54,7 +58,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_search_text_size), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_SEARCH_TEXT_SIZE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 fontSize=result.getFloat(getResources().getString(R.string.text_Size));
@@ -62,7 +66,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
             }
         });
         //변경 text line 값
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_search_text_line), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_SEARCH_TEXT_LINE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 textLine=result.getInt(getResources().getString(R.string.text_line));
@@ -70,7 +74,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
             }
         });
         //변경 text ellipsize 값
-        getParentFragmentManager().setFragmentResultListener(getResources().getString(R.string.request_key_search_text_ellipsize), this, new FragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_SEARCH_TEXT_ELLIPSIZE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 hasTextEllipsize=result.getBoolean(getResources().getString(R.string.text_ellipsize));
