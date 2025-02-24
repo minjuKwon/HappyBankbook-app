@@ -1,5 +1,14 @@
 package com.example.happybankbook.view;
 
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_FROM_DATE;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_CLICKED_ONCE;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_INITIALIZATION;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_NEWEST_SORT;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_ITEM_COUNT;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_ELLIPSIZE;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_LINE;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TO_DATE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_INITIALIZATION;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_SORT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_ELLIPSIZE;
@@ -82,10 +91,10 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RECYCLERVIEW_SORT, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fromDate=result.getInt(getResources().getString(R.string.from_date));
-                toDate=result.getInt(getResources().getString(R.string.to_date));
-                itemCount=result.getInt(getResources().getString(R.string.item_count));
-                isNewestSort =result.getBoolean(getResources().getString(R.string.is_newest_sort));
+                fromDate=result.getInt(BUNDLE_KEY_FROM_DATE);
+                toDate=result.getInt(BUNDLE_KEY_TO_DATE);
+                itemCount=result.getInt(BUNDLE_KEY_ITEM_COUNT);
+                isNewestSort =result.getBoolean(BUNDLE_KEY_IS_NEWEST_SORT);
 
                 keepCondition();
             }
@@ -94,14 +103,14 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_REMOVE_FRAGMENT, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                clickCountCondition=result.getInt(getResources().getString(R.string.is_clicked_once));
+                clickCountCondition=result.getInt(BUNDLE_KEY_IS_CLICKED_ONCE);
             }
         });
         //변경 font size 값
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fontSize=result.getFloat(getResources().getString(R.string.text_Size));
+                fontSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
                 adapter.setFont(fontSize);
             }
         });
@@ -109,7 +118,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RECYCLERVIEW_TEXT_LINE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                textLine=result.getInt(getResources().getString(R.string.text_line));
+                textLine=result.getInt(BUNDLE_KEY_TEXT_LINE);
                 adapter.setTextLine(textLine);
             }
         });
@@ -117,7 +126,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RECYCLERVIEW_TEXT_ELLIPSIZE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                hasTextEllipsize=result.getBoolean(getResources().getString(R.string.text_ellipsize));
+                hasTextEllipsize=result.getBoolean(BUNDLE_KEY_TEXT_ELLIPSIZE);
                 adapter.setTextEllipsize(hasTextEllipsize);
             }
         });
@@ -151,7 +160,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
 
         //onStop()때 ConditionFragment 값 초기화
         Bundle bundle=new Bundle();
-        bundle.putBoolean(getResources().getString(R.string.is_initialization),true);
+        bundle.putBoolean(BUNDLE_KEY_IS_INITIALIZATION,true);
         getParentFragmentManager().setFragmentResult(REQUEST_KEY_INITIALIZATION, bundle);
         resetTextSetting();
 

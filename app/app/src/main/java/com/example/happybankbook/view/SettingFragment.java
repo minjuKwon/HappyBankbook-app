@@ -2,6 +2,9 @@ package com.example.happybankbook.view;
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_ELLIPSIZE;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_LINE;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_MEMO_TEXT_SIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_LINE;
@@ -337,14 +340,14 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     public void changeFont(float size, String key){
         Bundle bundle=new Bundle();
-        bundle.putFloat(getResources().getString(R.string.text_Size),size);
+        bundle.putFloat(BUNDLE_KEY_TEXT_SIZE,size);
 
         getParentFragmentManager().setFragmentResult(key, bundle);
     }
 
    public void changeTextLine(int line, String key){
        Bundle bundle=new Bundle();
-       bundle.putInt(getResources().getString(R.string.text_line), line);
+       bundle.putInt(BUNDLE_KEY_TEXT_LINE, line);
 
        getParentFragmentManager().setFragmentResult(key, bundle);
    }
@@ -361,7 +364,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     public void changeEllipsize(boolean check, String key){
         Bundle bundle=new Bundle();
-        bundle.putBoolean(getResources().getString(R.string.text_ellipsize), check);
+        bundle.putBoolean(BUNDLE_KEY_TEXT_ELLIPSIZE, check);
 
         getParentFragmentManager().setFragmentResult(key, bundle);
     }

@@ -1,5 +1,10 @@
 package com.example.happybankbook.view;
 
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_FROM_DATE;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_NEWEST_SORT;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_ITEM_COUNT;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TO_DATE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RETAIN_SORT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_SORT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_TEXT_SIZE;
@@ -90,10 +95,10 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 adapter.setCondition(false);
 
-                fromDate=result.getInt(getResources().getString(R.string.from_date));
-                toDate=result.getInt(getResources().getString(R.string.to_date));
-                itemCount=result.getInt(getResources().getString(R.string.item_count));
-                boolean isNewestSort=result.getBoolean(getResources().getString(R.string.is_newest_sort));
+                fromDate=result.getInt(BUNDLE_KEY_FROM_DATE);
+                toDate=result.getInt(BUNDLE_KEY_TO_DATE);
+                itemCount=result.getInt(BUNDLE_KEY_ITEM_COUNT);
+                boolean isNewestSort=result.getBoolean(BUNDLE_KEY_IS_NEWEST_SORT);
 
                 if(fromDate>toDate){
                     int temp=fromDate;
@@ -127,7 +132,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_VIEWPAGER_TEXT_SIZE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fontSize=result.getFloat(getResources().getString(R.string.text_Size));
+                fontSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
                 adapter.setFont(fontSize);
             }
         });
@@ -161,7 +166,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         super.onStop();
 
         Bundle bundle=new Bundle();
-        bundle.putBoolean(getResources().getString(R.string.is_newest_sort),true);
+        bundle.putBoolean(BUNDLE_KEY_IS_NEWEST_SORT,true);
         getParentFragmentManager().setFragmentResult(REQUEST_KEY_RETAIN_SORT, bundle);
 
         resetTextSetting();

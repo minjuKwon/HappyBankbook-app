@@ -1,5 +1,11 @@
 package com.example.happybankbook.view;
 
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_FROM_DATE;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_CLICKED_ONCE;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_INITIALIZATION;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_NEWEST_SORT;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_ITEM_COUNT;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TO_DATE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_INITIALIZATION;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_SORT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_REMOVE_FRAGMENT;
@@ -73,7 +79,7 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RETAIN_SORT, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                hasVisitedViewPager=result.getBoolean(getResources().getString(R.string.is_newest_sort));
+                hasVisitedViewPager=result.getBoolean(BUNDLE_KEY_IS_NEWEST_SORT);
                 if(!hasVisitedViewPager){
                     reset();
                 }
@@ -83,7 +89,7 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_INITIALIZATION, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                boolean isInitialization=result.getBoolean(getResources().getString(R.string.is_initialization));
+                boolean isInitialization=result.getBoolean(BUNDLE_KEY_IS_INITIALIZATION);
                 if(isInitialization){
                     reset();
                 }
@@ -130,7 +136,7 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         super.onDestroy();
         //ConditionFragment 중복 생성을 막기 위한 변수 전달
         Bundle bundle=new Bundle();
-        bundle.putInt(getResources().getString(R.string.is_clicked_once),1);
+        bundle.putInt(BUNDLE_KEY_IS_CLICKED_ONCE,1);
         getParentFragmentManager().setFragmentResult(REQUEST_KEY_REMOVE_FRAGMENT,bundle);
     }
 
@@ -262,10 +268,10 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
 
     public void sendBundle(int fromDate, int toDate, int count, boolean sort){
         Bundle bundle=new Bundle();
-        bundle.putInt(getResources().getString(R.string.from_date),fromDate);
-        bundle.putInt(getResources().getString(R.string.to_date),toDate);
-        bundle.putInt(getResources().getString(R.string.item_count),count);
-        bundle.putBoolean(getResources().getString(R.string.is_newest_sort),sort);
+        bundle.putInt(BUNDLE_KEY_FROM_DATE,fromDate);
+        bundle.putInt(BUNDLE_KEY_TO_DATE,toDate);
+        bundle.putInt(BUNDLE_KEY_ITEM_COUNT,count);
+        bundle.putBoolean(BUNDLE_KEY_IS_NEWEST_SORT,sort);
 
         getParentFragmentManager().setFragmentResult(REQUEST_KEY_RECYCLERVIEW_SORT, bundle);
         getParentFragmentManager().setFragmentResult(REQUEST_KEY_VIEWPAGER_SORT, bundle);

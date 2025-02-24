@@ -2,6 +2,7 @@ package com.example.happybankbook.view;
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_MEMO_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_MEMO_TEXT_STYLE;
@@ -70,7 +71,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_MEMO_TEXT_SIZE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fontSize=result.getFloat(getResources().getString(R.string.text_Size));
+                fontSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
                 contentEditText.setTextSize(fontSize);
             }
         });

@@ -1,5 +1,8 @@
 package com.example.happybankbook.view;
 
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_ELLIPSIZE;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_LINE;
+import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_LINE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_SIZE;
@@ -65,7 +68,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_SEARCH_TEXT_SIZE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fontSize=result.getFloat(getResources().getString(R.string.text_Size));
+                fontSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
                 adapter.setFont(fontSize);
             }
         });
@@ -73,7 +76,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_SEARCH_TEXT_LINE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                textLine=result.getInt(getResources().getString(R.string.text_line));
+                textLine=result.getInt(BUNDLE_KEY_TEXT_LINE);
                 adapter.setTextLine(textLine);
             }
         });
@@ -81,7 +84,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_SEARCH_TEXT_ELLIPSIZE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                hasTextEllipsize=result.getBoolean(getResources().getString(R.string.text_ellipsize));
+                hasTextEllipsize=result.getBoolean(BUNDLE_KEY_TEXT_ELLIPSIZE);
                 adapter.setTextEllipsize(hasTextEllipsize);
             }
         });
