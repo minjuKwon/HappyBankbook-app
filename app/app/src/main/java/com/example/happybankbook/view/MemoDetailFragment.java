@@ -3,6 +3,8 @@ package com.example.happybankbook.view;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RETAIN_SORT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_SORT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_TEXT_SIZE;
+import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_SIZE;
+import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_VIEWPAGER_TEXT_STYLE;
 
 import android.app.Activity;
 import android.content.Context;
@@ -144,8 +146,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_viewpager_text_style),Context.MODE_PRIVATE);
-        fontSize=preferences.getFloat(getResources().getString(R.string.text_Size),12);
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_VIEWPAGER_TEXT_STYLE,Context.MODE_PRIVATE);
+        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE,12);
         adapter.setFont(fontSize);
         
         //SearchFragment에서 검색 후 키보드 내리지 않고 바로 viewpager 이동 하면,
@@ -269,9 +271,9 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     }
 
     private void resetTextSetting(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_viewpager_text_style), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_VIEWPAGER_TEXT_STYLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putFloat(getResources().getString(R.string.text_Size), fontSize);
+        editor.putFloat(PREF_KEY_TEXT_SIZE, fontSize);
 
         editor.apply();
     }

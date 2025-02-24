@@ -5,6 +5,12 @@ import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KE
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_REMOVE_FRAGMENT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RETAIN_SORT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_SORT;
+import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_FROM_DATE;
+import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_IS_CLICKED_DURATION;
+import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_IS_NEWEST_SORT;
+import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_ITEM_COUNT;
+import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TO_DATE;
+import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_SORT;
 
 import android.app.Activity;
 import android.content.Context;
@@ -102,20 +108,20 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         ((MainActivity)mActivity).setCurrentDate(toDurationTextView);
 
         //SharedPreferences에 저장된 정렬 값 가져오기
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_sort),Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SORT,Context.MODE_PRIVATE);
 
-        boolean isClick=preferences.getBoolean(getResources().getString(R.string.is_clicked_duration),true);
+        boolean isClick=preferences.getBoolean(PREF_KEY_IS_CLICKED_DURATION,true);
         isClickedDuration=(!isClick);
         clickDuration();
 
-        fromDurationTextView.setText(preferences.getString(getResources().getString(R.string.from_date),((MainActivity)mActivity).setCurrentDate()));
-        toDurationTextView.setText(preferences.getString(getResources().getString(R.string.to_date),((MainActivity)mActivity).setCurrentDate()));
+        fromDurationTextView.setText(preferences.getString(PREF_KEY_FROM_DATE,((MainActivity)mActivity).setCurrentDate()));
+        toDurationTextView.setText(preferences.getString(PREF_KEY_TO_DATE,((MainActivity)mActivity).setCurrentDate()));
 
-        boolean isCheckedRadioNew=preferences.getBoolean(getResources().getString(R.string.is_newest_sort),true);
+        boolean isCheckedRadioNew=preferences.getBoolean(PREF_KEY_IS_NEWEST_SORT,true);
         newestSortRadioButton.setChecked(isCheckedRadioNew);
         oldestSortRadioButton.setChecked(!isCheckedRadioNew);
 
-        itemCountEditText.setText(preferences.getString(getResources().getString(R.string.item_count),null));
+        itemCountEditText.setText(preferences.getString(PREF_KEY_ITEM_COUNT,null));
 
     }
 
@@ -266,13 +272,13 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
     }
 
     public void setSharedPreferences(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_sort), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SORT, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(getResources().getString(R.string.is_clicked_duration),isClickedDuration);
-        editor.putString(getResources().getString(R.string.from_date),fromDurationTextView.getText().toString());
-        editor.putString(getResources().getString(R.string.to_date),toDurationTextView.getText().toString());
-        editor.putBoolean(getResources().getString(R.string.is_newest_sort),newestSortRadioButton.isChecked());
-        editor.putString(getResources().getString(R.string.item_count),itemCountEditText.getText().toString());
+        editor.putBoolean(PREF_KEY_IS_CLICKED_DURATION,isClickedDuration);
+        editor.putString(PREF_KEY_FROM_DATE,fromDurationTextView.getText().toString());
+        editor.putString(PREF_KEY_TO_DATE,toDurationTextView.getText().toString());
+        editor.putBoolean(PREF_KEY_IS_NEWEST_SORT,newestSortRadioButton.isChecked());
+        editor.putString(PREF_KEY_ITEM_COUNT,itemCountEditText.getText().toString());
         editor.apply();
     }
 

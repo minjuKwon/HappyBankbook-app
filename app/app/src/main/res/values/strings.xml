@@ -67,29 +67,16 @@
     <string name="add">추가하기</string>
     <string name="setting">설정</string>
 
-    //SharedPreferences name
-    <string name="pref_sort">sort</string>
-    <string name="pref_set_style">set_style</string>
-    <string name="pref_list_text_style">list_text_setting</string>
-    <string name="pref_search_text_style">search_text_style</string>
-    <string name="pref_memo_text_style">memo_text_style</string>
-    <string name="pref_viewpager_text_style">viewpager_text_style</string>
-    <string name="pref_set_initialization">set_initialization</string>
-    <string name="pref_has_ellipsize">has_ellipsize</string>
-    <string name="pref_text_line_id">text_line_id</string>
-    <string name="pref_text_size_id">text_size_id</string>
-
     //bundle
-    <string name="is_clicked_once">is_clicked_once</string>
-    <string name="is_initialization">is_initialization</string>
-    <string name="is_clicked_duration">is_clicked_duration</string>
     <string name="text_ellipsize">text_ellipsize</string>
     <string name="text_line">text_line</string>
-    <string name="text_Size">text_Size</string>
+    <string name="text_Size">text_size</string>
+    <string name="is_initialization">is_initialization</string>
+    <string name="is_clicked_once">is_clicked_once</string>
+    <string name="is_newest_sort">is_newest_sort</string>
     <string name="from_date">from_date</string>
     <string name="to_date">to_date</string>
     <string name="item_count">item_count</string>
-    <string name="is_newest_sort">is_newest_sort</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

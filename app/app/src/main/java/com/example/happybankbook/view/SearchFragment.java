@@ -3,6 +3,10 @@ package com.example.happybankbook.view;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_LINE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_SIZE;
+import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_ELLIPSIZE;
+import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_LINE;
+import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_SIZE;
+import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_SEARCH_TEXT_STYLE;
 
 import android.app.Activity;
 import android.content.Context;
@@ -95,10 +99,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_search_text_style),Context.MODE_PRIVATE);
-        hasTextEllipsize=preferences.getBoolean(getResources().getString(R.string.text_ellipsize),true);
-        textLine=preferences.getInt(getResources().getString(R.string.text_line),2);
-        fontSize=preferences.getFloat(getResources().getString(R.string.text_Size),15);
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SEARCH_TEXT_STYLE,Context.MODE_PRIVATE);
+        hasTextEllipsize=preferences.getBoolean(PREF_KEY_TEXT_ELLIPSIZE,true);
+        textLine=preferences.getInt(PREF_KEY_TEXT_LINE,2);
+        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE,15);
 
         adapter.setTextEllipsize(hasTextEllipsize);
         adapter.setTextLine(textLine);
@@ -181,11 +185,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     }
 
     private void resetTextSetting(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_search_text_style), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SEARCH_TEXT_STYLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(getResources().getString(R.string.text_ellipsize), hasTextEllipsize);
-        editor.putInt(getResources().getString(R.string.text_line), textLine);
-        editor.putFloat(getResources().getString(R.string.text_Size), fontSize);
+        editor.putBoolean(PREF_KEY_TEXT_ELLIPSIZE, hasTextEllipsize);
+        editor.putInt(PREF_KEY_TEXT_LINE, textLine);
+        editor.putFloat(PREF_KEY_TEXT_SIZE, fontSize);
 
         editor.apply();
     }

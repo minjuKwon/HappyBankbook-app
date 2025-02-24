@@ -3,6 +3,8 @@ package com.example.happybankbook.view;
 import static android.app.Activity.RESULT_OK;
 
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_MEMO_TEXT_SIZE;
+import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_SIZE;
+import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_MEMO_TEXT_STYLE;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -89,8 +91,8 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         ((MainActivity)mActivity).setCurrentDate(dateTextView);
         getGallery();
 
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_memo_text_style),Context.MODE_PRIVATE);
-        fontSize=preferences.getFloat(getResources().getString(R.string.text_Size),12);
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_MEMO_TEXT_STYLE,Context.MODE_PRIVATE);
+        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE,12);
         contentEditText.setTextSize(fontSize);
     }
 
@@ -257,9 +259,9 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     }
 
     private void resetTextSetting(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_memo_text_style), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_MEMO_TEXT_STYLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putFloat(getResources().getString(R.string.text_Size), fontSize);
+        editor.putFloat(PREF_KEY_TEXT_SIZE, fontSize);
 
         editor.apply();
     }

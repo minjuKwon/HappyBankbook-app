@@ -10,6 +10,10 @@ import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KE
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_LINE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_SIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_TEXT_SIZE;
+import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_HAS_ELLIPSIZE;
+import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_LINE_TEXT_ID;
+import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_SIZE_TEXT_ID;
+import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_SET_STYLE;
 
 import android.Manifest;
 import android.app.Activity;
@@ -165,10 +169,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_set_style),Context.MODE_PRIVATE);
-        hasEllipsize=preferences.getBoolean(getResources().getString(R.string.pref_has_ellipsize),true);
-        checkLine=preferences.getInt(getResources().getString(R.string.pref_text_line_id),R.id.radioLineMul);
-        checkFontSize=preferences.getInt(getResources().getString(R.string.pref_text_size_id),R.id.radioFontOne);
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SET_STYLE,Context.MODE_PRIVATE);
+        hasEllipsize=preferences.getBoolean(PREF_KEY_HAS_ELLIPSIZE,true);
+        checkLine=preferences.getInt(PREF_KEY_LINE_TEXT_ID,R.id.radioLineMul);
+        checkFontSize=preferences.getInt(PREF_KEY_SIZE_TEXT_ID,R.id.radioFontOne);
 
         setEllipsize();
 
@@ -363,11 +367,11 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     }
 
     public void resetRadioButton(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(getResources().getString(R.string.pref_set_style), Context.MODE_PRIVATE);
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SET_STYLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(getResources().getString(R.string.pref_has_ellipsize), !hasEllipsize);
-        editor.putInt(getResources().getString(R.string.pref_text_line_id), checkLine);
-        editor.putInt(getResources().getString(R.string.pref_text_size_id), checkFontSize);
+        editor.putBoolean(PREF_KEY_HAS_ELLIPSIZE, !hasEllipsize);
+        editor.putInt(PREF_KEY_LINE_TEXT_ID, checkLine);
+        editor.putInt(PREF_KEY_SIZE_TEXT_ID, checkFontSize);
 
         editor.apply();
     }
