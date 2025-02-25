@@ -6,10 +6,16 @@ import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZ
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_LINE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_SIZE;
+import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_ELLIPSIZE;
+import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_LINE;
+import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_SIZE_LARGE;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_LINE;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_SEARCH_TEXT_STYLE;
+import static com.example.happybankbook.constants.TextStyles.TEXT_ELLIPSIZE_DEFAULT;
+import static com.example.happybankbook.constants.TextStyles.TEXT_LINE_DEFAULT;
+import static com.example.happybankbook.constants.TextStyles.TEXT_SIZE_DEFAULT_LARGE;
 
 import android.app.Activity;
 import android.content.Context;
@@ -47,9 +53,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     private RecyclerView recyclerView;
     private SearchPresenter presenter;
     private MemoAdapter adapter;
-    private float fontSize=15;
-    private int textLine=2;
-    private boolean hasTextEllipsize=true;
+    private float fontSize= TEXT_SIZE_DEFAULT_LARGE;
+    private int textLine= TEXT_LINE_DEFAULT;
+    private boolean hasTextEllipsize= TEXT_ELLIPSIZE_DEFAULT;
     private Context mContext;
     private Activity mActivity;
 
@@ -103,9 +109,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
         super.onViewCreated(view, savedInstanceState);
 
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SEARCH_TEXT_STYLE,Context.MODE_PRIVATE);
-        hasTextEllipsize=preferences.getBoolean(PREF_KEY_TEXT_ELLIPSIZE,true);
-        textLine=preferences.getInt(PREF_KEY_TEXT_LINE,2);
-        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE,15);
+        hasTextEllipsize=preferences.getBoolean(PREF_KEY_TEXT_ELLIPSIZE, PREF_DEFAULT_TEXT_ELLIPSIZE);
+        textLine=preferences.getInt(PREF_KEY_TEXT_LINE, PREF_DEFAULT_TEXT_LINE);
+        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE, PREF_DEFAULT_TEXT_SIZE_LARGE);
 
         adapter.setTextEllipsize(hasTextEllipsize);
         adapter.setTextLine(textLine);

@@ -11,6 +11,9 @@ import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KE
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_REMOVE_FRAGMENT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RETAIN_SORT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_SORT;
+import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_IS_CLICKED_DURATION;
+import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_IS_NEWEST_SORT;
+import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_ITEM_COUNT;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_FROM_DATE;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_IS_CLICKED_DURATION;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_IS_NEWEST_SORT;
@@ -116,18 +119,18 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         //SharedPreferences에 저장된 정렬 값 가져오기
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SORT,Context.MODE_PRIVATE);
 
-        boolean isClick=preferences.getBoolean(PREF_KEY_IS_CLICKED_DURATION,true);
+        boolean isClick=preferences.getBoolean(PREF_KEY_IS_CLICKED_DURATION,PREF_DEFAULT_IS_CLICKED_DURATION);
         isClickedDuration=(!isClick);
         clickDuration();
 
         fromDurationTextView.setText(preferences.getString(PREF_KEY_FROM_DATE,((MainActivity)mActivity).setCurrentDate()));
         toDurationTextView.setText(preferences.getString(PREF_KEY_TO_DATE,((MainActivity)mActivity).setCurrentDate()));
 
-        boolean isCheckedRadioNew=preferences.getBoolean(PREF_KEY_IS_NEWEST_SORT,true);
+        boolean isCheckedRadioNew=preferences.getBoolean(PREF_KEY_IS_NEWEST_SORT,PREF_DEFAULT_IS_NEWEST_SORT);
         newestSortRadioButton.setChecked(isCheckedRadioNew);
         oldestSortRadioButton.setChecked(!isCheckedRadioNew);
 
-        itemCountEditText.setText(preferences.getString(PREF_KEY_ITEM_COUNT,null));
+        itemCountEditText.setText(preferences.getString(PREF_KEY_ITEM_COUNT,PREF_DEFAULT_ITEM_COUNT));
 
     }
 

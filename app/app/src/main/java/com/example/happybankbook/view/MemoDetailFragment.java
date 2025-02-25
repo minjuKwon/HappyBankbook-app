@@ -8,8 +8,10 @@ import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TO_DATE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RETAIN_SORT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_SORT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_TEXT_SIZE;
+import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_SIZE_SMALL;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_VIEWPAGER_TEXT_STYLE;
+import static com.example.happybankbook.constants.TextStyles.TEXT_SIZE_DEFAULT_SMALL;
 
 import android.app.Activity;
 import android.content.Context;
@@ -69,7 +71,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     private int currentPosition;
     private int adapterPosition;
     private boolean isFirstInteraction=true;
-    private float fontSize=12;
+    private float fontSize= TEXT_SIZE_DEFAULT_SMALL;
 
     private Context mContext;
     private Activity mActivity;
@@ -152,7 +154,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         super.onViewCreated(view, savedInstanceState);
 
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_VIEWPAGER_TEXT_STYLE,Context.MODE_PRIVATE);
-        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE,12);
+        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE, PREF_DEFAULT_TEXT_SIZE_SMALL);
         adapter.setFont(fontSize);
         
         //SearchFragment에서 검색 후 키보드 내리지 않고 바로 viewpager 이동 하면,

@@ -15,12 +15,19 @@ import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KE
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_LINE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_REMOVE_FRAGMENT;
+import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_IS_INITIALIZATION;
+import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_ELLIPSIZE;
+import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_LINE;
+import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_SIZE_LARGE;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_IS_INITIALIZATION;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_LINE;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_LIST_TEXT_STYLE;
 import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_SET_INITIALIZATION;
+import static com.example.happybankbook.constants.TextStyles.TEXT_ELLIPSIZE_DEFAULT;
+import static com.example.happybankbook.constants.TextStyles.TEXT_LINE_DEFAULT;
+import static com.example.happybankbook.constants.TextStyles.TEXT_SIZE_DEFAULT_LARGE;
 
 import android.app.Activity;
 import android.content.Context;
@@ -64,10 +71,10 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     private int fromDate;
     private int toDate;
     private int clickCountCondition=1;
-    private int textLine=2;
-    private float fontSize=15;
+    private int textLine= TEXT_LINE_DEFAULT;
+    private float fontSize= TEXT_SIZE_DEFAULT_LARGE;
     private boolean isNewestSort;
-    private boolean hasTextEllipsize=true;
+    private boolean hasTextEllipsize= TEXT_ELLIPSIZE_DEFAULT;
     private boolean isInitialization;
 
     private Activity mActivity;
@@ -85,7 +92,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         super.onCreate(savedInstanceState);
 
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SET_INITIALIZATION,Context.MODE_PRIVATE);
-        isInitialization=preferences.getBoolean(PREF_KEY_IS_INITIALIZATION,false);
+        isInitialization=preferences.getBoolean(PREF_KEY_IS_INITIALIZATION,PREF_DEFAULT_IS_INITIALIZATION);
 
         //ConditionFragment 정렬 값 받기
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RECYCLERVIEW_SORT, this, new FragmentResultListener() {
@@ -145,9 +152,9 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         super.onViewCreated(view, savedInstanceState);
 
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_LIST_TEXT_STYLE,Context.MODE_PRIVATE);
-        hasTextEllipsize=preferences.getBoolean(PREF_KEY_TEXT_ELLIPSIZE,true);
-        textLine=preferences.getInt(PREF_KEY_TEXT_LINE,2);
-        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE,15);
+        hasTextEllipsize=preferences.getBoolean(PREF_KEY_TEXT_ELLIPSIZE,PREF_DEFAULT_TEXT_ELLIPSIZE);
+        textLine=preferences.getInt(PREF_KEY_TEXT_LINE,PREF_DEFAULT_TEXT_LINE);
+        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE,PREF_DEFAULT_TEXT_SIZE_LARGE);
 
         adapter.setTextEllipsize(hasTextEllipsize);
         adapter.setTextLine(textLine);

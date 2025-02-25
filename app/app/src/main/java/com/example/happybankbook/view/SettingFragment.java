@@ -13,10 +13,17 @@ import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KE
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_LINE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_SIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_TEXT_SIZE;
+import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_HAS_ELLIPSIZE;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_LINE_TEXT_ID;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_SIZE_TEXT_ID;
 import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_SET_STYLE;
+import static com.example.happybankbook.constants.TextStyles.TEXT_LINE_DEFAULT;
+import static com.example.happybankbook.constants.TextStyles.TEXT_LINE_SINGLE;
+import static com.example.happybankbook.constants.TextStyles.TEXT_SIZE_DEFAULT_LARGE;
+import static com.example.happybankbook.constants.TextStyles.TEXT_SIZE_DEFAULT_SMALL;
+import static com.example.happybankbook.constants.TextStyles.TEXT_SIZE_LARGE;
+import static com.example.happybankbook.constants.TextStyles.TEXT_SIZE_MEDIUM;
 
 import android.Manifest;
 import android.app.Activity;
@@ -173,9 +180,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         super.onViewCreated(view, savedInstanceState);
 
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SET_STYLE,Context.MODE_PRIVATE);
-        hasEllipsize=preferences.getBoolean(PREF_KEY_HAS_ELLIPSIZE,true);
-        checkLine=preferences.getInt(PREF_KEY_LINE_TEXT_ID,R.id.radioLineMul);
-        checkFontSize=preferences.getInt(PREF_KEY_SIZE_TEXT_ID,R.id.radioFontOne);
+        hasEllipsize=preferences.getBoolean(PREF_KEY_HAS_ELLIPSIZE, PREF_DEFAULT_TEXT_ELLIPSIZE);
+        checkLine=preferences.getInt(PREF_KEY_LINE_TEXT_ID, R.id.radioLineMul);
+        checkFontSize=preferences.getInt(PREF_KEY_SIZE_TEXT_ID, R.id.radioFontOne);
 
         setEllipsize();
 
@@ -276,13 +283,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         if(group.getId()==R.id.radioLineDisplay){
             if(checkedId==R.id.radioLineSingle){
                 setLineRadioButton(true, false, R.color.black, R.color.gray);
-                changeTextLine(1,REQUEST_KEY_RECYCLERVIEW_TEXT_LINE);
-                changeTextLine(1,REQUEST_KEY_SEARCH_TEXT_LINE);
+                changeTextLine(TEXT_LINE_SINGLE, REQUEST_KEY_RECYCLERVIEW_TEXT_LINE);
+                changeTextLine(TEXT_LINE_SINGLE,REQUEST_KEY_SEARCH_TEXT_LINE);
                 checkLine=R.id.radioLineSingle;
             }else if(checkedId==R.id.radioLineMul){
                 setLineRadioButton(false, true, R.color.gray, R.color.black);
-                changeTextLine(2,REQUEST_KEY_RECYCLERVIEW_TEXT_LINE);
-                changeTextLine(2,REQUEST_KEY_SEARCH_TEXT_LINE);
+                changeTextLine(TEXT_LINE_DEFAULT, REQUEST_KEY_RECYCLERVIEW_TEXT_LINE);
+                changeTextLine(TEXT_LINE_DEFAULT, REQUEST_KEY_SEARCH_TEXT_LINE);
                 checkLine=R.id.radioLineMul;
             }
         }
@@ -290,24 +297,24 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         else if(group.getId()==R.id.radioFont){
             if(checkedId==R.id.radioFontOne){
                 setFontRadioButton(true, false, false, R.color.black, R.color.gray, R.color.gray);
-                changeFont(15,REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
-                changeFont(15,REQUEST_KEY_SEARCH_TEXT_SIZE);
-                changeFont(12,REQUEST_KEY_MEMO_TEXT_SIZE);
-                changeFont(12,REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
+                changeFont(TEXT_SIZE_DEFAULT_SMALL, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
+                changeFont(TEXT_SIZE_DEFAULT_SMALL, REQUEST_KEY_MEMO_TEXT_SIZE);
+                changeFont(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
+                changeFont(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_SEARCH_TEXT_SIZE);
                 checkFontSize=R.id.radioFontOne;
             }else if(checkedId==R.id.radioFontTwo){
                 setFontRadioButton(false, true, false, R.color.gray, R.color.black, R.color.gray);
-                changeFont(18,REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
-                changeFont(18,REQUEST_KEY_SEARCH_TEXT_SIZE);
-                changeFont(15,REQUEST_KEY_MEMO_TEXT_SIZE);
-                changeFont(15,REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
+                changeFont(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
+                changeFont(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_MEMO_TEXT_SIZE);
+                changeFont(TEXT_SIZE_MEDIUM, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
+                changeFont(TEXT_SIZE_MEDIUM, REQUEST_KEY_SEARCH_TEXT_SIZE);
                 checkFontSize=R.id.radioFontTwo;
             }else if(checkedId==R.id.radioFontThree){
                 setFontRadioButton(false, false, true, R.color.gray, R.color.gray, R.color.black);
-                changeFont(21,REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
-                changeFont(21,REQUEST_KEY_SEARCH_TEXT_SIZE);
-                changeFont(18,REQUEST_KEY_MEMO_TEXT_SIZE);
-                changeFont(18,REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
+                changeFont(TEXT_SIZE_MEDIUM, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
+                changeFont(TEXT_SIZE_MEDIUM, REQUEST_KEY_MEMO_TEXT_SIZE);
+                changeFont(TEXT_SIZE_LARGE, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
+                changeFont(TEXT_SIZE_LARGE, REQUEST_KEY_SEARCH_TEXT_SIZE);
                 checkFontSize=R.id.radioFontThree;
             }
         }

@@ -4,8 +4,10 @@ import static android.app.Activity.RESULT_OK;
 
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_MEMO_TEXT_SIZE;
+import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_SIZE_SMALL;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_MEMO_TEXT_STYLE;
+import static com.example.happybankbook.constants.TextStyles.TEXT_SIZE_DEFAULT_SMALL;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -52,7 +54,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     private MemoPresenter presenter;
     private Context mContext;
     private Activity mActivity;
-    private float fontSize=12;
+    private float fontSize= TEXT_SIZE_DEFAULT_SMALL;
     private boolean isClearContentTxt=false;
 
     @Override
@@ -93,7 +95,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         getGallery();
 
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_MEMO_TEXT_STYLE,Context.MODE_PRIVATE);
-        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE,12);
+        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE, PREF_DEFAULT_TEXT_SIZE_SMALL);
         contentEditText.setTextSize(fontSize);
     }
 
