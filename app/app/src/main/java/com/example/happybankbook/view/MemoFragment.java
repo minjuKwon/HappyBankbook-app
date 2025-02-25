@@ -131,8 +131,9 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
             if(result.getResultCode()==RESULT_OK&&result.getData()!=null){
                 contentImageView.setVisibility(View.VISIBLE);
                 Uri imageUri=result.getData().getData();
+                final String imageType=mContext.getContentResolver().getType(imageUri);
                 final MimeTypeMap mime = MimeTypeMap.getSingleton();
-                String extension = mime.getExtensionFromMimeType(mContext.getContentResolver().getType(imageUri));
+                String extension = mime.getExtensionFromMimeType(imageType);
                 contentImageView.setTag(extension);
                 Glide.with(mContext).load(imageUri).into(contentImageView);
             }else if(result.getData()!=null){
@@ -169,8 +170,9 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
     public void loadImage(){
         final String imgType="image/*";
+        final Uri contentUri= android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         Intent intent=new Intent(Intent.ACTION_GET_CONTENT).
-                setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imgType);
+                setDataAndType(contentUri, imgType);
         Intent createChooserIntent=Intent.createChooser(intent,null);
         activityResultLauncher.launch(createChooserIntent);
     }

@@ -120,8 +120,12 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         isClickedDuration=(!isClick);
         clickDuration();
 
-        fromDurationTextView.setText(preferences.getString(PREF_KEY_FROM_DATE,((MainActivity)mActivity).setCurrentDate()));
-        toDurationTextView.setText(preferences.getString(PREF_KEY_TO_DATE,((MainActivity)mActivity).setCurrentDate()));
+        String fromDurationStr=preferences.getString( PREF_KEY_FROM_DATE,
+                                                     ((MainActivity)mActivity).setCurrentDate() );
+        String toDurationStr=preferences.getString( PREF_KEY_TO_DATE,
+                                                    ((MainActivity)mActivity).setCurrentDate()) ;
+        fromDurationTextView.setText(fromDurationStr);
+        toDurationTextView.setText(toDurationStr);
 
         boolean isCheckedRadioNew=preferences.getBoolean(PREF_KEY_IS_NEWEST_SORT,PREF_DEFAULT_IS_NEWEST_SORT);
         newestSortRadioButton.setChecked(isCheckedRadioNew);
@@ -216,6 +220,7 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
 
     public void submit(){
         int toDate, fromDate, count;
+        String countStr= itemCountEditText.getText().toString();
         //정렬 날짜 범위 지정
         if(isClickedDuration){
             fromDate=DEFAULT_FROM_DATE;
@@ -225,10 +230,10 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
             toDate=((MainActivity)mActivity).convertDateToInt(toDurationTextView);
         }
         //조회할 메모 개수 얻기
-        if(TextUtils.isEmpty(itemCountEditText.getText().toString())){
+        if(TextUtils.isEmpty(countStr)){
             count= DEFAULT_COUNT;
         }else{
-            count=Integer.parseInt(itemCountEditText.getText().toString());
+            count=Integer.parseInt(countStr);
         }
         //memo recyclerView로 정렬 데이터 전달
         sendBundle(fromDate, toDate, count, newestSortRadioButton.isChecked());

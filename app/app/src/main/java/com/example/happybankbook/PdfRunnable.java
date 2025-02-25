@@ -61,7 +61,8 @@ public class PdfRunnable implements Runnable{
 
             //canvas 배경 색 지정
             canvas=page.getCanvas();
-            canvas.drawColor(ContextCompat.getColor(mContext,R.color.cream));
+            int canvasColor= ContextCompat.getColor(mContext,R.color.cream);
+            canvas.drawColor(canvasColor);
 
             //canvas 배경 drawable 지정
             int dy=height/15;
@@ -82,7 +83,10 @@ public class PdfRunnable implements Runnable{
             datePaint.setTextSize(64);
             datePaint.setTextAlign(Paint.Align.CENTER);
             datePaint.setUnderlineText(true);
-            canvas.drawText(String.format(java.util.Locale.getDefault(),"%d.%02d.%02d",year,month,day),(float)(width/2), dy+180, datePaint);
+
+            String formattedDate= String.format( java.util.Locale.getDefault(),
+                                          "%d.%02d.%02d", year, month, day );
+            canvas.drawText(formattedDate,(float)(width/2), dy+180, datePaint);
 
             //image
             if(dataList.get(i).getImage()!=null){

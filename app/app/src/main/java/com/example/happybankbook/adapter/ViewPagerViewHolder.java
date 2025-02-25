@@ -38,11 +38,15 @@ public class ViewPagerViewHolder extends BaseItemView {
         String year=date.substring(0,4);
         String month=date.substring(4,6);
         String day=date.substring(6);
-        dateTextView.setText(String.format("%s.%s.%s",year,month,day));
 
+        String formattedDate=String.format( java.util.Locale.getDefault(),
+                                     "%s.%s.%s", year, month, day );
+        String formattedPrice=String.format( java.util.Locale.getDefault(),
+                                      "%,d", memoData.getPrice() );
+
+        dateTextView.setText(formattedDate);
+        priceTextView.setText(formattedPrice);
         contentTextView.setText(memoData.getContent());
-
-        priceTextView.setText(Integer.toString(memoData.getPrice()));
 
         if(memoData.getImage()!=null){
             Drawable img=new BitmapDrawable(context.getResources(),memoData.getImage());

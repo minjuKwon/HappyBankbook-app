@@ -54,10 +54,16 @@ public class RecyclerViewHolder extends BaseItemView{
             priceTextView.setEllipsize(null);
         }
 
-        idxTextView.setText(Integer.toString(memoData.getNum()));
+        String formattedIdx=String.format( java.util.Locale.getDefault(),
+                                     "%,d", memoData.getNum() );
+        String formattedDate=String.format( java.util.Locale.getDefault(),
+                                     "%,d", memoData.getDate() );
+        String formattedPrice=String.format( java.util.Locale.getDefault(),
+                                      "%,d", memoData.getPrice() );
 
-        dateTextView.setText(Long.toString(memoData.getDate()).substring(2));
-
+        idxTextView.setText(formattedIdx);
+        dateTextView.setText(formattedDate.substring(2));
+        priceTextView.setText(formattedPrice);
         contentTextView.setText(memoData.getContent());
 
         final int imageWidth=100;
@@ -70,8 +76,6 @@ public class RecyclerViewHolder extends BaseItemView{
         }else{
             contentTextView.setCompoundDrawables(null,null,null,null);
         }
-
-        priceTextView.setText(Integer.toString(memoData.getPrice()));
 
         if(position%2==0){
             idxTextView.setBackgroundResource(R.drawable.memo_list_content_background_cream);

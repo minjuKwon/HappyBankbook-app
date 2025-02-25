@@ -388,7 +388,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     public void makeExportDialog(int androidVersion, String type){
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
-        builder.setMessage(fileExtension+" "+getResources().getText(R.string.doExport));
+        final String message=fileExtension+" "+getResources().getText(R.string.doExport);
+        builder.setMessage(message);
         builder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -540,7 +541,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     public File getDirectory(String extension){
         final String directoryName="/HappyBank";
-        File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+directoryName);
+        final String pathName=Environment.getExternalStorageDirectory().getAbsolutePath()+directoryName;
+        File directory = new File(pathName);
         int count=0;
 
         if (!directory.exists()) {

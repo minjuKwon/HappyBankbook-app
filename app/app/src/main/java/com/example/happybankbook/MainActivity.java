@@ -111,7 +111,10 @@ public class MainActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener calendarListener=new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                textview.setText(String.format(java.util.Locale.getDefault(),"%d.%02d.%02d",year,month+1,dayOfMonth));
+                String date=String.format( java.util.Locale.getDefault(),
+                                     "%d.%02d.%02d",
+                                     year,month+1,dayOfMonth );
+                textview.setText(date);
             }
         };
 
@@ -126,9 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
     public int convertDateToInt(TextView textView){
         String [] dateStr=textView.getText().toString().split("\\.");
-        int dateInt=Integer.parseInt(dateStr[0]+dateStr[1]+dateStr[2]);
-        return dateInt;
+        return Integer.parseInt(dateStr[0]+dateStr[1]+dateStr[2]);
     }
-
 
 }
