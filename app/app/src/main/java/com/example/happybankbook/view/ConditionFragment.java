@@ -53,11 +53,8 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
     private static final int DEFAULT_TO_DATE=30000000;
     private static final int DEFAULT_COUNT=0;
 
-    private TextView durationTextView;
-    private TextView fromDurationTextView;
-    private TextView toDurationTextView;
-    private RadioButton oldestSortRadioButton;
-    private RadioButton newestSortRadioButton;
+    private TextView durationTextView, fromDurationTextView, toDurationTextView;
+    private RadioButton oldestSortRadioButton, newestSortRadioButton;
     private EditText itemCountEditText;
 
     private boolean isClickedDuration=true;

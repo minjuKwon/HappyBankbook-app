@@ -24,11 +24,9 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
     private static int recyclerviewPosition;
     private float fontSize;
     private int textLine;
-    private boolean isFirstInteraction=true;
-    private boolean isRecyclable=true;
-    private boolean textEllipsize;
-    private boolean hasReceivedCondition=true;
-    private boolean hasVisitedViewPager ;
+    private boolean isFirstInteraction, isRecyclable, hasReceivedCondition=true;
+    private boolean textEllipsize, hasVisitedViewPager;
+
 
     public MemoAdapter(Context context, MemoType memoType, float fontSize){
         this.mContext=context;

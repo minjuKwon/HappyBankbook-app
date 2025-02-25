@@ -67,15 +67,12 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     private ListPresenter presenter;
     private MemoAdapter adapter;
 
-    private int itemCount;
-    private int fromDate;
-    private int toDate;
+    private int itemCount, fromDate, toDate;
+    private boolean isNewestSort, isInitialization;
     private int clickCountCondition=1;
     private int textLine= TEXT_LINE_DEFAULT;
     private float fontSize= TEXT_SIZE_DEFAULT_LARGE;
-    private boolean isNewestSort;
     private boolean hasTextEllipsize= TEXT_ELLIPSIZE_DEFAULT;
-    private boolean isInitialization;
 
     private Activity mActivity;
 

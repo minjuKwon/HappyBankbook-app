@@ -56,20 +56,14 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     };
 
     private ViewPager2 viewPager;
-    private ImageView forwardImageView;
-    private ImageView backImageView;
+    private ImageView forwardImageView, backImageView;
 
     private ListPresenter presenter;
     private MemoAdapter adapter;
 
     private Handler handler;
 
-    private int itemCount;
-    private int fromDate;
-    private int toDate;
-    private int rowCount;
-    private int currentPosition;
-    private int adapterPosition;
+    private int itemCount, fromDate, toDate, rowCount, currentPosition, adapterPosition;
     private boolean isFirstInteraction=true;
     private float fontSize= TEXT_SIZE_DEFAULT_SMALL;
 
