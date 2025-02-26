@@ -62,7 +62,7 @@ public class RecyclerViewHolder extends BaseItemView{
         String formattedIdx=String.format( java.util.Locale.getDefault(),
                                      "%,d", memoData.getNum() );
         String formattedDate=String.format( java.util.Locale.getDefault(),
-                                     "%,d", memoData.getDate() );
+                                     "%d", memoData.getDate() );
         String formattedPrice=String.format( java.util.Locale.getDefault(),
                                       "%,d", memoData.getPrice() );
 
