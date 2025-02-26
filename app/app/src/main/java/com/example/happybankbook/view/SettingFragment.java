@@ -84,11 +84,11 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     private ParcelFileDescriptor pfd;
 
     private TextView ellipsisTextView;
-    private RadioButton singleLineRadioButton, MultiLineRadioButton, fontOneRadioButton,
-            fontTwoRadioButton, fontThreeRadioButton;
+    private RadioButton singleLineRadioButton, multiLineRadioButton, textSizeOneRadioButton,
+            textSizeTwoRadioButton, textSizeThreeRadioButton;
 
     private boolean hasEllipsize=false;
-    private int checkLine, checkFontSize;
+    private int currentTextLineId, currentTextSizeId;
     private String fileExtension;
     private StringBuffer buffer;
 
@@ -210,23 +210,23 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         TextView openSourceTextView=view.findViewById(R.id.openSource);
         RadioGroup radioGroupLine=view.findViewById(R.id.radioLineDisplay);
         singleLineRadioButton=view.findViewById(R.id.radioLineSingle);
-        MultiLineRadioButton=view.findViewById(R.id.radioLineMul);
-        RadioGroup radioGroupFont=view.findViewById(R.id.radioFont);
-        fontOneRadioButton=view.findViewById(R.id.radioFontOne);
-        fontTwoRadioButton=view.findViewById(R.id.radioFontTwo);
-        fontThreeRadioButton=view.findViewById(R.id.radioFontThree);
+        multiLineRadioButton=view.findViewById(R.id.radioLineMul);
+        RadioGroup radioGroupTextSize=view.findViewById(R.id.radioFont);
+        textSizeOneRadioButton=view.findViewById(R.id.radioFontOne);
+        textSizeTwoRadioButton=view.findViewById(R.id.radioFontTwo);
+        textSizeThreeRadioButton=view.findViewById(R.id.radioFontThree);
 
         presenter=new OutputPresenter();
 
         singleLineRadioButton.setChecked(false);
-        MultiLineRadioButton.setChecked(true);
+        multiLineRadioButton.setChecked(true);
 
-        fontOneRadioButton.setChecked(true);
-        fontTwoRadioButton.setChecked(false);
-        fontThreeRadioButton.setChecked(false);
+        textSizeOneRadioButton.setChecked(true);
+        textSizeTwoRadioButton.setChecked(false);
+        textSizeThreeRadioButton.setChecked(false);
 
         radioGroupLine.setOnCheckedChangeListener(this);
-        radioGroupFont.setOnCheckedChangeListener(this);
+        radioGroupTextSize.setOnCheckedChangeListener(this);
 
         manualTextView.setOnClickListener(this);
         ellipsisTextView.setOnClickListener(this);
@@ -242,23 +242,23 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SET_STYLE,Context.MODE_PRIVATE);
         hasEllipsize=preferences.getBoolean(PREF_KEY_HAS_ELLIPSIZE, PREF_DEFAULT_TEXT_ELLIPSIZE);
-        checkLine=preferences.getInt(PREF_KEY_LINE_TEXT_ID, R.id.radioLineMul);
-        checkFontSize=preferences.getInt(PREF_KEY_SIZE_TEXT_ID, R.id.radioFontOne);
+        currentTextLineId=preferences.getInt(PREF_KEY_LINE_TEXT_ID, R.id.radioLineMul);
+        currentTextSizeId=preferences.getInt(PREF_KEY_SIZE_TEXT_ID, R.id.radioFontOne);
 
         setEllipsize();
 
-        if(checkLine==R.id.radioLineSingle){
-            setLineRadioButton(true, false, R.color.black, R.color.gray);
-        }else if(checkLine==R.id.radioLineMul){
-            setLineRadioButton(false, true, R.color.gray, R.color.black);
+        if(currentTextLineId==R.id.radioLineSingle){
+            setTextLine(true, false, R.color.black, R.color.gray);
+        }else if(currentTextLineId==R.id.radioLineMul){
+            setTextLine(false, true, R.color.gray, R.color.black);
         }
 
-        if(checkFontSize==R.id.radioFontOne){
-            setFontRadioButton(true, false, false, R.color.black, R.color.gray, R.color.gray);
-        }else if(checkFontSize==R.id.radioFontTwo){
-            setFontRadioButton(false, true, false, R.color.gray, R.color.black, R.color.gray);
-        }else if(checkFontSize==R.id.radioFontThree){
-            setFontRadioButton(false, false, true, R.color.gray, R.color.gray, R.color.black);
+        if(currentTextSizeId==R.id.radioFontOne){
+            setTextSize(true, false, false, R.color.black, R.color.gray, R.color.gray);
+        }else if(currentTextSizeId==R.id.radioFontTwo){
+            setTextSize(false, true, false, R.color.gray, R.color.black, R.color.gray);
+        }else if(currentTextSizeId==R.id.radioFontThree){
+            setTextSize(false, false, true, R.color.gray, R.color.gray, R.color.black);
         }
     }
 
@@ -273,8 +273,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SET_STYLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putBoolean(PREF_KEY_HAS_ELLIPSIZE, !hasEllipsize);
-        editor.putInt(PREF_KEY_LINE_TEXT_ID, checkLine);
-        editor.putInt(PREF_KEY_SIZE_TEXT_ID, checkFontSize);
+        editor.putInt(PREF_KEY_LINE_TEXT_ID, currentTextLineId);
+        editor.putInt(PREF_KEY_SIZE_TEXT_ID, currentTextSizeId);
 
         editor.apply();
     }
@@ -367,62 +367,62 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
         if(group.getId()==R.id.radioLineDisplay){
             if(checkedId==R.id.radioLineSingle){
-                setLineRadioButton(true, false, R.color.black, R.color.gray);
+                setTextLine(true, false, R.color.black, R.color.gray);
                 changeTextLine(TEXT_LINE_SINGLE, REQUEST_KEY_RECYCLERVIEW_TEXT_LINE);
                 changeTextLine(TEXT_LINE_SINGLE,REQUEST_KEY_SEARCH_TEXT_LINE);
-                checkLine=R.id.radioLineSingle;
+                currentTextLineId=R.id.radioLineSingle;
             }else if(checkedId==R.id.radioLineMul){
-                setLineRadioButton(false, true, R.color.gray, R.color.black);
+                setTextLine(false, true, R.color.gray, R.color.black);
                 changeTextLine(TEXT_LINE_DEFAULT, REQUEST_KEY_RECYCLERVIEW_TEXT_LINE);
                 changeTextLine(TEXT_LINE_DEFAULT, REQUEST_KEY_SEARCH_TEXT_LINE);
-                checkLine=R.id.radioLineMul;
+                currentTextLineId=R.id.radioLineMul;
             }
         }
 
         else if(group.getId()==R.id.radioFont){
             if(checkedId==R.id.radioFontOne){
-                setFontRadioButton(true, false, false, R.color.black, R.color.gray, R.color.gray);
-                changeFont(TEXT_SIZE_DEFAULT_SMALL, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
-                changeFont(TEXT_SIZE_DEFAULT_SMALL, REQUEST_KEY_MEMO_TEXT_SIZE);
-                changeFont(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
-                changeFont(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_SEARCH_TEXT_SIZE);
-                checkFontSize=R.id.radioFontOne;
+                setTextSize(true, false, false, R.color.black, R.color.gray, R.color.gray);
+                changeTextSize(TEXT_SIZE_DEFAULT_SMALL, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
+                changeTextSize(TEXT_SIZE_DEFAULT_SMALL, REQUEST_KEY_MEMO_TEXT_SIZE);
+                changeTextSize(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
+                changeTextSize(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_SEARCH_TEXT_SIZE);
+                currentTextSizeId=R.id.radioFontOne;
             }else if(checkedId==R.id.radioFontTwo){
-                setFontRadioButton(false, true, false, R.color.gray, R.color.black, R.color.gray);
-                changeFont(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
-                changeFont(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_MEMO_TEXT_SIZE);
-                changeFont(TEXT_SIZE_MEDIUM, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
-                changeFont(TEXT_SIZE_MEDIUM, REQUEST_KEY_SEARCH_TEXT_SIZE);
-                checkFontSize=R.id.radioFontTwo;
+                setTextSize(false, true, false, R.color.gray, R.color.black, R.color.gray);
+                changeTextSize(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
+                changeTextSize(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_MEMO_TEXT_SIZE);
+                changeTextSize(TEXT_SIZE_MEDIUM, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
+                changeTextSize(TEXT_SIZE_MEDIUM, REQUEST_KEY_SEARCH_TEXT_SIZE);
+                currentTextSizeId=R.id.radioFontTwo;
             }else if(checkedId==R.id.radioFontThree){
-                setFontRadioButton(false, false, true, R.color.gray, R.color.gray, R.color.black);
-                changeFont(TEXT_SIZE_MEDIUM, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
-                changeFont(TEXT_SIZE_MEDIUM, REQUEST_KEY_MEMO_TEXT_SIZE);
-                changeFont(TEXT_SIZE_LARGE, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
-                changeFont(TEXT_SIZE_LARGE, REQUEST_KEY_SEARCH_TEXT_SIZE);
-                checkFontSize=R.id.radioFontThree;
+                setTextSize(false, false, true, R.color.gray, R.color.gray, R.color.black);
+                changeTextSize(TEXT_SIZE_MEDIUM, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
+                changeTextSize(TEXT_SIZE_MEDIUM, REQUEST_KEY_MEMO_TEXT_SIZE);
+                changeTextSize(TEXT_SIZE_LARGE, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
+                changeTextSize(TEXT_SIZE_LARGE, REQUEST_KEY_SEARCH_TEXT_SIZE);
+                currentTextSizeId=R.id.radioFontThree;
             }
         }
 
     }
 
-    public void setLineRadioButton(boolean b1, boolean b2, int c1, int c2){
+    public void setTextLine(boolean b1, boolean b2, int c1, int c2){
         singleLineRadioButton.setChecked(b1);
-        MultiLineRadioButton.setChecked(b2);
+        multiLineRadioButton.setChecked(b2);
         singleLineRadioButton.setTextColor(ContextCompat.getColor(mContext,c1));
-        MultiLineRadioButton.setTextColor(ContextCompat.getColor(mContext,c2));
+        multiLineRadioButton.setTextColor(ContextCompat.getColor(mContext,c2));
     }
 
-    public void setFontRadioButton(boolean b1, boolean b2, boolean b3, int c1, int c2, int c3){
-        fontOneRadioButton.setChecked(b1);
-        fontTwoRadioButton.setChecked(b2);
-        fontThreeRadioButton.setChecked(b3);
-        fontOneRadioButton.setTextColor(ContextCompat.getColor(mContext,c1));
-        fontTwoRadioButton.setTextColor(ContextCompat.getColor(mContext,c2));
-        fontThreeRadioButton.setTextColor(ContextCompat.getColor(mContext,c3));
+    public void setTextSize(boolean b1, boolean b2, boolean b3, int c1, int c2, int c3){
+        textSizeOneRadioButton.setChecked(b1);
+        textSizeTwoRadioButton.setChecked(b2);
+        textSizeThreeRadioButton.setChecked(b3);
+        textSizeOneRadioButton.setTextColor(ContextCompat.getColor(mContext,c1));
+        textSizeTwoRadioButton.setTextColor(ContextCompat.getColor(mContext,c2));
+        textSizeThreeRadioButton.setTextColor(ContextCompat.getColor(mContext,c3));
     }
 
-    public void changeFont(float size, String key){
+    public void changeTextSize(float size, String key){
         Bundle bundle=new Bundle();
         bundle.putFloat(BUNDLE_KEY_TEXT_SIZE,size);
 

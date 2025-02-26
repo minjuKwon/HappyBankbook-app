@@ -58,7 +58,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
     private RecyclerView recyclerView;
 
     private int textLine= TEXT_LINE_DEFAULT;
-    private float fontSize= TEXT_SIZE_DEFAULT_LARGE;
+    private float textSize= TEXT_SIZE_DEFAULT_LARGE;
     private boolean hasTextEllipsize= TEXT_ELLIPSIZE_DEFAULT;
 
 
@@ -77,8 +77,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_SEARCH_TEXT_SIZE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fontSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
-                adapter.setFont(fontSize);
+                textSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
+                adapter.setTextSize(textSize);
             }
         });
         //변경 text line 값
@@ -123,7 +123,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
         presenter.setView(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, fontSize, textLine, hasTextEllipsize);
+        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, textSize, textLine, hasTextEllipsize);
         recyclerView.setAdapter(adapter);
 
         adapter.clearItems();
@@ -136,25 +136,25 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SEARCH_TEXT_STYLE,Context.MODE_PRIVATE);
         hasTextEllipsize=preferences.getBoolean(PREF_KEY_TEXT_ELLIPSIZE, PREF_DEFAULT_TEXT_ELLIPSIZE);
         textLine=preferences.getInt(PREF_KEY_TEXT_LINE, PREF_DEFAULT_TEXT_LINE);
-        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE, PREF_DEFAULT_TEXT_SIZE_LARGE);
+        textSize=preferences.getFloat(PREF_KEY_TEXT_SIZE, PREF_DEFAULT_TEXT_SIZE_LARGE);
 
         adapter.setTextEllipsize(hasTextEllipsize);
         adapter.setTextLine(textLine);
-        adapter.setFont(fontSize);
+        adapter.setTextSize(textSize);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        resetTextSetting();
+        resetTextStyle();
     }
 
-    private void resetTextSetting(){
+    private void resetTextStyle(){
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SEARCH_TEXT_STYLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putBoolean(PREF_KEY_TEXT_ELLIPSIZE, hasTextEllipsize);
         editor.putInt(PREF_KEY_TEXT_LINE, textLine);
-        editor.putFloat(PREF_KEY_TEXT_SIZE, fontSize);
+        editor.putFloat(PREF_KEY_TEXT_SIZE, textSize);
 
         editor.apply();
     }

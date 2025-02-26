@@ -29,10 +29,10 @@ public class ViewPagerViewHolder extends BaseItemView {
         contentImg=view.findViewById(R.id.memoDetailImg);
     }
 
-    public void onBind(BaseItem data, Context context, float fontSize){
+    public void onBind(BaseItem data, Context context, float textSize){
         MemoData memoData=(MemoData)data;
 
-        contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+        contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 
         String date=Integer.toString(memoData.getDate());
         String year=date.substring(0,4);

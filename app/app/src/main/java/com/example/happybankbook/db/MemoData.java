@@ -24,7 +24,7 @@ public class MemoData extends BaseItem {
     public void setDate(int date){this.date=date;}
     public void setPrice(int price){this.price=price;}
     public void setContent(String content){this.content=content;}
-    public void setBitmap(Bitmap image){this.image=image;}
+    public void setImage(Bitmap image){this.image=image;}
 
     public int getNum() {
         return num;

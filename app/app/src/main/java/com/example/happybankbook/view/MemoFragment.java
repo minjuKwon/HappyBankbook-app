@@ -56,7 +56,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     private EditText contentEditText;
     private ImageView contentImageView;
 
-    private float fontSize= TEXT_SIZE_DEFAULT_SMALL;
+    private float textSize= TEXT_SIZE_DEFAULT_SMALL;
     private boolean isClearContentTxt=false;
 
 
@@ -72,12 +72,12 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //변경 font size 값
+        //변경 text size 값
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_MEMO_TEXT_SIZE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fontSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
-                contentEditText.setTextSize(fontSize);
+                textSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
+                contentEditText.setTextSize(textSize);
             }
         });
         isClearContentTxt=true;
@@ -112,8 +112,8 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         getGallery();
 
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_MEMO_TEXT_STYLE,Context.MODE_PRIVATE);
-        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE, PREF_DEFAULT_TEXT_SIZE_SMALL);
-        contentEditText.setTextSize(fontSize);
+        textSize=preferences.getFloat(PREF_KEY_TEXT_SIZE, PREF_DEFAULT_TEXT_SIZE_SMALL);
+        contentEditText.setTextSize(textSize);
     }
 
     public void getGallery(){
@@ -143,14 +143,14 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onStop() {
         super.onStop();
-        resetTextSetting();
+        resetTextStyle();
         isClearContentTxt=false;
     }
 
-    private void resetTextSetting(){
+    private void resetTextStyle(){
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_MEMO_TEXT_STYLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putFloat(PREF_KEY_TEXT_SIZE, fontSize);
+        editor.putFloat(PREF_KEY_TEXT_SIZE, textSize);
 
         editor.apply();
     }
@@ -233,7 +233,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
             }else{
                 BitmapDrawable drawable = (BitmapDrawable)contentImageView.getDrawable();
                 Bitmap bitmap = drawable.getBitmap();
-                data.setBitmap(bitmap);
+                data.setImage(bitmap);
             }
         }
 

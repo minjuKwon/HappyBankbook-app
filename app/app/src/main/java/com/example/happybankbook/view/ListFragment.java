@@ -69,7 +69,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
 
     private int clickCountCondition=1;
     private int textLine= TEXT_LINE_DEFAULT;
-    private float fontSize= TEXT_SIZE_DEFAULT_LARGE;
+    private float textSize= TEXT_SIZE_DEFAULT_LARGE;
     private boolean hasTextEllipsize= TEXT_ELLIPSIZE_DEFAULT;
     private int itemCount, fromDate, toDate;
     private boolean isNewestSort, isInitialization;
@@ -109,12 +109,12 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
                 clickCountCondition=result.getInt(BUNDLE_KEY_IS_CLICKED_ONCE);
             }
         });
-        //변경 font size 값
+        //변경 text size 값
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fontSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
-                adapter.setFont(fontSize);
+                textSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
+                adapter.setTextSize(textSize);
             }
         });
         //변경 text line 값
@@ -156,17 +156,17 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         presenter.setView(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, fontSize, textLine, hasTextEllipsize);
+        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, textSize, textLine, hasTextEllipsize);
         recyclerView.setAdapter(adapter);
 
         //메모 총합 표시
         presenter.setLongResultCallback(new LongResultCallback() {
             @Override
             public void onLongResult(long value) {
-                String priceFormatPattern="###,###";
-                DecimalFormat priceFormat = new DecimalFormat(priceFormatPattern);
-                String strPrice= priceFormat.format(value);
-                totalPriceTextView.setText(strPrice);
+                String formatPatternPrice="###,###";
+                DecimalFormat formattedPrice = new DecimalFormat(formatPatternPrice);
+                String priceStr= formattedPrice.format(value);
+                totalPriceTextView.setText(priceStr);
             }
         });
         presenter.getSumPrice(RoomDB.getInstance(getContext()).memoDao(), getContext());
@@ -188,11 +188,11 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_LIST_TEXT_STYLE,Context.MODE_PRIVATE);
         hasTextEllipsize=preferences.getBoolean(PREF_KEY_TEXT_ELLIPSIZE,PREF_DEFAULT_TEXT_ELLIPSIZE);
         textLine=preferences.getInt(PREF_KEY_TEXT_LINE,PREF_DEFAULT_TEXT_LINE);
-        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE,PREF_DEFAULT_TEXT_SIZE_LARGE);
+        textSize=preferences.getFloat(PREF_KEY_TEXT_SIZE,PREF_DEFAULT_TEXT_SIZE_LARGE);
 
         adapter.setTextEllipsize(hasTextEllipsize);
         adapter.setTextLine(textLine);
-        adapter.setFont(fontSize);
+        adapter.setTextSize(textSize);
     }
 
     @Override
@@ -203,7 +203,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         Bundle bundle=new Bundle();
         bundle.putBoolean(BUNDLE_KEY_IS_INITIALIZATION,true);
         getParentFragmentManager().setFragmentResult(REQUEST_KEY_INITIALIZATION, bundle);
-        resetTextSetting();
+        resetTextStyle();
 
         isInitialization=true;
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SET_INITIALIZATION, Context.MODE_PRIVATE);
@@ -212,12 +212,12 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         editor.apply();
     }
 
-    private void resetTextSetting(){
+    private void resetTextStyle(){
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_LIST_TEXT_STYLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putBoolean(PREF_KEY_TEXT_ELLIPSIZE, hasTextEllipsize);
         editor.putInt(PREF_KEY_TEXT_LINE, textLine);
-        editor.putFloat(PREF_KEY_TEXT_SIZE, fontSize);
+        editor.putFloat(PREF_KEY_TEXT_SIZE, textSize);
 
         editor.apply();
     }

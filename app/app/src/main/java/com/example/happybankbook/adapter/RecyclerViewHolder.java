@@ -37,13 +37,13 @@ public class RecyclerViewHolder extends BaseItemView{
         this.onItemClickListener=listener;
     }
 
-    public void onBind(BaseItem data, Context context, int position, float fontSize, int textLine, boolean hasTextEllipsize){
+    public void onBind(BaseItem data, Context context, int position, float textSize, int textLine, boolean hasTextEllipsize){
         MemoData memoData=(MemoData)data;
 
-        idxTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-        dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-        contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-        priceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+        idxTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+        dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+        contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+        priceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 
         idxTextView.setMaxLines(textLine);
         contentTextView.setMaxLines(textLine);

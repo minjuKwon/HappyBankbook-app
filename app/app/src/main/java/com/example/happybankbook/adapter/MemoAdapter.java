@@ -23,21 +23,21 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
     private final MemoType memoType;
 
     private int textLine;
-    private float fontSize;
+    private float textSize;
     private boolean isFirstInteraction, isRecyclable, hasReceivedCondition=true;
     private boolean textEllipsize, hasVisitedViewPager;
 
 
-    public MemoAdapter(Context context, MemoType memoType, float fontSize){
+    public MemoAdapter(Context context, MemoType memoType, float textSize){
         this.mContext=context;
         this.memoType=memoType;
-        this.fontSize=fontSize;
+        this.textSize=textSize;
     }
 
-    public MemoAdapter(Context context, MemoType memoType, float fontSize, int textLine, boolean textEllipsize){
+    public MemoAdapter(Context context, MemoType memoType, float textSize, int textLine, boolean textEllipsize){
         this.mContext=context;
         this.memoType=memoType;
-        this.fontSize=fontSize;
+        this.textSize=textSize;
         this.textLine=textLine;
         this.textEllipsize=textEllipsize;
     }
@@ -69,7 +69,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         if(holder instanceof RecyclerViewHolder){
             RecyclerViewHolder recyclerViewHolder=(RecyclerViewHolder)holder;
             data=dataList.get(recyclerViewHolder.getAdapterPosition());
-            recyclerViewHolder.onBind(data, mContext, position, fontSize, textLine, textEllipsize);
+            recyclerViewHolder.onBind(data, mContext, position, textSize, textLine, textEllipsize);
             //recyclerview position 얻기 위한 클릭 이벤트
             recyclerViewHolder.setOnItemClickListener(new OnItemClickListener() {
                 @Override
@@ -92,7 +92,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
                     isRecyclable=false;
                 }
                 viewPagerViewHolder.setIsRecyclable(isRecyclable);
-                viewPagerViewHolder.onBind(data, mContext, fontSize);
+                viewPagerViewHolder.onBind(data, mContext, textSize);
                 isRecyclable=true;
                 isFirstInteraction=false;
             }
@@ -115,8 +115,8 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         notifyDataSetChanged();
     }
 
-    public void setFont(float size){
-        fontSize=size;
+    public void setTextSize(float size){
+        textSize=size;
     }
 
     public void setTextLine(int line){

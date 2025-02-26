@@ -65,9 +65,9 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         }
     };
 
-    private int itemCount, fromDate, toDate, rowCount, currentPosition, adapterPosition;
-    private float fontSize= TEXT_SIZE_DEFAULT_SMALL;
+    private float textSize= TEXT_SIZE_DEFAULT_SMALL;
     private boolean isFirstInteraction=true;
+    private int itemCount, fromDate, toDate, rowCount, currentPosition, adapterPosition;
 
 
     @Override
@@ -125,12 +125,12 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             }
         });
 
-        //변경 font size 값
+        //변경 text size 값
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_VIEWPAGER_TEXT_SIZE, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fontSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
-                adapter.setFont(fontSize);
+                textSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
+                adapter.setTextSize(textSize);
             }
         });
 
@@ -157,7 +157,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         presenter=new ListPresenter();
         presenter.setView(this);
 
-        adapter=new MemoAdapter(getContext(), MemoType.VIEWPAGER, fontSize);
+        adapter=new MemoAdapter(getContext(), MemoType.VIEWPAGER, textSize);
         viewPager.setAdapter(adapter);
 
         adapterPosition= adapter.getRecyclerviewPosition();
@@ -206,8 +206,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         super.onViewCreated(view, savedInstanceState);
 
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_VIEWPAGER_TEXT_STYLE,Context.MODE_PRIVATE);
-        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE, PREF_DEFAULT_TEXT_SIZE_SMALL);
-        adapter.setFont(fontSize);
+        textSize=preferences.getFloat(PREF_KEY_TEXT_SIZE, PREF_DEFAULT_TEXT_SIZE_SMALL);
+        adapter.setTextSize(textSize);
 
         //SearchFragment에서 검색 후 키보드 내리지 않고 바로 viewpager 이동 하면,
         //계속 키보드 올려지는 경우 방지
@@ -223,13 +223,13 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         bundle.putBoolean(BUNDLE_KEY_IS_NEWEST_SORT,true);
         getParentFragmentManager().setFragmentResult(REQUEST_KEY_RETAIN_SORT, bundle);
 
-        resetTextSetting();
+        resetTextStyle();
     }
 
-    private void resetTextSetting(){
+    private void resetTextStyle(){
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_VIEWPAGER_TEXT_STYLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putFloat(PREF_KEY_TEXT_SIZE, fontSize);
+        editor.putFloat(PREF_KEY_TEXT_SIZE, textSize);
 
         editor.apply();
     }
