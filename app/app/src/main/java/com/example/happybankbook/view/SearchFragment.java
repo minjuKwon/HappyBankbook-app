@@ -50,14 +50,17 @@ import java.util.ArrayList;
 
 public class SearchFragment extends Fragment implements View.OnClickListener, View.OnFocusChangeListener,SearchView.OnQueryTextListener, SearchContract.View {
 
-    private RecyclerView recyclerView;
-    private SearchPresenter presenter;
-    private MemoAdapter adapter;
-    private float fontSize= TEXT_SIZE_DEFAULT_LARGE;
-    private int textLine= TEXT_LINE_DEFAULT;
-    private boolean hasTextEllipsize= TEXT_ELLIPSIZE_DEFAULT;
     private Context mContext;
     private Activity mActivity;
+    private SearchPresenter presenter;
+    private MemoAdapter adapter;
+
+    private RecyclerView recyclerView;
+
+    private int textLine= TEXT_LINE_DEFAULT;
+    private float fontSize= TEXT_SIZE_DEFAULT_LARGE;
+    private boolean hasTextEllipsize= TEXT_ELLIPSIZE_DEFAULT;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -104,39 +107,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
         return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SEARCH_TEXT_STYLE,Context.MODE_PRIVATE);
-        hasTextEllipsize=preferences.getBoolean(PREF_KEY_TEXT_ELLIPSIZE, PREF_DEFAULT_TEXT_ELLIPSIZE);
-        textLine=preferences.getInt(PREF_KEY_TEXT_LINE, PREF_DEFAULT_TEXT_LINE);
-        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE, PREF_DEFAULT_TEXT_SIZE_LARGE);
-
-        adapter.setTextEllipsize(hasTextEllipsize);
-        adapter.setTextLine(textLine);
-        adapter.setFont(fontSize);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        resetTextSetting();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        presenter.releaseView();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mContext=null;
-        mActivity=null;
-    }
-
     private void init(View view){
         TextView previousTextView=view.findViewById(R.id.previousSearch);
         SearchView searchView=view.findViewById(R.id.searchView);
@@ -157,6 +127,54 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
         recyclerView.setAdapter(adapter);
 
         adapter.clearItems();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SEARCH_TEXT_STYLE,Context.MODE_PRIVATE);
+        hasTextEllipsize=preferences.getBoolean(PREF_KEY_TEXT_ELLIPSIZE, PREF_DEFAULT_TEXT_ELLIPSIZE);
+        textLine=preferences.getInt(PREF_KEY_TEXT_LINE, PREF_DEFAULT_TEXT_LINE);
+        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE, PREF_DEFAULT_TEXT_SIZE_LARGE);
+
+        adapter.setTextEllipsize(hasTextEllipsize);
+        adapter.setTextLine(textLine);
+        adapter.setFont(fontSize);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        resetTextSetting();
+    }
+
+    private void resetTextSetting(){
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SEARCH_TEXT_STYLE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=preferences.edit();
+        editor.putBoolean(PREF_KEY_TEXT_ELLIPSIZE, hasTextEllipsize);
+        editor.putInt(PREF_KEY_TEXT_LINE, textLine);
+        editor.putFloat(PREF_KEY_TEXT_SIZE, fontSize);
+
+        editor.apply();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.releaseView();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext=null;
+        mActivity=null;
+    }
+
+    @Override
+    public void setItems(ArrayList<MemoData> items) {
+        adapter.setItems(items);
     }
 
     @Override
@@ -186,21 +204,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Vi
             InputMethodManager inputMethodManager=(InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.showSoftInput(v.findFocus(),InputMethodManager.SHOW_IMPLICIT);
         }
-    }
-
-    @Override
-    public void setItems(ArrayList<MemoData> items) {
-        adapter.setItems(items);
-    }
-
-    private void resetTextSetting(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SEARCH_TEXT_STYLE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(PREF_KEY_TEXT_ELLIPSIZE, hasTextEllipsize);
-        editor.putInt(PREF_KEY_TEXT_LINE, textLine);
-        editor.putFloat(PREF_KEY_TEXT_SIZE, fontSize);
-
-        editor.apply();
     }
 
 }

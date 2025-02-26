@@ -72,54 +72,26 @@ import java.util.ArrayList;
 
 public class SettingFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener{
 
-    private class FileRunnable implements Runnable{
-        private final StringBuffer content;
-        private String extension;
-        private Uri uri;
-        private final int branch;
-
-        public FileRunnable(StringBuffer content, String extension){
-            this.content=content;
-            this.extension=extension;
-            branch=1;
-        }
-        public FileRunnable(Uri uri, StringBuffer content){
-            this.uri=uri;
-            this.content=content;
-            branch=2;
-        }
-
-        @Override
-        public void run() {
-            if(branch==1){
-                makeFile(content, extension);
-            }else if(branch==2){
-                makeFile(uri, content);
-            }
-        }
-    }
-
-    private ActivityResultLauncher<String> requestPermissionLauncher ;
-    private ActivityResultLauncher<Intent> activityResultLauncher;
-
-    private TextView ellipsisTextView;
-    private RadioButton singleLineRadioButton, MultiLineRadioButton, fontOneRadioButton, fontTwoRadioButton, fontThreeRadioButton;
-
-    private OutputPresenter presenter;
-    private FileRunnable fileRunnable;
-    private Thread fileThread;
-
     private final String PERMISSION= Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
-    private String fileExtension;
-    private boolean hasEllipsize=false;
-    private int checkLine, checkFontSize;
-
-    private StringBuffer buffer;
-    private ParcelFileDescriptor pfd;
 
     private Context mContext;
     private Activity mActivity;
+    private OutputPresenter presenter;
+    private ActivityResultLauncher<String> requestPermissionLauncher ;
+    private ActivityResultLauncher<Intent> activityResultLauncher;
+    private FileRunnable fileRunnable;
+    private Thread fileThread;
+    private ParcelFileDescriptor pfd;
+
+    private TextView ellipsisTextView;
+    private RadioButton singleLineRadioButton, MultiLineRadioButton, fontOneRadioButton,
+            fontTwoRadioButton, fontThreeRadioButton;
+
+    private boolean hasEllipsize=false;
+    private int checkLine, checkFontSize;
+    private String fileExtension;
+    private StringBuffer buffer;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -165,249 +137,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             }
         });
 
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-       View view=inflater.inflate(R.layout.fragment_setting, container, false);
-       init(view);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SET_STYLE,Context.MODE_PRIVATE);
-        hasEllipsize=preferences.getBoolean(PREF_KEY_HAS_ELLIPSIZE, PREF_DEFAULT_TEXT_ELLIPSIZE);
-        checkLine=preferences.getInt(PREF_KEY_LINE_TEXT_ID, R.id.radioLineMul);
-        checkFontSize=preferences.getInt(PREF_KEY_SIZE_TEXT_ID, R.id.radioFontOne);
-
-        setEllipsize();
-
-        if(checkLine==R.id.radioLineSingle){
-            setLineRadioButton(true, false, R.color.black, R.color.gray);
-        }else if(checkLine==R.id.radioLineMul){
-            setLineRadioButton(false, true, R.color.gray, R.color.black);
-        }
-
-        if(checkFontSize==R.id.radioFontOne){
-            setFontRadioButton(true, false, false, R.color.black, R.color.gray, R.color.gray);
-        }else if(checkFontSize==R.id.radioFontTwo){
-            setFontRadioButton(false, true, false, R.color.gray, R.color.black, R.color.gray);
-        }else if(checkFontSize==R.id.radioFontThree){
-            setFontRadioButton(false, false, true, R.color.gray, R.color.gray, R.color.black);
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        resetRadioButton();
-        presenter.releaseView();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mContext=null;
-        mActivity=null;
-    }
-
-    private void init(View view){
-        TextView manualTextView=view.findViewById(R.id.manual);
-        ellipsisTextView=view.findViewById(R.id.ellipsis);
-        TextView pdfTextView=view.findViewById(R.id.pdf);
-        TextView excelTextView=view.findViewById(R.id.excel);
-        TextView txtTextView=view.findViewById(R.id.txt);
-        TextView openSourceTextView=view.findViewById(R.id.openSource);
-        RadioGroup radioGroupLine=view.findViewById(R.id.radioLineDisplay);
-        singleLineRadioButton=view.findViewById(R.id.radioLineSingle);
-        MultiLineRadioButton=view.findViewById(R.id.radioLineMul);
-        RadioGroup radioGroupFont=view.findViewById(R.id.radioFont);
-        fontOneRadioButton=view.findViewById(R.id.radioFontOne);
-        fontTwoRadioButton=view.findViewById(R.id.radioFontTwo);
-        fontThreeRadioButton=view.findViewById(R.id.radioFontThree);
-
-        presenter=new OutputPresenter();
-
-        singleLineRadioButton.setChecked(false);
-        MultiLineRadioButton.setChecked(true);
-
-        fontOneRadioButton.setChecked(true);
-        fontTwoRadioButton.setChecked(false);
-        fontThreeRadioButton.setChecked(false);
-
-        radioGroupLine.setOnCheckedChangeListener(this);
-        radioGroupFont.setOnCheckedChangeListener(this);
-
-        manualTextView.setOnClickListener(this);
-        ellipsisTextView.setOnClickListener(this);
-        pdfTextView.setOnClickListener(this);
-        excelTextView.setOnClickListener(this);
-        txtTextView.setOnClickListener(this);
-        openSourceTextView.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        final String pdfType="application/pdf";
-        final String csvType="text/comma-separated-values";
-        final String txtType="text/plain";
-
-        if(v.getId()==R.id.ellipsis){
-            setEllipsize();
-            boolean isCheckEllipsize=!hasEllipsize;
-            changeEllipsize(isCheckEllipsize,REQUEST_KEY_RECYCLERVIEW_TEXT_ELLIPSIZE);
-            changeEllipsize(isCheckEllipsize,REQUEST_KEY_SEARCH_TEXT_ELLIPSIZE);
-        }else if(v.getId()==R.id.pdf){
-            fileExtension="pdf";
-            makeExportDialog(Build.VERSION.SDK_INT, pdfType);
-        }else if(v.getId()==R.id.excel){
-            fileExtension="excel";
-            makeExportDialog(Build.VERSION.SDK_INT, csvType);
-        }else if(v.getId()==R.id.txt){
-            fileExtension="txt";
-            makeExportDialog(Build.VERSION.SDK_INT, txtType);
-        }else if(v.getId()==R.id.manual){
-            showManual();
-        }else if(v.getId()==R.id.openSource){
-            startActivity(new Intent(getContext(), OssLicensesMenuActivity.class));
-        }
-    }
-
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-        if(group.getId()==R.id.radioLineDisplay){
-            if(checkedId==R.id.radioLineSingle){
-                setLineRadioButton(true, false, R.color.black, R.color.gray);
-                changeTextLine(TEXT_LINE_SINGLE, REQUEST_KEY_RECYCLERVIEW_TEXT_LINE);
-                changeTextLine(TEXT_LINE_SINGLE,REQUEST_KEY_SEARCH_TEXT_LINE);
-                checkLine=R.id.radioLineSingle;
-            }else if(checkedId==R.id.radioLineMul){
-                setLineRadioButton(false, true, R.color.gray, R.color.black);
-                changeTextLine(TEXT_LINE_DEFAULT, REQUEST_KEY_RECYCLERVIEW_TEXT_LINE);
-                changeTextLine(TEXT_LINE_DEFAULT, REQUEST_KEY_SEARCH_TEXT_LINE);
-                checkLine=R.id.radioLineMul;
-            }
-        }
-
-        else if(group.getId()==R.id.radioFont){
-            if(checkedId==R.id.radioFontOne){
-                setFontRadioButton(true, false, false, R.color.black, R.color.gray, R.color.gray);
-                changeFont(TEXT_SIZE_DEFAULT_SMALL, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
-                changeFont(TEXT_SIZE_DEFAULT_SMALL, REQUEST_KEY_MEMO_TEXT_SIZE);
-                changeFont(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
-                changeFont(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_SEARCH_TEXT_SIZE);
-                checkFontSize=R.id.radioFontOne;
-            }else if(checkedId==R.id.radioFontTwo){
-                setFontRadioButton(false, true, false, R.color.gray, R.color.black, R.color.gray);
-                changeFont(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
-                changeFont(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_MEMO_TEXT_SIZE);
-                changeFont(TEXT_SIZE_MEDIUM, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
-                changeFont(TEXT_SIZE_MEDIUM, REQUEST_KEY_SEARCH_TEXT_SIZE);
-                checkFontSize=R.id.radioFontTwo;
-            }else if(checkedId==R.id.radioFontThree){
-                setFontRadioButton(false, false, true, R.color.gray, R.color.gray, R.color.black);
-                changeFont(TEXT_SIZE_MEDIUM, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
-                changeFont(TEXT_SIZE_MEDIUM, REQUEST_KEY_MEMO_TEXT_SIZE);
-                changeFont(TEXT_SIZE_LARGE, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
-                changeFont(TEXT_SIZE_LARGE, REQUEST_KEY_SEARCH_TEXT_SIZE);
-                checkFontSize=R.id.radioFontThree;
-            }
-        }
-
-    }
-
-    public void showManual(){
-        AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
-        builder.setMessage(getResources().getText(R.string.manualDialog));
-        builder.setNeutralButton(getResources().getText(R.string.close), (dialog, which)-> dialog.dismiss());
-        AlertDialog dialog=builder.create();
-        dialog.show();
-    }
-
-    public void setLineRadioButton(boolean b1, boolean b2, int c1, int c2){
-        singleLineRadioButton.setChecked(b1);
-        MultiLineRadioButton.setChecked(b2);
-        singleLineRadioButton.setTextColor(ContextCompat.getColor(mContext,c1));
-        MultiLineRadioButton.setTextColor(ContextCompat.getColor(mContext,c2));
-    }
-
-    public void setFontRadioButton(boolean b1, boolean b2, boolean b3, int c1, int c2, int c3){
-        fontOneRadioButton.setChecked(b1);
-        fontTwoRadioButton.setChecked(b2);
-        fontThreeRadioButton.setChecked(b3);
-        fontOneRadioButton.setTextColor(ContextCompat.getColor(mContext,c1));
-        fontTwoRadioButton.setTextColor(ContextCompat.getColor(mContext,c2));
-        fontThreeRadioButton.setTextColor(ContextCompat.getColor(mContext,c3));
-    }
-
-    public void changeFont(float size, String key){
-        Bundle bundle=new Bundle();
-        bundle.putFloat(BUNDLE_KEY_TEXT_SIZE,size);
-
-        getParentFragmentManager().setFragmentResult(key, bundle);
-    }
-
-   public void changeTextLine(int line, String key){
-       Bundle bundle=new Bundle();
-       bundle.putInt(BUNDLE_KEY_TEXT_LINE, line);
-
-       getParentFragmentManager().setFragmentResult(key, bundle);
-   }
-
-   public void setEllipsize(){
-        if(hasEllipsize){
-            ellipsisTextView.setTextColor(ContextCompat.getColor(mContext,R.color.black));
-            hasEllipsize=false;
-        }else{
-            ellipsisTextView.setTextColor(ContextCompat.getColor(mContext,R.color.gray));
-            hasEllipsize=true;
-        }
-   }
-
-    public void changeEllipsize(boolean check, String key){
-        Bundle bundle=new Bundle();
-        bundle.putBoolean(BUNDLE_KEY_TEXT_ELLIPSIZE, check);
-
-        getParentFragmentManager().setFragmentResult(key, bundle);
-    }
-
-    public void resetRadioButton(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SET_STYLE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(PREF_KEY_HAS_ELLIPSIZE, !hasEllipsize);
-        editor.putInt(PREF_KEY_LINE_TEXT_ID, checkLine);
-        editor.putInt(PREF_KEY_SIZE_TEXT_ID, checkFontSize);
-
-        editor.apply();
-    }
-
-    public void makeExportDialog(int androidVersion, String type){
-        AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
-        final String message=fileExtension+" "+getResources().getText(R.string.doExport);
-        builder.setMessage(message);
-        builder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(androidVersion>=Build.VERSION_CODES.Q){
-                    final String fileTitle="happy bank memo";
-                    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType(type);
-                    intent.putExtra(Intent.EXTRA_TITLE, fileTitle);
-                    activityResultLauncher.launch(intent);
-                }else{
-                    requestPermissionLauncher.launch(PERMISSION);
-                }
-            }
-        });
-        builder.setNegativeButton(getResources().getText(R.string.cancel), (dialog, which)-> dialog.dismiss());
-        AlertDialog dialog=builder.create();
-        dialog.show();
     }
 
     public void exportPdf(String extension){
@@ -464,33 +193,275 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         });
     }
 
-    public void makeFile(Uri uri, StringBuffer content){
-        pfd=null;
-        FileOutputStream fileOutputStream=null;
-        BufferedWriter bufferedWriter=null;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+       View view=inflater.inflate(R.layout.fragment_setting, container, false);
+       init(view);
+        return view;
+    }
 
-        try{
-            String contentStr = String.valueOf(content);
-            fileOutputStream=getDirectory(uri, mContext);
-            if("null".equals(contentStr)||"".equals(contentStr)){
-                Toast.makeText(getContext(),getResources().getText(R.string.noMemo),Toast.LENGTH_LONG).show();
-            }else{
-                bufferedWriter=new BufferedWriter(new OutputStreamWriter(fileOutputStream));
-                bufferedWriter.write(contentStr);
+    private void init(View view){
+        TextView manualTextView=view.findViewById(R.id.manual);
+        ellipsisTextView=view.findViewById(R.id.ellipsis);
+        TextView pdfTextView=view.findViewById(R.id.pdf);
+        TextView excelTextView=view.findViewById(R.id.excel);
+        TextView txtTextView=view.findViewById(R.id.txt);
+        TextView openSourceTextView=view.findViewById(R.id.openSource);
+        RadioGroup radioGroupLine=view.findViewById(R.id.radioLineDisplay);
+        singleLineRadioButton=view.findViewById(R.id.radioLineSingle);
+        MultiLineRadioButton=view.findViewById(R.id.radioLineMul);
+        RadioGroup radioGroupFont=view.findViewById(R.id.radioFont);
+        fontOneRadioButton=view.findViewById(R.id.radioFontOne);
+        fontTwoRadioButton=view.findViewById(R.id.radioFontTwo);
+        fontThreeRadioButton=view.findViewById(R.id.radioFontThree);
+
+        presenter=new OutputPresenter();
+
+        singleLineRadioButton.setChecked(false);
+        MultiLineRadioButton.setChecked(true);
+
+        fontOneRadioButton.setChecked(true);
+        fontTwoRadioButton.setChecked(false);
+        fontThreeRadioButton.setChecked(false);
+
+        radioGroupLine.setOnCheckedChangeListener(this);
+        radioGroupFont.setOnCheckedChangeListener(this);
+
+        manualTextView.setOnClickListener(this);
+        ellipsisTextView.setOnClickListener(this);
+        pdfTextView.setOnClickListener(this);
+        excelTextView.setOnClickListener(this);
+        txtTextView.setOnClickListener(this);
+        openSourceTextView.setOnClickListener(this);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SET_STYLE,Context.MODE_PRIVATE);
+        hasEllipsize=preferences.getBoolean(PREF_KEY_HAS_ELLIPSIZE, PREF_DEFAULT_TEXT_ELLIPSIZE);
+        checkLine=preferences.getInt(PREF_KEY_LINE_TEXT_ID, R.id.radioLineMul);
+        checkFontSize=preferences.getInt(PREF_KEY_SIZE_TEXT_ID, R.id.radioFontOne);
+
+        setEllipsize();
+
+        if(checkLine==R.id.radioLineSingle){
+            setLineRadioButton(true, false, R.color.black, R.color.gray);
+        }else if(checkLine==R.id.radioLineMul){
+            setLineRadioButton(false, true, R.color.gray, R.color.black);
+        }
+
+        if(checkFontSize==R.id.radioFontOne){
+            setFontRadioButton(true, false, false, R.color.black, R.color.gray, R.color.gray);
+        }else if(checkFontSize==R.id.radioFontTwo){
+            setFontRadioButton(false, true, false, R.color.gray, R.color.black, R.color.gray);
+        }else if(checkFontSize==R.id.radioFontThree){
+            setFontRadioButton(false, false, true, R.color.gray, R.color.gray, R.color.black);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        resetRadioButton();
+        presenter.releaseView();
+    }
+
+    public void resetRadioButton(){
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SET_STYLE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=preferences.edit();
+        editor.putBoolean(PREF_KEY_HAS_ELLIPSIZE, !hasEllipsize);
+        editor.putInt(PREF_KEY_LINE_TEXT_ID, checkLine);
+        editor.putInt(PREF_KEY_SIZE_TEXT_ID, checkFontSize);
+
+        editor.apply();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext=null;
+        mActivity=null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        final String pdfType="application/pdf";
+        final String csvType="text/comma-separated-values";
+        final String txtType="text/plain";
+
+        if(v.getId()==R.id.ellipsis){
+            setEllipsize();
+            boolean isCheckEllipsize=!hasEllipsize;
+            changeEllipsize(isCheckEllipsize,REQUEST_KEY_RECYCLERVIEW_TEXT_ELLIPSIZE);
+            changeEllipsize(isCheckEllipsize,REQUEST_KEY_SEARCH_TEXT_ELLIPSIZE);
+        }else if(v.getId()==R.id.pdf){
+            fileExtension="pdf";
+            makeExportDialog(Build.VERSION.SDK_INT, pdfType);
+        }else if(v.getId()==R.id.excel){
+            fileExtension="excel";
+            makeExportDialog(Build.VERSION.SDK_INT, csvType);
+        }else if(v.getId()==R.id.txt){
+            fileExtension="txt";
+            makeExportDialog(Build.VERSION.SDK_INT, txtType);
+        }else if(v.getId()==R.id.manual){
+            showManual();
+        }else if(v.getId()==R.id.openSource){
+            startActivity(new Intent(getContext(), OssLicensesMenuActivity.class));
+        }
+    }
+
+    public void setEllipsize(){
+        if(hasEllipsize){
+            ellipsisTextView.setTextColor(ContextCompat.getColor(mContext,R.color.black));
+            hasEllipsize=false;
+        }else{
+            ellipsisTextView.setTextColor(ContextCompat.getColor(mContext,R.color.gray));
+            hasEllipsize=true;
+        }
+    }
+
+    public void changeEllipsize(boolean check, String key){
+        Bundle bundle=new Bundle();
+        bundle.putBoolean(BUNDLE_KEY_TEXT_ELLIPSIZE, check);
+
+        getParentFragmentManager().setFragmentResult(key, bundle);
+    }
+
+    public void makeExportDialog(int androidVersion, String type){
+        AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
+        final String message=fileExtension+" "+getResources().getText(R.string.doExport);
+        builder.setMessage(message);
+        builder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(androidVersion>=Build.VERSION_CODES.Q){
+                    final String fileTitle="happy bank memo";
+                    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType(type);
+                    intent.putExtra(Intent.EXTRA_TITLE, fileTitle);
+                    activityResultLauncher.launch(intent);
+                }else{
+                    requestPermissionLauncher.launch(PERMISSION);
+                }
             }
-        }catch(IOException e){
-            e.printStackTrace();
-        }finally{
-            try {
-                if(bufferedWriter!=null){bufferedWriter.flush();bufferedWriter.close();}
-                if(fileOutputStream!=null){fileOutputStream.flush();fileOutputStream.close();}
-                if(pfd!=null){pfd.close();}
-            }catch (IOException e2){
-                e2.printStackTrace();
+        });
+        builder.setNegativeButton(getResources().getText(R.string.cancel), (dialog, which)-> dialog.dismiss());
+        AlertDialog dialog=builder.create();
+        dialog.show();
+    }
+
+    public void showManual(){
+        AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
+        builder.setMessage(getResources().getText(R.string.manualDialog));
+        builder.setNeutralButton(getResources().getText(R.string.close), (dialog, which)-> dialog.dismiss());
+        AlertDialog dialog=builder.create();
+        dialog.show();
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+        if(group.getId()==R.id.radioLineDisplay){
+            if(checkedId==R.id.radioLineSingle){
+                setLineRadioButton(true, false, R.color.black, R.color.gray);
+                changeTextLine(TEXT_LINE_SINGLE, REQUEST_KEY_RECYCLERVIEW_TEXT_LINE);
+                changeTextLine(TEXT_LINE_SINGLE,REQUEST_KEY_SEARCH_TEXT_LINE);
+                checkLine=R.id.radioLineSingle;
+            }else if(checkedId==R.id.radioLineMul){
+                setLineRadioButton(false, true, R.color.gray, R.color.black);
+                changeTextLine(TEXT_LINE_DEFAULT, REQUEST_KEY_RECYCLERVIEW_TEXT_LINE);
+                changeTextLine(TEXT_LINE_DEFAULT, REQUEST_KEY_SEARCH_TEXT_LINE);
+                checkLine=R.id.radioLineMul;
             }
         }
 
-        ((MainActivity)mContext).runOnUiThread(()->Toast.makeText(getContext(),getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show());
+        else if(group.getId()==R.id.radioFont){
+            if(checkedId==R.id.radioFontOne){
+                setFontRadioButton(true, false, false, R.color.black, R.color.gray, R.color.gray);
+                changeFont(TEXT_SIZE_DEFAULT_SMALL, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
+                changeFont(TEXT_SIZE_DEFAULT_SMALL, REQUEST_KEY_MEMO_TEXT_SIZE);
+                changeFont(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
+                changeFont(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_SEARCH_TEXT_SIZE);
+                checkFontSize=R.id.radioFontOne;
+            }else if(checkedId==R.id.radioFontTwo){
+                setFontRadioButton(false, true, false, R.color.gray, R.color.black, R.color.gray);
+                changeFont(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
+                changeFont(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_MEMO_TEXT_SIZE);
+                changeFont(TEXT_SIZE_MEDIUM, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
+                changeFont(TEXT_SIZE_MEDIUM, REQUEST_KEY_SEARCH_TEXT_SIZE);
+                checkFontSize=R.id.radioFontTwo;
+            }else if(checkedId==R.id.radioFontThree){
+                setFontRadioButton(false, false, true, R.color.gray, R.color.gray, R.color.black);
+                changeFont(TEXT_SIZE_MEDIUM, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
+                changeFont(TEXT_SIZE_MEDIUM, REQUEST_KEY_MEMO_TEXT_SIZE);
+                changeFont(TEXT_SIZE_LARGE, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
+                changeFont(TEXT_SIZE_LARGE, REQUEST_KEY_SEARCH_TEXT_SIZE);
+                checkFontSize=R.id.radioFontThree;
+            }
+        }
+
+    }
+
+    public void setLineRadioButton(boolean b1, boolean b2, int c1, int c2){
+        singleLineRadioButton.setChecked(b1);
+        MultiLineRadioButton.setChecked(b2);
+        singleLineRadioButton.setTextColor(ContextCompat.getColor(mContext,c1));
+        MultiLineRadioButton.setTextColor(ContextCompat.getColor(mContext,c2));
+    }
+
+    public void setFontRadioButton(boolean b1, boolean b2, boolean b3, int c1, int c2, int c3){
+        fontOneRadioButton.setChecked(b1);
+        fontTwoRadioButton.setChecked(b2);
+        fontThreeRadioButton.setChecked(b3);
+        fontOneRadioButton.setTextColor(ContextCompat.getColor(mContext,c1));
+        fontTwoRadioButton.setTextColor(ContextCompat.getColor(mContext,c2));
+        fontThreeRadioButton.setTextColor(ContextCompat.getColor(mContext,c3));
+    }
+
+    public void changeFont(float size, String key){
+        Bundle bundle=new Bundle();
+        bundle.putFloat(BUNDLE_KEY_TEXT_SIZE,size);
+
+        getParentFragmentManager().setFragmentResult(key, bundle);
+    }
+
+   public void changeTextLine(int line, String key){
+       Bundle bundle=new Bundle();
+       bundle.putInt(BUNDLE_KEY_TEXT_LINE, line);
+
+       getParentFragmentManager().setFragmentResult(key, bundle);
+   }
+
+    private class FileRunnable implements Runnable{
+
+        private final StringBuffer content;
+
+        private String extension;
+        private Uri uri;
+        private final int branch;
+        public FileRunnable(StringBuffer content, String extension){
+            this.content=content;
+            this.extension=extension;
+            branch=1;
+        }
+        public FileRunnable(Uri uri, StringBuffer content){
+            this.uri=uri;
+            this.content=content;
+            branch=2;
+        }
+
+        @Override
+        public void run() {
+            if(branch==1){
+                makeFile(content, extension);
+            }else if(branch==2){
+                makeFile(uri, content);
+            }
+        }
 
     }
 
@@ -525,6 +496,36 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         }
 
         ((MainActivity)mContext).runOnUiThread(()-> Toast.makeText(getContext(),getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show());
+
+    }
+
+    public void makeFile(Uri uri, StringBuffer content){
+        pfd=null;
+        FileOutputStream fileOutputStream=null;
+        BufferedWriter bufferedWriter=null;
+
+        try{
+            String contentStr = String.valueOf(content);
+            fileOutputStream=getDirectory(uri, mContext);
+            if("null".equals(contentStr)||"".equals(contentStr)){
+                Toast.makeText(getContext(),getResources().getText(R.string.noMemo),Toast.LENGTH_LONG).show();
+            }else{
+                bufferedWriter=new BufferedWriter(new OutputStreamWriter(fileOutputStream));
+                bufferedWriter.write(contentStr);
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }finally{
+            try {
+                if(bufferedWriter!=null){bufferedWriter.flush();bufferedWriter.close();}
+                if(fileOutputStream!=null){fileOutputStream.flush();fileOutputStream.close();}
+                if(pfd!=null){pfd.close();}
+            }catch (IOException e2){
+                e2.printStackTrace();
+            }
+        }
+
+        ((MainActivity)mContext).runOnUiThread(()->Toast.makeText(getContext(),getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show());
 
     }
 

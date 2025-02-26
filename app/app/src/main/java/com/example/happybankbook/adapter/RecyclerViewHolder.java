@@ -17,19 +17,24 @@ import com.example.happybankbook.db.MemoData;
 
 public class RecyclerViewHolder extends BaseItemView{
 
-    private TextView idxTextView,dateTextView,contentTextView,priceTextView;
     private OnItemClickListener onItemClickListener;
+    private TextView idxTextView,dateTextView,contentTextView,priceTextView;
+
 
     public RecyclerViewHolder(@NonNull View view){
         super(view);
 
+        ConstraintLayout recyclerContainer=view.findViewById(R.id.recyclerContainer);
         idxTextView=view.findViewById(R.id.txtNumber);
         dateTextView=view.findViewById(R.id.inputTxtDate);
         contentTextView=view.findViewById(R.id.inputTxtContent);
         priceTextView=view.findViewById(R.id.inputTxtDeposit);
-        ConstraintLayout recyclerContainer=view.findViewById(R.id.recyclerContainer);
 
         recyclerContainer.setOnClickListener(v -> onItemClickListener.onItemClick());
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.onItemClickListener=listener;
     }
 
     public void onBind(BaseItem data, Context context, int position, float fontSize, int textLine, boolean hasTextEllipsize){
@@ -88,10 +93,6 @@ public class RecyclerViewHolder extends BaseItemView{
             contentTextView.setBackgroundResource(R.drawable.memo_list_content_background_green);
             priceTextView.setBackgroundResource(R.color.green);
         }
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener){
-        this.onItemClickListener=listener;
     }
 
 }

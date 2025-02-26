@@ -24,11 +24,11 @@ import java.util.ArrayList;
 
 public class PdfRunnable implements Runnable{
 
-    private final ArrayList<MemoData> dataList;
     private final Context mContext;
+    private final int branch;
+    private final ArrayList<MemoData> dataList;
     private Uri uri;
     private String extension;
-    private final int branch;
 
     public PdfRunnable(ArrayList<MemoData> dataList, Context context, Uri uri){
         this.dataList=dataList;

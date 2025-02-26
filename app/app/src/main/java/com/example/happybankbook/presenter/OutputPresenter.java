@@ -24,6 +24,14 @@ public class OutputPresenter implements OutputContract.Presenter {
         this.disposable=new CompositeDisposable();
     }
 
+    public void setStringBufferResultCallback(StringBufferResultCallback callback){
+        this.stringBufferResultCallback = callback;
+    }
+
+    public void setMemoDataListCallback(MemoDataListCallback callback){
+        this.memoDataListCallback=callback;
+    }
+
     @Override
     public void releaseView() {
         disposable.clear();
@@ -60,14 +68,6 @@ public class OutputPresenter implements OutputContract.Presenter {
 
                   )
         );
-    }
-
-    public void setStringBufferResultCallback(StringBufferResultCallback callback){
-        this.stringBufferResultCallback = callback;
-    }
-
-    public void setMemoDataListCallback(MemoDataListCallback callback){
-        this.memoDataListCallback=callback;
     }
 
 }

@@ -13,9 +13,9 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 @Database(entities ={MemoData.class}, version = 2)
 @TypeConverters(Converters.class)
 public abstract class RoomDB extends RoomDatabase {
-    
-    private static RoomDB database;
+
     private static final String DATABASE_NAME="database";
+    private static RoomDB database;
 
     public abstract MemoDao memoDao();
 

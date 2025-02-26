@@ -62,19 +62,18 @@ import java.util.ArrayList;
 
 public class ListFragment extends Fragment implements View.OnClickListener, ListContract.View{
 
-    private TextView totalPriceTextView;
-
+    private Activity mActivity;
     private ListPresenter presenter;
     private MemoAdapter adapter;
+    private TextView totalPriceTextView;
 
-    private int itemCount, fromDate, toDate;
-    private boolean isNewestSort, isInitialization;
     private int clickCountCondition=1;
     private int textLine= TEXT_LINE_DEFAULT;
     private float fontSize= TEXT_SIZE_DEFAULT_LARGE;
     private boolean hasTextEllipsize= TEXT_ELLIPSIZE_DEFAULT;
+    private int itemCount, fromDate, toDate;
+    private boolean isNewestSort, isInitialization;
 
-    private Activity mActivity;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -144,6 +143,44 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         return view;
     }
 
+    private void init(View v){
+        RecyclerView recyclerView=v.findViewById(R.id.recyclerMemo);
+        TextView searchTextView=v.findViewById(R.id.txtSearch);
+        TextView conditionTextView=v.findViewById(R.id.txtCondition);
+        totalPriceTextView=v.findViewById(R.id.priceTotalTxt);
+
+        searchTextView.setOnClickListener(this);
+        conditionTextView.setOnClickListener(this);
+
+        presenter=new ListPresenter();
+        presenter.setView(this);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, fontSize, textLine, hasTextEllipsize);
+        recyclerView.setAdapter(adapter);
+
+        //메모 총합 표시
+        presenter.setLongResultCallback(new LongResultCallback() {
+            @Override
+            public void onLongResult(long value) {
+                String priceFormatPattern="###,###";
+                DecimalFormat priceFormat = new DecimalFormat(priceFormatPattern);
+                String strPrice= priceFormat.format(value);
+                totalPriceTextView.setText(strPrice);
+            }
+        });
+        presenter.getSumPrice(RoomDB.getInstance(getContext()).memoDao(), getContext());
+
+        boolean hasVisitedViewPager=adapter.hasVisitedViewpager();
+        //viewpager 방문 후 ListFragment 돌아온 경우 검색 조건 값 유지
+        //viewpager 제외한 다른 프래그먼트 방문 후, ListFragment 돌아온 경우는 데이터 조건을 초기화하여 모든 데이터 보여줌
+        if(!hasVisitedViewPager||isInitialization){
+            presenter.getData(RoomDB.getInstance(getContext()).memoDao());
+        }else{
+            keepCondition();
+        }
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -175,6 +212,16 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         editor.apply();
     }
 
+    private void resetTextSetting(){
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_LIST_TEXT_STYLE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=preferences.edit();
+        editor.putBoolean(PREF_KEY_TEXT_ELLIPSIZE, hasTextEllipsize);
+        editor.putInt(PREF_KEY_TEXT_LINE, textLine);
+        editor.putFloat(PREF_KEY_TEXT_SIZE, fontSize);
+
+        editor.apply();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -185,63 +232,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     public void onDetach() {
         super.onDetach();
         mActivity=null;
-    }
-
-    private void init(View v){
-        TextView searchTextView=v.findViewById(R.id.txtSearch);
-        TextView conditionTextView=v.findViewById(R.id.txtCondition);
-        totalPriceTextView=v.findViewById(R.id.priceTotalTxt);
-        RecyclerView recyclerView=v.findViewById(R.id.recyclerMemo);
-
-        searchTextView.setOnClickListener(this);
-        conditionTextView.setOnClickListener(this);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, fontSize, textLine, hasTextEllipsize);
-        recyclerView.setAdapter(adapter);
-
-        presenter=new ListPresenter();
-        presenter.setView(this);
-
-        boolean hasVisitedViewPager=adapter.hasVisitedViewpager();
-        //viewpager 방문 후 ListFragment 돌아온 경우 검색 조건 값 유지
-        //viewpager 제외한 다른 프래그먼트 방문 후, ListFragment 돌아온 경우는 데이터 조건을 초기화하여 모든 데이터 보여줌
-        if(!hasVisitedViewPager||isInitialization){
-            presenter.getData(RoomDB.getInstance(getContext()).memoDao());
-        }else{
-            keepCondition();
-        }
-
-        //메모 총합 표시
-        presenter.setLongResultCallback(new LongResultCallback() {
-            @Override
-            public void onLongResult(long value) {
-                String priceFormatPattern="###,###";
-                DecimalFormat priceFormat = new DecimalFormat(priceFormatPattern);
-                String strPrice= priceFormat.format(value);
-                totalPriceTextView.setText(strPrice);
-            }
-        });
-        presenter.getSumPrice(RoomDB.getInstance(getContext()).memoDao(), getContext());
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        if(v.getId()==R.id.txtSearch){
-            ((MainActivity)mActivity).replaceFragment(new SearchFragment());
-        }else if(v.getId()==R.id.txtCondition){
-            //addFragment 1일 때만 addFragment()하여 여러 번 클릭 시 중복 생성을 막음
-            if(clickCountCondition==1){
-                ((MainActivity)mActivity).addFragment(new ConditionFragment());
-                ++clickCountCondition;
-            }
-        }
-    }
-
-    @Override
-    public void setItems(ArrayList<MemoData> items) {
-        adapter.setItems(items);
     }
 
     private void keepCondition(){
@@ -272,14 +262,22 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         }
     }
 
-    private void resetTextSetting(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_LIST_TEXT_STYLE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(PREF_KEY_TEXT_ELLIPSIZE, hasTextEllipsize);
-        editor.putInt(PREF_KEY_TEXT_LINE, textLine);
-        editor.putFloat(PREF_KEY_TEXT_SIZE, fontSize);
+    @Override
+    public void setItems(ArrayList<MemoData> items) {
+        adapter.setItems(items);
+    }
 
-        editor.apply();
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.txtSearch){
+            ((MainActivity)mActivity).replaceFragment(new SearchFragment());
+        }else if(v.getId()==R.id.txtCondition){
+            //addFragment 1일 때만 addFragment()하여 여러 번 클릭 시 중복 생성을 막음
+            if(clickCountCondition==1){
+                ((MainActivity)mActivity).addFragment(new ConditionFragment());
+                ++clickCountCondition;
+            }
+        }
     }
 
 }

@@ -46,6 +46,16 @@ import java.util.ArrayList;
 
 public class MemoDetailFragment extends Fragment implements ListContract.View,View.OnClickListener{
 
+    private Context mContext;
+    private Activity mActivity;
+
+    private ListPresenter presenter;
+    private MemoAdapter adapter;
+    private Handler handler;
+
+    private ViewPager2 viewPager;
+    private ImageView forwardImageView, backImageView;
+
     //일정 시간 후 화살표 이미지 투명화 위한 Runnable
     private final Runnable changeImgAlphaRunnable =new Runnable(){
         @Override
@@ -55,20 +65,10 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         }
     };
 
-    private ViewPager2 viewPager;
-    private ImageView forwardImageView, backImageView;
-
-    private ListPresenter presenter;
-    private MemoAdapter adapter;
-
-    private Handler handler;
-
     private int itemCount, fromDate, toDate, rowCount, currentPosition, adapterPosition;
-    private boolean isFirstInteraction=true;
     private float fontSize= TEXT_SIZE_DEFAULT_SMALL;
+    private boolean isFirstInteraction=true;
 
-    private Context mContext;
-    private Activity mActivity;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -124,6 +124,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
 
             }
         });
+
         //변경 font size 값
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_VIEWPAGER_TEXT_SIZE, this, new FragmentResultListener() {
             @Override
@@ -141,44 +142,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         View view=inflater.inflate(R.layout.fragment_memo_detail, container, false);
         init(view);
         return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_VIEWPAGER_TEXT_STYLE,Context.MODE_PRIVATE);
-        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE, PREF_DEFAULT_TEXT_SIZE_SMALL);
-        adapter.setFont(fontSize);
-        
-        //SearchFragment에서 검색 후 키보드 내리지 않고 바로 viewpager 이동 하면,
-        //계속 키보드 올려지는 경우 방지
-        InputMethodManager inputMethodManager=(InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        Bundle bundle=new Bundle();
-        bundle.putBoolean(BUNDLE_KEY_IS_NEWEST_SORT,true);
-        getParentFragmentManager().setFragmentResult(REQUEST_KEY_RETAIN_SORT, bundle);
-
-        resetTextSetting();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        presenter.releaseView();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mContext=null;
-        mActivity=null;
     }
 
     public void init(View view){
@@ -210,6 +173,86 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         changePage();
     }
 
+    public void changePage(){
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                //recyclerview position, viewpager position 더하여 클릭된 메모 데이터에서 슬라이드 하였을 때 다음 데이터 로딩 하기 위한 초기 값
+                if(isFirstInteraction){
+                    currentPosition=position+adapterPosition;
+                }else{
+                    currentPosition=position;
+                }
+                isFirstInteraction=false;
+
+                if(currentPosition==0){
+                    forwardImageView.setVisibility(View.INVISIBLE);
+                    backImageView.setVisibility(View.VISIBLE);
+                }else if(currentPosition==(rowCount-1)){
+                    forwardImageView.setVisibility(View.VISIBLE);
+                    backImageView.setVisibility(View.INVISIBLE);
+                }else{
+                    forwardImageView.setVisibility(View.VISIBLE);
+                    backImageView.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_VIEWPAGER_TEXT_STYLE,Context.MODE_PRIVATE);
+        fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE, PREF_DEFAULT_TEXT_SIZE_SMALL);
+        adapter.setFont(fontSize);
+
+        //SearchFragment에서 검색 후 키보드 내리지 않고 바로 viewpager 이동 하면,
+        //계속 키보드 올려지는 경우 방지
+        InputMethodManager inputMethodManager=(InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        Bundle bundle=new Bundle();
+        bundle.putBoolean(BUNDLE_KEY_IS_NEWEST_SORT,true);
+        getParentFragmentManager().setFragmentResult(REQUEST_KEY_RETAIN_SORT, bundle);
+
+        resetTextSetting();
+    }
+
+    private void resetTextSetting(){
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_VIEWPAGER_TEXT_STYLE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=preferences.edit();
+        editor.putFloat(PREF_KEY_TEXT_SIZE, fontSize);
+
+        editor.apply();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.releaseView();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext=null;
+        mActivity=null;
+    }
+
+    @Override
+    public void setItems(ArrayList<MemoData> items) {
+        adapter.setItems(items);
+        adapter.setCondition(true);
+    }
+
     @Override
     public void onClick(View v) {
         final int delayTime=3000;
@@ -237,47 +280,4 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         }
     }
 
-    @Override
-    public void setItems(ArrayList<MemoData> items) {
-        adapter.setItems(items);
-        adapter.setCondition(true);
-    }
-
-    public void changePage(){
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                //recyclerview position, viewpager position 더하여 클릭된 메모 데이터에서 슬라이드 하였을 때 다음 데이터 로딩 하기 위한 초기 값
-                if(isFirstInteraction){
-                    currentPosition=position+adapterPosition;
-                }else{
-                    currentPosition=position;
-                }
-                isFirstInteraction=false;
-                
-                if(currentPosition==0){
-                    forwardImageView.setVisibility(View.INVISIBLE);
-                    backImageView.setVisibility(View.VISIBLE);
-                }else if(currentPosition==(rowCount-1)){
-                    forwardImageView.setVisibility(View.VISIBLE);
-                    backImageView.setVisibility(View.INVISIBLE);
-                }else{
-                    forwardImageView.setVisibility(View.VISIBLE);
-                    backImageView.setVisibility(View.VISIBLE);
-                }
-
-            }
-        });
-    }
-
-    private void resetTextSetting(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_VIEWPAGER_TEXT_STYLE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=preferences.edit();
-        editor.putFloat(PREF_KEY_TEXT_SIZE, fontSize);
-
-        editor.apply();
-    }
-
 }
-

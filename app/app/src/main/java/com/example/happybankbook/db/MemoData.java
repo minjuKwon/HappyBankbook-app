@@ -18,14 +18,17 @@ public class MemoData extends BaseItem {
     public String content;
     public Bitmap image;
 
+    public void setNum(int num) {
+        this.num = num;
+    }
     public void setDate(int date){this.date=date;}
     public void setPrice(int price){this.price=price;}
     public void setContent(String content){this.content=content;}
     public void setBitmap(Bitmap image){this.image=image;}
-    public void setNum(int num) {
-        this.num = num;
-    }
 
+    public int getNum() {
+        return num;
+    }
     public int getDate() {
         return date;
     }
@@ -37,9 +40,6 @@ public class MemoData extends BaseItem {
     }
     public Bitmap getImage() {
         return image;
-    }
-    public int getNum() {
-        return num;
     }
 
 }

@@ -53,15 +53,16 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
     private static final int DEFAULT_TO_DATE=30000000;
     private static final int DEFAULT_COUNT=0;
 
+    private Context mContext;
+    private Activity mActivity;
+
     private TextView durationTextView, fromDurationTextView, toDurationTextView;
-    private RadioButton oldestSortRadioButton, newestSortRadioButton;
     private EditText itemCountEditText;
+    private RadioButton oldestSortRadioButton, newestSortRadioButton;
 
     private boolean isClickedDuration=true;
     private boolean hasVisitedViewPager=false;
 
-    private Context mContext;
-    private Activity mActivity;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -103,6 +104,30 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         View view=inflater.inflate(R.layout.fragment_condition, container, false);
         init(view);
         return view;
+    }
+
+    private void init(View view){
+        ImageView clseeImageView=view.findViewById(R.id.close);
+        durationTextView=view.findViewById(R.id.duration);
+        fromDurationTextView=view.findViewById(R.id.fromDuration);
+        toDurationTextView=view.findViewById(R.id.toDuration);
+        oldestSortRadioButton=view.findViewById(R.id.radioOldest);
+        RadioGroup radioGroupSort=view.findViewById(R.id.radioGroupSort);
+        newestSortRadioButton=view.findViewById(R.id.radioNewest);
+        itemCountEditText=view.findViewById(R.id.editCount);
+        Button submitButton=view.findViewById(R.id.buttonSubmit);
+        Button initButton=view.findViewById(R.id.buttonInit);
+
+        clseeImageView.setOnClickListener(this);
+        durationTextView.setOnClickListener(this);
+        fromDurationTextView.setOnClickListener(this);
+        toDurationTextView.setOnClickListener(this);
+        radioGroupSort.setOnCheckedChangeListener(this);
+        submitButton.setOnClickListener(this);
+        initButton.setOnClickListener(this);
+
+        newestSortRadioButton.setChecked(true);
+        oldestSortRadioButton.setChecked(false);
     }
 
     @Override
@@ -151,32 +176,6 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         mActivity=null;
     }
 
-    private void init(View view){
-        ImageView clseeImageView=view.findViewById(R.id.close);
-        durationTextView=view.findViewById(R.id.duration);
-        fromDurationTextView=view.findViewById(R.id.fromDuration);
-        toDurationTextView=view.findViewById(R.id.toDuration);
-        oldestSortRadioButton=view.findViewById(R.id.radioOldest);
-        RadioGroup radioGroupSort=view.findViewById(R.id.radioGroupSort);
-        newestSortRadioButton=view.findViewById(R.id.radioNewest);
-        itemCountEditText=view.findViewById(R.id.editCount);
-        Button submitButton=view.findViewById(R.id.buttonSubmit);
-        Button initButton=view.findViewById(R.id.buttonInit);
-
-        newestSortRadioButton.setChecked(true);
-        oldestSortRadioButton.setChecked(false);
-
-        clseeImageView.setOnClickListener(this);
-        durationTextView.setOnClickListener(this);
-        fromDurationTextView.setOnClickListener(this);
-        toDurationTextView.setOnClickListener(this);
-
-       radioGroupSort.setOnCheckedChangeListener(this);
-
-       submitButton.setOnClickListener(this);
-       initButton.setOnClickListener(this);
-    }
-
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.close){
@@ -218,6 +217,20 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         }
     }
 
+    public void isDurationClick(){
+        durationTextView.setTextColor(ContextCompat.getColor(mContext,R.color.black));
+        fromDurationTextView.setVisibility(View.VISIBLE);
+        toDurationTextView.setVisibility(View.VISIBLE);
+        isClickedDuration=false;
+    }
+
+    public void isNotDurationClick(){
+        durationTextView.setTextColor(ContextCompat.getColor(mContext,R.color.darkGray));
+        fromDurationTextView.setVisibility(View.GONE);
+        toDurationTextView.setVisibility(View.GONE);
+        isClickedDuration=true;
+    }
+
     public void submit(){
         int toDate, fromDate, count;
         String countStr= itemCountEditText.getText().toString();
@@ -252,23 +265,9 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         newestSortRadioButton.setChecked(true);
         itemCountEditText.setText(null);
 
-        setSharedPreferences();
-
         sendBundle(DEFAULT_FROM_DATE,DEFAULT_TO_DATE,DEFAULT_COUNT,true);
-    }
 
-    public void isDurationClick(){
-        durationTextView.setTextColor(ContextCompat.getColor(mContext,R.color.black));
-        fromDurationTextView.setVisibility(View.VISIBLE);
-        toDurationTextView.setVisibility(View.VISIBLE);
-        isClickedDuration=false;
-    }
-
-    public void isNotDurationClick(){
-        durationTextView.setTextColor(ContextCompat.getColor(mContext,R.color.darkGray));
-        fromDurationTextView.setVisibility(View.GONE);
-        toDurationTextView.setVisibility(View.GONE);
-        isClickedDuration=true;
+        setSharedPreferences();
     }
 
     public void sendBundle(int fromDate, int toDate, int count, boolean sort){

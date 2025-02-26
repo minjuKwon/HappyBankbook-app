@@ -16,6 +16,10 @@ public class MemoPresenter implements MemoContract.Presenter {
 
     public MemoPresenter(){this.disposable=new CompositeDisposable();}
 
+    public void setIntResultCallback(IntResultCallback callback){
+        this.callback = callback;
+    }
+
     @Override
     public void releaseView() {
         disposable.clear();
@@ -53,10 +57,6 @@ public class MemoPresenter implements MemoContract.Presenter {
                                 value->value.changeNum(date)
                         )
         );
-    }
-
-    public void setIntResultCallback(IntResultCallback callback){
-        this.callback = callback;
     }
 
 }

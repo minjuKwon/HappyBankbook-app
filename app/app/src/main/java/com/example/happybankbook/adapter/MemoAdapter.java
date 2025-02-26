@@ -17,13 +17,13 @@ import java.util.List;
 
 public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
+    private static List<MemoData> dataList=new ArrayList<>();
+    private static int recyclerviewPosition;
     private final Context mContext;
     private final MemoType memoType;
-    static private List<MemoData> dataList=new ArrayList<>();
 
-    private static int recyclerviewPosition;
-    private float fontSize;
     private int textLine;
+    private float fontSize;
     private boolean isFirstInteraction, isRecyclable, hasReceivedCondition=true;
     private boolean textEllipsize, hasVisitedViewPager;
 
@@ -93,12 +93,11 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
                 }
                 viewPagerViewHolder.setIsRecyclable(isRecyclable);
                 viewPagerViewHolder.onBind(data, mContext, fontSize);
-                isFirstInteraction=false;
                 isRecyclable=true;
+                isFirstInteraction=false;
             }
         }
     }
-
 
     @Override
     public int getItemCount() {
@@ -114,14 +113,6 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
     public void setItems(ArrayList<MemoData>data){
         dataList=data;
         notifyDataSetChanged();
-    }
-
-    public void clearItems(){
-        dataList.clear();
-    }
-
-    public int getRecyclerviewPosition(){
-        return recyclerviewPosition;
     }
 
     public void setFont(float size){
@@ -140,8 +131,16 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         this.hasReceivedCondition=condition;
     }
 
+    public int getRecyclerviewPosition(){
+        return recyclerviewPosition;
+    }
+
     public boolean hasVisitedViewpager(){
         return hasVisitedViewPager ;
+    }
+
+    public void clearItems(){
+        dataList.clear();
     }
 
 }

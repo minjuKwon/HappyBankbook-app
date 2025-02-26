@@ -19,12 +19,21 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ListPresenter implements ListContract.Presenter {
 
-    private ListContract.View view;
     private final CompositeDisposable disposable;
     private LongResultCallback longResultCallback;
     private IntResultCallback intResultCallback;
+    private ListContract.View view;
+
 
     public ListPresenter(){this.disposable=new CompositeDisposable();}
+
+    public void setLongResultCallback(LongResultCallback callback){
+        this.longResultCallback = callback;
+    }
+
+    public void setIntResultCallback(IntResultCallback callback){
+        this.intResultCallback = callback;
+    }
 
     public void setView(ListContract.View view) {
         this.view = view;
@@ -92,14 +101,6 @@ public class ListPresenter implements ListContract.Presenter {
                         err->Toast.makeText(context,context.getResources().getText(R.string.totalPriceOver),Toast.LENGTH_LONG).show()
                     )
         );
-    }
-
-    public void setLongResultCallback(LongResultCallback callback){
-        this.longResultCallback = callback;
-    }
-
-    public void setIntResultCallback(IntResultCallback callback){
-        this.intResultCallback = callback;
     }
 
 }

@@ -47,15 +47,18 @@ import com.example.happybankbook.presenterReturnInterface.IntResultCallback;
 
 public class MemoFragment extends Fragment implements View.OnClickListener{
 
-    private TextView dateTextView;
-    private ImageView contentImageView;
-    private EditText contentEditText;
-    private ActivityResultLauncher<Intent> activityResultLauncher;
-    private MemoPresenter presenter;
     private Context mContext;
     private Activity mActivity;
+    private MemoPresenter presenter;
+    private ActivityResultLauncher<Intent> activityResultLauncher;
+
+    private TextView dateTextView;
+    private EditText contentEditText;
+    private ImageView contentImageView;
+
     private float fontSize= TEXT_SIZE_DEFAULT_SMALL;
     private boolean isClearContentTxt=false;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -88,6 +91,20 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         return view;
     }
 
+    private void init(View view){
+        dateTextView=view.findViewById(R.id.txtMemoDate);
+        TextView addPictureTextView=view.findViewById(R.id.addPicture);
+        TextView saveTextView=view.findViewById(R.id.save);
+        contentEditText=view.findViewById(R.id.editMemo);
+        contentImageView=view.findViewById(R.id.imageView);
+
+        dateTextView.setOnClickListener(this);
+        addPictureTextView.setOnClickListener(this);
+        saveTextView.setOnClickListener(this);
+
+        presenter=new MemoPresenter();
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -97,32 +114,6 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_MEMO_TEXT_STYLE,Context.MODE_PRIVATE);
         fontSize=preferences.getFloat(PREF_KEY_TEXT_SIZE, PREF_DEFAULT_TEXT_SIZE_SMALL);
         contentEditText.setTextSize(fontSize);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if(isClearContentTxt){ contentEditText.setText("");}
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        resetTextSetting();
-        isClearContentTxt=false;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        presenter.releaseView();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mContext=null;
-        mActivity=null;
     }
 
     public void getGallery(){
@@ -143,18 +134,38 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
     }
 
-    private void init(View view){
-        dateTextView=view.findViewById(R.id.txtMemoDate);
-        TextView addPictureTextView=view.findViewById(R.id.addPicture);
-        TextView saveTextView=view.findViewById(R.id.save);
-        contentImageView=view.findViewById(R.id.imageView);
-        contentEditText=view.findViewById(R.id.editMemo);
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(isClearContentTxt){ contentEditText.setText("");}
+    }
 
-        presenter=new MemoPresenter();
+    @Override
+    public void onStop() {
+        super.onStop();
+        resetTextSetting();
+        isClearContentTxt=false;
+    }
 
-        dateTextView.setOnClickListener(this);
-        addPictureTextView.setOnClickListener(this);
-        saveTextView.setOnClickListener(this);
+    private void resetTextSetting(){
+        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_MEMO_TEXT_STYLE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=preferences.edit();
+        editor.putFloat(PREF_KEY_TEXT_SIZE, fontSize);
+
+        editor.apply();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.releaseView();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext=null;
+        mActivity=null;
     }
 
     @Override
@@ -261,14 +272,6 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
             dialog.show();
         }
 
-    }
-
-    private void resetTextSetting(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_MEMO_TEXT_STYLE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=preferences.edit();
-        editor.putFloat(PREF_KEY_TEXT_SIZE, fontSize);
-
-        editor.apply();
     }
 
 }
