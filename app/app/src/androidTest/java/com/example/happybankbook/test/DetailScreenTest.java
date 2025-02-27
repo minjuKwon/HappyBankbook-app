@@ -65,27 +65,34 @@ public class DetailScreenTest {
 
    @Test
     public void givenDetailScreen_whenClickedBackBtn_thenBtnIsNotShownAFewLater(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(1,click()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(1,click()));
 
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack)).check(matches(withImageAlpha(255)));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack))
+                .check(matches(withImageAlpha(255)));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack)).perform(click());
         onView(isRoot()).perform(waitFor(3000));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack)).check(matches(withImageAlpha(0)));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack))
+                .check(matches(withImageAlpha(0)));
     }
 
    @Test
     public void givenDetailScreen_whenClickedForwardBtn_thenBtnIsNotShownAFewLater(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(2,click()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(2,click()));
 
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack)).check(matches(withImageAlpha(255)));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack))
+                .check(matches(withImageAlpha(255)));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgForward)).perform(click());
         onView(isRoot()).perform(waitFor(3000));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgForward)).check(matches(withImageAlpha(0)));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgForward))
+                .check(matches(withImageAlpha(0)));
     }
 
     @Test
     public void given0thItemDetailScreen_whenClickedBackBtnAndComeBack_thenCorrectScreenIsDisplayed(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(0,click()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(0,click()));
 
         checkFirstScreen(dataPriceList.get(4));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack)).perform(click());
@@ -108,7 +115,8 @@ public class DetailScreenTest {
 
     @Test
     public void given1thItemDetailScreen_whenClickedBackBtnAndComeBack_thenCorrectScreenIsDisplayed(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(1,click()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(1,click()));
 
         for(int i=4;i>1;i--){
             String txt=String.valueOf(i*10);
@@ -127,7 +135,8 @@ public class DetailScreenTest {
 
     @Test
     public void given1thItemDetailScreen_whenClickedForwardBtnAndComeBack_thenCorrectScreenIsDisplayed(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(1,click()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(1,click()));
 
         checkMiddleScreen(dataPriceList.get(3));
 
@@ -140,7 +149,8 @@ public class DetailScreenTest {
 
     @Test
     public void given2ndItemDetailScreen_whenClickedBackBtnAndComeBack_thenCorrectScreenIsDisplayed(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(2,click()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(2,click()));
 
         for(int i=3;i>1;i--){
             String txt=String.valueOf(i*10);
@@ -160,7 +170,8 @@ public class DetailScreenTest {
 
     @Test
     public void given2ndItemDetailScreen_whenClickedForwardBtnAndComeBack_thenCorrectScreenIsDisplayed(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(2,click()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(2,click()));
 
         checkMiddleScreen(dataPriceList.get(2));
         checkDetailScreenClickedForward(dataPriceList.get(3));
@@ -175,7 +186,8 @@ public class DetailScreenTest {
 
     @Test
     public void given3rdItemDetailScreen_whenClickedBackBtnAndComeBack_thenCorrectScreenIsDisplayed(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(3,click()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(3,click()));
 
         checkDetailScreenClickedBack(dataPriceList.get(1));
         checkLastScreen(dataPriceList.get(0));
@@ -184,7 +196,8 @@ public class DetailScreenTest {
 
     @Test
     public void given3rdItemDetailScreen_whenClickedForwardBtnAndComeBack_thenCorrectScreenIsDisplayed(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(3,click()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(3,click()));
 
         checkMiddleScreen(dataPriceList.get(1));
 
@@ -206,7 +219,8 @@ public class DetailScreenTest {
 
     @Test
     public void given4thItemDetailScreen_whenClickedForwardBtnAndComeBack_thenCorrectScreenIsDisplayed(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo)).perform(actionOnItemAtPosition(4,click()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
+                .perform(actionOnItemAtPosition(4,click()));
 
         checkLastScreen(dataPriceList.get(0));
 

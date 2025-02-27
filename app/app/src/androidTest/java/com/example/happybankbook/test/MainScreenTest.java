@@ -41,24 +41,32 @@ public class MainScreenTest {
 
     @Test
     public void givenAppIsLaunched_whenClickedNothing_thenListScreenIsShown(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.mainMenu)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.mainMenu)).check(matches(isSelected()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.mainMenu))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.mainMenu))
+                .check(matches(isSelected()));
     }
 
     @Test
     public void givenMainScreen_whenClickedNavigation_thenCorrectScreenIsShown(){
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.mainMenu)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.addMenu)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.settingMenu)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.mainMenu))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.addMenu))
+                .check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.settingMenu))
+                .check(matches(isDisplayed()));
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.addMenu)).perform(click());
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.addMenu)).check(matches(isSelected()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.addMenu))
+                .check(matches(isSelected()));
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.settingMenu)).perform(click());
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.settingMenu)).check(matches(isSelected()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.settingMenu))
+                .check(matches(isSelected()));
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.mainMenu)).perform(click());
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.mainMenu)).check(matches(isSelected()));
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.mainMenu))
+                .check(matches(isSelected()));
     }
 
     @Test
