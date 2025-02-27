@@ -72,11 +72,11 @@ public class ListPresenter implements ListContract.Presenter {
     public void getDataDesc(MemoDao memoDao, int from, int to, int cnt) {
         disposable.add(
                 memoDao.searchDesc(from, to, cnt)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    item->view.setItems((ArrayList<MemoData>)item)
-                )
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                item->view.setItems((ArrayList<MemoData>)item)
+                        )
         );
     }
 
@@ -84,10 +84,10 @@ public class ListPresenter implements ListContract.Presenter {
     public void getDataCount(MemoDao memoDao) {
         disposable.add(
                 Observable.just(memoDao)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(
-                        value-> intResultCallback.onIntResult(value.getRowCount())
-                    )
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(
+                                value-> intResultCallback.onIntResult(value.getRowCount())
+                        )
         );
     }
 
@@ -95,11 +95,15 @@ public class ListPresenter implements ListContract.Presenter {
     public void getSumPrice(MemoDao memoDao, Context context) {
         disposable.add(
                 Observable.just(memoDao)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(
-                        value-> longResultCallback.onLongResult(value.getTotalPrice()),
-                        err->Toast.makeText(context,context.getResources().getText(R.string.totalPriceOver),Toast.LENGTH_LONG).show()
-                    )
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(
+                                value-> longResultCallback.onLongResult(value.getTotalPrice()),
+                                err->Toast.makeText(
+                                        context,
+                                        context.getResources().getText(R.string.totalPriceOver),
+                                        Toast.LENGTH_LONG
+                                ).show()
+                        )
         );
     }
 

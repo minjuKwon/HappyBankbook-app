@@ -61,12 +61,13 @@ public class OutputPresenter implements OutputContract.Presenter {
     @Override
     public void getConvertedPdf(MemoDao memoDao) {
         disposable.add(
-          memoDao.getAll()
-                  .subscribeOn(Schedulers.io())
-                  .subscribe(
-                        item->memoDataListCallback.onMemoDataListResult((ArrayList<MemoData>)item)
+                memoDao.getAll()
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(
+                                item->memoDataListCallback
+                                        .onMemoDataListResult((ArrayList<MemoData>)item)
 
-                  )
+                        )
         );
     }
 

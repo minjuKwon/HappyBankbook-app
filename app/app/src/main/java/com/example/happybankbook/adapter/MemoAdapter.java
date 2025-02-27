@@ -34,7 +34,9 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         this.textSize=textSize;
     }
 
-    public MemoAdapter(Context context, MemoType memoType, float textSize, int textLine, boolean textEllipsize){
+    public MemoAdapter(Context context, MemoType memoType,
+                       float textSize, int textLine, boolean textEllipsize
+    ){
         this.mContext=context;
         this.memoType=memoType;
         this.textSize=textSize;
@@ -49,10 +51,14 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         View view;
 
         if(memoType==MemoType.RECYCLER){
-            view=LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item,parent,false);
+            view= LayoutInflater
+                    .from(parent.getContext())
+                    .inflate(R.layout.recyclerview_item, parent, false);
             return new RecyclerViewHolder(view);
         }else if(memoType==MemoType.VIEWPAGER){
-            view=LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_memo_detail_item,parent,false);
+            view= LayoutInflater
+                    .from(parent.getContext())
+                    .inflate(R.layout.fragment_memo_detail_item, parent, false);
             //viewPager 후 recyclerView로 돌아 왔을 때 condition 값을 유지 하기 위한 변수
             hasVisitedViewPager =true;
             return new ViewPagerViewHolder(view);
@@ -83,7 +89,8 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
             ViewPagerViewHolder viewPagerViewHolder=(ViewPagerViewHolder) holder;
             data=dataList.get(viewPagerViewHolder.getAdapterPosition());
             if(hasReceivedCondition){//메모 정렬 후 onBind 호출하기 위한 변수.
-                //recyclerview position, viewpager position 더하여 클릭한 메모를 시작점으로 viewpager 화면 넘기게 하기 위한 초기 값
+                //recyclerview position, viewpager position 더하여
+                // 클릭한 메모를 시작점으로 viewpager 화면 넘기게 하기 위한 초기 값
                 if(isFirstInteraction){
                     data=dataList.get(viewPagerViewHolder.getAdapterPosition()+recyclerviewPosition);
                 }

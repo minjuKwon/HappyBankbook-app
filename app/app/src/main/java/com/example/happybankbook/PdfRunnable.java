@@ -121,7 +121,12 @@ public class PdfRunnable implements Runnable{
             //clover
             Drawable cloverImg=ContextCompat.getDrawable(mContext,R.drawable.clover_30);
             if(cloverImg!=null){
-                cloverImg.setBounds(width/2-220, height-dy+40, width/2-160, height-dy+100);
+                cloverImg.setBounds(
+                        width/2-220,
+                        height-dy+40,
+                        width/2-160,
+                        height-dy+100
+                );
                 cloverImg.draw(canvas);
             }
 
@@ -154,7 +159,12 @@ public class PdfRunnable implements Runnable{
 
         pdfDocument.close();
 
-        ((MainActivity)mContext).runOnUiThread(()-> Toast.makeText(mContext,mContext.getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show());
+        ((MainActivity)mContext).runOnUiThread( ()->
+                Toast.makeText(
+                        mContext,
+                        mContext.getResources().getText(R.string.completeSaving),
+                        Toast.LENGTH_SHORT
+                ).show());
 
     }
 

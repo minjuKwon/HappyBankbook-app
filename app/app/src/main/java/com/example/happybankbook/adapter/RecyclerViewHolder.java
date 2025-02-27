@@ -37,7 +37,9 @@ public class RecyclerViewHolder extends BaseItemView{
         this.onItemClickListener=listener;
     }
 
-    public void onBind(BaseItem data, Context context, int position, float textSize, int textLine, boolean hasTextEllipsize){
+    public void onBind(BaseItem data, Context context,
+                       int position, float textSize, int textLine, boolean hasTextEllipsize
+    ){
         MemoData memoData=(MemoData)data;
 
         idxTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
@@ -59,12 +61,12 @@ public class RecyclerViewHolder extends BaseItemView{
             priceTextView.setEllipsize(null);
         }
 
-        String formattedIdx=String.format( java.util.Locale.getDefault(),
-                                     "%,d", memoData.getNum() );
-        String formattedDate=String.format( java.util.Locale.getDefault(),
-                                     "%d", memoData.getDate() );
-        String formattedPrice=String.format( java.util.Locale.getDefault(),
-                                      "%,d", memoData.getPrice() );
+        String formattedIdx=
+                String.format(java.util.Locale.getDefault(), "%,d", memoData.getNum());
+        String formattedDate=
+                String.format(java.util.Locale.getDefault(), "%d", memoData.getDate());
+        String formattedPrice=
+                String.format(java.util.Locale.getDefault(), "%,d", memoData.getPrice());
 
         idxTextView.setText(formattedIdx);
         dateTextView.setText(formattedDate.substring(2));

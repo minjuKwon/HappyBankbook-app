@@ -24,7 +24,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -73,13 +72,15 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //변경 text size 값
-        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_MEMO_TEXT_SIZE, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                textSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
-                contentEditText.setTextSize(textSize);
-            }
-        });
+        getParentFragmentManager()
+                .setFragmentResultListener(
+                        REQUEST_KEY_MEMO_TEXT_SIZE,
+                        this,
+                        (requestKey, result) -> {
+                            textSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
+                            contentEditText.setTextSize(textSize);
+                        }
+                );
         isClearContentTxt=true;
     }
 
@@ -111,26 +112,36 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         ((MainActivity)mActivity).setCurrentDate(dateTextView);
         getGallery();
 
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_MEMO_TEXT_STYLE,Context.MODE_PRIVATE);
+        SharedPreferences preferences=
+                mActivity.getSharedPreferences(PREF_NAME_MEMO_TEXT_STYLE,Context.MODE_PRIVATE);
         textSize=preferences.getFloat(PREF_KEY_TEXT_SIZE, PREF_DEFAULT_TEXT_SIZE_SMALL);
         contentEditText.setTextSize(textSize);
     }
 
     public void getGallery(){
 
-        activityResultLauncher=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result -> {
-            if(result.getResultCode()==RESULT_OK&&result.getData()!=null){
-                contentImageView.setVisibility(View.VISIBLE);
-                Uri imageUri=result.getData().getData();
-                final String imageType=mContext.getContentResolver().getType(imageUri);
-                final MimeTypeMap mime = MimeTypeMap.getSingleton();
-                String extension = mime.getExtensionFromMimeType(imageType);
-                contentImageView.setTag(extension);
-                Glide.with(mContext).load(imageUri).into(contentImageView);
-            }else if(result.getData()!=null){
-                Toast.makeText(getContext(),getResources().getString(R.string.cantLoadImg),Toast.LENGTH_LONG).show();
-            }
-        });
+        activityResultLauncher=
+                registerForActivityResult(
+                        new ActivityResultContracts.StartActivityForResult(),
+                        result -> {
+                            if(result.getResultCode()==RESULT_OK&&result.getData()!=null){
+                                contentImageView.setVisibility(View.VISIBLE);
+                                Uri imageUri=result.getData().getData();
+                                final String imageType=
+                                        mContext.getContentResolver().getType(imageUri);
+                                final MimeTypeMap mime = MimeTypeMap.getSingleton();
+                                String extension = mime.getExtensionFromMimeType(imageType);
+                                contentImageView.setTag(extension);
+                                Glide.with(mContext).load(imageUri).into(contentImageView);
+                            }else if(result.getData()!=null){
+                                Toast.makeText(
+                                        getContext(),
+                                        getResources().getString(R.string.cantLoadImg),
+                                        Toast.LENGTH_LONG
+                                ).show();
+                            }
+                        }
+                );
 
     }
 
@@ -148,7 +159,8 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     }
 
     private void resetTextStyle(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_MEMO_TEXT_STYLE, Context.MODE_PRIVATE);
+        SharedPreferences preferences=
+                mActivity.getSharedPreferences(PREF_NAME_MEMO_TEXT_STYLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putFloat(PREF_KEY_TEXT_SIZE, textSize);
 
@@ -182,8 +194,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     public void loadImage(){
         final String imgType="image/*";
         final Uri contentUri= android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        Intent intent=new Intent(Intent.ACTION_GET_CONTENT).
-                setDataAndType(contentUri, imgType);
+        Intent intent=new Intent(Intent.ACTION_GET_CONTENT).setDataAndType(contentUri, imgType);
         Intent createChooserIntent=Intent.createChooser(intent,null);
         activityResultLauncher.launch(createChooserIntent);
     }
@@ -216,7 +227,8 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         String [] dateStr=currentDateStr.split("\\.");
         int currentDateInt=Integer.parseInt(dateStr[0]+dateStr[1]+dateStr[2]);
 
-        //설정한 날짜가 현재 날짜와 다르면, 중간에 메모가 삽입이 되는 것처럼 보이게 하기 위해 table num 값 update
+        //설정한 날짜가 현재 날짜와 다르면,
+        // 중간에 메모가 삽입이 되는 것처럼 보이게 하기 위해 table num 값 update
         if(dateInt!=currentDateInt){
             presenter.changeNum(RoomDB.getInstance(getContext()).memoDao(), dateInt);
         }
@@ -227,8 +239,15 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         boolean hasCorrectType=true;
         if(contentImageView.getVisibility()==View.VISIBLE){
             //image mime type 확인
-            if(!contentImageView.getTag().equals("png")&&!contentImageView.getTag().equals("jpeg")&&!contentImageView.getTag().equals("jpg")){
-                Toast.makeText(mContext,getText(R.string.imageType),Toast.LENGTH_SHORT).show();
+            if(!contentImageView.getTag().equals("png")&&
+                    !contentImageView.getTag().equals("jpeg")&&
+                    !contentImageView.getTag().equals("jpg")
+            ){
+                Toast.makeText(
+                        mContext,
+                        getText(R.string.imageType),
+                        Toast.LENGTH_SHORT
+                ).show();
                 hasCorrectType=false;
             }else{
                 BitmapDrawable drawable = (BitmapDrawable)contentImageView.getDrawable();
@@ -259,7 +278,11 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
                         dialog.dismiss();
                         ((MainActivity)mActivity).navigation(R.id.mainMenu);
                     }catch(NumberFormatException e){
-                        Toast.makeText(getContext(),getResources().getText(R.string.memoPriceOver),Toast.LENGTH_LONG).show();
+                        Toast.makeText(
+                                getContext(),
+                                getResources().getText(R.string.memoPriceOver),
+                                Toast.LENGTH_LONG
+                        ).show();
                     }
                 }
 

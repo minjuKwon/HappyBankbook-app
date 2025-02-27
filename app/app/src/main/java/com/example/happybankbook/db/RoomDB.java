@@ -31,7 +31,8 @@ public abstract class RoomDB extends RoomDatabase {
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE 'MemoData_table' ADD COLUMN 'num' INTEGER NOT NULL DEFAULT 0");
+            database.execSQL("ALTER TABLE 'MemoData_table' " +
+                    "ADD COLUMN 'num' INTEGER NOT NULL DEFAULT 0");
         }
     };
 

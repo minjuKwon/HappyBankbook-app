@@ -39,10 +39,10 @@ public class ViewPagerViewHolder extends BaseItemView {
         String month=date.substring(4,6);
         String day=date.substring(6);
 
-        String formattedDate=String.format( java.util.Locale.getDefault(),
-                                     "%s.%s.%s", year, month, day );
-        String formattedPrice=String.format( java.util.Locale.getDefault(),
-                                      "%,d", memoData.getPrice() );
+        String formattedDate=
+                String.format(java.util.Locale.getDefault(), "%s.%s.%s", year, month, day);
+        String formattedPrice=
+                String.format(java.util.Locale.getDefault(), "%,d", memoData.getPrice());
 
         dateTextView.setText(formattedDate);
         priceTextView.setText(formattedPrice);

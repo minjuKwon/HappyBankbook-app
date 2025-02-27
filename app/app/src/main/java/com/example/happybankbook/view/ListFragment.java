@@ -37,7 +37,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -87,52 +86,63 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SET_INITIALIZATION,Context.MODE_PRIVATE);
-        isInitialization=preferences.getBoolean(PREF_KEY_IS_INITIALIZATION,PREF_DEFAULT_IS_INITIALIZATION);
+        SharedPreferences preferences=
+                mActivity.getSharedPreferences(PREF_NAME_SET_INITIALIZATION,Context.MODE_PRIVATE);
+        isInitialization=
+                preferences.getBoolean(PREF_KEY_IS_INITIALIZATION,PREF_DEFAULT_IS_INITIALIZATION);
 
         //ConditionFragment 정렬 값 받기
-        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RECYCLERVIEW_SORT, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                fromDate=result.getInt(BUNDLE_KEY_FROM_DATE);
-                toDate=result.getInt(BUNDLE_KEY_TO_DATE);
-                itemCount=result.getInt(BUNDLE_KEY_ITEM_COUNT);
-                isNewestSort =result.getBoolean(BUNDLE_KEY_IS_NEWEST_SORT);
+        getParentFragmentManager()
+                .setFragmentResultListener(
+                        REQUEST_KEY_RECYCLERVIEW_SORT,
+                        this,
+                        (requestKey, result) -> {
+                            fromDate=result.getInt(BUNDLE_KEY_FROM_DATE);
+                            toDate=result.getInt(BUNDLE_KEY_TO_DATE);
+                            itemCount=result.getInt(BUNDLE_KEY_ITEM_COUNT);
+                            isNewestSort =result.getBoolean(BUNDLE_KEY_IS_NEWEST_SORT);
 
-                keepCondition();
-            }
-        });
+                            keepCondition();
+                        }
+                );
         //ConditionFragment 클릭 시 한 개의 Fragment만 생성하기 위한 변수 받기
-        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_REMOVE_FRAGMENT, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                clickCountCondition=result.getInt(BUNDLE_KEY_IS_CLICKED_ONCE);
-            }
-        });
+        getParentFragmentManager()
+                .setFragmentResultListener(
+                        REQUEST_KEY_REMOVE_FRAGMENT,
+                        this,
+                        (requestKey, result) ->
+                                clickCountCondition=result.getInt(BUNDLE_KEY_IS_CLICKED_ONCE)
+                );
         //변경 text size 값
-        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                textSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
-                adapter.setTextSize(textSize);
-            }
-        });
+        getParentFragmentManager()
+                .setFragmentResultListener(
+                        REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE,
+                        this,
+                        (requestKey, result) -> {
+                            textSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
+                            adapter.setTextSize(textSize);
+                        }
+                );
         //변경 text line 값
-        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RECYCLERVIEW_TEXT_LINE, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                textLine=result.getInt(BUNDLE_KEY_TEXT_LINE);
-                adapter.setTextLine(textLine);
-            }
-        });
+        getParentFragmentManager()
+                .setFragmentResultListener(
+                        REQUEST_KEY_RECYCLERVIEW_TEXT_LINE,
+                        this,
+                        (requestKey, result) -> {
+                            textLine=result.getInt(BUNDLE_KEY_TEXT_LINE);
+                            adapter.setTextLine(textLine);
+                        }
+                );
         //변경 text ellipsize 값
-        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RECYCLERVIEW_TEXT_ELLIPSIZE, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                hasTextEllipsize=result.getBoolean(BUNDLE_KEY_TEXT_ELLIPSIZE);
-                adapter.setTextEllipsize(hasTextEllipsize);
-            }
-        });
+        getParentFragmentManager()
+                .setFragmentResultListener(
+                        REQUEST_KEY_RECYCLERVIEW_TEXT_ELLIPSIZE,
+                        this,
+                        (requestKey, result) -> {
+                            hasTextEllipsize=result.getBoolean(BUNDLE_KEY_TEXT_ELLIPSIZE);
+                            adapter.setTextEllipsize(hasTextEllipsize);
+                        }
+                );
     }
 
     @Override
@@ -173,7 +183,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
 
         boolean hasVisitedViewPager=adapter.hasVisitedViewpager();
         //viewpager 방문 후 ListFragment 돌아온 경우 검색 조건 값 유지
-        //viewpager 제외한 다른 프래그먼트 방문 후, ListFragment 돌아온 경우는 데이터 조건을 초기화하여 모든 데이터 보여줌
+        //viewpager 제외한 다른 프래그먼트 방문 후,
+        // ListFragment 돌아온 경우는 데이터 조건을 초기화하여 모든 데이터 보여줌
         if(!hasVisitedViewPager||isInitialization){
             presenter.getData(RoomDB.getInstance(getContext()).memoDao());
         }else{
@@ -185,7 +196,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_LIST_TEXT_STYLE,Context.MODE_PRIVATE);
+        SharedPreferences preferences=
+                mActivity.getSharedPreferences(PREF_NAME_LIST_TEXT_STYLE,Context.MODE_PRIVATE);
         hasTextEllipsize=preferences.getBoolean(PREF_KEY_TEXT_ELLIPSIZE,PREF_DEFAULT_TEXT_ELLIPSIZE);
         textLine=preferences.getInt(PREF_KEY_TEXT_LINE,PREF_DEFAULT_TEXT_LINE);
         textSize=preferences.getFloat(PREF_KEY_TEXT_SIZE,PREF_DEFAULT_TEXT_SIZE_LARGE);
@@ -206,14 +218,16 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         resetTextStyle();
 
         isInitialization=true;
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SET_INITIALIZATION, Context.MODE_PRIVATE);
+        SharedPreferences preferences=
+                mActivity.getSharedPreferences(PREF_NAME_SET_INITIALIZATION, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putBoolean(PREF_KEY_IS_INITIALIZATION,isInitialization);
         editor.apply();
     }
 
     private void resetTextStyle(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_LIST_TEXT_STYLE, Context.MODE_PRIVATE);
+        SharedPreferences preferences=
+                mActivity.getSharedPreferences(PREF_NAME_LIST_TEXT_STYLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putBoolean(PREF_KEY_TEXT_ELLIPSIZE, hasTextEllipsize);
         editor.putInt(PREF_KEY_TEXT_LINE, textLine);
@@ -246,18 +260,38 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
                 @Override
                 public void onIntResult(int value) {
                     if(isNewestSort){
-                        presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,value);
+                        presenter.getDataDesc(
+                                    RoomDB.getInstance(getContext()).memoDao(),
+                                    fromDate,
+                                    toDate,
+                                    value
+                        );
                     }else{
-                        presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,value);
+                        presenter.getDataAsc(
+                                    RoomDB.getInstance(getContext()).memoDao(),
+                                    fromDate,
+                                    toDate,
+                                    value
+                        );
                     }
                 }
             });
             presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
         }else{
             if(isNewestSort){
-                presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,itemCount);
+                presenter.getDataDesc(
+                            RoomDB.getInstance(getContext()).memoDao(),
+                            fromDate,
+                            toDate,
+                            itemCount
+                );
             }else{
-                presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,itemCount);
+                presenter.getDataAsc(
+                            RoomDB.getInstance(getContext()).memoDao(),
+                            fromDate,
+                            toDate,
+                            itemCount
+                );
             }
         }
     }

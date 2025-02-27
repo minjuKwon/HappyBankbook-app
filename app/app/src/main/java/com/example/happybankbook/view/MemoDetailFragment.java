@@ -21,7 +21,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
@@ -86,53 +85,77 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         handler=new Handler();
 
         //ConditionFragment 정렬 값 받기
-        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_VIEWPAGER_SORT, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                adapter.setCondition(false);
+        getParentFragmentManager()
+                .setFragmentResultListener(
+                        REQUEST_KEY_VIEWPAGER_SORT,
+                        this,
+                        (requestKey, result) -> {
+                            adapter.setCondition(false);
 
-                fromDate=result.getInt(BUNDLE_KEY_FROM_DATE);
-                toDate=result.getInt(BUNDLE_KEY_TO_DATE);
-                itemCount=result.getInt(BUNDLE_KEY_ITEM_COUNT);
-                boolean isNewestSort=result.getBoolean(BUNDLE_KEY_IS_NEWEST_SORT);
+                            fromDate=result.getInt(BUNDLE_KEY_FROM_DATE);
+                            toDate=result.getInt(BUNDLE_KEY_TO_DATE);
+                            itemCount=result.getInt(BUNDLE_KEY_ITEM_COUNT);
+                            boolean isNewestSort=result.getBoolean(BUNDLE_KEY_IS_NEWEST_SORT);
 
-                if(fromDate>toDate){
-                    int temp=fromDate;
-                    fromDate=toDate;
-                    toDate=temp;
-                }
-
-                if(itemCount==0){
-                    presenter.setIntResultCallback(new IntResultCallback() {
-                        @Override
-                        public void onIntResult(int value) {
-                            if(isNewestSort){
-                                presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,value);
-                            }else{
-                                presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,value);
+                            if(fromDate>toDate){
+                                int temp=fromDate;
+                                fromDate=toDate;
+                                toDate=temp;
                             }
-                        }
-                    });
-                    presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
-                }else{
-                    if(isNewestSort){
-                        presenter.getDataDesc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,itemCount);
-                    }else{
-                        presenter.getDataAsc(RoomDB.getInstance(getContext()).memoDao(),fromDate,toDate,itemCount);
-                    }
-                }
 
-            }
-        });
+                            if(itemCount==0){
+                                presenter.setIntResultCallback(new IntResultCallback() {
+                                    @Override
+                                    public void onIntResult(int value) {
+                                        if(isNewestSort){
+                                            presenter.getDataDesc(
+                                                        RoomDB.getInstance(getContext()).memoDao(),
+                                                        fromDate,
+                                                        toDate,
+                                                        value
+                                            );
+                                        }else{
+                                            presenter.getDataAsc(
+                                                        RoomDB.getInstance(getContext()).memoDao(),
+                                                        fromDate,
+                                                        toDate,
+                                                        value
+                                            );
+                                        }
+                                    }
+                                });
+                                presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
+                            }else{
+                                if(isNewestSort){
+                                    presenter.getDataDesc(
+                                                RoomDB.getInstance(getContext()).memoDao(),
+                                                fromDate,
+                                                toDate,
+                                                itemCount
+                                    );
+                                }else{
+                                    presenter.getDataAsc(
+                                                RoomDB.getInstance(getContext()).memoDao(),
+                                                fromDate,
+                                                toDate,
+                                                itemCount
+                                    );
+                                }
+                            }
+
+                        }
+                );
 
         //변경 text size 값
-        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_VIEWPAGER_TEXT_SIZE, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                textSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
-                adapter.setTextSize(textSize);
-            }
-        });
+        getParentFragmentManager()
+                .setFragmentResultListener(
+                        REQUEST_KEY_VIEWPAGER_TEXT_SIZE,
+                        this,
+                        (requestKey, result) -> {
+                            textSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
+                            adapter.setTextSize(textSize);
+                        }
+                );
 
     }
 
@@ -178,7 +201,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                //recyclerview position, viewpager position 더하여 클릭된 메모 데이터에서 슬라이드 하였을 때 다음 데이터 로딩 하기 위한 초기 값
+                //recyclerview position, viewpager position 더하여
+                // 클릭된 메모 데이터에서 슬라이드 하였을 때 다음 데이터 로딩 하기 위한 초기 값
                 if(isFirstInteraction){
                     currentPosition=position+adapterPosition;
                 }else{
@@ -205,13 +229,15 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_VIEWPAGER_TEXT_STYLE,Context.MODE_PRIVATE);
+        SharedPreferences preferences=
+                mActivity.getSharedPreferences(PREF_NAME_VIEWPAGER_TEXT_STYLE,Context.MODE_PRIVATE);
         textSize=preferences.getFloat(PREF_KEY_TEXT_SIZE, PREF_DEFAULT_TEXT_SIZE_SMALL);
         adapter.setTextSize(textSize);
 
         //SearchFragment에서 검색 후 키보드 내리지 않고 바로 viewpager 이동 하면,
         //계속 키보드 올려지는 경우 방지
-        InputMethodManager inputMethodManager=(InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager=
+                (InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
@@ -227,7 +253,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     }
 
     private void resetTextStyle(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_VIEWPAGER_TEXT_STYLE, Context.MODE_PRIVATE);
+        SharedPreferences preferences=
+                mActivity.getSharedPreferences(PREF_NAME_VIEWPAGER_TEXT_STYLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putFloat(PREF_KEY_TEXT_SIZE, textSize);
 

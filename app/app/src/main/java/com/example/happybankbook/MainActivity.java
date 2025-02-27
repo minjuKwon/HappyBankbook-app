@@ -52,15 +52,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if(item.getItemId()== R.id.mainMenu){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,listFragment).commit();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.mainLayout,listFragment)
+                            .commit();
                     return true;
                 }
                 else if(item.getItemId()==R.id.addMenu){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,memoFragment).commit();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.mainLayout,memoFragment)
+                            .commit();
                     return true;
                 }
                 else if(item.getItemId()==R.id.settingMenu){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,settingFragment).commit();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.mainLayout,settingFragment)
+                            .commit();
                     return true;
                 }
                 return false;
@@ -95,13 +104,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public String setCurrentDate(){
-        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd",java.util.Locale.getDefault());
+        SimpleDateFormat dateFormat=
+                new SimpleDateFormat("yyyy.MM.dd",java.util.Locale.getDefault());
         Date date=new Date();
         return dateFormat.format(date);
     }
 
     public void setCurrentDate(TextView textView){
-        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy.MM.dd",java.util.Locale.getDefault());
+        SimpleDateFormat dateFormat=
+                new SimpleDateFormat("yyyy.MM.dd",java.util.Locale.getDefault());
         Date date=new Date();
         textView.setText(dateFormat.format(date));
     }

@@ -29,7 +29,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -70,7 +69,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
-public class SettingFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener{
+public class SettingFragment extends Fragment
+        implements View.OnClickListener, RadioGroup.OnCheckedChangeListener
+{
 
     private final String PERMISSION= Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -107,9 +108,14 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         super.onCreate(savedInstanceState);
 
         requestPermissionLauncher =
-                registerForActivityResult(new ActivityResultContracts.RequestPermission(), check -> {
+                registerForActivityResult(
+                        new ActivityResultContracts.RequestPermission(), check -> {
                     if(check){
-                        Toast.makeText(getContext(),getResources().getText(R.string.savePermissionYes),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(
+                                getContext(),
+                                getResources().getText(R.string.savePermissionYes)
+                                ,Toast.LENGTH_SHORT
+                        ).show();
                         if("pdf".equals(fileExtension)){
                             exportPdf(".pdf");
                         }else if("excel".equals(fileExtension)){
@@ -118,15 +124,24 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
                             exportTxtFile(' ',".txt");
                         }
                     }else{
-                        Toast.makeText(getContext(),getResources().getText(R.string.savePermissionNo),Toast.LENGTH_LONG).show();
+                        Toast.makeText(
+                                getContext(),
+                                getResources().getText(R.string.savePermissionNo),
+                                Toast.LENGTH_LONG
+                        ).show();
                     }
                 });
 
         activityResultLauncher
-                =registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result->{
+                =registerForActivityResult(
+                        new ActivityResultContracts.StartActivityForResult(), result->{
             if(result.getResultCode()==RESULT_OK&&result.getData()!=null){
                 Uri uri=result.getData().getData();
-                Toast.makeText(getContext(),getResources().getText(R.string.savePermissionYes),Toast.LENGTH_SHORT).show();
+                Toast.makeText(
+                        getContext(),
+                        getResources().getText(R.string.savePermissionYes),
+                        Toast.LENGTH_SHORT
+                ).show();
                 if("pdf".equals(fileExtension)){
                     exportPdf(uri);
                 }else if("excel".equals(fileExtension)){
@@ -240,7 +255,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SET_STYLE,Context.MODE_PRIVATE);
+        SharedPreferences preferences=
+                mActivity.getSharedPreferences(PREF_NAME_SET_STYLE,Context.MODE_PRIVATE);
         hasEllipsize=preferences.getBoolean(PREF_KEY_HAS_ELLIPSIZE, PREF_DEFAULT_TEXT_ELLIPSIZE);
         currentTextLineId=preferences.getInt(PREF_KEY_LINE_TEXT_ID, R.id.radioLineMul);
         currentTextSizeId=preferences.getInt(PREF_KEY_SIZE_TEXT_ID, R.id.radioFontOne);
@@ -270,7 +286,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     }
 
     public void resetRadioButton(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SET_STYLE, Context.MODE_PRIVATE);
+        SharedPreferences preferences=
+                mActivity.getSharedPreferences(PREF_NAME_SET_STYLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putBoolean(PREF_KEY_HAS_ELLIPSIZE, !hasEllipsize);
         editor.putInt(PREF_KEY_LINE_TEXT_ID, currentTextLineId);
@@ -334,22 +351,22 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
         final String message=fileExtension+" "+getResources().getText(R.string.doExport);
         builder.setMessage(message);
-        builder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(androidVersion>=Build.VERSION_CODES.Q){
-                    final String fileTitle="happy bank memo";
-                    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType(type);
-                    intent.putExtra(Intent.EXTRA_TITLE, fileTitle);
-                    activityResultLauncher.launch(intent);
-                }else{
-                    requestPermissionLauncher.launch(PERMISSION);
-                }
+        builder.setPositiveButton(getResources().getText(R.string.OK), (dialog, which) -> {
+            if(androidVersion>=Build.VERSION_CODES.Q){
+                final String fileTitle="happy bank memo";
+                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType(type);
+                intent.putExtra(Intent.EXTRA_TITLE, fileTitle);
+                activityResultLauncher.launch(intent);
+            }else{
+                requestPermissionLauncher.launch(PERMISSION);
             }
         });
-        builder.setNegativeButton(getResources().getText(R.string.cancel), (dialog, which)-> dialog.dismiss());
+        builder.setNegativeButton(
+                getResources().getText(R.string.cancel),
+                (dialog, which)-> dialog.dismiss()
+        );
         AlertDialog dialog=builder.create();
         dialog.show();
     }
@@ -357,7 +374,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
     public void showManual(){
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
         builder.setMessage(getResources().getText(R.string.manualDialog));
-        builder.setNeutralButton(getResources().getText(R.string.close), (dialog, which)-> dialog.dismiss());
+        builder.setNeutralButton(
+                getResources().getText(R.string.close),
+                (dialog, which)-> dialog.dismiss()
+        );
         AlertDialog dialog=builder.create();
         dialog.show();
     }
@@ -479,7 +499,11 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
                 String contentStr = String.valueOf(content);
                 if("null".equals(contentStr)||"".equals(contentStr)){
-                    Toast.makeText(getContext(),getResources().getText(R.string.noMemo),Toast.LENGTH_LONG).show();
+                    Toast.makeText(
+                            getContext(),
+                            getResources().getText(R.string.noMemo),
+                            Toast.LENGTH_LONG
+                    ).show();
                 }else{
                     writer.write(contentStr);
                 }
@@ -495,7 +519,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             }
         }
 
-        ((MainActivity)mContext).runOnUiThread(()-> Toast.makeText(getContext(),getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show());
+        ((MainActivity)mContext).runOnUiThread( ()->
+                Toast.makeText(
+                        getContext(),
+                        getResources().getText(R.string.completeSaving),
+                        Toast.LENGTH_SHORT
+                ).show()
+        );
 
     }
 
@@ -508,7 +538,11 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             String contentStr = String.valueOf(content);
             fileOutputStream=getDirectory(uri, mContext);
             if("null".equals(contentStr)||"".equals(contentStr)){
-                Toast.makeText(getContext(),getResources().getText(R.string.noMemo),Toast.LENGTH_LONG).show();
+                Toast.makeText(
+                        getContext(),
+                        getResources().getText(R.string.noMemo),
+                        Toast.LENGTH_LONG
+                ).show();
             }else{
                 bufferedWriter=new BufferedWriter(new OutputStreamWriter(fileOutputStream));
                 bufferedWriter.write(contentStr);
@@ -525,7 +559,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
             }
         }
 
-        ((MainActivity)mContext).runOnUiThread(()->Toast.makeText(getContext(),getResources().getText(R.string.completeSaving),Toast.LENGTH_SHORT).show());
+        ((MainActivity)mContext).runOnUiThread( ()->
+                Toast.makeText(
+                        getContext(),
+                        getResources().getText(R.string.completeSaving)
+                        ,Toast.LENGTH_SHORT
+                ).show());
 
     }
 
@@ -542,8 +581,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener, R
 
     public File getDirectory(String extension){
         final String directoryName="/HappyBank";
-        final String pathName=Environment.getExternalStorageDirectory().getAbsolutePath()+directoryName;
-        File directory = new File(pathName);
+        final String pathName=Environment.getExternalStorageDirectory().getAbsolutePath();
+        File directory = new File(pathName+directoryName);
         int count=0;
 
         if (!directory.exists()) {

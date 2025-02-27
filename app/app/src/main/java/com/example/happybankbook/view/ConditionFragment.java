@@ -30,7 +30,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -47,7 +46,9 @@ import android.widget.TextView;
 import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.R;
 
-public class ConditionFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+public class ConditionFragment extends Fragment
+        implements View.OnClickListener, RadioGroup.OnCheckedChangeListener
+{
 
     private static final int DEFAULT_FROM_DATE=0;
     private static final int DEFAULT_TO_DATE=30000000;
@@ -77,25 +78,29 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //viewPager 후 recyclerView로 돌아 왔을 때 condition 값을 유지 하기 위한 변수 얻기
-        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_RETAIN_SORT, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                hasVisitedViewPager=result.getBoolean(BUNDLE_KEY_IS_NEWEST_SORT);
-                if(!hasVisitedViewPager){
-                    reset();
-                }
-            }
-        });
+        getParentFragmentManager()
+                .setFragmentResultListener(
+                        REQUEST_KEY_RETAIN_SORT,
+                        this,
+                        (requestKey, result) -> {
+                            hasVisitedViewPager=result.getBoolean(BUNDLE_KEY_IS_NEWEST_SORT);
+                            if(!hasVisitedViewPager){
+                                reset();
+                            }
+                        }
+                );
         //ListFragment에서 isInitialization 받을 때는 SharedPreferences 대신 값 초기화
-        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_INITIALIZATION, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                boolean isInitialization=result.getBoolean(BUNDLE_KEY_IS_INITIALIZATION);
-                if(isInitialization){
-                    reset();
-                }
-            }
-        });
+        getParentFragmentManager()
+                .setFragmentResultListener(
+                        REQUEST_KEY_INITIALIZATION,
+                        this,
+                        (requestKey, result) -> {
+                            boolean isInitialization=result.getBoolean(BUNDLE_KEY_IS_INITIALIZATION);
+                            if(isInitialization){
+                                reset();
+                            }
+                        }
+                );
     }
 
     @Override
@@ -139,20 +144,23 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         ((MainActivity)mActivity).setCurrentDate(toDurationTextView);
 
         //SharedPreferences에 저장된 정렬 값 가져오기
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SORT,Context.MODE_PRIVATE);
+        SharedPreferences preferences=
+                mActivity.getSharedPreferences(PREF_NAME_SORT, Context.MODE_PRIVATE);
 
-        boolean isClick=preferences.getBoolean(PREF_KEY_IS_CLICKED_DURATION,PREF_DEFAULT_IS_CLICKED_DURATION);
+        boolean isClick=
+                preferences.getBoolean(PREF_KEY_IS_CLICKED_DURATION,PREF_DEFAULT_IS_CLICKED_DURATION);
         isClickedDuration=(!isClick);
         clickDuration();
 
-        String fromDurationStr=preferences.getString( PREF_KEY_FROM_DATE,
-                                                     ((MainActivity)mActivity).setCurrentDate() );
-        String toDurationStr=preferences.getString( PREF_KEY_TO_DATE,
-                                                    ((MainActivity)mActivity).setCurrentDate()) ;
+        String fromDurationStr=
+                preferences.getString(PREF_KEY_FROM_DATE, ((MainActivity)mActivity).setCurrentDate());
+        String toDurationStr=
+                preferences.getString(PREF_KEY_TO_DATE, ((MainActivity)mActivity).setCurrentDate());
         fromDurationTextView.setText(fromDurationStr);
         toDurationTextView.setText(toDurationStr);
 
-        boolean isCheckedRadioNew=preferences.getBoolean(PREF_KEY_IS_NEWEST_SORT,PREF_DEFAULT_IS_NEWEST_SORT);
+        boolean isCheckedRadioNew=
+                preferences.getBoolean(PREF_KEY_IS_NEWEST_SORT,PREF_DEFAULT_IS_NEWEST_SORT);
         newestSortRadioButton.setChecked(isCheckedRadioNew);
         oldestSortRadioButton.setChecked(!isCheckedRadioNew);
 
@@ -199,13 +207,17 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
         if(checkedId==R.id.radioNewest){
             newestSortRadioButton.setChecked(true);
             oldestSortRadioButton.setChecked(false);
-            newestSortRadioButton.setBackgroundColor(ContextCompat.getColor(mContext,R.color.green));
-            oldestSortRadioButton.setBackground(ContextCompat.getDrawable(mContext,R.drawable.radio_sort));
+            newestSortRadioButton
+                    .setBackgroundColor(ContextCompat.getColor(mContext,R.color.green));
+            oldestSortRadioButton
+                    .setBackground(ContextCompat.getDrawable(mContext,R.drawable.radio_sort));
         }else if(checkedId==R.id.radioOldest){
             oldestSortRadioButton.setChecked(true);
             newestSortRadioButton.setChecked(false);
-            oldestSortRadioButton.setBackgroundColor(ContextCompat.getColor(mContext,R.color.green));
-            newestSortRadioButton.setBackground(ContextCompat.getDrawable(mContext,R.drawable.radio_sort));
+            oldestSortRadioButton
+                    .setBackgroundColor(ContextCompat.getColor(mContext,R.color.green));
+            newestSortRadioButton
+                    .setBackground(ContextCompat.getDrawable(mContext,R.drawable.radio_sort));
         }
     }
 
@@ -282,7 +294,8 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
     }
 
     public void setSharedPreferences(){
-        SharedPreferences preferences= mActivity.getSharedPreferences(PREF_NAME_SORT, Context.MODE_PRIVATE);
+        SharedPreferences preferences=
+                mActivity.getSharedPreferences(PREF_NAME_SORT, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putBoolean(PREF_KEY_IS_CLICKED_DURATION,isClickedDuration);
         editor.putString(PREF_KEY_FROM_DATE,fromDurationTextView.getText().toString());
@@ -293,7 +306,8 @@ public class ConditionFragment extends Fragment implements View.OnClickListener,
     }
 
     public void hideKeyboard(){
-        InputMethodManager imm=(InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm=
+                (InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(itemCountEditText.getWindowToken(),0);
     }
 
