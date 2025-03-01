@@ -59,6 +59,9 @@ public class ConditionFragment extends Fragment
 
     private TextView durationTextView, fromDurationTextView, toDurationTextView;
     private EditText itemCountEditText;
+    private ImageView clseeImageView;
+    private Button submitButton, initButton;
+    private RadioGroup radioGroupSort;
     private RadioButton oldestSortRadioButton, newestSortRadioButton;
 
     private boolean isClickedDuration=true;
@@ -107,22 +110,29 @@ public class ConditionFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_condition, container, false);
-        init(view);
+
+        initViews(view);
+        setListener();
+        newestSortRadioButton.setChecked(true);
+        oldestSortRadioButton.setChecked(false);
+
         return view;
     }
 
-    private void init(View view){
-        ImageView clseeImageView=view.findViewById(R.id.close);
+    private void initViews(View view){
+        clseeImageView=view.findViewById(R.id.close);
         durationTextView=view.findViewById(R.id.duration);
         fromDurationTextView=view.findViewById(R.id.fromDuration);
         toDurationTextView=view.findViewById(R.id.toDuration);
         oldestSortRadioButton=view.findViewById(R.id.radioOldest);
-        RadioGroup radioGroupSort=view.findViewById(R.id.radioGroupSort);
+        radioGroupSort=view.findViewById(R.id.radioGroupSort);
         newestSortRadioButton=view.findViewById(R.id.radioNewest);
         itemCountEditText=view.findViewById(R.id.editCount);
-        Button submitButton=view.findViewById(R.id.buttonSubmit);
-        Button initButton=view.findViewById(R.id.buttonInit);
+        submitButton=view.findViewById(R.id.buttonSubmit);
+        initButton=view.findViewById(R.id.buttonInit);
+    }
 
+    private void setListener(){
         clseeImageView.setOnClickListener(this);
         durationTextView.setOnClickListener(this);
         fromDurationTextView.setOnClickListener(this);
@@ -130,9 +140,6 @@ public class ConditionFragment extends Fragment
         radioGroupSort.setOnCheckedChangeListener(this);
         submitButton.setOnClickListener(this);
         initButton.setOnClickListener(this);
-
-        newestSortRadioButton.setChecked(true);
-        oldestSortRadioButton.setChecked(false);
     }
 
     @Override
@@ -143,7 +150,10 @@ public class ConditionFragment extends Fragment
         ((MainActivity)mActivity).setCurrentDate(fromDurationTextView);
         ((MainActivity)mActivity).setCurrentDate(toDurationTextView);
 
-        //SharedPreferences에 저장된 정렬 값 가져오기
+        getSharedPreferences();
+    }
+
+    private void getSharedPreferences(){
         SharedPreferences preferences=
                 mActivity.getSharedPreferences(PREF_NAME_SORT, Context.MODE_PRIVATE);
 
@@ -165,7 +175,6 @@ public class ConditionFragment extends Fragment
         oldestSortRadioButton.setChecked(!isCheckedRadioNew);
 
         itemCountEditText.setText(preferences.getString(PREF_KEY_ITEM_COUNT,PREF_DEFAULT_ITEM_COUNT));
-
     }
 
     @Override

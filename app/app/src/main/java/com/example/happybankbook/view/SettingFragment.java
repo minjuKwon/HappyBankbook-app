@@ -84,7 +84,9 @@ public class SettingFragment extends Fragment
     private Thread fileThread;
     private ParcelFileDescriptor pfd;
 
-    private TextView ellipsisTextView;
+    private TextView ellipsisTextView, manualTextView, pdfTextView, excelTextView, txtTextView,
+            openSourceTextView;
+    private RadioGroup radioGroupLine, radioGroupTextSize;
     private RadioButton singleLineRadioButton, multiLineRadioButton, textSizeOneRadioButton,
             textSizeTwoRadioButton, textSizeThreeRadioButton;
 
@@ -211,35 +213,43 @@ public class SettingFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-       View view=inflater.inflate(R.layout.fragment_setting, container, false);
-       init(view);
+
+        View view=inflater.inflate(R.layout.fragment_setting, container, false);
+        initViews(view);
+
+        presenter=new OutputPresenter();
+        setCheckedRadioButton();
+        setListeners();
+
         return view;
     }
 
-    private void init(View view){
-        TextView manualTextView=view.findViewById(R.id.manual);
+    private void initViews(View view){
+        manualTextView=view.findViewById(R.id.manual);
         ellipsisTextView=view.findViewById(R.id.ellipsis);
-        TextView pdfTextView=view.findViewById(R.id.pdf);
-        TextView excelTextView=view.findViewById(R.id.excel);
-        TextView txtTextView=view.findViewById(R.id.txt);
-        TextView openSourceTextView=view.findViewById(R.id.openSource);
-        RadioGroup radioGroupLine=view.findViewById(R.id.radioLineDisplay);
+        pdfTextView=view.findViewById(R.id.pdf);
+        excelTextView=view.findViewById(R.id.excel);
+        txtTextView=view.findViewById(R.id.txt);
+        openSourceTextView=view.findViewById(R.id.openSource);
+        radioGroupLine=view.findViewById(R.id.radioLineDisplay);
         singleLineRadioButton=view.findViewById(R.id.radioLineSingle);
         multiLineRadioButton=view.findViewById(R.id.radioLineMul);
-        RadioGroup radioGroupTextSize=view.findViewById(R.id.radioFont);
+        radioGroupTextSize=view.findViewById(R.id.radioFont);
         textSizeOneRadioButton=view.findViewById(R.id.radioFontOne);
         textSizeTwoRadioButton=view.findViewById(R.id.radioFontTwo);
         textSizeThreeRadioButton=view.findViewById(R.id.radioFontThree);
+    }
 
-        presenter=new OutputPresenter();
-
+    private void setCheckedRadioButton(){
         singleLineRadioButton.setChecked(false);
         multiLineRadioButton.setChecked(true);
 
         textSizeOneRadioButton.setChecked(true);
         textSizeTwoRadioButton.setChecked(false);
         textSizeThreeRadioButton.setChecked(false);
+    }
 
+    private void setListeners(){
         radioGroupLine.setOnCheckedChangeListener(this);
         radioGroupTextSize.setOnCheckedChangeListener(this);
 
@@ -254,7 +264,10 @@ public class SettingFragment extends Fragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setTextStyle();
+    }
 
+    private void setTextStyle(){
         SharedPreferences preferences=
                 mActivity.getSharedPreferences(PREF_NAME_SET_STYLE,Context.MODE_PRIVATE);
         hasEllipsize=preferences.getBoolean(PREF_KEY_HAS_ELLIPSIZE, PREF_DEFAULT_TEXT_ELLIPSIZE);

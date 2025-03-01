@@ -42,31 +42,11 @@ public class RecyclerViewHolder extends BaseItemView{
     ){
         MemoData memoData=(MemoData)data;
 
-        idxTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
-        dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
-        contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
-        priceTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+        setTextStyle(textSize, textLine, hasTextEllipsize);
 
-        idxTextView.setMaxLines(textLine);
-        contentTextView.setMaxLines(textLine);
-        priceTextView.setMaxLines(textLine);
-
-        if(hasTextEllipsize){
-            idxTextView.setEllipsize(TextUtils.TruncateAt.END);
-            contentTextView.setEllipsize(TextUtils.TruncateAt.END);
-            priceTextView.setEllipsize(TextUtils.TruncateAt.END);
-        }else{
-            idxTextView.setEllipsize(null);
-            contentTextView.setEllipsize(null);
-            priceTextView.setEllipsize(null);
-        }
-
-        String formattedIdx=
-                String.format(java.util.Locale.getDefault(), "%,d", memoData.getNum());
-        String formattedDate=
-                String.format(java.util.Locale.getDefault(), "%d", memoData.getDate());
-        String formattedPrice=
-                String.format(java.util.Locale.getDefault(), "%,d", memoData.getPrice());
+        String formattedIdx= getFormattedString("%,d", memoData.getNum());
+        String formattedDate= getFormattedString("%d", memoData.getDate());
+        String formattedPrice= getFormattedString("%,d", memoData.getPrice());
 
         idxTextView.setText(formattedIdx);
         dateTextView.setText(formattedDate.substring(2));
@@ -84,17 +64,63 @@ public class RecyclerViewHolder extends BaseItemView{
             contentTextView.setCompoundDrawables(null,null,null,null);
         }
 
+        setBackground(position);
+
+    }
+
+    private void setTextStyle(float textSize, int textLine, boolean hasTextEllipsize){
+        setTextSize(idxTextView, textSize);
+        setTextSize(dateTextView, textSize);
+        setTextSize(contentTextView, textSize);
+        setTextSize(priceTextView, textSize);
+
+        idxTextView.setMaxLines(textLine);
+        contentTextView.setMaxLines(textLine);
+        priceTextView.setMaxLines(textLine);
+
+        if(hasTextEllipsize){
+            setEllipsize(idxTextView);
+            setEllipsize(contentTextView);
+            setEllipsize(priceTextView);
+        }else{
+            idxTextView.setEllipsize(null);
+            contentTextView.setEllipsize(null);
+            priceTextView.setEllipsize(null);
+        }
+    }
+
+    private void setTextSize(TextView view, float textSize){
+        view.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+    }
+
+    private void setEllipsize(TextView view){
+        view.setEllipsize(TextUtils.TruncateAt.END);
+    }
+
+    private String getFormattedString(String format, Object obj){
+        return String.format(java.util.Locale.getDefault(), format, obj);
+    }
+
+    private void setBackground(int position){
         if(position%2==0){
-            idxTextView.setBackgroundResource(R.drawable.memo_list_content_background_cream);
-            dateTextView.setBackgroundResource(R.drawable.memo_list_content_background_cream);
-            contentTextView.setBackgroundResource(R.drawable.memo_list_content_background_cream);
+            setBackgroundItemEven(idxTextView);
+            setBackgroundItemEven(dateTextView);
+            setBackgroundItemEven(contentTextView);
             priceTextView.setBackgroundResource(R.color.cream);
         }else{
-            idxTextView.setBackgroundResource(R.drawable.memo_list_content_background_green);
-            dateTextView.setBackgroundResource(R.drawable.memo_list_content_background_green);
-            contentTextView.setBackgroundResource(R.drawable.memo_list_content_background_green);
+            setBackgroundItemOdd(idxTextView);
+            setBackgroundItemOdd(dateTextView);
+            setBackgroundItemOdd(contentTextView);
             priceTextView.setBackgroundResource(R.color.green);
         }
+    }
+
+    private void setBackgroundItemEven(TextView view){
+        view.setBackgroundResource(R.drawable.memo_list_content_background_cream);
+    }
+
+    private void setBackgroundItemOdd(TextView view){
+        view.setBackgroundResource(R.drawable.memo_list_content_background_green);
     }
 
 }

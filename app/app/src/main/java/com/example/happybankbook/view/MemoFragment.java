@@ -19,6 +19,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -51,8 +52,8 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     private MemoPresenter presenter;
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
-    private TextView dateTextView;
-    private EditText contentEditText;
+    private TextView dateTextView, okTextView, cancelTextView;
+    private EditText contentEditText, happyValueEditText;
     private ImageView contentImageView;
 
     private float textSize= TEXT_SIZE_DEFAULT_SMALL;
@@ -126,13 +127,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
                         result -> {
                             if(result.getResultCode()==RESULT_OK&&result.getData()!=null){
                                 contentImageView.setVisibility(View.VISIBLE);
-                                Uri imageUri=result.getData().getData();
-                                final String imageType=
-                                        mContext.getContentResolver().getType(imageUri);
-                                final MimeTypeMap mime = MimeTypeMap.getSingleton();
-                                String extension = mime.getExtensionFromMimeType(imageType);
-                                contentImageView.setTag(extension);
-                                Glide.with(mContext).load(imageUri).into(contentImageView);
+                                getImage(result);
                             }else if(result.getData()!=null){
                                 Toast.makeText(
                                         getContext(),
@@ -143,6 +138,16 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
                         }
                 );
 
+    }
+
+    private void getImage(ActivityResult result){
+        Uri imageUri=result.getData().getData();
+        final String imageType=
+                mContext.getContentResolver().getType(imageUri);
+        final MimeTypeMap mime = MimeTypeMap.getSingleton();
+        String extension = mime.getExtensionFromMimeType(imageType);
+        contentImageView.setTag(extension);
+        Glide.with(mContext).load(imageUri).into(contentImageView);
     }
 
     @Override
@@ -201,16 +206,42 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
     public void save(){
         //Dialog 설정
+        Dialog dialog=setDialog();
+
+        MemoData data=new MemoData();
+
+        setDate(data);
+
+        String content=contentEditText.getText().toString();
+        data.setContent(content);
+
+        boolean hasCorrectType=setImage(data);
+
+        okTextView.setOnClickListener(v -> {
+            String priceStr=happyValueEditText.getText().toString().trim();
+            validateInput(content, priceStr, data, dialog);
+        });
+
+        cancelTextView.setOnClickListener((v)-> dialog.dismiss());
+
+        if(hasCorrectType){
+            dialog.show();
+        }
+
+    }
+
+    private Dialog setDialog(){
         Dialog dialog=new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_happy);
 
-        TextView okTextView=dialog.findViewById(R.id.ok);
-        TextView cancelTextView=dialog.findViewById(R.id.cancel);
-        EditText happyValueEditText=dialog.findViewById(R.id.editHappy);
+        okTextView=dialog.findViewById(R.id.ok);
+        cancelTextView=dialog.findViewById(R.id.cancel);
+        happyValueEditText=dialog.findViewById(R.id.editHappy);
+        return dialog;
+    }
 
-        MemoData data=new MemoData();
-
+    private void setDate(MemoData data){
         int dateInt=((MainActivity)mActivity).convertDateToInt(dateTextView);
         data.setDate(dateInt);
 
@@ -232,11 +263,9 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         if(dateInt!=currentDateInt){
             presenter.changeNum(RoomDB.getInstance(getContext()).memoDao(), dateInt);
         }
+    }
 
-        String content=contentEditText.getText().toString();
-        data.setContent(content);
-
-        boolean hasCorrectType=true;
+    private boolean setImage(MemoData data){
         if(contentImageView.getVisibility()==View.VISIBLE){
             //image mime type 확인
             if(!contentImageView.getTag().equals("png")&&
@@ -248,53 +277,41 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
                         getText(R.string.imageType),
                         Toast.LENGTH_SHORT
                 ).show();
-                hasCorrectType=false;
+                return false;
             }else{
                 BitmapDrawable drawable = (BitmapDrawable)contentImageView.getDrawable();
                 Bitmap bitmap = drawable.getBitmap();
                 data.setImage(bitmap);
             }
         }
+        return true;
+    }
 
-        okTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(TextUtils.isEmpty(content)){
-                    Toast.makeText(getContext(),getResources().getText(R.string.memoContentEmpty),Toast.LENGTH_SHORT).show();
-                }
-
-                String priceStr=happyValueEditText.getText().toString().trim();
-                if(TextUtils.isEmpty(priceStr)){
-                    Toast.makeText(getContext(),getResources().getText(R.string.memoPriceEmpty),Toast.LENGTH_SHORT).show();
-                }
-
-                if(!TextUtils.isEmpty(content)&&!TextUtils.isEmpty(priceStr)){
-                    try{
-                        int priceInt=Integer.parseInt(priceStr);
-                        data.setPrice(priceInt);
-
-                        presenter.insertMemo(RoomDB.getInstance(getContext()).memoDao(),data);
-                        dialog.dismiss();
-                        ((MainActivity)mActivity).navigation(R.id.mainMenu);
-                    }catch(NumberFormatException e){
-                        Toast.makeText(
-                                getContext(),
-                                getResources().getText(R.string.memoPriceOver),
-                                Toast.LENGTH_LONG
-                        ).show();
-                    }
-                }
-
-            }
-        });
-
-        cancelTextView.setOnClickListener((v)-> dialog.dismiss());
-
-        if(hasCorrectType){
-            dialog.show();
+    private void validateInput(String content, String priceStr, MemoData data, Dialog dialog){
+        if(TextUtils.isEmpty(content)){
+            Toast.makeText(getContext(),getResources().getText(R.string.memoContentEmpty),Toast.LENGTH_SHORT).show();
         }
 
+        if(TextUtils.isEmpty(priceStr)){
+            Toast.makeText(getContext(),getResources().getText(R.string.memoPriceEmpty),Toast.LENGTH_SHORT).show();
+        }
+
+        if(!TextUtils.isEmpty(content)&&!TextUtils.isEmpty(priceStr)){
+            try{
+                int priceInt=Integer.parseInt(priceStr);
+                data.setPrice(priceInt);
+
+                presenter.insertMemo(RoomDB.getInstance(getContext()).memoDao(),data);
+                dialog.dismiss();
+                ((MainActivity)mActivity).navigation(R.id.mainMenu);
+            }catch(NumberFormatException e){
+                Toast.makeText(
+                        getContext(),
+                        getResources().getText(R.string.memoPriceOver),
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        }
     }
 
 }

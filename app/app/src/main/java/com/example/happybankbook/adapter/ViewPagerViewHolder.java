@@ -32,20 +32,13 @@ public class ViewPagerViewHolder extends BaseItemView {
     public void onBind(BaseItem data, Context context, float textSize){
         MemoData memoData=(MemoData)data;
 
-        contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+        dateTextView.setText(getFormattedDate(memoData));
 
-        String date=Integer.toString(memoData.getDate());
-        String year=date.substring(0,4);
-        String month=date.substring(4,6);
-        String day=date.substring(6);
-
-        String formattedDate=
-                String.format(java.util.Locale.getDefault(), "%s.%s.%s", year, month, day);
         String formattedPrice=
                 String.format(java.util.Locale.getDefault(), "%,d", memoData.getPrice());
-
-        dateTextView.setText(formattedDate);
         priceTextView.setText(formattedPrice);
+
+        contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
         contentTextView.setText(memoData.getContent());
 
         if(memoData.getImage()!=null){
@@ -54,6 +47,14 @@ public class ViewPagerViewHolder extends BaseItemView {
             contentImg.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    private String getFormattedDate(MemoData memoData){
+        String date=Integer.toString(memoData.getDate());
+        String year=date.substring(0,4);
+        String month=date.substring(4,6);
+        String day=date.substring(6);
+        return String.format(java.util.Locale.getDefault(), "%s.%s.%s", year, month, day);
     }
 
 }

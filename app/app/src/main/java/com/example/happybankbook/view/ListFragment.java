@@ -169,7 +169,12 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, textSize, textLine, hasTextEllipsize);
         recyclerView.setAdapter(adapter);
 
-        //메모 총합 표시
+        getMemoTotalPrice();
+
+        setMemoListCondition();
+    }
+
+    private void getMemoTotalPrice(){
         presenter.setLongResultCallback(new LongResultCallback() {
             @Override
             public void onLongResult(long value) {
@@ -180,7 +185,9 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
             }
         });
         presenter.getSumPrice(RoomDB.getInstance(getContext()).memoDao(), getContext());
+    }
 
+    private void setMemoListCondition(){
         boolean hasVisitedViewPager=adapter.hasVisitedViewpager();
         //viewpager 방문 후 ListFragment 돌아온 경우 검색 조건 값 유지
         //viewpager 제외한 다른 프래그먼트 방문 후,
