@@ -91,6 +91,10 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         isInitialization=
                 preferences.getBoolean(PREF_KEY_IS_INITIALIZATION,PREF_DEFAULT_IS_INITIALIZATION);
 
+        getFragmentResult();
+    }
+
+    private void getFragmentResult(){
         //ConditionFragment 정렬 값 받기
         getParentFragmentManager()
                 .setFragmentResultListener(

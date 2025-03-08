@@ -76,6 +76,10 @@ public class SearchFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getFragmentResult();
+    }
+
+    private void getFragmentResult(){
         getParentFragmentManager()
                 .setFragmentResultListener(
                         REQUEST_KEY_SEARCH_TEXT_SIZE,

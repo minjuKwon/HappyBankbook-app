@@ -84,6 +84,10 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
 
         handler=new Handler();
 
+        getFragmentResult();
+    }
+
+    private void getFragmentResult(){
         //ConditionFragment 정렬 값 받기
         getParentFragmentManager()
                 .setFragmentResultListener(
@@ -109,17 +113,17 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
                                     public void onIntResult(int value) {
                                         if(isNewestSort){
                                             presenter.getDataDesc(
-                                                        RoomDB.getInstance(getContext()).memoDao(),
-                                                        fromDate,
-                                                        toDate,
-                                                        value
+                                                    RoomDB.getInstance(getContext()).memoDao(),
+                                                    fromDate,
+                                                    toDate,
+                                                    value
                                             );
                                         }else{
                                             presenter.getDataAsc(
-                                                        RoomDB.getInstance(getContext()).memoDao(),
-                                                        fromDate,
-                                                        toDate,
-                                                        value
+                                                    RoomDB.getInstance(getContext()).memoDao(),
+                                                    fromDate,
+                                                    toDate,
+                                                    value
                                             );
                                         }
                                     }
@@ -128,17 +132,17 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
                             }else{
                                 if(isNewestSort){
                                     presenter.getDataDesc(
-                                                RoomDB.getInstance(getContext()).memoDao(),
-                                                fromDate,
-                                                toDate,
-                                                itemCount
+                                            RoomDB.getInstance(getContext()).memoDao(),
+                                            fromDate,
+                                            toDate,
+                                            itemCount
                                     );
                                 }else{
                                     presenter.getDataAsc(
-                                                RoomDB.getInstance(getContext()).memoDao(),
-                                                fromDate,
-                                                toDate,
-                                                itemCount
+                                            RoomDB.getInstance(getContext()).memoDao(),
+                                            fromDate,
+                                            toDate,
+                                            itemCount
                                     );
                                 }
                             }
@@ -156,7 +160,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
                             adapter.setTextSize(textSize);
                         }
                 );
-
     }
 
     @Override

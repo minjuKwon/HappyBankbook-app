@@ -80,6 +80,11 @@ public class ConditionFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getFragmentResult();
+    }
+
+    private void getFragmentResult(){
         //viewPager 후 recyclerView로 돌아 왔을 때 condition 값을 유지 하기 위한 변수 얻기
         getParentFragmentManager()
                 .setFragmentResultListener(
