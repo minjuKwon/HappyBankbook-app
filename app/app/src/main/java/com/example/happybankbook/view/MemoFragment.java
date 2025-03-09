@@ -19,7 +19,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -127,7 +126,8 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
                         result -> {
                             if(result.getResultCode()==RESULT_OK&&result.getData()!=null){
                                 contentImageView.setVisibility(View.VISIBLE);
-                                getImage(result);
+                                Uri imageUri=result.getData().getData();
+                                getImage(imageUri);
                             }else if(result.getData()!=null){
                                 Toast.makeText(
                                         getContext(),
@@ -140,8 +140,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
     }
 
-    private void getImage(ActivityResult result){
-        Uri imageUri=result.getData().getData();
+    private void getImage(Uri imageUri){
         final String imageType=
                 mContext.getContentResolver().getType(imageUri);
         final MimeTypeMap mime = MimeTypeMap.getSingleton();
