@@ -22,6 +22,7 @@ import com.example.happybankbook.R;
 
 public class ConditionTestHelper {
 
+    private ConditionTestHelper(){}
     public static void resetCondition(){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.txtCondition)).perform(click());
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.buttonInit)).perform(click());

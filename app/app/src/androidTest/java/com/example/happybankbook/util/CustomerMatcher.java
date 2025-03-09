@@ -17,6 +17,8 @@ import org.hamcrest.TypeSafeMatcher;
 
 public class CustomerMatcher {
 
+    private CustomerMatcher(){}
+
     public static Matcher<Root> withToast(){
         return new TypeSafeMatcher<Root>() {
             @Override

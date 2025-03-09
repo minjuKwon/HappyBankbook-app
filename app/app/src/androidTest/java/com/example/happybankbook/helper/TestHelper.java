@@ -18,6 +18,8 @@ import com.example.happybankbook.R;
 
 public class TestHelper {
 
+    private TestHelper(){}
+
     public static final int BLACK=
             ContextCompat.getColor( ApplicationProvider.getApplicationContext(),
                     com.example.happybankbook.R.color.black  );

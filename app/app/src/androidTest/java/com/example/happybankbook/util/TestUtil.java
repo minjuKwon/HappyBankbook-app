@@ -30,6 +30,8 @@ import java.util.Date;
 
 public class TestUtil {
 
+    private TestUtil(){}
+
     // 커스텀 waitFor() 구현
     public static ViewAction waitFor(final long millis) {
         return new ViewAction() {

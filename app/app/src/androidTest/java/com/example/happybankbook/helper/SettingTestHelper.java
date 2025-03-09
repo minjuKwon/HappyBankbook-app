@@ -28,6 +28,8 @@ import org.hamcrest.Matcher;
 
 public class SettingTestHelper {
 
+    private SettingTestHelper(){}
+
     public static void checkTextLineSetting(int lineSingleColor, int lineMulColor){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.radioLineSingle))
                 .check(matches(withTextColor(lineSingleColor)));

@@ -14,6 +14,8 @@ import com.example.happybankbook.R;
 
 public class DetailScreenHelper {
 
+    private DetailScreenHelper(){}
+
     public static void checkDetailScreenClickedBack(String txt){
         checkMiddleScreen(txt);
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.imgBack)).perform(click());
