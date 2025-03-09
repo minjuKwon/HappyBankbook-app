@@ -1,5 +1,6 @@
 package com.example.happybankbook.view;
 
+import static com.example.happybankbook.Utils.hideKeyboard;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_FROM_DATE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_NEWEST_SORT;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_ITEM_COUNT;
@@ -27,7 +28,6 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -243,9 +243,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
 
         //SearchFragment에서 검색 후 키보드 내리지 않고 바로 viewpager 이동 하면,
         //계속 키보드 올려지는 경우 방지
-        InputMethodManager inputMethodManager=
-                (InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        hideKeyboard(mContext,view);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.happybankbook.view;
 
+import static com.example.happybankbook.Utils.hideKeyboard;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_FROM_DATE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_CLICKED_ONCE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_INITIALIZATION;
@@ -35,7 +36,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -201,7 +201,7 @@ public class ConditionFragment extends Fragment
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.close){
-            hideKeyboard();
+            hideKeyboard(mContext,itemCountEditText);
             ((MainActivity)mActivity).removeFragment(this);
         }else if(v.getId()==R.id.duration){
             clickDuration();
@@ -279,7 +279,7 @@ public class ConditionFragment extends Fragment
 
         setSharedPreferences();
 
-        hideKeyboard();
+        hideKeyboard(mContext,itemCountEditText);
 
         ((MainActivity)mActivity).removeFragment(this);
     }
@@ -317,12 +317,6 @@ public class ConditionFragment extends Fragment
         editor.putBoolean(PREF_KEY_IS_NEWEST_SORT,newestSortRadioButton.isChecked());
         editor.putString(PREF_KEY_ITEM_COUNT,itemCountEditText.getText().toString());
         editor.apply();
-    }
-
-    public void hideKeyboard(){
-        InputMethodManager imm=
-                (InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(itemCountEditText.getWindowToken(),0);
     }
 
 }
