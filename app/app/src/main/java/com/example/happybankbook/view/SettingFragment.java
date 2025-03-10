@@ -147,40 +147,33 @@ public class SettingFragment extends Fragment
                 if("pdf".equals(fileExtension)){
                     exportPdf(uri);
                 }else if("excel".equals(fileExtension)){
-                    exportTxtFile(uri,',');
+                    exportTxtFile(',', uri);
                 }else if("txt".equals(fileExtension)){
-                    exportTxtFile(uri,' ');
+                    exportTxtFile(' ', uri);
                 }
             }
         });
 
     }
 
-    public void exportPdf(String extension){
+    public <T> void exportPdf(T path){
         presenter.getConvertedPdf(RoomDB.getInstance(getContext()).memoDao());
         presenter.setMemoDataListCallback(new MemoDataListCallback() {
             @Override
             public void onMemoDataListResult(ArrayList<MemoData> list) {
-                PdfRunnable runnable=new PdfRunnable(list, getContext(), extension);
+                PdfRunnable runnable=null;
+                if(path instanceof Uri){
+                    runnable=new PdfRunnable(list, getContext(), Uri.parse(String.valueOf(path)));
+                }else if(path instanceof String){
+                    runnable=new PdfRunnable(list, getContext(), String.valueOf(path));
+                }
                 Thread thread=new Thread(runnable);
                 thread.start();
             }
         });
     }
 
-    public void exportPdf(Uri uri){
-        presenter.getConvertedPdf(RoomDB.getInstance(getContext()).memoDao());
-        presenter.setMemoDataListCallback(new MemoDataListCallback() {
-            @Override
-            public void onMemoDataListResult(ArrayList<MemoData> list) {
-                PdfRunnable runnable=new PdfRunnable(list, getContext(),uri);
-                Thread thread=new Thread(runnable);
-                thread.start();
-            }
-        });
-    }
-
-    public void exportTxtFile(char split, String extension){
+    public <T> void exportTxtFile(char split,T path){
         buffer=new StringBuffer();
         presenter.getConvertedFile(RoomDB.getInstance(getContext()).memoDao(),split);
 
@@ -188,22 +181,11 @@ public class SettingFragment extends Fragment
             @Override
             public void onStringBufferResult(StringBuffer stringBuffer) {
                 buffer=stringBuffer;
-                fileRunnable=new FileRunnable(buffer, extension);
-                fileThread=new Thread(fileRunnable);
-                fileThread.start();
-            }
-        });
-    }
-
-    public void exportTxtFile(Uri uri, char split){
-        buffer=new StringBuffer();
-        presenter.getConvertedFile(RoomDB.getInstance(getContext()).memoDao(),split);
-
-        presenter.setStringBufferResultCallback(new StringBufferResultCallback() {
-            @Override
-            public void onStringBufferResult(StringBuffer stringBuffer) {
-                buffer=stringBuffer;
-                fileRunnable=new FileRunnable(uri, buffer);
+                if(path instanceof Uri){
+                    fileRunnable=new FileRunnable(buffer, Uri.parse(String.valueOf(path)));
+                }else if(path instanceof String){
+                    fileRunnable=new FileRunnable(buffer, String.valueOf(path));
+                }
                 fileThread=new Thread(fileRunnable);
                 fileThread.start();
             }
@@ -481,7 +463,7 @@ public class SettingFragment extends Fragment
             this.extension=extension;
             branch=1;
         }
-        public FileRunnable(Uri uri, StringBuffer content){
+        public FileRunnable(StringBuffer content, Uri uri){
             this.uri=uri;
             this.content=content;
             branch=2;
