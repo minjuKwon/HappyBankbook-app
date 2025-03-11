@@ -74,28 +74,28 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
         if(holder instanceof RecyclerViewHolder){
             RecyclerViewHolder recyclerViewHolder=(RecyclerViewHolder)holder;
-            data=dataList.get(recyclerViewHolder.getAdapterPosition());
+            data=dataList.get(recyclerViewHolder.getBindingAdapterPosition());
             recyclerViewHolder.onBind(data, mContext, position, textSize, textLine, textEllipsize);
             //recyclerview position 얻기 위한 클릭 이벤트
             recyclerViewHolder.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick() {
                     ((MainActivity)mContext).addFragment(new MemoDetailFragment());
-                    recyclerviewPosition= recyclerViewHolder.getAdapterPosition();
+                    recyclerviewPosition= recyclerViewHolder.getBindingAdapterPosition();
                 }
             });
 
         }else if(holder instanceof ViewPagerViewHolder){
             ViewPagerViewHolder viewPagerViewHolder=(ViewPagerViewHolder) holder;
-            data=dataList.get(viewPagerViewHolder.getAdapterPosition());
+            data=dataList.get(viewPagerViewHolder.getBindingAdapterPosition());
             if(hasReceivedCondition){//메모 정렬 후 onBind 호출하기 위한 변수.
                 //recyclerview position, viewpager position 더하여
                 // 클릭한 메모를 시작점으로 viewpager 화면 넘기게 하기 위한 초기 값
                 if(isFirstInteraction){
-                    data=dataList.get(viewPagerViewHolder.getAdapterPosition()+recyclerviewPosition);
+                    data=dataList.get(viewPagerViewHolder.getBindingAdapterPosition()+recyclerviewPosition);
                 }
                 //viewpager에서 제일 첫번째 위치로 이동하면 처음 클릭한 데이터(0번째)로 재활용 방지
-                if(viewPagerViewHolder.getAdapterPosition()==0){
+                if(viewPagerViewHolder.getBindingAdapterPosition()==0){
                     isRecyclable=false;
                 }
                 viewPagerViewHolder.setIsRecyclable(isRecyclable);
