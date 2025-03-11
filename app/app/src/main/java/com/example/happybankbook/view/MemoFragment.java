@@ -42,7 +42,6 @@ import com.example.happybankbook.R;
 import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.MemoPresenter;
-import com.example.happybankbook.presenterReturnInterface.IntResultCallback;
 
 public class MemoFragment extends Fragment implements View.OnClickListener{
 
@@ -244,12 +243,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         int dateInt=((MainActivity)mActivity).convertDateToInt(dateTextView);
         data.setDate(dateInt);
 
-        presenter.setIntResultCallback(new IntResultCallback() {
-            @Override
-            public void onIntResult(int value) {
-                data.setNum(value+1);
-            }
-        });
+        presenter.setIntResultCallback(value -> data.setNum(value+1));
         presenter.getDataRange(RoomDB.getInstance(getContext()).memoDao(), dateInt);
 
         //현재 날짜 받기

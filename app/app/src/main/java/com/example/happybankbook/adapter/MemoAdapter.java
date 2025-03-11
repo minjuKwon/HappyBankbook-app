@@ -77,12 +77,9 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
             data=dataList.get(recyclerViewHolder.getBindingAdapterPosition());
             recyclerViewHolder.onBind(data, mContext, position, textSize, textLine, textEllipsize);
             //recyclerview position 얻기 위한 클릭 이벤트
-            recyclerViewHolder.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick() {
-                    ((MainActivity)mContext).addFragment(new MemoDetailFragment());
-                    recyclerviewPosition= recyclerViewHolder.getBindingAdapterPosition();
-                }
+            recyclerViewHolder.setOnItemClickListener(() -> {
+                ((MainActivity)mContext).addFragment(new MemoDetailFragment());
+                recyclerviewPosition= recyclerViewHolder.getBindingAdapterPosition();
             });
 
         }else if(holder instanceof ViewPagerViewHolder){

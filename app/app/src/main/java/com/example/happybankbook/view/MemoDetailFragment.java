@@ -39,7 +39,6 @@ import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.ListPresenter;
-import com.example.happybankbook.presenterReturnInterface.IntResultCallback;
 
 import java.util.ArrayList;
 
@@ -108,24 +107,21 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
                             }
 
                             if(itemCount==0){
-                                presenter.setIntResultCallback(new IntResultCallback() {
-                                    @Override
-                                    public void onIntResult(int value) {
-                                        if(isNewestSort){
-                                            presenter.getDataDesc(
-                                                    RoomDB.getInstance(getContext()).memoDao(),
-                                                    fromDate,
-                                                    toDate,
-                                                    value
-                                            );
-                                        }else{
-                                            presenter.getDataAsc(
-                                                    RoomDB.getInstance(getContext()).memoDao(),
-                                                    fromDate,
-                                                    toDate,
-                                                    value
-                                            );
-                                        }
+                                presenter.setIntResultCallback(value -> {
+                                    if(isNewestSort){
+                                        presenter.getDataDesc(
+                                                RoomDB.getInstance(getContext()).memoDao(),
+                                                fromDate,
+                                                toDate,
+                                                value
+                                        );
+                                    }else{
+                                        presenter.getDataAsc(
+                                                RoomDB.getInstance(getContext()).memoDao(),
+                                                fromDate,
+                                                toDate,
+                                                value
+                                        );
                                     }
                                 });
                                 presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
@@ -194,12 +190,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     }
 
     private void getRowCount(){
-        presenter.setIntResultCallback(new IntResultCallback() {
-            @Override
-            public void onIntResult(int value) {
-                rowCount=value;
-            }
-        });
+        presenter.setIntResultCallback(value -> rowCount=value);
         presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
     }
 

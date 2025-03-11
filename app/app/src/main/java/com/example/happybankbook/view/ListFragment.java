@@ -53,8 +53,6 @@ import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.ListPresenter;
-import com.example.happybankbook.presenterReturnInterface.IntResultCallback;
-import com.example.happybankbook.presenterReturnInterface.LongResultCallback;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -179,14 +177,11 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     }
 
     private void getMemoTotalPrice(){
-        presenter.setLongResultCallback(new LongResultCallback() {
-            @Override
-            public void onLongResult(long value) {
-                String formatPatternPrice="###,###";
-                DecimalFormat formattedPrice = new DecimalFormat(formatPatternPrice);
-                String priceStr= formattedPrice.format(value);
-                totalPriceTextView.setText(priceStr);
-            }
+        presenter.setLongResultCallback(value -> {
+            String formatPatternPrice="###,###";
+            DecimalFormat formattedPrice = new DecimalFormat(formatPatternPrice);
+            String priceStr= formattedPrice.format(value);
+            totalPriceTextView.setText(priceStr);
         });
         presenter.getSumPrice(RoomDB.getInstance(getContext()).memoDao(), getContext());
     }
@@ -267,24 +262,21 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         }
 
         if(itemCount==0){
-            presenter.setIntResultCallback(new IntResultCallback() {
-                @Override
-                public void onIntResult(int value) {
-                    if(isNewestSort){
-                        presenter.getDataDesc(
-                                    RoomDB.getInstance(getContext()).memoDao(),
-                                    fromDate,
-                                    toDate,
-                                    value
-                        );
-                    }else{
-                        presenter.getDataAsc(
-                                    RoomDB.getInstance(getContext()).memoDao(),
-                                    fromDate,
-                                    toDate,
-                                    value
-                        );
-                    }
+            presenter.setIntResultCallback(value -> {
+                if(isNewestSort){
+                    presenter.getDataDesc(
+                                RoomDB.getInstance(getContext()).memoDao(),
+                                fromDate,
+                                toDate,
+                                value
+                    );
+                }else{
+                    presenter.getDataAsc(
+                                RoomDB.getInstance(getContext()).memoDao(),
+                                fromDate,
+                                toDate,
+                                value
+                    );
                 }
             });
             presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());

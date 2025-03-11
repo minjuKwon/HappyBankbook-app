@@ -51,12 +51,9 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.happybankbook.presenterReturnInterface.MemoDataListCallback;
-import com.example.happybankbook.presenterReturnInterface.StringBufferResultCallback;
 import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.PdfRunnable;
 import com.example.happybankbook.R;
-import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.OutputPresenter;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
@@ -67,7 +64,6 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 
 public class SettingFragment extends Fragment
         implements View.OnClickListener, RadioGroup.OnCheckedChangeListener
@@ -158,18 +154,15 @@ public class SettingFragment extends Fragment
 
     public <T> void exportPdf(T path){
         presenter.getConvertedPdf(RoomDB.getInstance(getContext()).memoDao());
-        presenter.setMemoDataListCallback(new MemoDataListCallback() {
-            @Override
-            public void onMemoDataListResult(ArrayList<MemoData> list) {
-                PdfRunnable runnable=null;
-                if(path instanceof Uri){
-                    runnable=new PdfRunnable(list, getContext(), Uri.parse(String.valueOf(path)));
-                }else if(path instanceof String){
-                    runnable=new PdfRunnable(list, getContext(), String.valueOf(path));
-                }
-                Thread thread=new Thread(runnable);
-                thread.start();
+        presenter.setMemoDataListCallback(list -> {
+            PdfRunnable runnable=null;
+            if(path instanceof Uri){
+                runnable=new PdfRunnable(list, getContext(), Uri.parse(String.valueOf(path)));
+            }else if(path instanceof String){
+                runnable=new PdfRunnable(list, getContext(), String.valueOf(path));
             }
+            Thread thread=new Thread(runnable);
+            thread.start();
         });
     }
 
@@ -177,18 +170,15 @@ public class SettingFragment extends Fragment
         buffer=new StringBuffer();
         presenter.getConvertedFile(RoomDB.getInstance(getContext()).memoDao(),split);
 
-        presenter.setStringBufferResultCallback(new StringBufferResultCallback() {
-            @Override
-            public void onStringBufferResult(StringBuffer stringBuffer) {
-                buffer=stringBuffer;
-                if(path instanceof Uri){
-                    fileRunnable=new FileRunnable(buffer, Uri.parse(String.valueOf(path)));
-                }else if(path instanceof String){
-                    fileRunnable=new FileRunnable(buffer, String.valueOf(path));
-                }
-                fileThread=new Thread(fileRunnable);
-                fileThread.start();
+        presenter.setStringBufferResultCallback(stringBuffer -> {
+            buffer=stringBuffer;
+            if(path instanceof Uri){
+                fileRunnable=new FileRunnable(buffer, Uri.parse(String.valueOf(path)));
+            }else if(path instanceof String){
+                fileRunnable=new FileRunnable(buffer, String.valueOf(path));
             }
+            fileThread=new Thread(fileRunnable);
+            fileThread.start();
         });
     }
 

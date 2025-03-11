@@ -1,21 +1,17 @@
 package com.example.happybankbook;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.example.happybankbook.view.ListFragment;
 import com.example.happybankbook.view.MemoFragment;
 import com.example.happybankbook.view.SettingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,23 +44,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void navigation(){
         getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,listFragment).commit();
-        navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if(item.getItemId()== R.id.mainMenu){
-                    replaceFragment(listFragment);
-                    return true;
-                }
-                else if(item.getItemId()==R.id.addMenu){
-                    replaceFragment(memoFragment);
-                    return true;
-                }
-                else if(item.getItemId()==R.id.settingMenu){
-                    replaceFragment(settingFragment);
-                    return true;
-                }
-                return false;
+        navigationView.setOnItemSelectedListener(item -> {
+            if(item.getItemId()== R.id.mainMenu){
+                replaceFragment(listFragment);
+                return true;
             }
+            else if(item.getItemId()==R.id.addMenu){
+                replaceFragment(memoFragment);
+                return true;
+            }
+            else if(item.getItemId()==R.id.settingMenu){
+                replaceFragment(settingFragment);
+                return true;
+            }
+            return false;
         });
     }
     public void navigation(int id){
@@ -107,14 +100,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void setDate(TextView textview, Context context){
 
-        DatePickerDialog.OnDateSetListener calendarListener=new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String date=String.format( java.util.Locale.getDefault(),
-                                     "%d.%02d.%02d",
-                                     year,month+1,dayOfMonth );
-                textview.setText(date);
-            }
+        DatePickerDialog.OnDateSetListener calendarListener= (view, year, month, dayOfMonth) -> {
+            String date=String.format( java.util.Locale.getDefault(),
+                                 "%d.%02d.%02d",
+                                 year,month+1,dayOfMonth );
+            textview.setText(date);
         };
 
         Calendar calendar=Calendar.getInstance();
