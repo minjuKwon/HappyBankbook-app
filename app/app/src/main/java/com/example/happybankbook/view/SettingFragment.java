@@ -167,7 +167,6 @@ public class SettingFragment extends Fragment
     }
 
     public <T> void exportTxtFile(char split,T path){
-        buffer=new StringBuffer();
         presenter.getConvertedFile(RoomDB.getInstance(getContext()).memoDao(),split);
 
         presenter.setStringBufferResultCallback(stringBuffer -> {
@@ -580,8 +579,7 @@ public class SettingFragment extends Fragment
         }
 
         final String fileName="happy bank memo";
-        File file = new File(directory, fileName+"_"+(count+1) + extension);
-        return file;
+        return new File(directory, fileName+"_"+(count+1) + extension);
     }
 
 }
