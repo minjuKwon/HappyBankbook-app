@@ -482,7 +482,7 @@ public class SettingFragment extends Fragment
                 writer = new BufferedWriter(fw);
 
                 String contentStr = String.valueOf(content);
-                if("null".equals(contentStr)||"".equals(contentStr)){
+                if(contentStr.isEmpty()){
                     Toast.makeText(
                             getContext(),
                             getResources().getText(R.string.noMemo),
@@ -521,7 +521,7 @@ public class SettingFragment extends Fragment
         try{
             String contentStr = String.valueOf(content);
             fileOutputStream=getDirectory(uri, mContext);
-            if("null".equals(contentStr)||"".equals(contentStr)){
+            if(contentStr.isEmpty()){
                 Toast.makeText(
                         getContext(),
                         getResources().getText(R.string.noMemo),
