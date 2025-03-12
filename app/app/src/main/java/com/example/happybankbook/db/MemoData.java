@@ -26,6 +26,9 @@ public class MemoData extends BaseItem {
     public void setContent(String content){this.content=content;}
     public void setImage(Bitmap image){this.image=image;}
 
+    public int getIdx(){
+        return idx;
+    }
     public int getNum() {
         return num;
     }

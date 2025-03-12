@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.happybankbook.MainActivity;
@@ -115,8 +116,10 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
     }
 
     public void setItems(ArrayList<MemoData>data){
+        DiffUtil.DiffResult diffResult=
+                DiffUtil.calculateDiff(new MemoDiffUtilCallback(dataList,data));
         dataList=data;
-        notifyDataSetChanged();
+        diffResult.dispatchUpdatesTo(this);
     }
 
     public void setTextSize(float size){
