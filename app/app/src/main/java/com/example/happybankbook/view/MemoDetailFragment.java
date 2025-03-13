@@ -273,6 +273,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     @Override
     public void setItems(ArrayList<MemoData> items) {
         adapter.setItems(items);
+        adapter.notifyDataSetChanged();
         adapter.setCondition(true);
     }
 
