@@ -572,7 +572,10 @@ public class SettingFragment extends Fragment
         int count=0;
 
         if (!directory.exists()) {
-            directory.mkdirs();
+            boolean isSuccess=directory.mkdirs();
+            if(!isSuccess){
+                logDebugData(LOG_TAG,"directory 생성 실패");
+            }
         }
 
         File[] files = directory.listFiles();
