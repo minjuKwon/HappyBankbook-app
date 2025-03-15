@@ -558,7 +558,7 @@ public class SettingFragment extends Fragment
         FileOutputStream fileOutputStream=null;
         try {
             pfd = context.getContentResolver().openFileDescriptor(uri, "w");
-            fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
+            if(pfd!=null) fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
         } catch (IOException e) {
             logDebugData(LOG_TAG,"uri로 directory 얻기: "+e);
         }
