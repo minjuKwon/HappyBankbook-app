@@ -2,6 +2,7 @@ package com.example.happybankbook.view;
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.example.happybankbook.Utils.logDebugData;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_LINE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
@@ -69,6 +70,7 @@ public class SettingFragment extends Fragment
         implements View.OnClickListener, RadioGroup.OnCheckedChangeListener
 {
 
+    private static final String LOG_TAG="FILE";
     private final String PERMISSION= Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
     private Context mContext;
@@ -493,13 +495,13 @@ public class SettingFragment extends Fragment
                 }
             }
         }catch(IOException e){
-            e.printStackTrace();
+            logDebugData(LOG_TAG,"파일 생성 실패: "+e);
         }finally{
             try {
                 if(writer!=null){writer.flush();writer.close();}
                 if(fw!=null){fw.flush();fw.close();}
             }catch (IOException e2){
-                e2.printStackTrace();
+                logDebugData(LOG_TAG,"파일 리소스 닫기: "+e2);
             }
         }
 
@@ -532,14 +534,14 @@ public class SettingFragment extends Fragment
                 bufferedWriter.write(contentStr);
             }
         }catch(IOException e){
-            e.printStackTrace();
+            logDebugData(LOG_TAG,"uri로 파일 생성 실패: "+e);
         }finally{
             try {
                 if(bufferedWriter!=null){bufferedWriter.flush();bufferedWriter.close();}
                 if(fileOutputStream!=null){fileOutputStream.flush();fileOutputStream.close();}
                 if(pfd!=null){pfd.close();}
             }catch (IOException e2){
-                e2.printStackTrace();
+                logDebugData(LOG_TAG,"uri 생성 파일 리소스 닫기: "+e2);
             }
         }
 
@@ -558,7 +560,7 @@ public class SettingFragment extends Fragment
             pfd = context.getContentResolver().openFileDescriptor(uri, "w");
             fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
         } catch (IOException e) {
-            e.printStackTrace();
+            logDebugData(LOG_TAG,"uri로 directory 얻기: "+e);
         }
         return fileOutputStream;
     }

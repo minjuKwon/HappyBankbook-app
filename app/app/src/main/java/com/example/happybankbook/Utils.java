@@ -1,8 +1,11 @@
 package com.example.happybankbook;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import com.google.android.apps.common.testing.accessibility.framework.BuildConfig;
 
 public class Utils {
 
@@ -12,6 +15,12 @@ public class Utils {
         InputMethodManager imm=
                 (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+    }
+
+    public static void logDebugData(String tag, String message){
+        if(BuildConfig.DEBUG){
+            Log.e(tag, message);
+        }
     }
 
 }
