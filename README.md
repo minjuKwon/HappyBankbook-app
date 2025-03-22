@@ -4,8 +4,8 @@
 # 개발기간
 2023.06.06~2023.9.28(약4개월)
 # 개발환경
-- Java 17
-- Android Studio 8.0
+- Java 1.8
+- Android Studio Ladybug
 - Figma
 - GitHub
 # 기술 스택
