@@ -59,6 +59,7 @@ import java.util.ArrayList;
 
 public class ListFragment extends Fragment implements View.OnClickListener, ListContract.View{
 
+    private Context mContext;
     private Activity mActivity;
     private ListPresenter presenter;
     private MemoAdapter adapter;
@@ -75,6 +76,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        mContext=context;
         if (context instanceof Activity) {
             mActivity = (Activity)context;
         }
@@ -167,8 +169,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         presenter=new ListPresenter();
         presenter.setView(this);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, textSize, textLine, hasTextEllipsize);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        adapter=new MemoAdapter(mContext, MemoType.RECYCLER, textSize, textLine, hasTextEllipsize);
         recyclerView.setAdapter(adapter);
 
         getMemoTotalPrice();
@@ -183,7 +185,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
             String priceStr= formattedPrice.format(value);
             totalPriceTextView.setText(priceStr);
         });
-        presenter.getSumPrice(RoomDB.getInstance(getContext()).memoDao(), getContext());
+        presenter.getSumPrice(RoomDB.getInstance(mContext).memoDao(), mContext);
     }
 
     private void setMemoListCondition(){
@@ -192,7 +194,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         //viewpager 제외한 다른 프래그먼트 방문 후,
         // ListFragment 돌아온 경우는 데이터 조건을 초기화하여 모든 데이터 보여줌
         if(!hasVisitedViewPager||isInitialization){
-            presenter.getData(RoomDB.getInstance(getContext()).memoDao());
+            presenter.getData(RoomDB.getInstance(mContext).memoDao());
         }else{
             keepCondition();
         }
@@ -251,6 +253,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     @Override
     public void onDetach() {
         super.onDetach();
+        mContext=null;
         mActivity=null;
     }
 
@@ -265,32 +268,32 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
             presenter.setIntResultCallback(value -> {
                 if(isNewestSort){
                     presenter.getDataDesc(
-                                RoomDB.getInstance(getContext()).memoDao(),
+                                RoomDB.getInstance(mContext).memoDao(),
                                 fromDate,
                                 toDate,
                                 value
                     );
                 }else{
                     presenter.getDataAsc(
-                                RoomDB.getInstance(getContext()).memoDao(),
+                                RoomDB.getInstance(mContext).memoDao(),
                                 fromDate,
                                 toDate,
                                 value
                     );
                 }
             });
-            presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
+            presenter.getDataCount(RoomDB.getInstance(mContext).memoDao());
         }else{
             if(isNewestSort){
                 presenter.getDataDesc(
-                            RoomDB.getInstance(getContext()).memoDao(),
+                            RoomDB.getInstance(mContext).memoDao(),
                             fromDate,
                             toDate,
                             itemCount
                 );
             }else{
                 presenter.getDataAsc(
-                            RoomDB.getInstance(getContext()).memoDao(),
+                            RoomDB.getInstance(mContext).memoDao(),
                             fromDate,
                             toDate,
                             itemCount

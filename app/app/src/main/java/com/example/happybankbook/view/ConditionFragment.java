@@ -206,9 +206,9 @@ public class ConditionFragment extends Fragment
         }else if(v.getId()==R.id.duration){
             clickDuration();
         }else if(v.getId()==R.id.toDuration){
-            ((MainActivity)mActivity).setDate(toDurationTextView,getContext());
+            ((MainActivity)mActivity).setDate(toDurationTextView,mContext);
         }else if(v.getId()==R.id.fromDuration){
-            ((MainActivity)mActivity).setDate(fromDurationTextView,getContext());
+            ((MainActivity)mActivity).setDate(fromDurationTextView,mContext);
         }else if(v.getId()==R.id.buttonSubmit){
             submit();
         }else if(v.getId()==R.id.buttonInit){

@@ -110,32 +110,32 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
                                 presenter.setIntResultCallback(value -> {
                                     if(isNewestSort){
                                         presenter.getDataDesc(
-                                                RoomDB.getInstance(getContext()).memoDao(),
+                                                RoomDB.getInstance(mContext).memoDao(),
                                                 fromDate,
                                                 toDate,
                                                 value
                                         );
                                     }else{
                                         presenter.getDataAsc(
-                                                RoomDB.getInstance(getContext()).memoDao(),
+                                                RoomDB.getInstance(mContext).memoDao(),
                                                 fromDate,
                                                 toDate,
                                                 value
                                         );
                                     }
                                 });
-                                presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
+                                presenter.getDataCount(RoomDB.getInstance(mContext).memoDao());
                             }else{
                                 if(isNewestSort){
                                     presenter.getDataDesc(
-                                            RoomDB.getInstance(getContext()).memoDao(),
+                                            RoomDB.getInstance(mContext).memoDao(),
                                             fromDate,
                                             toDate,
                                             itemCount
                                     );
                                 }else{
                                     presenter.getDataAsc(
-                                            RoomDB.getInstance(getContext()).memoDao(),
+                                            RoomDB.getInstance(mContext).memoDao(),
                                             fromDate,
                                             toDate,
                                             itemCount
@@ -179,7 +179,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         presenter=new ListPresenter();
         presenter.setView(this);
 
-        adapter=new MemoAdapter(getContext(), MemoType.VIEWPAGER, textSize);
+        adapter=new MemoAdapter(mContext, MemoType.VIEWPAGER, textSize);
         viewPager.setAdapter(adapter);
 
         adapterPosition= adapter.getRecyclerviewPosition();
@@ -191,7 +191,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
 
     private void getRowCount(){
         presenter.setIntResultCallback(value -> rowCount=value);
-        presenter.getDataCount(RoomDB.getInstance(getContext()).memoDao());
+        presenter.getDataCount(RoomDB.getInstance(mContext).memoDao());
     }
 
     public void changePage(){

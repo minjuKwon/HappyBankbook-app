@@ -112,7 +112,7 @@ public class SettingFragment extends Fragment
                         new ActivityResultContracts.RequestPermission(), check -> {
                     if(check){
                         Toast.makeText(
-                                getContext(),
+                                mContext,
                                 getResources().getText(R.string.savePermissionYes)
                                 ,Toast.LENGTH_SHORT
                         ).show();
@@ -125,7 +125,7 @@ public class SettingFragment extends Fragment
                         }
                     }else{
                         Toast.makeText(
-                                getContext(),
+                                mContext,
                                 getResources().getText(R.string.savePermissionNo),
                                 Toast.LENGTH_LONG
                         ).show();
@@ -138,7 +138,7 @@ public class SettingFragment extends Fragment
             if(result.getResultCode()==RESULT_OK&&result.getData()!=null){
                 Uri uri=result.getData().getData();
                 Toast.makeText(
-                        getContext(),
+                        mContext,
                         getResources().getText(R.string.savePermissionYes),
                         Toast.LENGTH_SHORT
                 ).show();
@@ -155,13 +155,13 @@ public class SettingFragment extends Fragment
     }
 
     public <T> void exportPdf(T path){
-        presenter.getConvertedPdf(RoomDB.getInstance(getContext()).memoDao());
+        presenter.getConvertedPdf(RoomDB.getInstance(mContext).memoDao());
         presenter.setMemoDataListCallback(list -> {
             PdfRunnable runnable=null;
             if(path instanceof Uri){
-                runnable=new PdfRunnable(list, getContext(), Uri.parse(String.valueOf(path)));
+                runnable=new PdfRunnable(list, mContext, Uri.parse(String.valueOf(path)));
             }else if(path instanceof String){
-                runnable=new PdfRunnable(list, getContext(), String.valueOf(path));
+                runnable=new PdfRunnable(list, mContext, String.valueOf(path));
             }
             Thread thread=new Thread(runnable);
             thread.start();
@@ -169,7 +169,7 @@ public class SettingFragment extends Fragment
     }
 
     public <T> void exportTxtFile(char split,T path){
-        presenter.getConvertedFile(RoomDB.getInstance(getContext()).memoDao(),split);
+        presenter.getConvertedFile(RoomDB.getInstance(mContext).memoDao(),split);
 
         presenter.setStringBufferResultCallback(stringBuffer -> {
             buffer=stringBuffer;
@@ -312,7 +312,7 @@ public class SettingFragment extends Fragment
         }else if(v.getId()==R.id.manual){
             showManual();
         }else if(v.getId()==R.id.openSource){
-            startActivity(new Intent(getContext(), OssLicensesMenuActivity.class));
+            startActivity(new Intent(mContext, OssLicensesMenuActivity.class));
         }
     }
 
@@ -334,7 +334,7 @@ public class SettingFragment extends Fragment
     }
 
     public void makeExportDialog(int androidVersion, String type){
-        AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder=new AlertDialog.Builder(mContext);
         final String message=fileExtension+" "+getResources().getText(R.string.doExport);
         builder.setMessage(message);
         builder.setPositiveButton(getResources().getText(R.string.OK), (dialog, which) -> {
@@ -358,7 +358,7 @@ public class SettingFragment extends Fragment
     }
 
     public void showManual(){
-        AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder=new AlertDialog.Builder(mContext);
         builder.setMessage(getResources().getText(R.string.manualDialog));
         builder.setNeutralButton(
                 getResources().getText(R.string.close),
@@ -486,7 +486,7 @@ public class SettingFragment extends Fragment
                 String contentStr = String.valueOf(content);
                 if(contentStr.isEmpty()){
                     Toast.makeText(
-                            getContext(),
+                            mContext,
                             getResources().getText(R.string.noMemo),
                             Toast.LENGTH_LONG
                     ).show();
@@ -507,7 +507,7 @@ public class SettingFragment extends Fragment
 
         ((MainActivity)mContext).runOnUiThread( ()->
                 Toast.makeText(
-                        getContext(),
+                        mContext,
                         getResources().getText(R.string.completeSaving),
                         Toast.LENGTH_SHORT
                 ).show()
@@ -525,7 +525,7 @@ public class SettingFragment extends Fragment
             fileOutputStream=getDirectory(uri, mContext);
             if(contentStr.isEmpty()){
                 Toast.makeText(
-                        getContext(),
+                        mContext,
                         getResources().getText(R.string.noMemo),
                         Toast.LENGTH_LONG
                 ).show();
@@ -547,7 +547,7 @@ public class SettingFragment extends Fragment
 
         ((MainActivity)mContext).runOnUiThread( ()->
                 Toast.makeText(
-                        getContext(),
+                        mContext,
                         getResources().getText(R.string.completeSaving)
                         ,Toast.LENGTH_SHORT
                 ).show());
