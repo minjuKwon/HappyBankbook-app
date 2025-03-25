@@ -129,7 +129,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
                                 getImage(imageUri);
                             }else if(result.getData()!=null){
                                 Toast.makeText(
-                                        getContext(),
+                                        mContext,
                                         getResources().getString(R.string.cantLoadImg),
                                         Toast.LENGTH_LONG
                                 ).show();
@@ -186,7 +186,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
        if(v.getId()==R.id.txtMemoDate){
-           ((MainActivity)mActivity).setDate(dateTextView,getContext());
+           ((MainActivity)mActivity).setDate(dateTextView,mContext);
        }else if(v.getId()==R.id.addPicture){
            loadImage();
        }else if(v.getId()==R.id.save){
@@ -229,7 +229,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     }
 
     private Dialog setDialog(){
-        Dialog dialog=new Dialog(getContext());
+        Dialog dialog=new Dialog(mContext);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_happy);
 
@@ -244,7 +244,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         data.setDate(dateInt);
 
         presenter.setIntResultCallback(value -> data.setNum(value+1));
-        presenter.getDataRange(RoomDB.getInstance(getContext()).memoDao(), dateInt);
+        presenter.getDataRange(RoomDB.getInstance(mContext).memoDao(), dateInt);
 
         //현재 날짜 받기
         String currentDateStr=((MainActivity)mActivity).setCurrentDate();
@@ -254,7 +254,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         //설정한 날짜가 현재 날짜와 다르면,
         // 중간에 메모가 삽입이 되는 것처럼 보이게 하기 위해 table num 값 update
         if(dateInt!=currentDateInt){
-            presenter.changeNum(RoomDB.getInstance(getContext()).memoDao(), dateInt);
+            presenter.changeNum(RoomDB.getInstance(mContext).memoDao(), dateInt);
         }
     }
 
@@ -282,11 +282,11 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
     private void validateInput(String content, String priceStr, MemoData data, Dialog dialog){
         if(TextUtils.isEmpty(content)){
-            Toast.makeText(getContext(),getResources().getText(R.string.memoContentEmpty),Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext,getResources().getText(R.string.memoContentEmpty),Toast.LENGTH_SHORT).show();
         }
 
         if(TextUtils.isEmpty(priceStr)){
-            Toast.makeText(getContext(),getResources().getText(R.string.memoPriceEmpty),Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext,getResources().getText(R.string.memoPriceEmpty),Toast.LENGTH_SHORT).show();
         }
 
         if(!TextUtils.isEmpty(content)&&!TextUtils.isEmpty(priceStr)){
@@ -294,12 +294,12 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
                 int priceInt=Integer.parseInt(priceStr);
                 data.setPrice(priceInt);
 
-                presenter.insertMemo(RoomDB.getInstance(getContext()).memoDao(),data);
+                presenter.insertMemo(RoomDB.getInstance(mContext).memoDao(),data);
                 dialog.dismiss();
                 ((MainActivity)mActivity).navigation(R.id.mainMenu);
             }catch(NumberFormatException e){
                 Toast.makeText(
-                        getContext(),
+                        mContext,
                         getResources().getText(R.string.memoPriceOver),
                         Toast.LENGTH_LONG
                 ).show();
