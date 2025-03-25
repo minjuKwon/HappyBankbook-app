@@ -485,11 +485,13 @@ public class SettingFragment extends Fragment
 
                 String contentStr = String.valueOf(content);
                 if(contentStr.isEmpty()){
-                    Toast.makeText(
-                            mContext,
-                            getResources().getText(R.string.noMemo),
-                            Toast.LENGTH_LONG
-                    ).show();
+                    ((MainActivity)mContext).runOnUiThread( ()->
+                            Toast.makeText(
+                                    mContext,
+                                    getResources().getText(R.string.noMemo),
+                                    Toast.LENGTH_SHORT
+                            ).show()
+                    );
                 }else{
                     writer.write(contentStr);
                 }
@@ -524,11 +526,13 @@ public class SettingFragment extends Fragment
             String contentStr = String.valueOf(content);
             fileOutputStream=getDirectory(uri, mContext);
             if(contentStr.isEmpty()){
-                Toast.makeText(
-                        mContext,
-                        getResources().getText(R.string.noMemo),
-                        Toast.LENGTH_LONG
-                ).show();
+                ((MainActivity)mContext).runOnUiThread( ()->
+                        Toast.makeText(
+                                mContext,
+                                getResources().getText(R.string.noMemo),
+                                Toast.LENGTH_SHORT
+                        ).show()
+                );
             }else{
                 bufferedWriter=new BufferedWriter(new OutputStreamWriter(fileOutputStream));
                 bufferedWriter.write(contentStr);
