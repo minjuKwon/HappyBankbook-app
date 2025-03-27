@@ -2,6 +2,7 @@ package com.example.happybankbook.presenter;
 
 import android.util.Log;
 
+import com.example.happybankbook.presenterReturnInterface.IntResultCallback;
 import com.example.happybankbook.presenterReturnInterface.MemoDataListCallback;
 import com.example.happybankbook.presenterReturnInterface.StringBufferResultCallback;
 import com.example.happybankbook.contract.OutputContract;
@@ -10,6 +11,7 @@ import com.example.happybankbook.db.MemoData;
 
 import java.util.ArrayList;
 
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -19,6 +21,7 @@ public class OutputPresenter implements OutputContract.Presenter {
 
     private StringBufferResultCallback stringBufferResultCallback;
     private MemoDataListCallback memoDataListCallback;
+    private IntResultCallback intResultCallback;
 
     public OutputPresenter(){
         this.disposable=new CompositeDisposable();
@@ -30,6 +33,10 @@ public class OutputPresenter implements OutputContract.Presenter {
 
     public void setMemoDataListCallback(MemoDataListCallback callback){
         this.memoDataListCallback=callback;
+    }
+
+    public void setIntResultCallback(IntResultCallback callback){
+        this.intResultCallback = callback;
     }
 
     @Override
@@ -67,6 +74,17 @@ public class OutputPresenter implements OutputContract.Presenter {
                                 item->memoDataListCallback
                                         .onMemoDataListResult((ArrayList<MemoData>)item)
 
+                        )
+        );
+    }
+
+    @Override
+    public void getDataCount(MemoDao memoDao) {
+        disposable.add(
+                Observable.just(memoDao)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(
+                                value-> intResultCallback.onIntResult(value.getRowCount())
                         )
         );
     }

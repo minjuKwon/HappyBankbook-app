@@ -8,5 +8,6 @@ public interface OutputContract {
     interface Presenter extends BasePresenter {
         void getConvertedFile(MemoDao memoDao, char split);
         void getConvertedPdf(MemoDao memoDao);
+        void getDataCount(MemoDao memoDao);
     }
 }

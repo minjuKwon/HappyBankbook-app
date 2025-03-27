@@ -3,6 +3,7 @@ package com.example.happybankbook.view;
 import static android.app.Activity.RESULT_OK;
 
 import static com.example.happybankbook.Utils.logDebugData;
+import static com.example.happybankbook.Utils.showToastOnUi;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_LINE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
@@ -52,7 +53,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.PdfRunnable;
 import com.example.happybankbook.R;
 import com.example.happybankbook.db.RoomDB;
@@ -111,11 +111,6 @@ public class SettingFragment extends Fragment
                 registerForActivityResult(
                         new ActivityResultContracts.RequestPermission(), check -> {
                     if(check){
-                        Toast.makeText(
-                                mContext,
-                                getResources().getText(R.string.savePermissionYes)
-                                ,Toast.LENGTH_SHORT
-                        ).show();
                         if("pdf".equals(fileExtension)){
                             exportPdf(".pdf");
                         }else if("excel".equals(fileExtension)){
@@ -137,11 +132,6 @@ public class SettingFragment extends Fragment
                         new ActivityResultContracts.StartActivityForResult(), result->{
             if(result.getResultCode()==RESULT_OK&&result.getData()!=null){
                 Uri uri=result.getData().getData();
-                Toast.makeText(
-                        mContext,
-                        getResources().getText(R.string.savePermissionYes),
-                        Toast.LENGTH_SHORT
-                ).show();
                 if("pdf".equals(fileExtension)){
                     exportPdf(uri);
                 }else if("excel".equals(fileExtension)){
@@ -149,6 +139,12 @@ public class SettingFragment extends Fragment
                 }else if("txt".equals(fileExtension)){
                     exportTxtFile(' ', uri);
                 }
+            }else{
+                Toast.makeText(
+                        mContext,
+                        getResources().getText(R.string.savePermissionNo),
+                        Toast.LENGTH_LONG
+                ).show();
             }
         });
 
@@ -338,16 +334,23 @@ public class SettingFragment extends Fragment
         final String message=fileExtension+" "+getResources().getText(R.string.doExport);
         builder.setMessage(message);
         builder.setPositiveButton(getResources().getText(R.string.OK), (dialog, which) -> {
-            if(androidVersion>=Build.VERSION_CODES.Q){
-                final String fileTitle="happy bank memo";
-                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType(type);
-                intent.putExtra(Intent.EXTRA_TITLE, fileTitle);
-                activityResultLauncher.launch(intent);
-            }else{
-                requestPermissionLauncher.launch(PERMISSION);
-            }
+            presenter.setIntResultCallback(value -> {
+                if(value==0){
+                    showToastOnUi(mContext, R.string.noMemo);
+                }else{
+                    if(androidVersion>=Build.VERSION_CODES.Q){
+                        final String fileTitle="happy bank memo";
+                        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        intent.setType(type);
+                        intent.putExtra(Intent.EXTRA_TITLE, fileTitle);
+                        activityResultLauncher.launch(intent);
+                    }else{
+                        requestPermissionLauncher.launch(PERMISSION);
+                    }
+                }
+            });
+            presenter.getDataCount(RoomDB.getInstance(mContext).memoDao());
         });
         builder.setNegativeButton(
                 getResources().getText(R.string.cancel),
@@ -480,21 +483,11 @@ public class SettingFragment extends Fragment
         try{
             boolean hasFile=file.createNewFile();
             if(hasFile){
+                showToastOnUi(mContext, R.string.savePermissionYes);
                 fw = new FileWriter(file);
                 writer = new BufferedWriter(fw);
-
                 String contentStr = String.valueOf(content);
-                if(contentStr.isEmpty()){
-                    ((MainActivity)mContext).runOnUiThread( ()->
-                            Toast.makeText(
-                                    mContext,
-                                    getResources().getText(R.string.noMemo),
-                                    Toast.LENGTH_SHORT
-                            ).show()
-                    );
-                }else{
-                    writer.write(contentStr);
-                }
+                writer.write(contentStr);
             }
         }catch(IOException e){
             logDebugData(LOG_TAG,"파일 생성 실패: "+e);
@@ -507,14 +500,7 @@ public class SettingFragment extends Fragment
             }
         }
 
-        ((MainActivity)mContext).runOnUiThread( ()->
-                Toast.makeText(
-                        mContext,
-                        getResources().getText(R.string.completeSaving),
-                        Toast.LENGTH_SHORT
-                ).show()
-        );
-
+        showToastOnUi(mContext, R.string.completeSaving);
     }
 
     public void makeFile(Uri uri, StringBuffer content){
@@ -523,20 +509,11 @@ public class SettingFragment extends Fragment
         BufferedWriter bufferedWriter=null;
 
         try{
-            String contentStr = String.valueOf(content);
+            showToastOnUi(mContext, R.string.savePermissionYes);
             fileOutputStream=getDirectory(uri, mContext);
-            if(contentStr.isEmpty()){
-                ((MainActivity)mContext).runOnUiThread( ()->
-                        Toast.makeText(
-                                mContext,
-                                getResources().getText(R.string.noMemo),
-                                Toast.LENGTH_SHORT
-                        ).show()
-                );
-            }else{
-                bufferedWriter=new BufferedWriter(new OutputStreamWriter(fileOutputStream));
-                bufferedWriter.write(contentStr);
-            }
+            bufferedWriter=new BufferedWriter(new OutputStreamWriter(fileOutputStream));
+            String contentStr = String.valueOf(content);
+            bufferedWriter.write(contentStr);
         }catch(IOException e){
             logDebugData(LOG_TAG,"uri로 파일 생성 실패: "+e);
         }finally{
@@ -549,24 +526,7 @@ public class SettingFragment extends Fragment
             }
         }
 
-        ((MainActivity)mContext).runOnUiThread( ()->
-                Toast.makeText(
-                        mContext,
-                        getResources().getText(R.string.completeSaving)
-                        ,Toast.LENGTH_SHORT
-                ).show());
-
-    }
-
-    public FileOutputStream getDirectory(Uri uri, Context context) {
-        FileOutputStream fileOutputStream=null;
-        try {
-            pfd = context.getContentResolver().openFileDescriptor(uri, "w");
-            if(pfd!=null) fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
-        } catch (IOException e) {
-            logDebugData(LOG_TAG,"uri로 directory 얻기: "+e);
-        }
-        return fileOutputStream;
+        showToastOnUi(mContext, R.string.completeSaving);
     }
 
     public File getDirectory(String extension){
@@ -589,6 +549,17 @@ public class SettingFragment extends Fragment
 
         final String fileName="happy bank memo";
         return new File(directory, fileName+"_"+(count+1) + extension);
+    }
+
+    public FileOutputStream getDirectory(Uri uri, Context context) {
+        FileOutputStream fileOutputStream=null;
+        try {
+            pfd = context.getContentResolver().openFileDescriptor(uri, "w");
+            if(pfd!=null) fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
+        } catch (IOException e) {
+            logDebugData(LOG_TAG,"uri로 directory 얻기: "+e);
+        }
+        return fileOutputStream;
     }
 
 }

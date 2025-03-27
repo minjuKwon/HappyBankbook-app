@@ -1,5 +1,7 @@
 package com.example.happybankbook;
 
+import static com.example.happybankbook.Utils.showToastOnUi;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -50,6 +52,7 @@ public class PdfRunnable implements Runnable{
     @Override
     public void run() {
         PdfDocument pdfDocument=new PdfDocument();
+        showToastOnUi(mContext, R.string.savePermissionYes);
 
         for(int i=0;i<dataList.size();i++){
             drawPage(pdfDocument, dataList.get(i));
