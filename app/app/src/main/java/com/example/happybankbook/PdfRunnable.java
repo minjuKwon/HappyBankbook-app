@@ -17,7 +17,6 @@ import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 
 import com.example.happybankbook.db.MemoData;
-import com.example.happybankbook.view.SettingFragment;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,23 +28,28 @@ public class PdfRunnable implements Runnable{
     private static final int CANVAS_WIDTH=1080;
     private static final int CANVAS_HEIGHT=1920;
     private static final int BACKGROUND_HEIGHT=CANVAS_HEIGHT/15;
+
     private final Context mContext;
+    private final FileRunnable runnable;
     private final int branch;
     private final ArrayList<MemoData> dataList;
+
     private Uri uri;
     private String extension;
 
-    public PdfRunnable(ArrayList<MemoData> dataList, Context context, Uri uri){
-        this.dataList=dataList;
+    public PdfRunnable(Context context, ArrayList<MemoData> dataList, Uri uri, FileRunnable runnable){
         this.mContext=context;
+        this.dataList=dataList;
         this.uri=uri;
+        this.runnable=runnable;
         branch=1;
     }
 
-    public PdfRunnable(ArrayList<MemoData> dataList, Context context, String extension){
-        this.dataList=dataList;
+    public PdfRunnable(Context context, ArrayList<MemoData> dataList, String extension, FileRunnable runnable){
         this.mContext=context;
+        this.dataList=dataList;
         this.extension=extension;
+        this.runnable=runnable;
         branch=2;
     }
 
@@ -58,17 +62,15 @@ public class PdfRunnable implements Runnable{
             drawPage(pdfDocument, dataList.get(i));
         }
 
-        SettingFragment fragment=new SettingFragment();
-
         if(branch==1){
-            FileOutputStream fileOutputStream=fragment.getDirectory(uri,mContext);
+            FileOutputStream fileOutputStream=runnable.getDirectory(uri,mContext);
             try {
                 pdfDocument.writeTo(fileOutputStream);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         } else if(branch==2){
-            File file=fragment.getDirectory(extension);
+            File file=runnable.getDirectory(extension);
             try {
                 pdfDocument.writeTo(new FileOutputStream(file));
             } catch (IOException e) {

@@ -2,7 +2,6 @@ package com.example.happybankbook.view;
 
 import static android.app.Activity.RESULT_OK;
 
-import static com.example.happybankbook.Utils.logDebugData;
 import static com.example.happybankbook.Utils.showToastOnUi;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_LINE;
@@ -36,8 +35,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.ParcelFileDescriptor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,24 +50,16 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.happybankbook.FileRunnable;
 import com.example.happybankbook.PdfRunnable;
 import com.example.happybankbook.R;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.OutputPresenter;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-
 public class SettingFragment extends Fragment
         implements View.OnClickListener, RadioGroup.OnCheckedChangeListener
 {
-
-    private static final String LOG_TAG="FILE";
     private final String PERMISSION= Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
     private Context mContext;
@@ -80,7 +69,6 @@ public class SettingFragment extends Fragment
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private FileRunnable fileRunnable;
     private Thread fileThread;
-    private ParcelFileDescriptor pfd;
 
     private TextView ellipsisTextView, manualTextView, pdfTextView, excelTextView, txtTextView,
             openSourceTextView;
@@ -155,9 +143,9 @@ public class SettingFragment extends Fragment
         presenter.setMemoDataListCallback(list -> {
             PdfRunnable runnable=null;
             if(path instanceof Uri){
-                runnable=new PdfRunnable(list, mContext, Uri.parse(String.valueOf(path)));
+                runnable=new PdfRunnable(mContext, list, Uri.parse(String.valueOf(path)), new FileRunnable());
             }else if(path instanceof String){
-                runnable=new PdfRunnable(list, mContext, String.valueOf(path));
+                runnable=new PdfRunnable(mContext, list, String.valueOf(path), new FileRunnable());
             }
             Thread thread=new Thread(runnable);
             thread.start();
@@ -170,9 +158,9 @@ public class SettingFragment extends Fragment
         presenter.setStringBufferResultCallback(stringBuffer -> {
             buffer=stringBuffer;
             if(path instanceof Uri){
-                fileRunnable=new FileRunnable(buffer, Uri.parse(String.valueOf(path)));
+                fileRunnable=new FileRunnable(mContext, buffer, Uri.parse(String.valueOf(path)));
             }else if(path instanceof String){
-                fileRunnable=new FileRunnable(buffer, String.valueOf(path));
+                fileRunnable=new FileRunnable(mContext, buffer, String.valueOf(path));
             }
             fileThread=new Thread(fileRunnable);
             fileThread.start();
@@ -444,122 +432,5 @@ public class SettingFragment extends Fragment
 
        getParentFragmentManager().setFragmentResult(key, bundle);
    }
-
-    private class FileRunnable implements Runnable{
-
-        private final StringBuffer content;
-
-        private String extension;
-        private Uri uri;
-        private final int branch;
-        public FileRunnable(StringBuffer content, String extension){
-            this.content=content;
-            this.extension=extension;
-            branch=1;
-        }
-        public FileRunnable(StringBuffer content, Uri uri){
-            this.uri=uri;
-            this.content=content;
-            branch=2;
-        }
-
-        @Override
-        public void run() {
-            if(branch==1){
-                makeFile(content, extension);
-            }else if(branch==2){
-                makeFile(uri, content);
-            }
-        }
-
-    }
-
-    public void makeFile(StringBuffer content, String extension){
-        File file=getDirectory(extension);
-
-        FileWriter fw=null;
-        BufferedWriter writer=null;
-
-        try{
-            boolean hasFile=file.createNewFile();
-            if(hasFile){
-                showToastOnUi(mContext, R.string.savePermissionYes);
-                fw = new FileWriter(file);
-                writer = new BufferedWriter(fw);
-                String contentStr = String.valueOf(content);
-                writer.write(contentStr);
-            }
-        }catch(IOException e){
-            logDebugData(LOG_TAG,"파일 생성 실패: "+e);
-        }finally{
-            try {
-                if(writer!=null){writer.flush();writer.close();}
-                if(fw!=null){fw.flush();fw.close();}
-            }catch (IOException e2){
-                logDebugData(LOG_TAG,"파일 리소스 닫기: "+e2);
-            }
-        }
-
-        showToastOnUi(mContext, R.string.completeSaving);
-    }
-
-    public void makeFile(Uri uri, StringBuffer content){
-        pfd=null;
-        FileOutputStream fileOutputStream=null;
-        BufferedWriter bufferedWriter=null;
-
-        try{
-            showToastOnUi(mContext, R.string.savePermissionYes);
-            fileOutputStream=getDirectory(uri, mContext);
-            bufferedWriter=new BufferedWriter(new OutputStreamWriter(fileOutputStream));
-            String contentStr = String.valueOf(content);
-            bufferedWriter.write(contentStr);
-        }catch(IOException e){
-            logDebugData(LOG_TAG,"uri로 파일 생성 실패: "+e);
-        }finally{
-            try {
-                if(bufferedWriter!=null){bufferedWriter.flush();bufferedWriter.close();}
-                if(fileOutputStream!=null){fileOutputStream.flush();fileOutputStream.close();}
-                if(pfd!=null){pfd.close();}
-            }catch (IOException e2){
-                logDebugData(LOG_TAG,"uri 생성 파일 리소스 닫기: "+e2);
-            }
-        }
-
-        showToastOnUi(mContext, R.string.completeSaving);
-    }
-
-    public File getDirectory(String extension){
-        final String directoryName="/HappyBank";
-        final String pathName=Environment.getExternalStorageDirectory().getAbsolutePath();
-        File directory = new File(pathName+directoryName);
-        int count=0;
-
-        if (!directory.exists()) {
-            boolean isSuccess=directory.mkdirs();
-            if(!isSuccess){
-                logDebugData(LOG_TAG,"directory 생성 실패");
-            }
-        }
-
-        File[] files = directory.listFiles();
-        if(files!=null){
-            count=files.length;
-        }
-
-        final String fileName="happy bank memo";
-        return new File(directory, fileName+"_"+(count+1) + extension);
-    }
-
-    public FileOutputStream getDirectory(Uri uri, Context context) {
-        FileOutputStream fileOutputStream=null;
-        try {
-            pfd = context.getContentResolver().openFileDescriptor(uri, "w");
-            if(pfd!=null) fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
-        } catch (IOException e) {
-            logDebugData(LOG_TAG,"uri로 directory 얻기: "+e);
-        }
-        return fileOutputStream;
-    }
 
 }
