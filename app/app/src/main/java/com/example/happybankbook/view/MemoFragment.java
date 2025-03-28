@@ -2,6 +2,9 @@ package com.example.happybankbook.view;
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.example.happybankbook.Utils.convertDateToInt;
+import static com.example.happybankbook.Utils.setCurrentDate;
+import static com.example.happybankbook.Utils.setDate;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_MEMO_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_SIZE_SMALL;
@@ -108,7 +111,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((MainActivity)mActivity).setCurrentDate(dateTextView);
+        setCurrentDate(dateTextView);
         getGallery();
 
         SharedPreferences preferences=
@@ -186,7 +189,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
        if(v.getId()==R.id.txtMemoDate){
-           ((MainActivity)mActivity).setDate(dateTextView,mContext);
+           setDate(dateTextView, mContext);
        }else if(v.getId()==R.id.addPicture){
            loadImage();
        }else if(v.getId()==R.id.save){
@@ -208,7 +211,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
         MemoData data=new MemoData();
 
-        setDate(data);
+        getDate(data);
 
         String content=contentEditText.getText().toString();
         data.setContent(content);
@@ -239,15 +242,15 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         return dialog;
     }
 
-    private void setDate(MemoData data){
-        int dateInt=((MainActivity)mActivity).convertDateToInt(dateTextView);
+    private void getDate(MemoData data){
+        int dateInt= convertDateToInt(dateTextView);
         data.setDate(dateInt);
 
         presenter.setIntResultCallback(value -> data.setNum(value+1));
         presenter.getDataRange(RoomDB.getInstance(mContext).memoDao(), dateInt);
 
         //현재 날짜 받기
-        String currentDateStr=((MainActivity)mActivity).setCurrentDate();
+        String currentDateStr= setCurrentDate();
         String [] dateStr=currentDateStr.split("\\.");
         int currentDateInt=Integer.parseInt(dateStr[0]+dateStr[1]+dateStr[2]);
 

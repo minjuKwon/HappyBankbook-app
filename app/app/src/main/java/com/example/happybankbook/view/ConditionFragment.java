@@ -1,6 +1,9 @@
 package com.example.happybankbook.view;
 
+import static com.example.happybankbook.Utils.convertDateToInt;
 import static com.example.happybankbook.Utils.hideKeyboard;
+import static com.example.happybankbook.Utils.setCurrentDate;
+import static com.example.happybankbook.Utils.setDate;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_FROM_DATE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_CLICKED_ONCE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_INITIALIZATION;
@@ -152,8 +155,8 @@ public class ConditionFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
 
         //조회 날짜 기본 값 설정
-        ((MainActivity)mActivity).setCurrentDate(fromDurationTextView);
-        ((MainActivity)mActivity).setCurrentDate(toDurationTextView);
+        setCurrentDate(fromDurationTextView);
+        setCurrentDate(toDurationTextView);
 
         getSharedPreferences();
     }
@@ -168,9 +171,9 @@ public class ConditionFragment extends Fragment
         clickDuration();
 
         String fromDurationStr=
-                preferences.getString(PREF_KEY_FROM_DATE, ((MainActivity)mActivity).setCurrentDate());
+                preferences.getString(PREF_KEY_FROM_DATE, setCurrentDate());
         String toDurationStr=
-                preferences.getString(PREF_KEY_TO_DATE, ((MainActivity)mActivity).setCurrentDate());
+                preferences.getString(PREF_KEY_TO_DATE, setCurrentDate());
         fromDurationTextView.setText(fromDurationStr);
         toDurationTextView.setText(toDurationStr);
 
@@ -206,9 +209,9 @@ public class ConditionFragment extends Fragment
         }else if(v.getId()==R.id.duration){
             clickDuration();
         }else if(v.getId()==R.id.toDuration){
-            ((MainActivity)mActivity).setDate(toDurationTextView,mContext);
+            setDate(toDurationTextView,mContext);
         }else if(v.getId()==R.id.fromDuration){
-            ((MainActivity)mActivity).setDate(fromDurationTextView,mContext);
+            setDate(fromDurationTextView,mContext);
         }else if(v.getId()==R.id.buttonSubmit){
             submit();
         }else if(v.getId()==R.id.buttonInit){
@@ -265,8 +268,8 @@ public class ConditionFragment extends Fragment
             fromDate=DEFAULT_FROM_DATE;
             toDate=DEFAULT_TO_DATE;
         }else{
-            fromDate=((MainActivity)mActivity).convertDateToInt(fromDurationTextView);
-            toDate=((MainActivity)mActivity).convertDateToInt(toDurationTextView);
+            fromDate= convertDateToInt(fromDurationTextView);
+            toDate= convertDateToInt(toDurationTextView);
         }
         //조회할 메모 개수 얻기
         if(TextUtils.isEmpty(countStr)){
@@ -285,8 +288,8 @@ public class ConditionFragment extends Fragment
     }
 
     public void reset(){
-        ((MainActivity)mActivity).setCurrentDate(fromDurationTextView);
-        ((MainActivity)mActivity).setCurrentDate(toDurationTextView);
+        setCurrentDate(fromDurationTextView);
+        setCurrentDate(toDurationTextView);
         isNotDurationClick();
         newestSortRadioButton.setChecked(true);
         itemCountEditText.setText(null);
