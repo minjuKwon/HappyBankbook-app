@@ -154,7 +154,7 @@ public class PdfRunnable implements Runnable{
         }
     }
 
-    public Bitmap resizeBitmap(Bitmap bitmap, int newWidth, int newHeight){
+    private Bitmap resizeBitmap(Bitmap bitmap, int newWidth, int newHeight){
         int width=bitmap.getWidth();
         int height=bitmap.getHeight();
         while(width>=newWidth||height>=newHeight){

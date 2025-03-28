@@ -166,7 +166,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         return view;
     }
 
-    public void init(View view){
+    private void init(View view){
         viewPager=view.findViewById(R.id.viewPager2);
         forwardImageView=view.findViewById(R.id.imgForward);
         backImageView=view.findViewById(R.id.imgBack);
@@ -194,7 +194,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         presenter.getDataCount(RoomDB.getInstance(mContext).memoDao());
     }
 
-    public void changePage(){
+    private void changePage(){
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {

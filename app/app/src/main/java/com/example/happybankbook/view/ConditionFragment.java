@@ -238,7 +238,7 @@ public class ConditionFragment extends Fragment
         }
     }
 
-    public void clickDuration(){
+    private void clickDuration(){
         if(isClickedDuration){
             isDurationClick();
         }else{
@@ -246,21 +246,21 @@ public class ConditionFragment extends Fragment
         }
     }
 
-    public void isDurationClick(){
+    private void isDurationClick(){
         durationTextView.setTextColor(ContextCompat.getColor(mContext,R.color.black));
         fromDurationTextView.setVisibility(View.VISIBLE);
         toDurationTextView.setVisibility(View.VISIBLE);
         isClickedDuration=false;
     }
 
-    public void isNotDurationClick(){
+    private void isNotDurationClick(){
         durationTextView.setTextColor(ContextCompat.getColor(mContext,R.color.darkGray));
         fromDurationTextView.setVisibility(View.GONE);
         toDurationTextView.setVisibility(View.GONE);
         isClickedDuration=true;
     }
 
-    public void submit(){
+    private void submit(){
         int toDate, fromDate, count;
         String countStr= itemCountEditText.getText().toString();
         //정렬 날짜 범위 지정
@@ -287,7 +287,7 @@ public class ConditionFragment extends Fragment
         ((MainActivity)mActivity).removeFragment(this);
     }
 
-    public void reset(){
+    private void reset(){
         setCurrentDate(fromDurationTextView);
         setCurrentDate(toDurationTextView);
         isNotDurationClick();
@@ -299,7 +299,7 @@ public class ConditionFragment extends Fragment
         setSharedPreferences();
     }
 
-    public void sendBundle(int fromDate, int toDate, int count, boolean sort){
+    private void sendBundle(int fromDate, int toDate, int count, boolean sort){
         Bundle bundle=new Bundle();
         bundle.putInt(BUNDLE_KEY_FROM_DATE,fromDate);
         bundle.putInt(BUNDLE_KEY_TO_DATE,toDate);
@@ -310,7 +310,7 @@ public class ConditionFragment extends Fragment
         getParentFragmentManager().setFragmentResult(REQUEST_KEY_VIEWPAGER_SORT, bundle);
     }
 
-    public void setSharedPreferences(){
+    private void setSharedPreferences(){
         SharedPreferences preferences=
                 mActivity.getSharedPreferences(PREF_NAME_SORT, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();

@@ -120,7 +120,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         contentEditText.setTextSize(textSize);
     }
 
-    public void getGallery(){
+    private void getGallery(){
 
         activityResultLauncher=
                 registerForActivityResult(
@@ -197,7 +197,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
        }
     }
 
-    public void loadImage(){
+    private void loadImage(){
         final String imgType="image/*";
         final Uri contentUri= android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         Intent intent=new Intent(Intent.ACTION_GET_CONTENT).setDataAndType(contentUri, imgType);
@@ -205,7 +205,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         activityResultLauncher.launch(createChooserIntent);
     }
 
-    public void save(){
+    private void save(){
         //Dialog 설정
         Dialog dialog=setDialog();
 

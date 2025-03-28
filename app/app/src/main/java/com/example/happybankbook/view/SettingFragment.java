@@ -138,7 +138,7 @@ public class SettingFragment extends Fragment
 
     }
 
-    public <T> void exportPdf(T path){
+    private <T> void exportPdf(T path){
         presenter.getConvertedPdf(RoomDB.getInstance(mContext).memoDao());
         presenter.setMemoDataListCallback(list -> {
             PdfRunnable runnable=null;
@@ -152,7 +152,7 @@ public class SettingFragment extends Fragment
         });
     }
 
-    public <T> void exportTxtFile(char split,T path){
+    private <T> void exportTxtFile(char split,T path){
         presenter.getConvertedFile(RoomDB.getInstance(mContext).memoDao(),split);
 
         presenter.setStringBufferResultCallback(stringBuffer -> {
@@ -255,7 +255,7 @@ public class SettingFragment extends Fragment
         presenter.releaseView();
     }
 
-    public void resetRadioButton(){
+    private void resetRadioButton(){
         SharedPreferences preferences=
                 mActivity.getSharedPreferences(PREF_NAME_SET_STYLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
@@ -300,7 +300,7 @@ public class SettingFragment extends Fragment
         }
     }
 
-    public void setEllipsize(){
+    private void setEllipsize(){
         if(hasEllipsize){
             ellipsisTextView.setTextColor(ContextCompat.getColor(mContext,R.color.black));
             hasEllipsize=false;
@@ -310,14 +310,14 @@ public class SettingFragment extends Fragment
         }
     }
 
-    public void changeEllipsize(boolean check, String key){
+    private void changeEllipsize(boolean check, String key){
         Bundle bundle=new Bundle();
         bundle.putBoolean(BUNDLE_KEY_TEXT_ELLIPSIZE, check);
 
         getParentFragmentManager().setFragmentResult(key, bundle);
     }
 
-    public void makeExportDialog(int androidVersion, String type){
+    private void makeExportDialog(int androidVersion, String type){
         AlertDialog.Builder builder=new AlertDialog.Builder(mContext);
         final String message=fileExtension+" "+getResources().getText(R.string.doExport);
         builder.setMessage(message);
@@ -348,7 +348,7 @@ public class SettingFragment extends Fragment
         dialog.show();
     }
 
-    public void showManual(){
+    private void showManual(){
         AlertDialog.Builder builder=new AlertDialog.Builder(mContext);
         builder.setMessage(getResources().getText(R.string.manualDialog));
         builder.setNeutralButton(
@@ -403,14 +403,14 @@ public class SettingFragment extends Fragment
 
     }
 
-    public void setTextLine(boolean b1, boolean b2, int c1, int c2){
+    private void setTextLine(boolean b1, boolean b2, int c1, int c2){
         singleLineRadioButton.setChecked(b1);
         multiLineRadioButton.setChecked(b2);
         singleLineRadioButton.setTextColor(ContextCompat.getColor(mContext,c1));
         multiLineRadioButton.setTextColor(ContextCompat.getColor(mContext,c2));
     }
 
-    public void setTextSize(boolean b1, boolean b2, boolean b3, int c1, int c2, int c3){
+    private void setTextSize(boolean b1, boolean b2, boolean b3, int c1, int c2, int c3){
         textSizeOneRadioButton.setChecked(b1);
         textSizeTwoRadioButton.setChecked(b2);
         textSizeThreeRadioButton.setChecked(b3);
@@ -419,14 +419,14 @@ public class SettingFragment extends Fragment
         textSizeThreeRadioButton.setTextColor(ContextCompat.getColor(mContext,c3));
     }
 
-    public void changeTextSize(float size, String key){
+    private void changeTextSize(float size, String key){
         Bundle bundle=new Bundle();
         bundle.putFloat(BUNDLE_KEY_TEXT_SIZE,size);
 
         getParentFragmentManager().setFragmentResult(key, bundle);
     }
 
-   public void changeTextLine(int line, String key){
+    private void changeTextLine(int line, String key){
        Bundle bundle=new Bundle();
        bundle.putInt(BUNDLE_KEY_TEXT_LINE, line);
 
