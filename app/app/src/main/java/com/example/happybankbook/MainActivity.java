@@ -10,6 +10,9 @@ import com.example.happybankbook.view.MemoFragment;
 import com.example.happybankbook.view.SettingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView navigationView;

@@ -17,13 +17,15 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class OutputPresenter implements OutputContract.Presenter {
 
+    private final MemoDao memoDao;
     private final CompositeDisposable disposable;
 
     private StringBufferResultCallback stringBufferResultCallback;
     private MemoDataListCallback memoDataListCallback;
     private IntResultCallback intResultCallback;
 
-    public OutputPresenter(){
+    public OutputPresenter(MemoDao memoDao){
+        this.memoDao= memoDao;
         this.disposable=new CompositeDisposable();
     }
 
@@ -45,7 +47,7 @@ public class OutputPresenter implements OutputContract.Presenter {
     }
 
     @Override
-    public void getConvertedFile(MemoDao memoDao, char split) {
+    public void getConvertedFile(char split) {
         StringBuffer stringBuffer=new StringBuffer();
         disposable.add(
                 memoDao.getAll()
@@ -66,7 +68,7 @@ public class OutputPresenter implements OutputContract.Presenter {
     }
 
     @Override
-    public void getConvertedPdf(MemoDao memoDao) {
+    public void getConvertedPdf() {
         disposable.add(
                 memoDao.getAll()
                         .subscribeOn(Schedulers.io())
@@ -79,7 +81,7 @@ public class OutputPresenter implements OutputContract.Presenter {
     }
 
     @Override
-    public void getDataCount(MemoDao memoDao) {
+    public void getDataCount() {
         disposable.add(
                 Observable.just(memoDao)
                         .subscribeOn(Schedulers.io())

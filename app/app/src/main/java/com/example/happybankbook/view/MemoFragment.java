@@ -43,14 +43,20 @@ import com.bumptech.glide.Glide;
 import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.R;
 import com.example.happybankbook.db.MemoData;
-import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.MemoPresenter;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MemoFragment extends Fragment implements View.OnClickListener{
+
+    @Inject
+    MemoPresenter presenter;
 
     private Context mContext;
     private Activity mActivity;
-    private MemoPresenter presenter;
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
     private TextView dateTextView, okTextView, cancelTextView;
@@ -105,7 +111,6 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         addPictureTextView.setOnClickListener(this);
         saveTextView.setOnClickListener(this);
 
-        presenter=new MemoPresenter();
     }
 
     @Override
@@ -247,7 +252,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         data.setDate(dateInt);
 
         presenter.setIntResultCallback(value -> data.setNum(value+1));
-        presenter.getDataRange(RoomDB.getInstance(mContext).memoDao(), dateInt);
+        presenter.getDataRange(dateInt);
 
         //현재 날짜 받기
         String currentDateStr= setCurrentDate();
@@ -257,7 +262,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         //설정한 날짜가 현재 날짜와 다르면,
         // 중간에 메모가 삽입이 되는 것처럼 보이게 하기 위해 table num 값 update
         if(dateInt!=currentDateInt){
-            presenter.changeNum(RoomDB.getInstance(mContext).memoDao(), dateInt);
+            presenter.changeNum(dateInt);
         }
     }
 
@@ -297,7 +302,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
                 int priceInt=Integer.parseInt(priceStr);
                 data.setPrice(priceInt);
 
-                presenter.insertMemo(RoomDB.getInstance(mContext).memoDao(),data);
+                presenter.insertMemo(data);
                 dialog.dismiss();
                 ((MainActivity)mActivity).navigation(R.id.mainMenu);
             }catch(NumberFormatException e){

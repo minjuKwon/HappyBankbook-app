@@ -42,19 +42,24 @@ import com.example.happybankbook.R;
 import com.example.happybankbook.adapter.MemoType;
 import com.example.happybankbook.contract.SearchContract;
 import com.example.happybankbook.db.MemoData;
-import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.SearchPresenter;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class SearchFragment extends Fragment
         implements View.OnClickListener, View.OnFocusChangeListener,
                     SearchView.OnQueryTextListener, SearchContract.View
 {
+    @Inject
+    SearchPresenter presenter;
 
     private Context mContext;
     private Activity mActivity;
-    private SearchPresenter presenter;
     private MemoAdapter adapter;
 
     private RecyclerView recyclerView;
@@ -131,11 +136,10 @@ public class SearchFragment extends Fragment
         searchView.setIconified(false);
         searchView.setFocusable(true);
 
-        presenter=new SearchPresenter();
         presenter.setView(this);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter=new MemoAdapter(getContext(), MemoType.RECYCLER, textSize, textLine, hasTextEllipsize);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        adapter=new MemoAdapter(mContext, MemoType.RECYCLER, textSize, textLine, hasTextEllipsize);
         recyclerView.setAdapter(adapter);
 
         adapter.clearItems();
@@ -209,7 +213,7 @@ public class SearchFragment extends Fragment
             adapter.clearItems();
             recyclerView.removeAllViews();
         }else{
-            presenter.getData(RoomDB.getInstance(getContext()).memoDao(),newText);
+            presenter.getData(newText);
         }
         return true;
     }

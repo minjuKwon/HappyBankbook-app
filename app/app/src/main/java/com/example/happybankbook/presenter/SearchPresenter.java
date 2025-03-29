@@ -12,10 +12,14 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class SearchPresenter implements SearchContract.Presenter {
 
+    private final MemoDao memoDao;
     private final CompositeDisposable disposable;
     private SearchContract.View view;
 
-    public SearchPresenter(){this.disposable=new CompositeDisposable();}
+    public SearchPresenter(MemoDao memoDao){
+        this.memoDao= memoDao;
+        this.disposable=new CompositeDisposable();
+    }
 
     public void setView(SearchContract.View view) {
         this.view = view;
@@ -27,7 +31,7 @@ public class SearchPresenter implements SearchContract.Presenter {
     }
 
     @Override
-    public void getData(MemoDao memoDao,String keyword) {
+    public void getData(String keyword) {
         disposable.add(
                 memoDao.searchKeyword(keyword)
                         .subscribeOn(Schedulers.io())

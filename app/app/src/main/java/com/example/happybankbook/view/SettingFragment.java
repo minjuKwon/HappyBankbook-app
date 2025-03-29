@@ -53,18 +53,24 @@ import androidx.fragment.app.Fragment;
 import com.example.happybankbook.FileRunnable;
 import com.example.happybankbook.PdfRunnable;
 import com.example.happybankbook.R;
-import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.OutputPresenter;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class SettingFragment extends Fragment
         implements View.OnClickListener, RadioGroup.OnCheckedChangeListener
 {
+    @Inject
+    OutputPresenter presenter;
+
     private final String PERMISSION= Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
     private Context mContext;
     private Activity mActivity;
-    private OutputPresenter presenter;
     private ActivityResultLauncher<String> requestPermissionLauncher ;
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private FileRunnable fileRunnable;
@@ -139,7 +145,7 @@ public class SettingFragment extends Fragment
     }
 
     private <T> void exportPdf(T path){
-        presenter.getConvertedPdf(RoomDB.getInstance(mContext).memoDao());
+        presenter.getConvertedPdf();
         presenter.setMemoDataListCallback(list -> {
             PdfRunnable runnable=null;
             if(path instanceof Uri){
@@ -153,7 +159,7 @@ public class SettingFragment extends Fragment
     }
 
     private <T> void exportTxtFile(char split,T path){
-        presenter.getConvertedFile(RoomDB.getInstance(mContext).memoDao(),split);
+        presenter.getConvertedFile(split);
 
         presenter.setStringBufferResultCallback(stringBuffer -> {
             buffer=stringBuffer;
@@ -174,7 +180,6 @@ public class SettingFragment extends Fragment
         View view=inflater.inflate(R.layout.fragment_setting, container, false);
         initViews(view);
 
-        presenter=new OutputPresenter();
         setCheckedRadioButton();
         setListeners();
 
@@ -338,7 +343,7 @@ public class SettingFragment extends Fragment
                     }
                 }
             });
-            presenter.getDataCount(RoomDB.getInstance(mContext).memoDao());
+            presenter.getDataCount();
         });
         builder.setNegativeButton(
                 getResources().getText(R.string.cancel),

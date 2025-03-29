@@ -37,17 +37,23 @@ import com.example.happybankbook.adapter.MemoAdapter;
 import com.example.happybankbook.adapter.MemoType;
 import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.MemoData;
-import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.ListPresenter;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MemoDetailFragment extends Fragment implements ListContract.View,View.OnClickListener{
+
+    @Inject
+    ListPresenter presenter;
 
     private Context mContext;
     private Activity mActivity;
 
-    private ListPresenter presenter;
     private MemoAdapter adapter;
     private Handler handler;
 
@@ -109,37 +115,17 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
                             if(itemCount==0){
                                 presenter.setIntResultCallback(value -> {
                                     if(isNewestSort){
-                                        presenter.getDataDesc(
-                                                RoomDB.getInstance(mContext).memoDao(),
-                                                fromDate,
-                                                toDate,
-                                                value
-                                        );
+                                        presenter.getDataDesc(fromDate, toDate, value);
                                     }else{
-                                        presenter.getDataAsc(
-                                                RoomDB.getInstance(mContext).memoDao(),
-                                                fromDate,
-                                                toDate,
-                                                value
-                                        );
+                                        presenter.getDataAsc(fromDate, toDate, value);
                                     }
                                 });
-                                presenter.getDataCount(RoomDB.getInstance(mContext).memoDao());
+                                presenter.getDataCount();
                             }else{
                                 if(isNewestSort){
-                                    presenter.getDataDesc(
-                                            RoomDB.getInstance(mContext).memoDao(),
-                                            fromDate,
-                                            toDate,
-                                            itemCount
-                                    );
+                                    presenter.getDataDesc(fromDate, toDate, itemCount);
                                 }else{
-                                    presenter.getDataAsc(
-                                            RoomDB.getInstance(mContext).memoDao(),
-                                            fromDate,
-                                            toDate,
-                                            itemCount
-                                    );
+                                    presenter.getDataAsc(fromDate, toDate, itemCount);
                                 }
                             }
 
@@ -176,7 +162,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         backImageView.setOnClickListener(this);
         previousTextView.setOnClickListener(this);
 
-        presenter=new ListPresenter();
         presenter.setView(this);
 
         adapter=new MemoAdapter(mContext, MemoType.VIEWPAGER, textSize);
@@ -191,7 +176,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
 
     private void getRowCount(){
         presenter.setIntResultCallback(value -> rowCount=value);
-        presenter.getDataCount(RoomDB.getInstance(mContext).memoDao());
+        presenter.getDataCount();
     }
 
     private void changePage(){

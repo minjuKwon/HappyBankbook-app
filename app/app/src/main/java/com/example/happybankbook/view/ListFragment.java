@@ -51,17 +51,22 @@ import com.example.happybankbook.R;
 import com.example.happybankbook.adapter.MemoType;
 import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.MemoData;
-import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.presenter.ListPresenter;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class ListFragment extends Fragment implements View.OnClickListener, ListContract.View{
+    @Inject
+    ListPresenter presenter;
 
     private Context mContext;
     private Activity mActivity;
-    private ListPresenter presenter;
     private MemoAdapter adapter;
     private TextView totalPriceTextView;
 
@@ -166,7 +171,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         searchTextView.setOnClickListener(this);
         conditionTextView.setOnClickListener(this);
 
-        presenter=new ListPresenter();
         presenter.setView(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -185,7 +189,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
             String priceStr= formattedPrice.format(value);
             totalPriceTextView.setText(priceStr);
         });
-        presenter.getSumPrice(RoomDB.getInstance(mContext).memoDao(), mContext);
+        presenter.getSumPrice(mContext);
     }
 
     private void setMemoListCondition(){
@@ -194,7 +198,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         //viewpager 제외한 다른 프래그먼트 방문 후,
         // ListFragment 돌아온 경우는 데이터 조건을 초기화하여 모든 데이터 보여줌
         if(!hasVisitedViewPager||isInitialization){
-            presenter.getData(RoomDB.getInstance(mContext).memoDao());
+            presenter.getData();
         }else{
             keepCondition();
         }
@@ -267,37 +271,17 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         if(itemCount==0){
             presenter.setIntResultCallback(value -> {
                 if(isNewestSort){
-                    presenter.getDataDesc(
-                                RoomDB.getInstance(mContext).memoDao(),
-                                fromDate,
-                                toDate,
-                                value
-                    );
+                    presenter.getDataDesc(fromDate, toDate, value);
                 }else{
-                    presenter.getDataAsc(
-                                RoomDB.getInstance(mContext).memoDao(),
-                                fromDate,
-                                toDate,
-                                value
-                    );
+                    presenter.getDataAsc(fromDate, toDate, value );
                 }
             });
-            presenter.getDataCount(RoomDB.getInstance(mContext).memoDao());
+            presenter.getDataCount();
         }else{
             if(isNewestSort){
-                presenter.getDataDesc(
-                            RoomDB.getInstance(mContext).memoDao(),
-                            fromDate,
-                            toDate,
-                            itemCount
-                );
+                presenter.getDataDesc(fromDate, toDate, itemCount);
             }else{
-                presenter.getDataAsc(
-                            RoomDB.getInstance(mContext).memoDao(),
-                            fromDate,
-                            toDate,
-                            itemCount
-                );
+                presenter.getDataAsc(fromDate, toDate, itemCount);
             }
         }
     }

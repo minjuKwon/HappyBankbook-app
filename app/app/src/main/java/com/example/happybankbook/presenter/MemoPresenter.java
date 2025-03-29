@@ -11,10 +11,14 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MemoPresenter implements MemoContract.Presenter {
 
+    private final MemoDao memoDao;
     private final CompositeDisposable disposable;
     private IntResultCallback callback;
 
-    public MemoPresenter(){this.disposable=new CompositeDisposable();}
+    public MemoPresenter(MemoDao memoDao){
+        this.memoDao= memoDao;
+        this.disposable=new CompositeDisposable();
+    }
 
     public void setIntResultCallback(IntResultCallback callback){
         this.callback = callback;
@@ -26,7 +30,7 @@ public class MemoPresenter implements MemoContract.Presenter {
     }
 
     @Override
-    public void insertMemo(MemoDao memoDao, MemoData memoData) {
+    public void insertMemo(MemoData memoData) {
         disposable.add(
                 Observable.just(memoData)
                         .subscribeOn(Schedulers.io())
@@ -38,7 +42,7 @@ public class MemoPresenter implements MemoContract.Presenter {
     }
 
     @Override
-    public void getDataRange(MemoDao memoDao, int date) {
+    public void getDataRange(int date) {
         disposable.add(
                 Observable.just(memoDao)
                         .subscribeOn(Schedulers.io())
@@ -49,7 +53,7 @@ public class MemoPresenter implements MemoContract.Presenter {
     }
 
     @Override
-    public void changeNum(MemoDao memoDao, int date) {
+    public void changeNum(int date) {
         disposable.add(
                 Observable.just(memoDao)
                         .subscribeOn(Schedulers.io())

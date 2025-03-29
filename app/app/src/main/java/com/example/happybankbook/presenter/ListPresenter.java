@@ -19,13 +19,17 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ListPresenter implements ListContract.Presenter {
 
+    private final MemoDao memoDao;
     private final CompositeDisposable disposable;
     private LongResultCallback longResultCallback;
     private IntResultCallback intResultCallback;
     private ListContract.View view;
 
 
-    public ListPresenter(){this.disposable=new CompositeDisposable();}
+    public ListPresenter(MemoDao memoDao){
+        this.memoDao= memoDao;
+        this.disposable=new CompositeDisposable();
+    }
 
     public void setLongResultCallback(LongResultCallback callback){
         this.longResultCallback = callback;
@@ -45,7 +49,7 @@ public class ListPresenter implements ListContract.Presenter {
     }
 
     @Override
-    public void getData(MemoDao memoDao) {
+    public void getData() {
         disposable.add(
                 memoDao.getAll()
                         .subscribeOn(Schedulers.io())
@@ -57,7 +61,7 @@ public class ListPresenter implements ListContract.Presenter {
     }
 
     @Override
-    public void getDataAsc(MemoDao memoDao, int from, int to, int cnt) {
+    public void getDataAsc(int from, int to, int cnt) {
         disposable.add(
                 memoDao.searchAsc(from, to, cnt)
                         .subscribeOn(Schedulers.io())
@@ -69,7 +73,7 @@ public class ListPresenter implements ListContract.Presenter {
     }
 
     @Override
-    public void getDataDesc(MemoDao memoDao, int from, int to, int cnt) {
+    public void getDataDesc(int from, int to, int cnt) {
         disposable.add(
                 memoDao.searchDesc(from, to, cnt)
                         .subscribeOn(Schedulers.io())
@@ -81,7 +85,7 @@ public class ListPresenter implements ListContract.Presenter {
     }
 
     @Override
-    public void getDataCount(MemoDao memoDao) {
+    public void getDataCount() {
         disposable.add(
                 Observable.just(memoDao)
                         .subscribeOn(Schedulers.io())
@@ -92,7 +96,7 @@ public class ListPresenter implements ListContract.Presenter {
     }
 
     @Override
-    public void getSumPrice(MemoDao memoDao, Context context) {
+    public void getSumPrice(Context context) {
         disposable.add(
                 Observable.just(memoDao)
                         .subscribeOn(Schedulers.io())
