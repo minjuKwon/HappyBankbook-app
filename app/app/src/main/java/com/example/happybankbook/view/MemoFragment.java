@@ -40,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.happybankbook.ImageMimeTypeProvider;
 import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.R;
 import com.example.happybankbook.db.MemoData;
@@ -54,6 +55,8 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
     @Inject
     MemoPresenter presenter;
+    @Inject
+    ImageMimeTypeProvider imageMimeTypeProvider;
 
     private Context mContext;
     private Activity mActivity;
@@ -149,7 +152,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
     private void getImage(Uri imageUri){
         final String imageType=
-                mContext.getContentResolver().getType(imageUri);
+                imageMimeTypeProvider.getMimeType(imageUri);
         final MimeTypeMap mime = MimeTypeMap.getSingleton();
         String extension = mime.getExtensionFromMimeType(imageType);
         contentImageView.setTag(extension);
