@@ -13,8 +13,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isFocused;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static com.example.happybankbook.fake.FakeMimeTypeModule.provideFakeGifMimeTypeProvider;
+import static com.example.happybankbook.fake.FakeMimeTypeModule.provideFakeJpgMimeTypeProvider;
+import static com.example.happybankbook.fake.FakeMimeTypeModule.provideFakePngMimeTypeProvider;
 import static com.example.happybankbook.helper.TestHelper.MONTH;
 import static com.example.happybankbook.helper.TestHelper.YEAR;
 import static com.example.happybankbook.helper.TestHelper.dateFormat;
@@ -29,6 +33,8 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.net.Uri;
+import android.webkit.MimeTypeMap;
+import android.widget.ImageView;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
@@ -169,22 +175,42 @@ public class MemoSaveTest {
     }
 
     @Test
-    public void givenSaveMemoScreen_whenClickGalleryButton_thenCorrectImgIsShown(){
-        //가짜 이미지 생성
-        Intent resultData = new Intent();
-        Uri mockImageUri =
-                Uri.parse("android.resource://"
-                        +ApplicationProvider.getApplicationContext()
-                        .getPackageName() + "/" + com.example.happybankbook.R.drawable.test_img_png);
-        resultData.setData(mockImageUri);
-        Instrumentation.ActivityResult result =
-                new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
-        intending(anyIntent()).respondWith(result);
-        //갤러리 버튼 클릭
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.addPicture)).perform(click());
-        //이미지 보이는 지 확인
-        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imageView))
-                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+    public void givenSaveMemoScreen_whenClickGalleryButton_thenCorrectPngImgIsShown(){
+        Uri mockImageUri= getImage(R.drawable.test_img_png);
+
+        String imageType=
+                provideFakePngMimeTypeProvider().getMimeType(mockImageUri);
+        setTag(imageType);
+
+        saveMemoWithImage();
+    }
+
+    @Test
+    public void givenSaveMemoScreen_whenClickGalleryButton_thenCorrectJpgImgIsShown(){
+        Uri mockImageUri= getImage(R.drawable.test_img_jpeg);
+
+        String imageType=
+                provideFakeJpgMimeTypeProvider().getMimeType(mockImageUri);
+        setTag(imageType);
+
+        saveMemoWithImage();
+    }
+
+    @Test
+    public void givenSaveMemoScreen_whenClickGalleryButton_thenCorrectGifImgIsShown(){
+        Uri mockImageUri= getImage(R.drawable.test_img_gif);
+
+        String imageType=
+                provideFakeGifMimeTypeProvider().getMimeType(mockImageUri);
+        setTag(imageType);
+
+        onView(withId(R.id.editMemo)).perform(typeText(data[0].getMemo()));
+        onView(withId(R.id.save)).perform(click());
+
+        onView(isRoot()).perform(waitFor(500));
+        onView(ViewMatchers.withText(com.example.happybankbook.R.string.imageType))
+                .inRoot(withToast())
+                .check(matches(isDisplayed()));
     }
 
     @Test
@@ -245,6 +271,45 @@ public class MemoSaveTest {
 
         //저장된 메모 일치 여부 확인
         checkSavedMemoValue(data[1].getPrice());
+    }
+
+    private Uri getImage(int image){
+        //가짜 이미지 생성
+        Intent resultData = new Intent();
+        Uri mockImageUri =
+                Uri.parse("android.resource://"
+                        +ApplicationProvider.getApplicationContext()
+                        .getPackageName() + "/" + image);
+        resultData.setData(mockImageUri);
+        Instrumentation.ActivityResult result =
+                new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+        intending(anyIntent()).respondWith(result);
+        //갤러리 버튼 클릭
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.addPicture)).perform(click());
+        return mockImageUri;
+    }
+
+    private void setTag(String imageType){
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        String extension = mime.getExtensionFromMimeType(imageType);
+        // ActivityScenario를 사용하여 실제 Activity에 접근
+        scenario.onActivity(activity -> {
+            ImageView imageView = activity.findViewById(R.id.imageView);
+            imageView.setTag(extension); // 테스트에서 강제로 setTag() 설정
+        });
+
+        //이미지 보이는지 확인
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.imageView))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+    }
+
+    private void saveMemoWithImage(){
+        saveMemo(false, data[0]);
+        checkSavedMemo();
+        checkSavedMemoValue(data[0].getPrice());
+
+        onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailImg))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
     }
 
     private void checkSavedMemo(){
