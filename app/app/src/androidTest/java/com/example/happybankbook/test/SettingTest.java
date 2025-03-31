@@ -29,6 +29,7 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.example.happybankbook.MainActivity;
+import com.example.happybankbook.R;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.helper.TestMemoData;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
@@ -212,18 +213,48 @@ public class SettingTest {
     }
 
     @Test
+    public void givenEmptyMemo_whenClickedExportPdf_thenCorrectToastIsShown(){
+        db.clearAllTables();
+        checkExportIsSuccess(
+                com.example.happybankbook.R.id.pdf,"pdf", R.string.noMemo,false
+        );
+    }
+
+    @Test
+    public void givenEmptyMemo_whenClickedExportCsv_thenCorrectToastIsShown(){
+        db.clearAllTables();
+        checkExportIsSuccess(
+                com.example.happybankbook.R.id.excel,"excel", R.string.noMemo,false
+        );
+    }
+
+    @Test
+    public void givenEmptyMemo_whenClickedExportTxt_thenCorrectToastIsShown(){
+        db.clearAllTables();
+        checkExportIsSuccess(
+                com.example.happybankbook.R.id.txt,"txt", R.string.noMemo,false
+        );
+    }
+
+    @Test
     public void givenSettingScreen_whenClickedExportPdf_thenCorrectToastIsShown(){
-        checkExportIsSuccess(com.example.happybankbook.R.id.pdf,"pdf");
+        checkExportIsSuccess(
+                com.example.happybankbook.R.id.pdf,"pdf", R.string.savePermissionYes,true
+        );
     }
 
     @Test
     public void givenSettingScreen_whenClickedExportCsv_thenCorrectToastIsShown(){
-        checkExportIsSuccess(com.example.happybankbook.R.id.excel,"excel");
+        checkExportIsSuccess(
+                com.example.happybankbook.R.id.excel,"excel", R.string.savePermissionYes,true
+        );
     }
 
     @Test
     public void givenSettingScreen_whenClickedExportTxt_thenCorrectToastIsShown(){
-        checkExportIsSuccess(com.example.happybankbook.R.id.txt,"txt");
+        checkExportIsSuccess(
+                com.example.happybankbook.R.id.txt,"txt", R.string.savePermissionYes,true
+        );
     }
 
     @Test

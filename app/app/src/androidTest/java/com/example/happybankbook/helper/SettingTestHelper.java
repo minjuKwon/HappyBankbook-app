@@ -118,7 +118,7 @@ public class SettingTestHelper {
         onView(withId(id)).perform(click());
     }
 
-    public static void checkExportIsSuccess(int id,String type){
+    public static void checkExportIsSuccess(int id,String type, int toastId, boolean finished){
         onView(withId(id)).perform(click());
 
         String str=type+" "+ApplicationProvider
@@ -128,15 +128,17 @@ public class SettingTestHelper {
         onView(ViewMatchers.withText(com.example.happybankbook.R.string.OK)).perform(click());
         clickUiButton();
 
-        onView(ViewMatchers.withText(com.example.happybankbook.R.string.savePermissionYes))
+        onView(ViewMatchers.withText(toastId))
                 .inRoot(withToast())
                 .check(matches(isDisplayed()));
 
-        onView(isRoot()).perform(waitFor(2000));
+        if(finished){
+            onView(isRoot()).perform(waitFor(2000));
 
-        onView(ViewMatchers.withText(R.string.completeSaving))
-                .inRoot(withToast())
-                .check(matches(isDisplayed()));
+            onView(ViewMatchers.withText(R.string.completeSaving))
+                    .inRoot(withToast())
+                    .check(matches(isDisplayed()));
+        }
     }
 
 }
