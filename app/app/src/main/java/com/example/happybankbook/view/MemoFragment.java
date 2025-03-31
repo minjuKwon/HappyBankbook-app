@@ -40,8 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.happybankbook.ImageMimeTypeProvider;
-import com.example.happybankbook.MainActivity;
+import com.example.happybankbook.provider.ImageMimeTypeProvider;
 import com.example.happybankbook.R;
 import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.presenter.MemoPresenter;

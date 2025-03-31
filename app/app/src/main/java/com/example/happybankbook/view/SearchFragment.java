@@ -36,7 +36,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.adapter.MemoAdapter;
 import com.example.happybankbook.R;
 import com.example.happybankbook.adapter.MemoType;

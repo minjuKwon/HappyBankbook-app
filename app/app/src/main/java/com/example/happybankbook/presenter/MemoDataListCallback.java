@@ -1,4 +1,4 @@
-package com.example.happybankbook.presenterReturnInterface;
+package com.example.happybankbook.presenter;
 
 import com.example.happybankbook.db.MemoData;
 

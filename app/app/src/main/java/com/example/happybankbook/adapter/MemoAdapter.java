@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.happybankbook.MainActivity;
+import com.example.happybankbook.view.MainActivity;
 import com.example.happybankbook.R;
 import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.view.MemoDetailFragment;

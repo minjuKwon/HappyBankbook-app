@@ -1,4 +1,4 @@
-package com.example.happybankbook.presenterReturnInterface;
+package com.example.happybankbook.presenter;
 
 public interface StringBufferResultCallback {
     void onStringBufferResult(StringBuffer stringBuffer);

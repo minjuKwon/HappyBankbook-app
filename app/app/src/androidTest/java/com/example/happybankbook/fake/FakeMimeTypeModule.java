@@ -1,6 +1,6 @@
 package com.example.happybankbook.fake;
 
-import com.example.happybankbook.MimeTypeProvider;
+import com.example.happybankbook.provider.MimeTypeProvider;
 import com.example.happybankbook.module.MimeTypeModule;
 
 import dagger.Module;

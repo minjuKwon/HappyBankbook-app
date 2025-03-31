@@ -46,7 +46,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.R;
 
 public class ConditionFragment extends Fragment

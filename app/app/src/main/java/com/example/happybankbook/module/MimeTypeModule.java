@@ -2,8 +2,8 @@ package com.example.happybankbook.module;
 
 import android.content.Context;
 
-import com.example.happybankbook.ImageMimeTypeProvider;
-import com.example.happybankbook.MimeTypeProvider;
+import com.example.happybankbook.provider.ImageMimeTypeProvider;
+import com.example.happybankbook.provider.MimeTypeProvider;
 
 import dagger.Module;
 import dagger.Provides;

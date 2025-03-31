@@ -1,4 +1,4 @@
-package com.example.happybankbook;
+package com.example.happybankbook.provider;
 
 import android.net.Uri;
 

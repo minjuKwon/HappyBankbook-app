@@ -12,7 +12,7 @@ import static com.example.happybankbook.helper.TestHelper.saveMemo;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
 
-import com.example.happybankbook.MainActivity;
+import com.example.happybankbook.view.MainActivity;
 import com.example.happybankbook.R;
 import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.helper.TestMemoData;

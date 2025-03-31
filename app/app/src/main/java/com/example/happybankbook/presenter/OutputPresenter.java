@@ -2,9 +2,6 @@ package com.example.happybankbook.presenter;
 
 import android.util.Log;
 
-import com.example.happybankbook.presenterReturnInterface.IntResultCallback;
-import com.example.happybankbook.presenterReturnInterface.MemoDataListCallback;
-import com.example.happybankbook.presenterReturnInterface.StringBufferResultCallback;
 import com.example.happybankbook.contract.OutputContract;
 import com.example.happybankbook.db.MemoDao;
 import com.example.happybankbook.db.MemoData;

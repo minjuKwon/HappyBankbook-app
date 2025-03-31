@@ -7,8 +7,6 @@ import com.example.happybankbook.R;
 import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.MemoDao;
 import com.example.happybankbook.db.MemoData;
-import com.example.happybankbook.presenterReturnInterface.IntResultCallback;
-import com.example.happybankbook.presenterReturnInterface.LongResultCallback;
 
 import java.util.ArrayList;
 

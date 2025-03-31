@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.R;
 import com.example.happybankbook.adapter.MemoAdapter;
 import com.example.happybankbook.adapter.MemoType;

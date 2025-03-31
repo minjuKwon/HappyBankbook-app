@@ -3,7 +3,6 @@ package com.example.happybankbook.presenter;
 import com.example.happybankbook.contract.MemoContract;
 import com.example.happybankbook.db.MemoDao;
 import com.example.happybankbook.db.MemoData;
-import com.example.happybankbook.presenterReturnInterface.IntResultCallback;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;

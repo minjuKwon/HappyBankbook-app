@@ -2,7 +2,7 @@ package com.example.happybankbook.fake;
 
 import android.net.Uri;
 
-import com.example.happybankbook.MimeTypeProvider;
+import com.example.happybankbook.provider.MimeTypeProvider;
 
 public class FakeGifMimeTypeProvider implements MimeTypeProvider {
     @Override

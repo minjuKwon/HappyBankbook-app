@@ -1,4 +1,4 @@
-package com.example.happybankbook;
+package com.example.happybankbook.runnable;
 
 import static com.example.happybankbook.Utils.showToastOnUi;
 
@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.happybankbook.R;
 import com.example.happybankbook.db.MemoData;
+import com.example.happybankbook.view.MainActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
