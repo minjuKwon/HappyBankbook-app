@@ -34,20 +34,30 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.R;
+import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.helper.TestMemoData;
 import com.example.happybankbook.helper.TestMemoWithDayData;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(AndroidJUnit4.class)
+import javax.inject.Inject;
+
+import dagger.hilt.android.testing.HiltAndroidRule;
+import dagger.hilt.android.testing.HiltAndroidTest;
+
+@HiltAndroidTest
 public class MemoSaveTest {
+
+    @Rule
+    public HiltAndroidRule hiltRule = new HiltAndroidRule(this);
+    @Inject
+    RoomDB db;
 
     private static final TestMemoData[] data= {
             new TestMemoData("...?", "100"),
@@ -64,6 +74,8 @@ public class MemoSaveTest {
     public void setUp() {
         scenario = ActivityScenario.launch(MainActivity.class);
         Intents.init();
+        hiltRule.inject();
+        db.clearAllTables();
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.addMenu))
                 .check(matches(isDisplayed()));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.addMenu)).perform(click());
@@ -74,6 +86,7 @@ public class MemoSaveTest {
         if(scenario!=null)
             scenario.close();
         Intents.release();
+        db.close();
     }
 
     @Test

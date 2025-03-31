@@ -19,17 +19,30 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.example.happybankbook.MainActivity;
+import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.helper.TestMemoData;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.testing.HiltAndroidRule;
+import dagger.hilt.android.testing.HiltAndroidTest;
+
+@HiltAndroidTest
 public class DetailScreenTest {
+
+    @Rule
+    public HiltAndroidRule hiltRule = new HiltAndroidRule(this);
+    @Inject
+    RoomDB db;
 
     private static final TestMemoData[] data= {
             new TestMemoData("memo 1", "10"),
@@ -41,26 +54,25 @@ public class DetailScreenTest {
     private static final List<String> dataPriceList= Arrays.stream(data)
             .map(TestMemoData::getPrice)
             .collect(Collectors.toList());
-
-    private static boolean isMemoSaved=false;
     private ActivityScenario<MainActivity> scenario;
 
     @Before
     public void setUp(){
         scenario=ActivityScenario.launch(MainActivity.class);
-        if(!isMemoSaved){
-            saveMemo(true, data[0]);
-            saveMemo(true, data[1]);
-            saveMemo(true, data[2]);
-            saveMemo(true, data[3]);
-            saveMemo(true, data[4]);
-            isMemoSaved=true;
-        }
+        hiltRule.inject();
+        db.clearAllTables();
+
+        saveMemo(true, data[0]);
+        saveMemo(true, data[1]);
+        saveMemo(true, data[2]);
+        saveMemo(true, data[3]);
+        saveMemo(true, data[4]);
     }
 
     @After
-    public void closeScenario(){
+    public void closeResource(){
         if(scenario!=null) scenario.close();
+        db.close();
     }
 
    @Test

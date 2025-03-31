@@ -1,12 +1,9 @@
 package com.example.happybankbook.test;
 
+import static com.example.happybankbook.fake.FakeDatabaseModule.provideMemoDao;
 import static org.junit.Assert.assertEquals;
 
-import android.content.Context;
-
-import androidx.room.Room;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.example.happybankbook.db.MemoDao;
 import com.example.happybankbook.db.MemoData;
@@ -14,28 +11,33 @@ import com.example.happybankbook.db.RoomDB;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.rxjava3.plugins.RxJavaPlugins;
-import io.reactivex.rxjava3.schedulers.Schedulers;
+import javax.inject.Inject;
 
+import dagger.hilt.android.testing.HiltAndroidRule;
+import dagger.hilt.android.testing.HiltAndroidTest;
+
+@HiltAndroidTest
 @RunWith(AndroidJUnit4.class)
 public class MemoRepositoryTest {
 
-    private RoomDB db;
+    @Rule
+    public HiltAndroidRule hiltRule = new HiltAndroidRule(this);
+    @Inject
+    RoomDB db;
+
     private MemoDao dao;
 
     @Before
     public void createDb(){
-        Context contest = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        db= Room.inMemoryDatabaseBuilder(contest, RoomDB.class)
-                .build();
-        dao=db.memoDao();
-        RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
+        hiltRule.inject();
+        dao= provideMemoDao(db);
     }
 
     @After

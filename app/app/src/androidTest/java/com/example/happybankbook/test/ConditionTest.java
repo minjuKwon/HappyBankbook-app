@@ -31,17 +31,30 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.example.happybankbook.MainActivity;
+import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.helper.TestMemoWithDayData;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.testing.HiltAndroidRule;
+import dagger.hilt.android.testing.HiltAndroidTest;
+
+@HiltAndroidTest
 public class ConditionTest {
+
+    @Rule
+    public HiltAndroidRule hiltRule = new HiltAndroidRule(this);
+    @Inject
+    RoomDB db;
 
     private static final TestMemoWithDayData [] data= {
             new TestMemoWithDayData("memo 1", "10", 3),
@@ -53,28 +66,27 @@ public class ConditionTest {
     private static final List<String> dataPriceList= Arrays.stream(data)
                                                             .map(TestMemoWithDayData::getPrice)
                                                             .collect(Collectors.toList());
-    private static boolean isMemoSaved=false;
     private ActivityScenario<MainActivity> scenario;
 
     @Before
     public void setUp(){
         scenario= ActivityScenario.launch(MainActivity.class);
+        hiltRule.inject();
+        db.clearAllTables();
 
-        if(!isMemoSaved){
-            saveMemoWithDay(true, data[0]);
-            saveMemoWithDay(true, data[1]);
-            saveMemoWithDay(true, data[2]);
-            saveMemoWithDay(true, data[3]);
-            saveMemoWithDay(true, data[4]);
-            isMemoSaved=true;
-        }
+        saveMemoWithDay(true, data[0]);
+        saveMemoWithDay(true, data[1]);
+        saveMemoWithDay(true, data[2]);
+        saveMemoWithDay(true, data[3]);
+        saveMemoWithDay(true, data[4]);
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.txtCondition)).perform(click());
     }
 
     @After
-    public void closeScenario(){
+    public void closeResource(){
         if(scenario!=null) scenario.close();
+        db.close();
     }
 
     @Test

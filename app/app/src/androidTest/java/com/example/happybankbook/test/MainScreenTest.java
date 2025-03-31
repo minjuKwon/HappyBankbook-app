@@ -14,13 +14,26 @@ import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.example.happybankbook.MainActivity;
 import com.example.happybankbook.R;
+import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.helper.TestMemoData;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.testing.HiltAndroidRule;
+import dagger.hilt.android.testing.HiltAndroidTest;
+
+@HiltAndroidTest
 public class MainScreenTest {
+
+    @Rule
+    public HiltAndroidRule hiltRule = new HiltAndroidRule(this);
+    @Inject
+    RoomDB db;
 
     private static final TestMemoData[] data= {
             new TestMemoData("a","12"),
@@ -71,6 +84,8 @@ public class MainScreenTest {
 
     @Test
     public void givenAddedMultipleMemo_whenMainScreenIsDisplayed_thenCorrectPriceIsDisplayed(){
+        hiltRule.inject();
+
         int totalPrice=0;
         for(TestMemoData price:data){
             totalPrice+=Integer.parseInt(price.getPrice());
@@ -82,6 +97,9 @@ public class MainScreenTest {
 
         onView(ViewMatchers.withId(R.id.priceTotalTxt))
                 .check(matches(withText(String.valueOf(totalPrice))));
+
+        db.clearAllTables();
+        db.close();
     }
 
 }

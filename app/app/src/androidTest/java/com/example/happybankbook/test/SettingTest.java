@@ -29,40 +29,51 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.example.happybankbook.MainActivity;
+import com.example.happybankbook.db.RoomDB;
 import com.example.happybankbook.helper.TestMemoData;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.testing.HiltAndroidRule;
+import dagger.hilt.android.testing.HiltAndroidTest;
+
+@HiltAndroidTest
 public class SettingTest {
+
+    @Rule
+    public HiltAndroidRule hiltRule = new HiltAndroidRule(this);
+    @Inject
+    RoomDB db;
 
     private static final String keyword="twinkle";
     private static final int [] fontSize={12,15,18,21};
-    private static boolean isMemoSaved=false;
     private ActivityScenario<MainActivity> scenario;
 
     @Before
     public void setUp(){
         scenario = ActivityScenario.launch(MainActivity.class);
-        if(!isMemoSaved){
-            saveMemo(
-                    true,
-                    new TestMemoData(
-                            "Twinkle, twinkle, little star,\n" +
-                                    "How I wonder what you are",
-                            "1987654321")
-                    );
-
-            isMemoSaved=true;
-        }
+        hiltRule.inject();
+        db.clearAllTables();
+        saveMemo(
+                true,
+                new TestMemoData(
+                        "Twinkle, twinkle, little star,\n" +
+                                "How I wonder what you are",
+                        "1987654321")
+        );
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.settingMenu)).perform(click());
     }
 
     @After
-    public void closeScenario(){
+    public void closeResource(){
         if(scenario!=null) scenario.close();
+        db.close();
     }
 
     @Test
