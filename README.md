@@ -13,6 +13,7 @@
 - RxJava
 - Room
 - Glide
+- Hilt
 # 분석 및 설계
 - <p>Usecase Diagram
 ![Usecase Diagram](https://github.com/minjuKwon/HappyBankbook-app/blob/main/%ED%96%89%EB%B3%B5%ED%86%B5%EC%9E%A5_usecaseDiagram.png)</p>
@@ -27,15 +28,20 @@
 - [UI](https://github.com/minjuKwon/HappyBankbook-app/blob/main/%ED%96%89%EB%B3%B5%ED%86%B5%EC%9E%A5_UI_5_0815.pdf)
 # 주요기능
 - 메모하기
-
 - 메모 검색
 - 메모 필터링
 - 메모 내보내기
 # 출시
 https://play.google.com/store/apps/details?id=jadeBead.app.happybankbook
 
-출시일: 2023.12.29
+- 출시일: 2023.12.29
 
-버전 업데이트1(1.0.1): 2024.01.21
+- 버전 업데이트1(1.0.1): 2024.01.21
 
-버전 업데이트2(1.0.2): 2024.03.17
+- 버전 업데이트2(1.0.2): 2024.03.17
+
+- 버전 업데이트3(1.0.3): 2024.08.27
+
+- 리팩토링: 2025.01.31~2025.03.31
+
+- 버전 업데이트4(1.0.4): 2025.04.02
