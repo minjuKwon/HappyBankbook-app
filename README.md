@@ -14,6 +14,7 @@
 - Room
 - Glide
 - Hilt
+- UI Test
 # 분석 및 설계
 - <p>Usecase Diagram
 ![Usecase Diagram](https://github.com/minjuKwon/HappyBankbook-app/blob/main/%ED%96%89%EB%B3%B5%ED%86%B5%EC%9E%A5_usecaseDiagram.png)</p>
@@ -45,3 +46,5 @@ https://play.google.com/store/apps/details?id=jadeBead.app.happybankbook
 - 리팩토링: 2025.01.31~2025.03.31
 
 - 버전 업데이트4(1.0.4): 2025.04.02
+  
+- 버전 업데이트5(1.0.5): 2025.08.25
