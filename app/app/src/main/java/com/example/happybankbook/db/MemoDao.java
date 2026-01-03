@@ -14,18 +14,18 @@ public interface MemoDao {
     @Insert
     void insert(MemoData memo);
 
-    @Query("SELECT * FROM MemoData_table ORDER BY num DESC")
+    @Query("SELECT * FROM MemoData_table ORDER BY date DESC, idx DESC")
     Flowable<List<MemoData>> getAll();
 
     @Query("SELECT * FROM MemoData_table WHERE content LIKE '%' || :keyword || '%'")
     Flowable<List<MemoData>> searchKeyword(String keyword);
 
     @Query("SELECT * FROM MemoData_table WHERE date BETWEEN :from AND :to " +
-            "ORDER BY num ASC LIMIT :cnt")
+            "ORDER BY date ASC, idx ASC LIMIT :cnt")
     Flowable<List<MemoData>> searchAsc(int from, int to, int cnt);
 
     @Query("SELECT * FROM MemoData_table WHERE date BETWEEN :from AND :to " +
-            "ORDER BY num DESC LIMIT :cnt")
+            "ORDER BY date DESC, idx DESC LIMIT :cnt")
     Flowable<List<MemoData>> searchDesc(int from, int to, int cnt);
 
     @Query("SELECT COUNT(idx) FROM MemoData_table")
@@ -36,8 +36,5 @@ public interface MemoDao {
 
     @Query("SELECT SUM(price) FROM MemoData_table")
     long getTotalPrice();
-
-    @Query("UPDATE MemoData_table SET num=num+1 WHERE date>:date")
-    void changeNum(int date);
 
 }

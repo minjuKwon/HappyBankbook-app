@@ -51,8 +51,9 @@ public class OutputPresenter implements OutputContract.Presenter {
                         .subscribeOn(Schedulers.io())
                         .subscribe(
                                 item->{
-                                    for(MemoData data : item){
-                                        stringBuffer.append(data.getNum()).append(split)
+                                    for(int i=0;i<item.size();i++){
+                                        MemoData data= item.get(i);
+                                        stringBuffer.append(item.size()-i).append(split)
                                                 .append(data.getDate()).append(split)
                                                 .append(data.getContent()).append(split)
                                                 .append(data.getPrice()).append('\n');

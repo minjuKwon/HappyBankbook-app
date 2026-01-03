@@ -12,15 +12,10 @@ public class MemoPresenter implements MemoContract.Presenter {
 
     private final MemoDao memoDao;
     private final CompositeDisposable disposable;
-    private IntResultCallback callback;
 
     public MemoPresenter(MemoDao memoDao){
         this.memoDao= memoDao;
         this.disposable=new CompositeDisposable();
-    }
-
-    public void setIntResultCallback(IntResultCallback callback){
-        this.callback = callback;
     }
 
     @Override
@@ -36,28 +31,6 @@ public class MemoPresenter implements MemoContract.Presenter {
                         .subscribe(
                             item-> memoDao.insert(memoData)
 
-                        )
-        );
-    }
-
-    @Override
-    public void getDataRange(int date) {
-        disposable.add(
-                Observable.just(memoDao)
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(
-                                value-> callback.onIntResult(value.getRangeCount(date))
-                        )
-        );
-    }
-
-    @Override
-    public void changeNum(int date) {
-        disposable.add(
-                Observable.just(memoDao)
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(
-                                value->value.changeNum(date)
                         )
         );
     }

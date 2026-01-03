@@ -26,7 +26,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
     private int textLine;
     private float textSize;
     private boolean isFirstInteraction=true, isRecyclable=true, hasReceivedCondition=true;
-    private boolean textEllipsize, hasVisitedViewPager;
+    private boolean textEllipsize, hasVisitedViewPager, isNewestSort;
 
 
     public MemoAdapter(Context context, MemoType memoType, float textSize){
@@ -35,14 +35,20 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         this.textSize=textSize;
     }
 
-    public MemoAdapter(Context context, MemoType memoType,
-                       float textSize, int textLine, boolean textEllipsize
+    public MemoAdapter(
+            Context context,
+            MemoType memoType,
+            float textSize,
+            int textLine,
+            boolean textEllipsize,
+            boolean isNewestSort
     ){
         this.mContext=context;
         this.memoType=memoType;
         this.textSize=textSize;
         this.textLine=textLine;
         this.textEllipsize=textEllipsize;
+        this.isNewestSort=isNewestSort;
     }
 
     @NonNull
@@ -76,7 +82,10 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         if(holder instanceof RecyclerViewHolder){
             RecyclerViewHolder recyclerViewHolder=(RecyclerViewHolder)holder;
             data=dataList.get(recyclerViewHolder.getBindingAdapterPosition());
-            recyclerViewHolder.onBind(data, mContext, position, textSize, textLine, textEllipsize);
+            int displayNum= isNewestSort?dataList.size()-position:position+1;
+
+            recyclerViewHolder.onBind(data, mContext, position,displayNum, textSize, textLine, textEllipsize);
+
             //recyclerview position 얻기 위한 클릭 이벤트
             recyclerViewHolder.setOnItemClickListener(() -> {
                 ((MainActivity)mContext).addFragment(new MemoDetailFragment());
@@ -115,10 +124,11 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         return position;
     }
 
-    public void setItems(ArrayList<MemoData>data){
+    public void setItems(ArrayList<MemoData>data, Boolean isNewestSort){
         DiffUtil.DiffResult diffResult=
                 DiffUtil.calculateDiff(new MemoDiffUtilCallback(dataList,data));
         dataList=data;
+        this.isNewestSort=isNewestSort;
         diffResult.dispatchUpdatesTo(this);
     }
 

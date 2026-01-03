@@ -70,6 +70,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
 
     private float textSize= TEXT_SIZE_DEFAULT_SMALL;
     private boolean isFirstInteraction=true;
+    private boolean isNewestSort;
     private int itemCount, fromDate, toDate, rowCount, currentPosition, adapterPosition;
 
 
@@ -103,7 +104,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
                             fromDate=result.getInt(BUNDLE_KEY_FROM_DATE);
                             toDate=result.getInt(BUNDLE_KEY_TO_DATE);
                             itemCount=result.getInt(BUNDLE_KEY_ITEM_COUNT);
-                            boolean isNewestSort=result.getBoolean(BUNDLE_KEY_IS_NEWEST_SORT);
+                            isNewestSort=result.getBoolean(BUNDLE_KEY_IS_NEWEST_SORT);
 
                             if(fromDate>toDate){
                                 int temp=fromDate;
@@ -256,7 +257,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
 
     @Override
     public void setItems(ArrayList<MemoData> items) {
-        adapter.setItems(items);
+        adapter.setItems(items, isNewestSort);
         adapter.notifyDataSetChanged();
         adapter.setCondition(true);
     }

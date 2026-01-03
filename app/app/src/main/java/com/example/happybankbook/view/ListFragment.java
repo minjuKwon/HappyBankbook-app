@@ -73,8 +73,9 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     private int textLine= TEXT_LINE_DEFAULT;
     private float textSize= TEXT_SIZE_DEFAULT_LARGE;
     private boolean hasTextEllipsize= TEXT_ELLIPSIZE_DEFAULT;
+    private boolean isNewestSort=true;
     private int itemCount, fromDate, toDate;
-    private boolean isNewestSort, isInitialization;
+    private boolean isInitialization;
 
 
     @Override
@@ -173,7 +174,14 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         presenter.setView(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter=new MemoAdapter(mContext, MemoType.RECYCLER, textSize, textLine, hasTextEllipsize);
+        adapter = new MemoAdapter(
+                mContext,
+                MemoType.RECYCLER,
+                textSize,
+                textLine,
+                hasTextEllipsize,
+                isNewestSort
+        );
         recyclerView.setAdapter(adapter);
 
         getMemoTotalPrice();
@@ -287,7 +295,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
 
     @Override
     public void setItems(ArrayList<MemoData> items) {
-        adapter.setItems(items);
+        adapter.setItems(items, isNewestSort);
     }
 
     @Override

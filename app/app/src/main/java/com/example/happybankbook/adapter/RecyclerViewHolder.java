@@ -37,14 +37,20 @@ public class RecyclerViewHolder extends BaseItemView{
         this.onItemClickListener=listener;
     }
 
-    public void onBind(BaseItem data, Context context,
-                       int position, float textSize, int textLine, boolean hasTextEllipsize
+    public void onBind(
+            BaseItem data,
+            Context context,
+            int position,
+            int displayNum,
+            float textSize,
+            int textLine,
+            boolean hasTextEllipsize
     ){
         MemoData memoData=(MemoData)data;
 
         setTextStyle(textSize, textLine, hasTextEllipsize);
 
-        String formattedIdx= getFormattedString("%,d", memoData.getNum());
+        String formattedIdx= getFormattedString("%,d", displayNum);
         String formattedDate= getFormattedString("%d", memoData.getDate());
         String formattedPrice= getFormattedString("%,d", memoData.getPrice());
 

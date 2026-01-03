@@ -218,7 +218,8 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
         MemoData data=new MemoData();
 
-        getDate(data);
+        int dateInt= convertDateToInt(dateTextView);
+        data.setDate(dateInt);
 
         String content=contentEditText.getText().toString();
         data.setContent(content);
@@ -247,25 +248,6 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         cancelTextView=dialog.findViewById(R.id.cancel);
         happyValueEditText=dialog.findViewById(R.id.editHappy);
         return dialog;
-    }
-
-    private void getDate(MemoData data){
-        int dateInt= convertDateToInt(dateTextView);
-        data.setDate(dateInt);
-
-        presenter.setIntResultCallback(value -> data.setNum(value+1));
-        presenter.getDataRange(dateInt);
-
-        //현재 날짜 받기
-        String currentDateStr= setCurrentDate();
-        String [] dateStr=currentDateStr.split("\\.");
-        int currentDateInt=Integer.parseInt(dateStr[0]+dateStr[1]+dateStr[2]);
-
-        //설정한 날짜가 현재 날짜와 다르면,
-        // 중간에 메모가 삽입이 되는 것처럼 보이게 하기 위해 table num 값 update
-        if(dateInt!=currentDateInt){
-            presenter.changeNum(dateInt);
-        }
     }
 
     private boolean setImage(MemoData data){

@@ -138,7 +138,7 @@ public class SearchFragment extends Fragment
         presenter.setView(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter=new MemoAdapter(mContext, MemoType.RECYCLER, textSize, textLine, hasTextEllipsize);
+        adapter=new MemoAdapter(mContext, MemoType.RECYCLER, textSize, textLine, hasTextEllipsize,true);
         recyclerView.setAdapter(adapter);
 
         adapter.clearItems();
@@ -191,7 +191,7 @@ public class SearchFragment extends Fragment
 
     @Override
     public void setItems(ArrayList<MemoData> items) {
-        adapter.setItems(items);
+        adapter.setItems(items, true);
     }
 
     @Override

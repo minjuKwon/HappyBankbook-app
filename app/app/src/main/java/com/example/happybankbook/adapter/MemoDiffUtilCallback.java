@@ -35,7 +35,7 @@ public class MemoDiffUtilCallback extends DiffUtil.Callback {
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
         MemoData oldItem= oldList.get(oldItemPosition);
         MemoData newItem= newList.get(newItemPosition);
-        return oldItem.getNum()==newItem.getNum();
+        return oldItem.getIdx()==newItem.getIdx();
     }
 
 }
