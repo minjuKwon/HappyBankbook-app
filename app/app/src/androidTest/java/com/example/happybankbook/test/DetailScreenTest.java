@@ -60,7 +60,6 @@ public class DetailScreenTest {
     public void setUp(){
         scenario=ActivityScenario.launch(MainActivity.class);
         hiltRule.inject();
-        db.clearAllTables();
 
         saveMemo(true, data[0]);
         saveMemo(true, data[1]);

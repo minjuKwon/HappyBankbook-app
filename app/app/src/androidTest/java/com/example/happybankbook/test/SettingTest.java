@@ -60,7 +60,6 @@ public class SettingTest {
     public void setUp(){
         scenario = ActivityScenario.launch(MainActivity.class);
         hiltRule.inject();
-        db.clearAllTables();
         saveMemo(
                 true,
                 new TestMemoData(

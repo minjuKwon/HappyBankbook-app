@@ -22,13 +22,13 @@ import dagger.hilt.testing.TestInstallIn;
         replaces = DatabaseModule.class
 )
 public class FakeDatabaseModule {
-    private static final String DATABASE_NAME="database";
-
     @Provides
     @Singleton
     public static RoomDB provideDatabase(@ApplicationContext Context context){
-        return Room.databaseBuilder(context.getApplicationContext(),RoomDB.class,DATABASE_NAME)
-                .build();
+        return Room.inMemoryDatabaseBuilder(
+                context,
+                RoomDB.class
+        ).allowMainThreadQueries().build();
     }
 
     @Provides

@@ -42,10 +42,7 @@ public class MemoRepositoryTest {
 
     @After
     public void closeDb(){
-        if (db!=null&&db.isOpen()) {
-            db.clearAllTables();
-            db.close();
-        }
+        db.close();
     }
 
     @Test

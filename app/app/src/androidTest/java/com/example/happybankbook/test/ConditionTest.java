@@ -72,7 +72,6 @@ public class ConditionTest {
     public void setUp(){
         scenario= ActivityScenario.launch(MainActivity.class);
         hiltRule.inject();
-        db.clearAllTables();
 
         saveMemoWithDay(true, data[0]);
         saveMemoWithDay(true, data[1]);

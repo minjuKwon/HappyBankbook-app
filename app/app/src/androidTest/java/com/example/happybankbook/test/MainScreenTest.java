@@ -98,7 +98,6 @@ public class MainScreenTest {
         onView(ViewMatchers.withId(R.id.priceTotalTxt))
                 .check(matches(withText(String.valueOf(totalPrice))));
 
-        db.clearAllTables();
         db.close();
     }
 

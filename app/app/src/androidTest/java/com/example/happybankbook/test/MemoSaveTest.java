@@ -81,7 +81,6 @@ public class MemoSaveTest {
         scenario = ActivityScenario.launch(MainActivity.class);
         Intents.init();
         hiltRule.inject();
-        db.clearAllTables();
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.addMenu))
                 .check(matches(isDisplayed()));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.addMenu)).perform(click());
