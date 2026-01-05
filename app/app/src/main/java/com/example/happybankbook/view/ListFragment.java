@@ -67,6 +67,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     private Context mContext;
     private Activity mActivity;
     private MemoAdapter adapter;
+    private RecyclerView recyclerView;
     private TextView totalPriceTextView;
 
     private int clickCountCondition=1;
@@ -163,7 +164,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     }
 
     private void init(View v){
-        RecyclerView recyclerView=v.findViewById(R.id.recyclerMemo);
+        recyclerView=v.findViewById(R.id.recyclerMemo);
         TextView searchTextView=v.findViewById(R.id.txtSearch);
         TextView conditionTextView=v.findViewById(R.id.txtCondition);
         totalPriceTextView=v.findViewById(R.id.priceTotalTxt);
@@ -182,6 +183,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
                 hasTextEllipsize
         );
         recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(null);
 
         getMemoTotalPrice();
 
@@ -294,7 +296,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
 
     @Override
     public void setItems(ArrayList<UiMemoData> items) {
-        adapter.setItems(items);
+        adapter.setItems(items, ()-> recyclerView.scrollToPosition(0));
     }
 
     @Override

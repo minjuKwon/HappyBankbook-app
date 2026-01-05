@@ -128,6 +128,11 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         diffResult.dispatchUpdatesTo(this);
     }
 
+    public void setItems(ArrayList<UiMemoData>data, Runnable onCommitted){
+        setItems(data);
+        onCommitted.run();
+    }
+
     public void setTextSize(float size){
         textSize=size;
     }
