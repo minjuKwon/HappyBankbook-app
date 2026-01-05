@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.happybankbook.R;
 import com.example.happybankbook.db.BaseItem;
-import com.example.happybankbook.db.MemoData;
+import com.example.happybankbook.db.UiMemoData;
 
 public class RecyclerViewHolder extends BaseItemView{
 
@@ -41,16 +41,15 @@ public class RecyclerViewHolder extends BaseItemView{
             BaseItem data,
             Context context,
             int position,
-            int displayNum,
             float textSize,
             int textLine,
             boolean hasTextEllipsize
     ){
-        MemoData memoData=(MemoData)data;
+        UiMemoData memoData=(UiMemoData)data;
 
         setTextStyle(textSize, textLine, hasTextEllipsize);
 
-        String formattedIdx= getFormattedString("%,d", displayNum);
+        String formattedIdx= getFormattedString("%,d", memoData.getNum());
         String formattedDate= getFormattedString("%d", memoData.getDate());
         String formattedPrice= getFormattedString("%,d", memoData.getPrice());
 

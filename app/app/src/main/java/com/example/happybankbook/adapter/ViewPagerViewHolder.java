@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 
 import com.example.happybankbook.R;
 import com.example.happybankbook.db.BaseItem;
-import com.example.happybankbook.db.MemoData;
+import com.example.happybankbook.db.UiMemoData;
 
 public class ViewPagerViewHolder extends BaseItemView {
 
@@ -30,7 +30,7 @@ public class ViewPagerViewHolder extends BaseItemView {
     }
 
     public void onBind(BaseItem data, Context context, float textSize){
-        MemoData memoData=(MemoData)data;
+        UiMemoData memoData=(UiMemoData)data;
 
         dateTextView.setText(getFormattedDate(memoData));
 
@@ -49,7 +49,7 @@ public class ViewPagerViewHolder extends BaseItemView {
 
     }
 
-    private String getFormattedDate(MemoData memoData){
+    private String getFormattedDate(UiMemoData memoData){
         String date=Integer.toString(memoData.getDate());
         String year=date.substring(0,4);
         String month=date.substring(4,6);

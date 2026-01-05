@@ -3,6 +3,7 @@ package com.example.happybankbook.presenter;
 import com.example.happybankbook.contract.SearchContract;
 import com.example.happybankbook.db.MemoDao;
 import com.example.happybankbook.db.MemoData;
+import com.example.happybankbook.db.UiMemoData;
 
 import java.util.ArrayList;
 
@@ -37,7 +38,21 @@ public class SearchPresenter implements SearchContract.Presenter {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                item-> view.setItems((ArrayList<MemoData>)item)
+                                item->{
+                                    ArrayList<UiMemoData> list = new ArrayList<>();
+                                    for(int i=0;i<item.size();i++){
+                                        MemoData data= item.get(i);
+                                        list.add(new UiMemoData(
+                                                data.idx,
+                                                item.size()-i,
+                                                data.date,
+                                                data.price,
+                                                data.content,
+                                                data.image
+                                        ));
+                                    }
+                                    view.setItems(list);
+                                }
 
                         )
         );

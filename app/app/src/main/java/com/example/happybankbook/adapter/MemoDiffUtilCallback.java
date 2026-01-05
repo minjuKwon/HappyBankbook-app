@@ -2,16 +2,16 @@ package com.example.happybankbook.adapter;
 
 import androidx.recyclerview.widget.DiffUtil;
 
-import com.example.happybankbook.db.MemoData;
+import com.example.happybankbook.db.UiMemoData;
 
 import java.util.List;
 
 public class MemoDiffUtilCallback extends DiffUtil.Callback {
 
-    private final List<MemoData> oldList;
-    private final List<MemoData> newList;
+    private final List<UiMemoData> oldList;
+    private final List<UiMemoData> newList;
 
-    public MemoDiffUtilCallback(List<MemoData> oldList, List<MemoData> newList) {
+    public MemoDiffUtilCallback(List<UiMemoData> oldList, List<UiMemoData> newList) {
         this.oldList = oldList;
         this.newList = newList;
     }
@@ -33,9 +33,9 @@ public class MemoDiffUtilCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        MemoData oldItem= oldList.get(oldItemPosition);
-        MemoData newItem= newList.get(newItemPosition);
-        return oldItem.getIdx()==newItem.getIdx();
+        UiMemoData oldItem= oldList.get(oldItemPosition);
+        UiMemoData newItem= newList.get(newItemPosition);
+        return oldItem.getNum()==newItem.getNum();
     }
 
 }

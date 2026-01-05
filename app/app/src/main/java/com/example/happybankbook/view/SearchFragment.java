@@ -40,7 +40,7 @@ import com.example.happybankbook.adapter.MemoAdapter;
 import com.example.happybankbook.R;
 import com.example.happybankbook.adapter.MemoType;
 import com.example.happybankbook.contract.SearchContract;
-import com.example.happybankbook.db.MemoData;
+import com.example.happybankbook.db.UiMemoData;
 import com.example.happybankbook.presenter.SearchPresenter;
 
 import java.util.ArrayList;
@@ -138,7 +138,7 @@ public class SearchFragment extends Fragment
         presenter.setView(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter=new MemoAdapter(mContext, MemoType.RECYCLER, textSize, textLine, hasTextEllipsize,true);
+        adapter=new MemoAdapter(mContext, MemoType.RECYCLER, textSize, textLine, hasTextEllipsize);
         recyclerView.setAdapter(adapter);
 
         adapter.clearItems();
@@ -190,8 +190,8 @@ public class SearchFragment extends Fragment
     }
 
     @Override
-    public void setItems(ArrayList<MemoData> items) {
-        adapter.setItems(items, true);
+    public void setItems(ArrayList<UiMemoData> items) {
+        adapter.setItems(items);
     }
 
     @Override

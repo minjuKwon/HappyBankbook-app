@@ -7,6 +7,7 @@ import com.example.happybankbook.R;
 import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.MemoDao;
 import com.example.happybankbook.db.MemoData;
+import com.example.happybankbook.db.UiMemoData;
 
 import java.util.ArrayList;
 
@@ -53,7 +54,21 @@ public class ListPresenter implements ListContract.Presenter {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                            item->view.setItems((ArrayList<MemoData>)item)
+                            item->{
+                                ArrayList<UiMemoData> list = new ArrayList<>();
+                                for(int i=0;i<item.size();i++){
+                                    MemoData data= item.get(i);
+                                    list.add(new UiMemoData(
+                                            data.getIdx(),
+                                            item.size()-i,
+                                            data.getDate(),
+                                            data.getPrice(),
+                                            data.getContent(),
+                                            data.getImage()
+                                    ));
+                                }
+                                view.setItems(list);
+                            }
                         )
         );
     }
@@ -65,7 +80,21 @@ public class ListPresenter implements ListContract.Presenter {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                            item->view.setItems((ArrayList<MemoData>)item)
+                                item->{
+                                    ArrayList<UiMemoData> list = new ArrayList<>();
+                                    for(int i=0;i<item.size();i++){
+                                        MemoData data= item.get(i);
+                                        list.add(new UiMemoData(
+                                                data.getIdx(),
+                                                i+1,
+                                                data.getDate(),
+                                                data.getPrice(),
+                                                data.getContent(),
+                                                data.getImage()
+                                        ));
+                                    }
+                                    view.setItems(list);
+                                }
                         )
         );
     }
@@ -77,7 +106,21 @@ public class ListPresenter implements ListContract.Presenter {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                item->view.setItems((ArrayList<MemoData>)item)
+                                item->{
+                                    ArrayList<UiMemoData> list = new ArrayList<>();
+                                    for(int i=0;i<item.size();i++){
+                                        MemoData data= item.get(i);
+                                        list.add(new UiMemoData(
+                                                data.getIdx(),
+                                                item.size()-i,
+                                                data.getDate(),
+                                                data.getPrice(),
+                                                data.getContent(),
+                                                data.getImage()
+                                        ));
+                                    }
+                                    view.setItems(list);
+                                }
                         )
         );
     }

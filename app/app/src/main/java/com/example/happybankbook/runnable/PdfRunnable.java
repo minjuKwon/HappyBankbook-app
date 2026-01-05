@@ -17,7 +17,7 @@ import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 
 import com.example.happybankbook.R;
-import com.example.happybankbook.db.MemoData;
+import com.example.happybankbook.db.UiMemoData;
 import com.example.happybankbook.view.MainActivity;
 
 import java.io.File;
@@ -34,12 +34,12 @@ public class PdfRunnable implements Runnable{
     private final Context mContext;
     private final FileRunnable runnable;
     private final int branch;
-    private final ArrayList<MemoData> dataList;
+    private final ArrayList<UiMemoData> dataList;
 
     private Uri uri;
     private String extension;
 
-    public PdfRunnable(Context context, ArrayList<MemoData> dataList, Uri uri, FileRunnable runnable){
+    public PdfRunnable(Context context, ArrayList<UiMemoData> dataList, Uri uri, FileRunnable runnable){
         this.mContext=context;
         this.dataList=dataList;
         this.uri=uri;
@@ -47,7 +47,7 @@ public class PdfRunnable implements Runnable{
         branch=1;
     }
 
-    public PdfRunnable(Context context, ArrayList<MemoData> dataList, String extension, FileRunnable runnable){
+    public PdfRunnable(Context context, ArrayList<UiMemoData> dataList, String extension, FileRunnable runnable){
         this.mContext=context;
         this.dataList=dataList;
         this.extension=extension;
@@ -90,7 +90,7 @@ public class PdfRunnable implements Runnable{
                 ).show());
     }
 
-    private void drawPage(PdfDocument pdfDocument, MemoData data){
+    private void drawPage(PdfDocument pdfDocument, UiMemoData data){
         PdfDocument.PageInfo pageInfo;
         PdfDocument.Page page;
         Canvas canvas;
@@ -124,7 +124,7 @@ public class PdfRunnable implements Runnable{
         pdfDocument.finishPage(page);
     }
 
-    private void drawDate(Canvas canvas, MemoData data){
+    private void drawDate(Canvas canvas, UiMemoData data){
         int date=data.getDate();
         int year=date/10000;
         date-=year*10000;
@@ -141,7 +141,7 @@ public class PdfRunnable implements Runnable{
         canvas.drawText(formattedDate,(float)(CANVAS_WIDTH/2), BACKGROUND_HEIGHT+180, datePaint);
     }
 
-    private void drawContentImage(Canvas canvas, MemoData data){
+    private void drawContentImage(Canvas canvas, UiMemoData data){
         if(data.getImage()!=null){
             Bitmap img=resizeBitmap(data.getImage(), 560, 420);
             Paint paintImg=new Paint();
@@ -166,7 +166,7 @@ public class PdfRunnable implements Runnable{
         return Bitmap.createScaledBitmap(bitmap, width, height, true);
     }
 
-    private void drawContent(Canvas canvas, MemoData data){
+    private void drawContent(Canvas canvas, UiMemoData data){
         String content=data.getContent();
         TextPaint contentPaint=new TextPaint();
         contentPaint.setTextSize(48);
@@ -180,7 +180,7 @@ public class PdfRunnable implements Runnable{
         canvas.restore();
     }
 
-    private void drawPrice(Canvas canvas, MemoData data){
+    private void drawPrice(Canvas canvas, UiMemoData data){
         int price=data.getPrice();
         TextPaint pricePaint=new TextPaint();
         pricePaint.setTextSize(54);

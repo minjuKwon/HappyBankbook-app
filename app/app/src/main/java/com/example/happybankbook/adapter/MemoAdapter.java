@@ -8,9 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.happybankbook.db.UiMemoData;
 import com.example.happybankbook.view.MainActivity;
 import com.example.happybankbook.R;
-import com.example.happybankbook.db.MemoData;
 import com.example.happybankbook.view.MemoDetailFragment;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
-    private static List<MemoData> dataList=new ArrayList<>();
+    private static List<UiMemoData> dataList=new ArrayList<>();
     private static int recyclerviewPosition;
     private final Context mContext;
     private final MemoType memoType;
@@ -26,7 +26,7 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
     private int textLine;
     private float textSize;
     private boolean isFirstInteraction=true, isRecyclable=true, hasReceivedCondition=true;
-    private boolean textEllipsize, hasVisitedViewPager, isNewestSort;
+    private boolean textEllipsize, hasVisitedViewPager;
 
 
     public MemoAdapter(Context context, MemoType memoType, float textSize){
@@ -40,15 +40,13 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
             MemoType memoType,
             float textSize,
             int textLine,
-            boolean textEllipsize,
-            boolean isNewestSort
+            boolean textEllipsize
     ){
         this.mContext=context;
         this.memoType=memoType;
         this.textSize=textSize;
         this.textLine=textLine;
         this.textEllipsize=textEllipsize;
-        this.isNewestSort=isNewestSort;
     }
 
     @NonNull
@@ -77,14 +75,13 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseItemView holder, int position) {
-        MemoData data;
+        UiMemoData data;
 
         if(holder instanceof RecyclerViewHolder){
             RecyclerViewHolder recyclerViewHolder=(RecyclerViewHolder)holder;
             data=dataList.get(recyclerViewHolder.getBindingAdapterPosition());
-            int displayNum= isNewestSort?dataList.size()-position:position+1;
 
-            recyclerViewHolder.onBind(data, mContext, position,displayNum, textSize, textLine, textEllipsize);
+            recyclerViewHolder.onBind(data, mContext, position, textSize, textLine, textEllipsize);
 
             //recyclerview position 얻기 위한 클릭 이벤트
             recyclerViewHolder.setOnItemClickListener(() -> {
@@ -124,11 +121,10 @@ public class MemoAdapter extends RecyclerView.Adapter<BaseItemView> {
         return position;
     }
 
-    public void setItems(ArrayList<MemoData>data, Boolean isNewestSort){
+    public void setItems(ArrayList<UiMemoData>data){
         DiffUtil.DiffResult diffResult=
                 DiffUtil.calculateDiff(new MemoDiffUtilCallback(dataList,data));
         dataList=data;
-        this.isNewestSort=isNewestSort;
         diffResult.dispatchUpdatesTo(this);
     }
 

@@ -49,7 +49,7 @@ import com.example.happybankbook.adapter.MemoAdapter;
 import com.example.happybankbook.R;
 import com.example.happybankbook.adapter.MemoType;
 import com.example.happybankbook.contract.ListContract;
-import com.example.happybankbook.db.MemoData;
+import com.example.happybankbook.db.UiMemoData;
 import com.example.happybankbook.presenter.ListPresenter;
 
 import java.text.DecimalFormat;
@@ -179,8 +179,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
                 MemoType.RECYCLER,
                 textSize,
                 textLine,
-                hasTextEllipsize,
-                isNewestSort
+                hasTextEllipsize
         );
         recyclerView.setAdapter(adapter);
 
@@ -280,7 +279,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
                 if(isNewestSort){
                     presenter.getDataDesc(fromDate, toDate, value);
                 }else{
-                    presenter.getDataAsc(fromDate, toDate, value );
+                    presenter.getDataAsc(fromDate, toDate, value);
                 }
             });
             presenter.getDataCount();
@@ -294,8 +293,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     }
 
     @Override
-    public void setItems(ArrayList<MemoData> items) {
-        adapter.setItems(items, isNewestSort);
+    public void setItems(ArrayList<UiMemoData> items) {
+        adapter.setItems(items);
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.happybankbook.contract.OutputContract;
 import com.example.happybankbook.db.MemoDao;
 import com.example.happybankbook.db.MemoData;
+import com.example.happybankbook.db.UiMemoData;
 
 import java.util.ArrayList;
 
@@ -71,8 +72,23 @@ public class OutputPresenter implements OutputContract.Presenter {
                 memoDao.getAll()
                         .subscribeOn(Schedulers.io())
                         .subscribe(
-                                item->memoDataListCallback
-                                        .onMemoDataListResult((ArrayList<MemoData>)item)
+                                item->{
+                                    ArrayList<UiMemoData> list = new ArrayList<>();
+                                    for(int i=0;i<item.size();i++){
+                                        MemoData data= item.get(i);
+                                        list.add(new UiMemoData(
+                                                data.getIdx(),
+                                                item.size()-i,
+                                                data.getDate(),
+                                                data.getPrice(),
+                                                data.getContent(),
+                                                data.getImage()
+                                        ));
+                                    }
+
+                                    memoDataListCallback.onMemoDataListResult(list);
+                                }
+
 
                         )
         );
