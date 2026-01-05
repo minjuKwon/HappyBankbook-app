@@ -127,8 +127,8 @@ public class ConditionTest {
         //recyclerview 확인
         checkRecyclerviewSize(count);
         for(int i=0;i<count;i++){
-            String str=String.valueOf(10*(5-i));
-            checkRecyclerViewItem(i, str);
+            String price=String.valueOf(10*(5-i));
+            checkRecyclerViewItem(i, price);
         }
 
         //viewpager 확인
@@ -177,8 +177,8 @@ public class ConditionTest {
         //recyclerview 확인
         checkRecyclerviewSize(len);
         for(int i=0;i<len;i++){
-            String str=String.valueOf(10*(i+1));
-            checkRecyclerViewItem(i, str);
+            String price=String.valueOf(10*(i+1));
+            checkRecyclerViewItem(i, price);
         }
 
         //viewpager 확인
@@ -208,8 +208,8 @@ public class ConditionTest {
         //recyclerview 확인
         checkRecyclerviewSize(2);
         for(int i=0;i<count;i++){
-            String str=String.valueOf(10*(i+1));
-            checkRecyclerViewItem(i, str);
+            String price=String.valueOf(10*(i+1));
+            checkRecyclerViewItem(i, price);
         }
 
         //viewpager 확인
@@ -234,8 +234,8 @@ public class ConditionTest {
         //recyclerview 확인
         checkRecyclerviewSize(count);
         for(int i=0;i<count;i++){
-            String str=String.valueOf(10*(i+1));
-            checkRecyclerViewItem(i, str);
+            String price=String.valueOf(10*(i+1));
+            checkRecyclerViewItem(i, price);
         }
 
         //viewpager 확인
