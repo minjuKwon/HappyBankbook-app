@@ -9,7 +9,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static com.example.happybankbook.helper.ConditionTestHelper.checkInitialCondition;
-import static com.example.happybankbook.helper.ConditionTestHelper.checkRecyclerViewItemPrice;
+import static com.example.happybankbook.helper.ConditionTestHelper.checkRecyclerViewItem;
 import static com.example.happybankbook.helper.ConditionTestHelper.checkRecyclerviewSize;
 import static com.example.happybankbook.helper.ConditionTestHelper.checkTempConditionList;
 import static com.example.happybankbook.helper.ConditionTestHelper.checkViewpagerItemBack;
@@ -128,7 +128,7 @@ public class ConditionTest {
         checkRecyclerviewSize(count);
         for(int i=0;i<count;i++){
             String str=String.valueOf(10*(5-i));
-            checkRecyclerViewItemPrice(i, str);
+            checkRecyclerViewItem(i, str);
         }
 
         //viewpager 확인
@@ -153,8 +153,8 @@ public class ConditionTest {
 
         //recyclerview 확인
         checkRecyclerviewSize(count);
-        checkRecyclerViewItemPrice(0, dataPriceList.get(2));
-        checkRecyclerViewItemPrice(1, dataPriceList.get(1));
+        checkRecyclerViewItem(0, dataPriceList.get(2));
+        checkRecyclerViewItem(1, dataPriceList.get(1));
 
         //viewpager 확인
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
@@ -178,7 +178,7 @@ public class ConditionTest {
         checkRecyclerviewSize(len);
         for(int i=0;i<len;i++){
             String str=String.valueOf(10*(i+1));
-            checkRecyclerViewItemPrice(i, str);
+            checkRecyclerViewItem(i, str);
         }
 
         //viewpager 확인
@@ -209,7 +209,7 @@ public class ConditionTest {
         checkRecyclerviewSize(2);
         for(int i=0;i<count;i++){
             String str=String.valueOf(10*(i+1));
-            checkRecyclerViewItemPrice(i, str);
+            checkRecyclerViewItem(i, str);
         }
 
         //viewpager 확인
@@ -235,7 +235,7 @@ public class ConditionTest {
         checkRecyclerviewSize(count);
         for(int i=0;i<count;i++){
             String str=String.valueOf(10*(i+1));
-            checkRecyclerViewItemPrice(i, str);
+            checkRecyclerViewItem(i, str);
         }
 
         //viewpager 확인

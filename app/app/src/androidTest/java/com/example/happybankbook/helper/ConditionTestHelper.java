@@ -74,7 +74,7 @@ public class ConditionTestHelper {
                 .check(matches(hasChildCount(size)));
     }
 
-    public static void checkRecyclerViewItemPrice(int position, String text){
+    public static void checkRecyclerViewItem(int position, String text){
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
                 .check(matches(atPosition(position, hasDescendant(withText(text)))));
     }
