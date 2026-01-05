@@ -57,7 +57,7 @@ public class MemoRepositoryTest {
 
     @Test
     public void givenEmptyMemoList_whenMemoAdded_thenSizeIncrease(){
-        dao.insert(createTempData(1,10,20250101,"content1"));
+        dao.insert(createTempData(10,20250101,"content1"));
         List<MemoData> list=dao.getAll().blockingFirst();
 
         assertEquals(1,list.size());
@@ -81,7 +81,7 @@ public class MemoRepositoryTest {
 
     @Test
     public void givenEmptyMemoList_whenMemoAdded_thenReturnsRowCount() {
-        dao.insert(createTempData(1,10,20250101,"content1"));
+        dao.insert(createTempData(10,20250101,"content1"));
         int cnt=dao.getRowCount();
 
         assertEquals(1,cnt);
@@ -124,9 +124,9 @@ public class MemoRepositoryTest {
         List<MemoData> list=dao.searchKeyword("memo").blockingFirst();
 
         assertEquals(3,list.size());
-        assertEquals(1, list.get(0).getNum());
-        assertEquals(3, list.get(1).getNum());
-        assertEquals(4, list.get(2).getNum());
+        assertEquals(1, list.get(0).getIdx());
+        assertEquals(3, list.get(1).getIdx());
+        assertEquals(4, list.get(2).getIdx());
     }
 
     @Test
@@ -135,9 +135,9 @@ public class MemoRepositoryTest {
         List<MemoData> list=dao.searchAsc(20250101, 20250501,3).blockingFirst();
 
         assertEquals(3,list.size());
-        assertEquals(1,list.get(0).getNum());
-        assertEquals(2,list.get(1).getNum());
-        assertEquals(3,list.get(2).getNum());
+        assertEquals(1,list.get(0).getIdx());
+        assertEquals(2,list.get(1).getIdx());
+        assertEquals(3,list.get(2).getIdx());
     }
 
     @Test
@@ -146,8 +146,8 @@ public class MemoRepositoryTest {
         List<MemoData> list=dao.searchAsc(20250101, 20250201,5).blockingFirst();
 
         assertEquals(2,list.size());
-        assertEquals(1,list.get(0).getNum());
-        assertEquals(2,list.get(1).getNum());
+        assertEquals(1,list.get(0).getIdx());
+        assertEquals(2,list.get(1).getIdx());
     }
 
     @Test
@@ -156,9 +156,9 @@ public class MemoRepositoryTest {
         List<MemoData> list=dao.searchDesc(20250101, 20250501,3).blockingFirst();
 
         assertEquals(3,list.size());
-        assertEquals(5,list.get(0).getNum());
-        assertEquals(4,list.get(1).getNum());
-        assertEquals(3,list.get(2).getNum());
+        assertEquals(5,list.get(0).getIdx());
+        assertEquals(4,list.get(1).getIdx());
+        assertEquals(3,list.get(2).getIdx());
     }
 
     @Test
@@ -167,8 +167,8 @@ public class MemoRepositoryTest {
         List<MemoData> list=dao.searchDesc(20250101, 20250201,5).blockingFirst();
 
         assertEquals(2,list.size());
-        assertEquals(2,list.get(0).getNum());
-        assertEquals(1,list.get(1).getNum());
+        assertEquals(2,list.get(0).getIdx());
+        assertEquals(1,list.get(1).getIdx());
     }
 
     @Test
@@ -179,29 +179,8 @@ public class MemoRepositoryTest {
         assertEquals(3,cnt);
     }
 
-    @Test
-    public void givenMemoAdded_whenChangeNum_thenReturnsNumSortedList(){
-        List<MemoData> list=new ArrayList<>();
-        list.add(createTempData(1,20,20250301,"memo 2"));
-        list.add(createTempData(1,10,20250201,"content 2"));
-
-        for(MemoData data:list){
-            dao.insert(data);
-        }
-
-        dao.changeNum(20250201);
-
-        List<MemoData> result= dao.getAll().blockingFirst();
-        assertEquals(2,result.size());
-        assertEquals(2, result.get(0).getNum());
-        assertEquals(20, result.get(0).getPrice());
-        assertEquals(1, result.get(1).getNum());
-        assertEquals(10, result.get(1).getPrice());
-    }
-
-    private MemoData createTempData(int num, int price, int date, String content){
+    private MemoData createTempData(int price, int date, String content){
         MemoData data=new MemoData();
-        data.setNum(num);
         data.setPrice(price);
         data.setDate(date);
         data.setContent(content);
@@ -210,11 +189,11 @@ public class MemoRepositoryTest {
 
     private void insertDataList(){
         List<MemoData> list=new ArrayList<>();
-        list.add(createTempData(1,10,20250101,"memo 1"));
-        list.add(createTempData(2,20,20250201,"content 2"));
-        list.add(createTempData(3,30,20250301,"memo 3"));
-        list.add(createTempData(4,40,20250401,"memo 4"));
-        list.add(createTempData(5,50,20250501,"content 5"));
+        list.add(createTempData(10,20250101,"memo 1"));
+        list.add(createTempData(20,20250201,"content 2"));
+        list.add(createTempData(30,20250301,"memo 3"));
+        list.add(createTempData(40,20250401,"memo 4"));
+        list.add(createTempData(50,20250501,"content 5"));
         for(MemoData data:list){
             dao.insert(data);
         }
