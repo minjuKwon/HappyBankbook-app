@@ -59,7 +59,7 @@ public class ConditionTest {
     private static final TestMemoWithDayData [] data= {
             new TestMemoWithDayData("memo 1", "10", 3),
             new TestMemoWithDayData("memo 2", "20", 5),
-            new TestMemoWithDayData("memo 3", "30", 8),
+            new TestMemoWithDayData("memo 3", "30", 4),
             new TestMemoWithDayData("memo 4", "40", 9),
             new TestMemoWithDayData("memo 5", "50", 9),
             };
@@ -126,17 +126,21 @@ public class ConditionTest {
 
         //recyclerview 확인
         checkRecyclerviewSize(count);
-        for(int i=0;i<count;i++){
-            String price=String.valueOf(10*(5-i));
-            checkRecyclerViewItem(i, price);
-        }
+        //아이템의 인덱스 확인
+        checkRecyclerViewItem(0, "3");
+        checkRecyclerViewItem(1, "2");
+        checkRecyclerViewItem(2, "1");
+        //아이템의 가격 확인
+        checkRecyclerViewItem(0, dataPriceList.get(4));
+        checkRecyclerViewItem(1, dataPriceList.get(3));
+        checkRecyclerViewItem(2, dataPriceList.get(1));
 
         //viewpager 확인
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
                 .perform(actionOnItemAtPosition(0,click()));
         checkViewpagerItemBack(dataPriceList.get(4));
         checkViewpagerItemBack(dataPriceList.get(3));
-        checkViewpagerItemCurrent(dataPriceList.get(2));
+        checkViewpagerItemCurrent(dataPriceList.get(1));
         checkViewpagerItemForward(dataPriceList.get(3));
         checkViewpagerItemForward(dataPriceList.get(4));
 
@@ -153,15 +157,19 @@ public class ConditionTest {
 
         //recyclerview 확인
         checkRecyclerviewSize(count);
-        checkRecyclerViewItem(0, dataPriceList.get(2));
-        checkRecyclerViewItem(1, dataPriceList.get(1));
+        //아이템의 가격 확인
+        checkRecyclerViewItem(0, dataPriceList.get(1));
+        checkRecyclerViewItem(1, dataPriceList.get(2));
+        //아이템의 인덱스 확인
+        checkRecyclerViewItem(0, "2");
+        checkRecyclerViewItem(1, "1");
 
         //viewpager 확인
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
                 .perform(actionOnItemAtPosition(0,click()));
-        checkViewpagerItemBack(dataPriceList.get(2));
-        checkViewpagerItemCurrent(dataPriceList.get(1));
-        checkViewpagerItemForward(dataPriceList.get(2));
+        checkViewpagerItemBack(dataPriceList.get(1));
+        checkViewpagerItemCurrent(dataPriceList.get(2));
+        checkViewpagerItemForward(dataPriceList.get(1));
 
         resetCondition();
     }
@@ -176,23 +184,34 @@ public class ConditionTest {
 
         //recyclerview 확인
         checkRecyclerviewSize(len);
-        for(int i=0;i<len;i++){
-            String price=String.valueOf(10*(i+1));
-            checkRecyclerViewItem(i, price);
-        }
+        //아이템의 인덱스 확인
+        checkRecyclerViewItem(0, "1");
+        checkRecyclerViewItem(1, "2");
+        checkRecyclerViewItem(2, "3");
+        checkRecyclerViewItem(3, "4");
+        checkRecyclerViewItem(4, "5");
+        //아이템의 가격 확인
+        checkRecyclerViewItem(0, dataPriceList.get(0));
+        checkRecyclerViewItem(1, dataPriceList.get(2));
+        checkRecyclerViewItem(2, dataPriceList.get(1));
+        checkRecyclerViewItem(3,dataPriceList.get(3));
+        checkRecyclerViewItem(4, dataPriceList.get(4));
 
         //viewpager 확인
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
                 .perform(actionOnItemAtPosition(0,click()));
-        for(int i=1;i<len;i++){
-            String str=String.valueOf(10*i);
-            checkViewpagerItemBack(str);
-        }
+
+        checkViewpagerItemBack(dataPriceList.get(0));
+        checkViewpagerItemBack(dataPriceList.get(2));
+        checkViewpagerItemBack(dataPriceList.get(1));
+        checkViewpagerItemBack(dataPriceList.get(3));
+
         checkViewpagerItemCurrent(dataPriceList.get(4));
-        for(int i=len-1;i>0;i--){
-            String str=String.valueOf(10*i);
-            checkViewpagerItemForward(str);
-        }
+
+        checkViewpagerItemForward(dataPriceList.get(3));
+        checkViewpagerItemForward(dataPriceList.get(1));
+        checkViewpagerItemForward(dataPriceList.get(2));
+        checkViewpagerItemForward(dataPriceList.get(0));
 
         resetCondition();
     }
@@ -207,16 +226,18 @@ public class ConditionTest {
 
         //recyclerview 확인
         checkRecyclerviewSize(2);
-        for(int i=0;i<count;i++){
-            String price=String.valueOf(10*(i+1));
-            checkRecyclerViewItem(i, price);
-        }
+        //아이템의 인덱스 확인
+        checkRecyclerViewItem(0, "1");
+        checkRecyclerViewItem(1, "2");
+        //아이템의 가격 확인
+        checkRecyclerViewItem(0, dataPriceList.get(0));
+        checkRecyclerViewItem(1, dataPriceList.get(2));
 
         //viewpager 확인
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
                 .perform(actionOnItemAtPosition(0,click()));
         checkViewpagerItemBack(dataPriceList.get(0));
-        checkViewpagerItemCurrent(dataPriceList.get(1));
+        checkViewpagerItemCurrent(dataPriceList.get(2));
         checkViewpagerItemForward(dataPriceList.get(0));
 
         resetCondition();
@@ -233,16 +254,18 @@ public class ConditionTest {
 
         //recyclerview 확인
         checkRecyclerviewSize(count);
-        for(int i=0;i<count;i++){
-            String price=String.valueOf(10*(i+1));
-            checkRecyclerViewItem(i, price);
-        }
+        //아이템의 인덱스 확인
+        checkRecyclerViewItem(0, "1");
+        checkRecyclerViewItem(1, "2");
+        //아이템의 가격 확인
+        checkRecyclerViewItem(0, dataPriceList.get(0));
+        checkRecyclerViewItem(1, dataPriceList.get(2));
 
         //viewpager 확인
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
                 .perform(actionOnItemAtPosition(0,click()));
         checkViewpagerItemBack(dataPriceList.get(0));
-        checkViewpagerItemCurrent(dataPriceList.get(1));
+        checkViewpagerItemCurrent(dataPriceList.get(2));
         checkViewpagerItemForward(dataPriceList.get(0));
 
         resetCondition();
@@ -266,14 +289,14 @@ public class ConditionTest {
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.buttonSubmit))
                 .perform(click());
 
-        checkTempConditionList(dataPriceList.get(1), dataPriceList.get(2), dataPriceList.get(3),count);
+        checkTempConditionList(dataPriceList.get(1), dataPriceList.get(3), dataPriceList.get(4),count);
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.recyclerMemo))
                 .perform(actionOnItemAtPosition(0,click()));
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.memoDetailPrevious))
                 .perform(click());
 
-        checkTempConditionList(dataPriceList.get(1), dataPriceList.get(2), dataPriceList.get(3),count);
+        checkTempConditionList(dataPriceList.get(1), dataPriceList.get(3), dataPriceList.get(4),count);
 
         onView(ViewMatchers.withId(com.example.happybankbook.R.id.txtCondition)).perform(click());
 
