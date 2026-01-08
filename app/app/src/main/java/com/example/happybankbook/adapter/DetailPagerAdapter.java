@@ -25,7 +25,7 @@ public class DetailPagerAdapter extends RecyclerView.Adapter<DetailPagerAdapter.
     private TextView dateTextView, contentTextView, priceTextView;
     private ImageView contentImg;
     private List<UiMemoData> dataList=new ArrayList<>();
-    private boolean hasReceivedCondition=true;
+    private boolean isRecyclable=true, hasReceivedCondition=true;
     private float textSize;
 
     public DetailPagerAdapter(float textSize){
@@ -48,6 +48,10 @@ public class DetailPagerAdapter extends RecyclerView.Adapter<DetailPagerAdapter.
         //메모 정렬 후 bind 호출하기 위한 플래그 변수
         if(hasReceivedCondition){
             UiMemoData data=dataList.get(position);
+            if(position==0||position==dataList.size()-1){
+                isRecyclable=false;
+            }
+            holder.setIsRecyclable(isRecyclable);
             holder.bind(data, textSize);
         }
     }
@@ -58,9 +62,9 @@ public class DetailPagerAdapter extends RecyclerView.Adapter<DetailPagerAdapter.
     }
 
     public void setItems(ArrayList<UiMemoData> data){
-        dataList=data;
         DiffUtil.DiffResult diffResult=
                 DiffUtil.calculateDiff(new MemoDiffUtilCallback(dataList,data));
+        dataList=data;
         diffResult.dispatchUpdatesTo(this);
     }
 
