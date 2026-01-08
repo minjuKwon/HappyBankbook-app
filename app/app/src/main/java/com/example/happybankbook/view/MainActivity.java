@@ -6,12 +6,13 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 
 import com.example.happybankbook.R;
+import com.example.happybankbook.adapter.OnItemSelectedListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnItemSelectedListener {
 
     private BottomNavigationView navigationView;
     private ListFragment listFragment;
@@ -79,6 +80,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void removeFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+    }
+
+    @Override
+    public void onItemSelected(long itemId) {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.mainLayout, MemoDetailFragment.newInstance(itemId))
+                .commit();
     }
 
 }

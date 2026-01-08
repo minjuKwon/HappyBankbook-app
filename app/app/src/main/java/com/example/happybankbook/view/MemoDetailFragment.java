@@ -32,8 +32,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.happybankbook.R;
-import com.example.happybankbook.adapter.MemoAdapter;
-import com.example.happybankbook.adapter.MemoType;
+import com.example.happybankbook.adapter.DetailPagerAdapter;
 import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.UiMemoData;
 import com.example.happybankbook.presenter.ListPresenter;
@@ -46,18 +45,27 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class MemoDetailFragment extends Fragment implements ListContract.View,View.OnClickListener{
-
     @Inject
     ListPresenter presenter;
+
+    private static final String ARG_ITEM_ID = "item_id";
 
     private Context mContext;
     private Activity mActivity;
 
-    private MemoAdapter adapter;
+    private DetailPagerAdapter adapter;
     private Handler handler;
-
     private ViewPager2 viewPager;
     private ImageView forwardImageView, backImageView;
+
+    public static MemoDetailFragment newInstance(long itemId) {
+        Bundle args = new Bundle();
+        args.putLong(ARG_ITEM_ID, itemId);
+
+        MemoDetailFragment fragment = new MemoDetailFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     //일정 시간 후 화살표 이미지 투명화 위한 Runnable
     private final Runnable changeImgAlphaRunnable =new Runnable(){
@@ -69,8 +77,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     };
 
     private float textSize= TEXT_SIZE_DEFAULT_SMALL;
-    private boolean isFirstInteraction=true;
-    private int itemCount, fromDate, toDate, rowCount, currentPosition, adapterPosition;
+    private int itemCount, fromDate, toDate, rowCount, currentPosition;
+    private Integer pendingItemId;
 
 
     @Override
@@ -161,16 +169,29 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         backImageView.setOnClickListener(this);
         previousTextView.setOnClickListener(this);
 
-        presenter.setView(this);
-
-        adapter=new MemoAdapter(mContext, MemoType.VIEWPAGER, textSize);
+        adapter=new DetailPagerAdapter(textSize);
         viewPager.setAdapter(adapter);
 
-        adapterPosition= adapter.getRecyclerviewPosition();
+        int argItemId = getArguments() != null
+                ? getArguments().getInt(ARG_ITEM_ID, -1)
+                : -1;
+
+        if (argItemId != -1) {
+            pendingItemId = argItemId;
+        }
+        presenter.setView(this);
+        presenter.getData();
 
         getRowCount();
 
         changePage();
+    }
+
+    private void moveToItem(int itemId) {
+        int position = adapter.getPositionById(itemId);
+        if (position >= 0) {
+            viewPager.setCurrentItem(position, false);
+        }
     }
 
     private void getRowCount(){
@@ -183,15 +204,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                //recyclerview position, viewpager position 더하여
-                // 클릭된 메모 데이터에서 슬라이드 하였을 때 다음 데이터 로딩 하기 위한 초기 값
-                if(isFirstInteraction){
-                    currentPosition=position+adapterPosition;
-                }else{
-                    currentPosition=position;
-                }
-                isFirstInteraction=false;
-
+                currentPosition=position;
                 if(currentPosition==0){
                     forwardImageView.setVisibility(View.INVISIBLE);
                     backImageView.setVisibility(View.VISIBLE);
@@ -257,6 +270,10 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     @Override
     public void setItems(ArrayList<UiMemoData> items) {
         adapter.setItems(items);
+        if (pendingItemId != null) {
+            moveToItem(pendingItemId);
+            pendingItemId = null;
+        }
         adapter.notifyDataSetChanged();
         adapter.setCondition(true);
     }
@@ -265,7 +282,9 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     public void onClick(View v) {
         final int delayTime=3000;
         if(v.getId()==R.id.imgForward){
-            clickImgForward(delayTime);
+            forwardImageView.setImageAlpha(255);
+            viewPager.setCurrentItem(currentPosition-1,false);
+            handler.postDelayed(changeImgAlphaRunnable,delayTime);
         }else if(v.getId()==R.id.imgBack){
             backImageView.setImageAlpha(255);
             viewPager.setCurrentItem(currentPosition+1,false);
@@ -273,23 +292,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         }else if(v.getId()==R.id.memoDetailPrevious){
             ((MainActivity)mActivity).removeFragment(this);
         }
-    }
-
-    private void clickImgForward(int delayTime){
-        forwardImageView.setImageAlpha(255);
-        //처음 1번째 아이템 클릭하여 이동한 viewpager 에서 이전 데이터로 이동하지 않은 오류 해결
-        if(!isFirstInteraction&&adapterPosition==1&&currentPosition==1){
-            //notifyItemChanged 호출하면 화면 버벅거림
-            adapter.notifyDataSetChanged();
-            //1번째 아이템이라도 viewpager 입장에서는 0번째라서 이전 버튼 누르면
-            //페이지 변화가 없기 때문에 임의로 변경.
-            currentPosition=0;
-            viewPager.setCurrentItem(currentPosition);
-            forwardImageView.setVisibility(View.INVISIBLE);
-        }else{
-            viewPager.setCurrentItem(currentPosition-1,false);
-        }
-        handler.postDelayed(changeImgAlphaRunnable,delayTime);
     }
 
 }

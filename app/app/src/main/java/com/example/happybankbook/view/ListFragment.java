@@ -45,9 +45,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.happybankbook.adapter.MemoAdapter;
+import com.example.happybankbook.adapter.DetailPagerAdapter;
+import com.example.happybankbook.adapter.ListAdapter;
 import com.example.happybankbook.R;
-import com.example.happybankbook.adapter.MemoType;
+import com.example.happybankbook.adapter.OnItemSelectedListener;
 import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.UiMemoData;
 import com.example.happybankbook.presenter.ListPresenter;
@@ -66,7 +67,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
 
     private Context mContext;
     private Activity mActivity;
-    private MemoAdapter adapter;
+    private OnItemSelectedListener callback;
+    private ListAdapter adapter;
     private TextView totalPriceTextView;
 
     private int clickCountCondition=1;
@@ -84,6 +86,9 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         mContext=context;
         if (context instanceof Activity) {
             mActivity = (Activity)context;
+        }
+        if(context instanceof OnItemSelectedListener){
+            callback = (OnItemSelectedListener) context;
         }
     }
 
@@ -174,12 +179,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         presenter.setView(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter = new MemoAdapter(
-                mContext,
-                MemoType.RECYCLER,
-                textSize,
-                textLine,
-                hasTextEllipsize
+        adapter = new ListAdapter(textSize, textLine, hasTextEllipsize, item ->
+            callback.onItemSelected(item.getIdx())
         );
         recyclerView.setAdapter(adapter);
 
@@ -199,7 +200,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     }
 
     private void setMemoListCondition(){
-        boolean hasVisitedViewPager=adapter.hasVisitedViewpager();
+        boolean hasVisitedViewPager=DetailPagerAdapter.hasVisitedViewPager;
         //viewpager 방문 후 ListFragment 돌아온 경우 검색 조건 값 유지
         //viewpager 제외한 다른 프래그먼트 방문 후,
         // ListFragment 돌아온 경우는 데이터 조건을 초기화하여 모든 데이터 보여줌
