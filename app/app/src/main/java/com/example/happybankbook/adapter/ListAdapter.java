@@ -65,12 +65,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
         return dataList.size();
     }
 
-    //데이터 꼬임 현상 막음
-    @Override
-    public int getItemViewType(int position) {
-        return position;
-    }
-
     public void setItems(ArrayList<UiMemoData> data){
         DiffUtil.DiffResult diffResult=
                 DiffUtil.calculateDiff(new MemoDiffUtilCallback(dataList,data));

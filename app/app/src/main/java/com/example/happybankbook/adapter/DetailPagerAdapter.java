@@ -57,11 +57,6 @@ public class DetailPagerAdapter extends RecyclerView.Adapter<DetailPagerAdapter.
         return dataList.size();
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return position;
-    }
-
     public void setItems(ArrayList<UiMemoData> data){
         dataList=data;
         DiffUtil.DiffResult diffResult=
