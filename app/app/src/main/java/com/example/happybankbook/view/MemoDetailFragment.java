@@ -58,9 +58,9 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     private ViewPager2 viewPager;
     private ImageView forwardImageView, backImageView;
 
-    public static MemoDetailFragment newInstance(long itemId) {
+    public static MemoDetailFragment newInstance(int itemId) {
         Bundle args = new Bundle();
-        args.putLong(ARG_ITEM_ID, itemId);
+        args.putInt(ARG_ITEM_ID, itemId);
 
         MemoDetailFragment fragment = new MemoDetailFragment();
         fragment.setArguments(args);

@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
     }
 
     @Override
-    public void onItemSelected(long itemId) {
+    public void onItemSelected(int itemId) {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.mainLayout, MemoDetailFragment.newInstance(itemId))
                 .commit();
