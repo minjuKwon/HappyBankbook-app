@@ -290,7 +290,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             viewPager.setCurrentItem(currentPosition+1,false);
             handler.postDelayed(changeImgAlphaRunnable,delayTime);
         }else if(v.getId()==R.id.memoDetailPrevious){
-            ((MainActivity)mActivity).removeFragment(this);
+            ((MainActivity)mActivity).popFragment();
         }
     }
 

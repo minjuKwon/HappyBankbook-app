@@ -82,10 +82,15 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }
 
+    public void popFragment(){
+        getSupportFragmentManager().popBackStack();
+    }
+
     @Override
     public void onItemSelected(int itemId) {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.mainLayout, MemoDetailFragment.newInstance(itemId))
+                .addToBackStack(null)
                 .commit();
     }
 
