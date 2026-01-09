@@ -36,9 +36,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.example.happybankbook.adapter.MemoAdapter;
+import com.example.happybankbook.adapter.ListAdapter;
 import com.example.happybankbook.R;
-import com.example.happybankbook.adapter.MemoType;
+import com.example.happybankbook.adapter.OnItemSelectedListener;
 import com.example.happybankbook.contract.SearchContract;
 import com.example.happybankbook.db.UiMemoData;
 import com.example.happybankbook.presenter.SearchPresenter;
@@ -59,7 +59,8 @@ public class SearchFragment extends Fragment
 
     private Context mContext;
     private Activity mActivity;
-    private MemoAdapter adapter;
+    private OnItemSelectedListener callback;
+    private ListAdapter adapter;
 
     private RecyclerView recyclerView;
 
@@ -74,6 +75,9 @@ public class SearchFragment extends Fragment
         mContext=context;
         if(context instanceof Activity){
             mActivity=(Activity)context;
+        }
+        if(context instanceof OnItemSelectedListener){
+            callback = (OnItemSelectedListener) context;
         }
     }
 
@@ -138,7 +142,9 @@ public class SearchFragment extends Fragment
         presenter.setView(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter=new MemoAdapter(mContext, MemoType.RECYCLER, textSize, textLine, hasTextEllipsize);
+        adapter = new ListAdapter(textSize, textLine, hasTextEllipsize, item ->
+                callback.onItemSelected(item.getIdx())
+        );
         recyclerView.setAdapter(adapter);
 
         adapter.clearItems();
