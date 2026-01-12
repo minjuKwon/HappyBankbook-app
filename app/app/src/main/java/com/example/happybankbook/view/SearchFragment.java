@@ -6,6 +6,7 @@ import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZ
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_LINE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_SIZE;
+import static com.example.happybankbook.constants.FragmentTag.LIST;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_LINE;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_SIZE_LARGE;
@@ -203,7 +204,7 @@ public class SearchFragment extends Fragment
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.previousSearch){
-            ((MainActivity)mActivity).replaceFragment(new ListFragment());
+            ((MainActivity)mActivity).replaceFragment(new ListFragment(),LIST);
         }
     }
 

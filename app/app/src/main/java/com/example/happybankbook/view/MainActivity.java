@@ -1,5 +1,9 @@
 package com.example.happybankbook.view;
 
+import static com.example.happybankbook.constants.FragmentTag.LIST;
+import static com.example.happybankbook.constants.FragmentTag.MEMO;
+import static com.example.happybankbook.constants.FragmentTag.SETTING;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -41,15 +45,15 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
         getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,listFragment).commit();
         navigationView.setOnItemSelectedListener(item -> {
             if(item.getItemId()== R.id.mainMenu){
-                replaceFragment(listFragment);
+                replaceFragment(listFragment,LIST);
                 return true;
             }
             else if(item.getItemId()==R.id.addMenu){
-                replaceFragment(memoFragment);
+                replaceFragment(memoFragment,MEMO);
                 return true;
             }
             else if(item.getItemId()==R.id.settingMenu){
-                replaceFragment(settingFragment);
+                replaceFragment(settingFragment,SETTING);
                 return true;
             }
             return false;
@@ -58,20 +62,20 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
     public void navigation(int id){
         if(id== R.id.mainMenu){
             navigationView.setSelectedItemId(id);
-            replaceFragment(listFragment);
+            replaceFragment(listFragment,LIST);
         }
         else if(id==R.id.addMenu){
             navigationView.setSelectedItemId(id);
-            replaceFragment(memoFragment);
+            replaceFragment(memoFragment,MEMO);
         }
         else if(id==R.id.settingMenu){
             navigationView.setSelectedItemId(id);
-            replaceFragment(settingFragment);
+            replaceFragment(settingFragment, SETTING);
         }
     }
 
-    public void replaceFragment(Fragment fragment){
-        getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,fragment).commit();
+    public void replaceFragment(Fragment fragment, String tag){
+        getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,fragment,tag).commit();
     }
 
     public void addFragment(Fragment fragment){

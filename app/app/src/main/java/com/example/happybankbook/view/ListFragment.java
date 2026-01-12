@@ -15,6 +15,7 @@ import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KE
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_LINE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_REMOVE_FRAGMENT;
+import static com.example.happybankbook.constants.FragmentTag.SEARCH;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_IS_INITIALIZATION;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_LINE;
@@ -301,7 +302,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.txtSearch){
-            ((MainActivity)mActivity).replaceFragment(new SearchFragment());
+            ((MainActivity)mActivity).replaceFragment(new SearchFragment(),SEARCH);
         }else if(v.getId()==R.id.txtCondition){
             //addFragment 1일 때만 addFragment()하여 여러 번 클릭 시 중복 생성을 막음
             if(clickCountCondition==1){
