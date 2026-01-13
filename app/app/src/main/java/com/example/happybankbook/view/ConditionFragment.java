@@ -4,17 +4,12 @@ import static com.example.happybankbook.Utils.convertDateToInt;
 import static com.example.happybankbook.Utils.hideKeyboard;
 import static com.example.happybankbook.Utils.setCurrentDate;
 import static com.example.happybankbook.Utils.setDate;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_FROM_DATE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_CLICKED_ONCE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_INITIALIZATION;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_NEWEST_SORT;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_ITEM_COUNT;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TO_DATE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_INITIALIZATION;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_SORT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_REMOVE_FRAGMENT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RETAIN_SORT;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_SORT;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_IS_CLICKED_DURATION;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_IS_NEWEST_SORT;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_ITEM_COUNT;
@@ -277,13 +272,14 @@ public class ConditionFragment extends Fragment
             count=Integer.parseInt(countStr);
         }
         //memo recyclerView로 정렬 데이터 전달
-        sendBundle(fromDate, toDate, count, newestSortRadioButton.isChecked());
+        sendCondition(fromDate, toDate, count, newestSortRadioButton.isChecked());
 
         setSharedPreferences();
 
         hideKeyboard(mContext,itemCountEditText);
 
-        ((MainActivity)mActivity).removeFragment(this);
+        ((MainActivity)mActivity).onConditionChanged();
+        ((MainActivity) mActivity).removeFragment(this);
     }
 
     private void reset(){
@@ -293,20 +289,17 @@ public class ConditionFragment extends Fragment
         newestSortRadioButton.setChecked(true);
         itemCountEditText.setText(null);
 
-        sendBundle(DEFAULT_FROM_DATE,DEFAULT_TO_DATE,DEFAULT_COUNT,true);
+        sendCondition(DEFAULT_FROM_DATE,DEFAULT_TO_DATE,DEFAULT_COUNT,true);
 
         setSharedPreferences();
     }
 
-    private void sendBundle(int fromDate, int toDate, int count, boolean sort){
-        Bundle bundle=new Bundle();
-        bundle.putInt(BUNDLE_KEY_FROM_DATE,fromDate);
-        bundle.putInt(BUNDLE_KEY_TO_DATE,toDate);
-        bundle.putInt(BUNDLE_KEY_ITEM_COUNT,count);
-        bundle.putBoolean(BUNDLE_KEY_IS_NEWEST_SORT,sort);
-
-        getParentFragmentManager().setFragmentResult(REQUEST_KEY_RECYCLERVIEW_SORT, bundle);
-        getParentFragmentManager().setFragmentResult(REQUEST_KEY_VIEWPAGER_SORT, bundle);
+    private void sendCondition(int fromDate, int toDate, int count, boolean sort){
+          ListConditionState state = ((MainActivity) requireActivity()).getListState();
+          state.fromDate=fromDate;
+          state.toDate=toDate;
+          state.count=count;
+          state.isNewestSort= sort;
     }
 
     private void setSharedPreferences(){

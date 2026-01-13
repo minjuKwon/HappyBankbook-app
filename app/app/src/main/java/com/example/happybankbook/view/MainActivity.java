@@ -23,6 +23,12 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
     private MemoFragment memoFragment;
     private SettingFragment settingFragment;
 
+    private final ListConditionState listState = new ListConditionState();
+
+    public ListConditionState getListState() {
+        return listState;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +102,16 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
                 .add(R.id.mainLayout, MemoDetailFragment.newInstance(itemId))
                 .addToBackStack(null)
                 .commit();
+    }
+
+    public void onConditionChanged() {
+        Fragment f = getSupportFragmentManager()
+                .findFragmentByTag(LIST);
+
+        if (f instanceof ListFragment) {
+            ((ListFragment) f).getCondition();
+            ((ListFragment) f).keepCondition();
+        }
     }
 
 }

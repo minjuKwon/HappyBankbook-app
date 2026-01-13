@@ -1,16 +1,11 @@
 package com.example.happybankbook.view;
 
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_FROM_DATE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_CLICKED_ONCE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_INITIALIZATION;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_NEWEST_SORT;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_ITEM_COUNT;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_LINE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TO_DATE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_INITIALIZATION;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_SORT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_LINE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE;
@@ -105,21 +100,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         getFragmentResult();
     }
 
-    private void getFragmentResult(){
-        //ConditionFragment 정렬 값 받기
-        getParentFragmentManager()
-                .setFragmentResultListener(
-                        REQUEST_KEY_RECYCLERVIEW_SORT,
-                        this,
-                        (requestKey, result) -> {
-                            fromDate=result.getInt(BUNDLE_KEY_FROM_DATE);
-                            toDate=result.getInt(BUNDLE_KEY_TO_DATE);
-                            itemCount=result.getInt(BUNDLE_KEY_ITEM_COUNT);
-                            isNewestSort =result.getBoolean(BUNDLE_KEY_IS_NEWEST_SORT);
-
-                            keepCondition();
-                        }
-                );
+    public void getFragmentResult(){
         //ConditionFragment 클릭 시 한 개의 Fragment만 생성하기 위한 변수 받기
         getParentFragmentManager()
                 .setFragmentResultListener(
@@ -187,7 +168,9 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
 
         getMemoTotalPrice();
 
-        setMemoListCondition();
+        getCondition();
+
+        //setMemoListCondition();
     }
 
     private void getMemoTotalPrice(){
@@ -198,6 +181,15 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
             totalPriceTextView.setText(priceStr);
         });
         presenter.getSumPrice(mContext);
+    }
+
+    public void getCondition(){
+        //ConditionFragment 정렬 값 받기
+        ListConditionState state = ((MainActivity) requireActivity()).getListState();
+        fromDate= state.fromDate;
+        toDate=state.toDate;
+        itemCount= state.count;
+        isNewestSort= state.isNewestSort;
     }
 
     private void setMemoListCondition(){
@@ -215,6 +207,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        keepCondition();
 
         SharedPreferences preferences=
                 mActivity.getSharedPreferences(PREF_NAME_LIST_TEXT_STYLE,Context.MODE_PRIVATE);
@@ -269,7 +263,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         mActivity=null;
     }
 
-    private void keepCondition(){
+    public void keepCondition(){
         if(fromDate>toDate){
             int temp=fromDate;
             fromDate=toDate;

@@ -1,13 +1,9 @@
 package com.example.happybankbook.view;
 
 import static com.example.happybankbook.Utils.hideKeyboard;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_FROM_DATE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_NEWEST_SORT;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_ITEM_COUNT;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TO_DATE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RETAIN_SORT;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_SORT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_SIZE_SMALL;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_SIZE;
@@ -78,6 +74,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
 
     private float textSize= TEXT_SIZE_DEFAULT_SMALL;
     private int itemCount, fromDate, toDate, rowCount, currentPosition;
+    private boolean isNewestSort;
     private Integer pendingItemId;
 
 
@@ -100,45 +97,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     }
 
     private void getFragmentResult(){
-        //ConditionFragment 정렬 값 받기
-        getParentFragmentManager()
-                .setFragmentResultListener(
-                        REQUEST_KEY_VIEWPAGER_SORT,
-                        this,
-                        (requestKey, result) -> {
-                            adapter.setCondition(false);
-
-                            fromDate=result.getInt(BUNDLE_KEY_FROM_DATE);
-                            toDate=result.getInt(BUNDLE_KEY_TO_DATE);
-                            itemCount=result.getInt(BUNDLE_KEY_ITEM_COUNT);
-                            boolean isNewestSort=result.getBoolean(BUNDLE_KEY_IS_NEWEST_SORT);
-
-                            if(fromDate>toDate){
-                                int temp=fromDate;
-                                fromDate=toDate;
-                                toDate=temp;
-                            }
-
-                            if(itemCount==0){
-                                presenter.setIntResultCallback(value -> {
-                                    if(isNewestSort){
-                                        presenter.getDataDesc(fromDate, toDate, value);
-                                    }else{
-                                        presenter.getDataAsc(fromDate, toDate, value);
-                                    }
-                                });
-                                presenter.getDataCount();
-                            }else{
-                                if(isNewestSort){
-                                    presenter.getDataDesc(fromDate, toDate, itemCount);
-                                }else{
-                                    presenter.getDataAsc(fromDate, toDate, itemCount);
-                                }
-                            }
-
-                        }
-                );
-
         //변경 text size 값
         getParentFragmentManager()
                 .setFragmentResultListener(
@@ -180,7 +138,13 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             pendingItemId = argItemId;
         }
         presenter.setView(this);
-        presenter.getData();
+
+        //ConditionFragment 정렬 값 받기
+        ListConditionState state = ((MainActivity) requireActivity()).getListState();
+        fromDate= state.fromDate;
+        toDate=state.toDate;
+        itemCount= state.count;
+        isNewestSort= state.isNewestSort;
 
         getRowCount();
 
@@ -223,6 +187,29 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if(fromDate>toDate){
+            int temp=fromDate;
+            fromDate=toDate;
+            toDate=temp;
+        }
+
+        if(itemCount==0){
+            presenter.setIntResultCallback(value -> {
+                if(isNewestSort){
+                    presenter.getDataDesc(fromDate, toDate, value);
+                }else{
+                    presenter.getDataAsc(fromDate, toDate, value);
+                }
+            });
+            presenter.getDataCount();
+        }else{
+            if(isNewestSort){
+                presenter.getDataDesc(fromDate, toDate, itemCount);
+            }else{
+                presenter.getDataAsc(fromDate, toDate, itemCount);
+            }
+        }
 
         SharedPreferences preferences=
                 mActivity.getSharedPreferences(PREF_NAME_VIEWPAGER_TEXT_STYLE,Context.MODE_PRIVATE);
