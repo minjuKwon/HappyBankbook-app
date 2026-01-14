@@ -261,7 +261,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             moveToItem(pendingItemId);
             pendingItemId = null;
         }
-        adapter.notifyDataSetChanged();
         adapter.setCondition(true);
     }
 
