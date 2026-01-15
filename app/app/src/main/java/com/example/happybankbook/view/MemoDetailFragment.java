@@ -1,9 +1,7 @@
 package com.example.happybankbook.view;
 
 import static com.example.happybankbook.Utils.hideKeyboard;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_NEWEST_SORT;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RETAIN_SORT;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_SIZE_SMALL;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_SIZE;
@@ -225,10 +223,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     public void onStop() {
         super.onStop();
 
-        Bundle bundle=new Bundle();
-        bundle.putBoolean(BUNDLE_KEY_IS_NEWEST_SORT,true);
-        getParentFragmentManager().setFragmentResult(REQUEST_KEY_RETAIN_SORT, bundle);
-
         resetTextStyle();
     }
 
@@ -261,7 +255,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             moveToItem(pendingItemId);
             pendingItemId = null;
         }
-        adapter.setCondition(true);
     }
 
     @Override

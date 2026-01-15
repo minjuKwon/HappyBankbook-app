@@ -21,11 +21,9 @@ import java.util.List;
 
 public class DetailPagerAdapter extends RecyclerView.Adapter<DetailPagerAdapter.ViewPagerHolder>{
 
-    public static boolean hasVisitedViewPager=false;
     private TextView dateTextView, contentTextView, priceTextView;
     private ImageView contentImg;
     private List<UiMemoData> dataList=new ArrayList<>();
-    private boolean isRecyclable=true, hasReceivedCondition=true;
     private float textSize;
 
     public DetailPagerAdapter(float textSize){
@@ -38,22 +36,15 @@ public class DetailPagerAdapter extends RecyclerView.Adapter<DetailPagerAdapter.
         View view= LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.fragment_memo_detail_item, parent, false);
-        //viewPager 후 recyclerView로 돌아 왔을 때 condition 값을 유지 하기 위한 변수
-        hasVisitedViewPager =true;
         return new DetailPagerAdapter.ViewPagerHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewPagerHolder holder, int position) {
-        //메모 정렬 후 bind 호출하기 위한 플래그 변수
-        if(hasReceivedCondition){
-            UiMemoData data=dataList.get(position);
-            if(position==0||position==dataList.size()-1){
-                isRecyclable=false;
-            }
-            holder.setIsRecyclable(isRecyclable);
-            holder.bind(data, textSize);
-        }
+        UiMemoData data=dataList.get(position);
+        boolean isRecyclable= position != 0 && position != dataList.size() - 1;
+        holder.setIsRecyclable(isRecyclable);
+        holder.bind(data, textSize);
     }
 
     @Override
@@ -79,10 +70,6 @@ public class DetailPagerAdapter extends RecyclerView.Adapter<DetailPagerAdapter.
 
     public void setTextSize(float size){
         textSize=size;
-    }
-
-    public void setCondition(boolean condition){
-        this.hasReceivedCondition=condition;
     }
 
     public class ViewPagerHolder extends RecyclerView.ViewHolder{

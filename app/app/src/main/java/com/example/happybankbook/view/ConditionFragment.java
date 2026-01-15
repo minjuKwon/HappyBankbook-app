@@ -5,11 +5,7 @@ import static com.example.happybankbook.Utils.hideKeyboard;
 import static com.example.happybankbook.Utils.setCurrentDate;
 import static com.example.happybankbook.Utils.setDate;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_CLICKED_ONCE;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_INITIALIZATION;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_NEWEST_SORT;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_INITIALIZATION;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_REMOVE_FRAGMENT;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RETAIN_SORT;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_IS_CLICKED_DURATION;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_IS_NEWEST_SORT;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_ITEM_COUNT;
@@ -62,7 +58,6 @@ public class ConditionFragment extends Fragment
     private RadioButton oldestSortRadioButton, newestSortRadioButton;
 
     private boolean isClickedDuration=true;
-    private boolean hasVisitedViewPager=false;
 
 
     @Override
@@ -72,40 +67,6 @@ public class ConditionFragment extends Fragment
         if (context instanceof Activity) {
             mActivity = (Activity)context;
         }
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        getFragmentResult();
-    }
-
-    private void getFragmentResult(){
-        //viewPager 후 recyclerView로 돌아 왔을 때 condition 값을 유지 하기 위한 변수 얻기
-        getParentFragmentManager()
-                .setFragmentResultListener(
-                        REQUEST_KEY_RETAIN_SORT,
-                        this,
-                        (requestKey, result) -> {
-                            hasVisitedViewPager=result.getBoolean(BUNDLE_KEY_IS_NEWEST_SORT);
-                            if(!hasVisitedViewPager){
-                                reset();
-                            }
-                        }
-                );
-        //ListFragment에서 isInitialization 받을 때는 SharedPreferences 대신 값 초기화
-        getParentFragmentManager()
-                .setFragmentResultListener(
-                        REQUEST_KEY_INITIALIZATION,
-                        this,
-                        (requestKey, result) -> {
-                            boolean isInitialization=result.getBoolean(BUNDLE_KEY_IS_INITIALIZATION);
-                            if(isInitialization){
-                                reset();
-                            }
-                        }
-                );
     }
 
     @Override

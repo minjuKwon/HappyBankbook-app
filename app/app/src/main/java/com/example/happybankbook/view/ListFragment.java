@@ -1,26 +1,21 @@
 package com.example.happybankbook.view;
 
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_CLICKED_ONCE;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_INITIALIZATION;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_LINE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_INITIALIZATION;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_LINE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_REMOVE_FRAGMENT;
 import static com.example.happybankbook.constants.FragmentTag.SEARCH;
-import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_IS_INITIALIZATION;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_LINE;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_SIZE_LARGE;
-import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_IS_INITIALIZATION;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_LINE;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_LIST_TEXT_STYLE;
-import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_SET_INITIALIZATION;
 import static com.example.happybankbook.constants.TextStyles.TEXT_ELLIPSIZE_DEFAULT;
 import static com.example.happybankbook.constants.TextStyles.TEXT_LINE_DEFAULT;
 import static com.example.happybankbook.constants.TextStyles.TEXT_SIZE_DEFAULT_LARGE;
@@ -41,7 +36,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.happybankbook.adapter.DetailPagerAdapter;
 import com.example.happybankbook.adapter.ListAdapter;
 import com.example.happybankbook.R;
 import com.example.happybankbook.adapter.OnItemSelectedListener;
@@ -73,7 +67,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     private boolean hasTextEllipsize= TEXT_ELLIPSIZE_DEFAULT;
     private boolean isNewestSort=true;
     private int itemCount, fromDate, toDate;
-    private boolean isInitialization;
 
 
     @Override
@@ -91,11 +84,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        SharedPreferences preferences=
-                mActivity.getSharedPreferences(PREF_NAME_SET_INITIALIZATION,Context.MODE_PRIVATE);
-        isInitialization=
-                preferences.getBoolean(PREF_KEY_IS_INITIALIZATION,PREF_DEFAULT_IS_INITIALIZATION);
 
         getFragmentResult();
     }
@@ -161,16 +149,15 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         presenter.setView(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter = new ListAdapter(textSize, textLine, hasTextEllipsize, item ->
-            callback.onItemSelected(item.getIdx())
+        adapter = new ListAdapter(textSize, textLine, hasTextEllipsize, item ->{
+            callback.onItemSelected(item.getIdx());
+        }
         );
         recyclerView.setAdapter(adapter);
 
         getMemoTotalPrice();
 
         getCondition();
-
-        //setMemoListCondition();
     }
 
     private void getMemoTotalPrice(){
@@ -190,18 +177,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         toDate=state.toDate;
         itemCount= state.count;
         isNewestSort= state.isNewestSort;
-    }
-
-    private void setMemoListCondition(){
-        boolean hasVisitedViewPager=DetailPagerAdapter.hasVisitedViewPager;
-        //viewpager 방문 후 ListFragment 돌아온 경우 검색 조건 값 유지
-        //viewpager 제외한 다른 프래그먼트 방문 후,
-        // ListFragment 돌아온 경우는 데이터 조건을 초기화하여 모든 데이터 보여줌
-        if(!hasVisitedViewPager||isInitialization){
-            presenter.getData();
-        }else{
-            keepCondition();
-        }
     }
 
     @Override
@@ -225,18 +200,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     public void onStop() {
         super.onStop();
 
-        //onStop()때 ConditionFragment 값 초기화
-        Bundle bundle=new Bundle();
-        bundle.putBoolean(BUNDLE_KEY_IS_INITIALIZATION,true);
-        getParentFragmentManager().setFragmentResult(REQUEST_KEY_INITIALIZATION, bundle);
         resetTextStyle();
-
-        isInitialization=true;
-        SharedPreferences preferences=
-                mActivity.getSharedPreferences(PREF_NAME_SET_INITIALIZATION, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(PREF_KEY_IS_INITIALIZATION,isInitialization);
-        editor.apply();
     }
 
     private void resetTextStyle(){
