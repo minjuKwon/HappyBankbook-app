@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
     }
 
     public void replaceFragment(Fragment fragment, String tag){
+        resetCondition();
         getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,fragment,tag).commit();
     }
 
@@ -112,6 +113,13 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
             ((ListFragment) f).getCondition();
             ((ListFragment) f).keepCondition();
         }
+    }
+
+    public void resetCondition(){
+        listState.isNewestSort=true;
+        listState.fromDate=0;
+        listState.toDate=30000000;
+        listState.count=0;
     }
 
 }
