@@ -1,24 +1,15 @@
 package com.example.happybankbook.view;
 
 import static com.example.happybankbook.Utils.convertDateToInt;
+import static com.example.happybankbook.Utils.formatDateToString;
 import static com.example.happybankbook.Utils.hideKeyboard;
 import static com.example.happybankbook.Utils.setCurrentDate;
 import static com.example.happybankbook.Utils.setDate;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_CLICKED_ONCE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_REMOVE_FRAGMENT;
-import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_IS_CLICKED_DURATION;
-import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_IS_NEWEST_SORT;
-import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_ITEM_COUNT;
-import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_FROM_DATE;
-import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_IS_CLICKED_DURATION;
-import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_IS_NEWEST_SORT;
-import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_ITEM_COUNT;
-import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TO_DATE;
-import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_SORT;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -76,9 +67,6 @@ public class ConditionFragment extends Fragment
 
         initViews(view);
         setListener();
-        newestSortRadioButton.setChecked(true);
-        oldestSortRadioButton.setChecked(false);
-
         return view;
     }
 
@@ -108,36 +96,30 @@ public class ConditionFragment extends Fragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         //조회 날짜 기본 값 설정
         setCurrentDate(fromDurationTextView);
         setCurrentDate(toDurationTextView);
-
-        getSharedPreferences();
+        getConditionState();
     }
 
-    private void getSharedPreferences(){
-        SharedPreferences preferences=
-                mActivity.getSharedPreferences(PREF_NAME_SORT, Context.MODE_PRIVATE);
+    private void getConditionState(){
+        ListConditionState state = ((MainActivity) requireActivity()).getListState();
+        if(state.fromDate==DEFAULT_FROM_DATE&&state.toDate==DEFAULT_TO_DATE){
+            isClickedDuration=false;
+        }else{
+            isClickedDuration=true;
+            fromDurationTextView.setText(formatDateToString(state.fromDate));
+            toDurationTextView.setText(formatDateToString(state.toDate));
+        }
 
-        boolean isClick=
-                preferences.getBoolean(PREF_KEY_IS_CLICKED_DURATION,PREF_DEFAULT_IS_CLICKED_DURATION);
-        isClickedDuration=(!isClick);
         clickDuration();
 
-        String fromDurationStr=
-                preferences.getString(PREF_KEY_FROM_DATE, setCurrentDate());
-        String toDurationStr=
-                preferences.getString(PREF_KEY_TO_DATE, setCurrentDate());
-        fromDurationTextView.setText(fromDurationStr);
-        toDurationTextView.setText(toDurationStr);
+        newestSortRadioButton.setChecked(state.isNewestSort);
+        oldestSortRadioButton.setChecked(!state.isNewestSort);
 
-        boolean isCheckedRadioNew=
-                preferences.getBoolean(PREF_KEY_IS_NEWEST_SORT,PREF_DEFAULT_IS_NEWEST_SORT);
-        newestSortRadioButton.setChecked(isCheckedRadioNew);
-        oldestSortRadioButton.setChecked(!isCheckedRadioNew);
-
-        itemCountEditText.setText(preferences.getString(PREF_KEY_ITEM_COUNT,PREF_DEFAULT_ITEM_COUNT));
+        String count= "";
+        if(state.count!=0 ) count=String.format(java.util.Locale.getDefault(), Integer.toString(state.count));
+        itemCountEditText.setText(count);
     }
 
     @Override
@@ -235,8 +217,6 @@ public class ConditionFragment extends Fragment
         //memo recyclerView로 정렬 데이터 전달
         sendCondition(fromDate, toDate, count, newestSortRadioButton.isChecked());
 
-        setSharedPreferences();
-
         hideKeyboard(mContext,itemCountEditText);
 
         ((MainActivity)mActivity).onConditionChanged();
@@ -251,8 +231,6 @@ public class ConditionFragment extends Fragment
         itemCountEditText.setText(null);
 
         sendCondition(DEFAULT_FROM_DATE,DEFAULT_TO_DATE,DEFAULT_COUNT,true);
-
-        setSharedPreferences();
     }
 
     private void sendCondition(int fromDate, int toDate, int count, boolean sort){
@@ -261,18 +239,6 @@ public class ConditionFragment extends Fragment
           state.toDate=toDate;
           state.count=count;
           state.isNewestSort= sort;
-    }
-
-    private void setSharedPreferences(){
-        SharedPreferences preferences=
-                mActivity.getSharedPreferences(PREF_NAME_SORT, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=preferences.edit();
-        editor.putBoolean(PREF_KEY_IS_CLICKED_DURATION,isClickedDuration);
-        editor.putString(PREF_KEY_FROM_DATE,fromDurationTextView.getText().toString());
-        editor.putString(PREF_KEY_TO_DATE,toDurationTextView.getText().toString());
-        editor.putBoolean(PREF_KEY_IS_NEWEST_SORT,newestSortRadioButton.isChecked());
-        editor.putString(PREF_KEY_ITEM_COUNT,itemCountEditText.getText().toString());
-        editor.apply();
     }
 
 }
