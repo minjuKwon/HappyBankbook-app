@@ -1,7 +1,6 @@
 package com.example.happybankbook.constants;
 
 public class FragmentRequestKeys {
-    public static final String REQUEST_KEY_REMOVE_FRAGMENT="remove_fragment";
     public static final String REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE="recyclerview_text_size";
     public static final String REQUEST_KEY_SEARCH_TEXT_SIZE="search_text_size";
     public static final String REQUEST_KEY_MEMO_TEXT_SIZE="memo_text_size";

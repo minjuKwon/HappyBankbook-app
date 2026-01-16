@@ -5,8 +5,6 @@ import static com.example.happybankbook.Utils.formatDateToString;
 import static com.example.happybankbook.Utils.hideKeyboard;
 import static com.example.happybankbook.Utils.setCurrentDate;
 import static com.example.happybankbook.Utils.setDate;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_CLICKED_ONCE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_REMOVE_FRAGMENT;
 
 import android.app.Activity;
 import android.content.Context;
@@ -125,10 +123,6 @@ public class ConditionFragment extends Fragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //ConditionFragment 중복 생성을 막기 위한 변수 전달
-        Bundle bundle=new Bundle();
-        bundle.putInt(BUNDLE_KEY_IS_CLICKED_ONCE,1);
-        getParentFragmentManager().setFragmentResult(REQUEST_KEY_REMOVE_FRAGMENT,bundle);
     }
 
     @Override
