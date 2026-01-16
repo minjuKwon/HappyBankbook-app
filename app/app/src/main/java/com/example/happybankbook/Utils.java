@@ -30,6 +30,14 @@ public class Utils {
         textView.setText(setCurrentDate());
     }
 
+    public static String formatDateToString(int date){
+        String strDate=Integer.toString(date);
+        String year=strDate.substring(0,4);
+        String month=strDate.substring(4,6);
+        String day=strDate.substring(6);
+        return String.format(java.util.Locale.getDefault(), "%s.%s.%s", year, month, day);
+    }
+
     public static void setDate(TextView textview, Context context){
 
         DatePickerDialog.OnDateSetListener calendarListener= (view, year, month, dayOfMonth) -> {

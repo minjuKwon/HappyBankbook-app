@@ -1,5 +1,7 @@
 package com.example.happybankbook.adapter;
 
+import static com.example.happybankbook.Utils.formatDateToString;
+
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
@@ -83,7 +85,7 @@ public class DetailPagerAdapter extends RecyclerView.Adapter<DetailPagerAdapter.
         }
 
         public void bind(UiMemoData memoData, float textSize){
-            dateTextView.setText(getFormattedDate(memoData));
+            dateTextView.setText(formatDateToString(memoData.getDate()));
 
             String formattedPrice=
                     String.format(java.util.Locale.getDefault(), "%,d", memoData.getPrice());
@@ -99,13 +101,6 @@ public class DetailPagerAdapter extends RecyclerView.Adapter<DetailPagerAdapter.
             }
         }
 
-        private String getFormattedDate(UiMemoData memoData){
-            String date=Integer.toString(memoData.getDate());
-            String year=date.substring(0,4);
-            String month=date.substring(4,6);
-            String day=date.substring(6);
-            return String.format(java.util.Locale.getDefault(), "%s.%s.%s", year, month, day);
-        }
     }
 
 }
