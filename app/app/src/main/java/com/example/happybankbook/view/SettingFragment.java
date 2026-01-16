@@ -3,22 +3,18 @@ package com.example.happybankbook.view;
 import static android.app.Activity.RESULT_OK;
 
 import static com.example.happybankbook.Utils.showToastOnUi;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_ELLIPSIZE;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_LINE;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_MEMO_TEXT_SIZE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_ELLIPSIZE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_LINE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_ELLIPSIZE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_LINE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_SIZE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_HAS_ELLIPSIZE;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_LINE_TEXT_ID;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_SIZE_TEXT_ID;
+import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_ELLIPSIZE;
+import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_LINE;
+import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_SIZE;
+import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_LIST_TEXT_STYLE;
+import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_MEMO_TEXT_STYLE;
+import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_SEARCH_TEXT_STYLE;
 import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_SET_STYLE;
+import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_VIEWPAGER_TEXT_STYLE;
 import static com.example.happybankbook.constants.TextStyles.TEXT_LINE_DEFAULT;
 import static com.example.happybankbook.constants.TextStyles.TEXT_LINE_SINGLE;
 import static com.example.happybankbook.constants.TextStyles.TEXT_SIZE_DEFAULT_LARGE;
@@ -287,8 +283,8 @@ public class SettingFragment extends Fragment
         if(v.getId()==R.id.ellipsis){
             setEllipsize();
             boolean isCheckEllipsize=!hasEllipsize;
-            changeEllipsize(isCheckEllipsize,REQUEST_KEY_RECYCLERVIEW_TEXT_ELLIPSIZE);
-            changeEllipsize(isCheckEllipsize,REQUEST_KEY_SEARCH_TEXT_ELLIPSIZE);
+            changeEllipsize(isCheckEllipsize,PREF_NAME_LIST_TEXT_STYLE);
+            changeEllipsize(isCheckEllipsize,PREF_NAME_SEARCH_TEXT_STYLE);
         }else if(v.getId()==R.id.pdf){
             fileExtension="pdf";
             makeExportDialog(Build.VERSION.SDK_INT, pdfType);
@@ -316,10 +312,11 @@ public class SettingFragment extends Fragment
     }
 
     private void changeEllipsize(boolean check, String key){
-        Bundle bundle=new Bundle();
-        bundle.putBoolean(BUNDLE_KEY_TEXT_ELLIPSIZE, check);
-
-        getParentFragmentManager().setFragmentResult(key, bundle);
+        SharedPreferences preferences=
+                mActivity.getSharedPreferences(key, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=preferences.edit();
+        editor.putBoolean(PREF_KEY_TEXT_ELLIPSIZE, check);
+        editor.apply();
     }
 
     private void makeExportDialog(int androidVersion, String type){
@@ -370,13 +367,13 @@ public class SettingFragment extends Fragment
         if(group.getId()==R.id.radioLineDisplay){
             if(checkedId==R.id.radioLineSingle){
                 setTextLine(true, false, R.color.black, R.color.gray);
-                changeTextLine(TEXT_LINE_SINGLE, REQUEST_KEY_RECYCLERVIEW_TEXT_LINE);
-                changeTextLine(TEXT_LINE_SINGLE,REQUEST_KEY_SEARCH_TEXT_LINE);
+                changeTextLine(TEXT_LINE_SINGLE, PREF_NAME_LIST_TEXT_STYLE);
+                changeTextLine(TEXT_LINE_SINGLE, PREF_NAME_SEARCH_TEXT_STYLE);
                 currentTextLineId=R.id.radioLineSingle;
             }else if(checkedId==R.id.radioLineMul){
                 setTextLine(false, true, R.color.gray, R.color.black);
-                changeTextLine(TEXT_LINE_DEFAULT, REQUEST_KEY_RECYCLERVIEW_TEXT_LINE);
-                changeTextLine(TEXT_LINE_DEFAULT, REQUEST_KEY_SEARCH_TEXT_LINE);
+                changeTextLine(TEXT_LINE_DEFAULT, PREF_NAME_LIST_TEXT_STYLE);
+                changeTextLine(TEXT_LINE_DEFAULT, PREF_NAME_SEARCH_TEXT_STYLE);
                 currentTextLineId=R.id.radioLineMul;
             }
         }
@@ -384,28 +381,28 @@ public class SettingFragment extends Fragment
         else if(group.getId()==R.id.radioFont){
             if(checkedId==R.id.radioFontOne){
                 setTextSize(true, false, false, R.color.black, R.color.gray, R.color.gray);
-                changeTextSize(TEXT_SIZE_DEFAULT_SMALL, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
-                changeTextSize(TEXT_SIZE_DEFAULT_SMALL, REQUEST_KEY_MEMO_TEXT_SIZE);
-                changeTextSize(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
-                changeTextSize(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_SEARCH_TEXT_SIZE);
+                changeTextSize(TEXT_SIZE_DEFAULT_SMALL, PREF_NAME_VIEWPAGER_TEXT_STYLE);
+                changeTextSize(TEXT_SIZE_DEFAULT_SMALL, PREF_NAME_MEMO_TEXT_STYLE);
+                changeTextSize(TEXT_SIZE_DEFAULT_LARGE, PREF_NAME_LIST_TEXT_STYLE);
+                changeTextSize(TEXT_SIZE_DEFAULT_LARGE, PREF_NAME_SEARCH_TEXT_STYLE);
                 currentTextSizeId=R.id.radioFontOne;
             }else if(checkedId==R.id.radioFontTwo){
                 setTextSize(false, true, false, R.color.gray, R.color.black, R.color.gray);
-                changeTextSize(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
-                changeTextSize(TEXT_SIZE_DEFAULT_LARGE, REQUEST_KEY_MEMO_TEXT_SIZE);
-                changeTextSize(TEXT_SIZE_MEDIUM, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
-                changeTextSize(TEXT_SIZE_MEDIUM, REQUEST_KEY_SEARCH_TEXT_SIZE);
+                changeTextSize(TEXT_SIZE_DEFAULT_LARGE, PREF_NAME_VIEWPAGER_TEXT_STYLE);
+                changeTextSize(TEXT_SIZE_DEFAULT_LARGE, PREF_NAME_MEMO_TEXT_STYLE);
+                changeTextSize(TEXT_SIZE_MEDIUM, PREF_NAME_LIST_TEXT_STYLE);
+                changeTextSize(TEXT_SIZE_MEDIUM, PREF_NAME_SEARCH_TEXT_STYLE);
                 currentTextSizeId=R.id.radioFontTwo;
             }else if(checkedId==R.id.radioFontThree){
                 setTextSize(false, false, true, R.color.gray, R.color.gray, R.color.black);
-                changeTextSize(TEXT_SIZE_MEDIUM, REQUEST_KEY_VIEWPAGER_TEXT_SIZE);
-                changeTextSize(TEXT_SIZE_MEDIUM, REQUEST_KEY_MEMO_TEXT_SIZE);
-                changeTextSize(TEXT_SIZE_LARGE, REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE);
-                changeTextSize(TEXT_SIZE_LARGE, REQUEST_KEY_SEARCH_TEXT_SIZE);
+                changeTextSize(TEXT_SIZE_MEDIUM, PREF_NAME_VIEWPAGER_TEXT_STYLE);
+                changeTextSize(TEXT_SIZE_MEDIUM, PREF_NAME_MEMO_TEXT_STYLE);
+                changeTextSize(TEXT_SIZE_LARGE, PREF_NAME_LIST_TEXT_STYLE);
+                changeTextSize(TEXT_SIZE_LARGE, PREF_NAME_SEARCH_TEXT_STYLE);
                 currentTextSizeId=R.id.radioFontThree;
             }
-        }
 
+        }
     }
 
     private void setTextLine(boolean b1, boolean b2, int c1, int c2){
@@ -425,17 +422,19 @@ public class SettingFragment extends Fragment
     }
 
     private void changeTextSize(float size, String key){
-        Bundle bundle=new Bundle();
-        bundle.putFloat(BUNDLE_KEY_TEXT_SIZE,size);
-
-        getParentFragmentManager().setFragmentResult(key, bundle);
+        SharedPreferences preferences=
+                mActivity.getSharedPreferences(key,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=preferences.edit();
+        editor.putFloat(PREF_KEY_TEXT_SIZE, size);
+        editor.apply();
     }
 
     private void changeTextLine(int line, String key){
-       Bundle bundle=new Bundle();
-       bundle.putInt(BUNDLE_KEY_TEXT_LINE, line);
-
-       getParentFragmentManager().setFragmentResult(key, bundle);
+        SharedPreferences preferences=
+                mActivity.getSharedPreferences(key,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=preferences.edit();
+        editor.putInt(PREF_KEY_TEXT_LINE, line);
+        editor.apply();
    }
 
 }

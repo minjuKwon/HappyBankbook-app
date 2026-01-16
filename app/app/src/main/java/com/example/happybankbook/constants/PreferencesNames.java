@@ -6,5 +6,4 @@ public class PreferencesNames {
     public static final String PREF_NAME_SEARCH_TEXT_STYLE="search_text_style";
     public static final String PREF_NAME_MEMO_TEXT_STYLE="memo_text_style";
     public static final String PREF_NAME_VIEWPAGER_TEXT_STYLE="viewpager_text_style";
-    public static final String PREF_NAME_SORT="sort";
 }

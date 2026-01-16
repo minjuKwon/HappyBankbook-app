@@ -1,8 +1,6 @@
 package com.example.happybankbook.view;
 
 import static com.example.happybankbook.Utils.hideKeyboard;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_VIEWPAGER_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_SIZE_SMALL;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_VIEWPAGER_TEXT_STYLE;
@@ -90,21 +88,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         super.onCreate(savedInstanceState);
 
         handler=new Handler();
-
-        getFragmentResult();
-    }
-
-    private void getFragmentResult(){
-        //변경 text size 값
-        getParentFragmentManager()
-                .setFragmentResultListener(
-                        REQUEST_KEY_VIEWPAGER_TEXT_SIZE,
-                        this,
-                        (requestKey, result) -> {
-                            textSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
-                            adapter.setTextSize(textSize);
-                        }
-                );
     }
 
     @Override

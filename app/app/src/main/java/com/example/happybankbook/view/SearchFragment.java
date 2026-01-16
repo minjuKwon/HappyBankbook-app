@@ -1,11 +1,5 @@
 package com.example.happybankbook.view;
 
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_ELLIPSIZE;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_LINE;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_ELLIPSIZE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_LINE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_SEARCH_TEXT_SIZE;
 import static com.example.happybankbook.constants.FragmentTag.LIST;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_LINE;
@@ -80,44 +74,6 @@ public class SearchFragment extends Fragment
         if(context instanceof OnItemSelectedListener){
             callback = (OnItemSelectedListener) context;
         }
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getFragmentResult();
-    }
-
-    private void getFragmentResult(){
-        getParentFragmentManager()
-                .setFragmentResultListener(
-                        REQUEST_KEY_SEARCH_TEXT_SIZE,
-                        this,
-                        (requestKey, result) -> {
-                            textSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
-                            adapter.setTextSize(textSize);
-                        }
-                );
-        //변경 text line 값
-        getParentFragmentManager()
-                .setFragmentResultListener(
-                        REQUEST_KEY_SEARCH_TEXT_LINE,
-                        this,
-                        (requestKey, result) -> {
-                            textLine=result.getInt(BUNDLE_KEY_TEXT_LINE);
-                            adapter.setTextLine(textLine);
-                        }
-                );
-        //변경 text ellipsize 값
-        getParentFragmentManager()
-                .setFragmentResultListener(
-                        REQUEST_KEY_SEARCH_TEXT_ELLIPSIZE,
-                        this,
-                        (requestKey, result) -> {
-                            hasTextEllipsize=result.getBoolean(BUNDLE_KEY_TEXT_ELLIPSIZE);
-                            adapter.setTextEllipsize(hasTextEllipsize);
-                        }
-                );
     }
 
     @Override

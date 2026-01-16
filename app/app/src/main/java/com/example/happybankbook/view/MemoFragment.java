@@ -5,8 +5,6 @@ import static android.app.Activity.RESULT_OK;
 import static com.example.happybankbook.Utils.convertDateToInt;
 import static com.example.happybankbook.Utils.setCurrentDate;
 import static com.example.happybankbook.Utils.setDate;
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_MEMO_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_SIZE_SMALL;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_MEMO_TEXT_STYLE;
@@ -81,16 +79,6 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //변경 text size 값
-        getParentFragmentManager()
-                .setFragmentResultListener(
-                        REQUEST_KEY_MEMO_TEXT_SIZE,
-                        this,
-                        (requestKey, result) -> {
-                            textSize=result.getFloat(BUNDLE_KEY_TEXT_SIZE);
-                            contentEditText.setTextSize(textSize);
-                        }
-                );
         isClearContentTxt=true;
     }
 
