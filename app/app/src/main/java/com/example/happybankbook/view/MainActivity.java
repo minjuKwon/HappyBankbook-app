@@ -1,5 +1,6 @@
 package com.example.happybankbook.view;
 
+import static com.example.happybankbook.constants.FragmentTag.CONDITION;
 import static com.example.happybankbook.constants.FragmentTag.LIST;
 import static com.example.happybankbook.constants.FragmentTag.MEMO;
 import static com.example.happybankbook.constants.FragmentTag.SETTING;
@@ -86,7 +87,10 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
     }
 
     public void addFragment(Fragment fragment){
-        getSupportFragmentManager().beginTransaction().add(R.id.mainLayout,fragment).commit();
+        Fragment existing = getSupportFragmentManager().findFragmentByTag(CONDITION);
+        if(existing==null){
+            getSupportFragmentManager().beginTransaction().add(R.id.mainLayout,fragment,CONDITION).commit();
+        }
     }
 
     public void removeFragment(Fragment fragment){

@@ -1,13 +1,11 @@
 package com.example.happybankbook.view;
 
-import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_IS_CLICKED_ONCE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_LINE;
 import static com.example.happybankbook.constants.BundleKeys.BUNDLE_KEY_TEXT_SIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_LINE;
 import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_RECYCLERVIEW_TEXT_SIZE;
-import static com.example.happybankbook.constants.FragmentRequestKeys.REQUEST_KEY_REMOVE_FRAGMENT;
 import static com.example.happybankbook.constants.FragmentTag.SEARCH;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_LINE;
@@ -61,7 +59,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     private ListAdapter adapter;
     private TextView totalPriceTextView;
 
-    private int clickCountCondition=1;
     private int textLine= TEXT_LINE_DEFAULT;
     private float textSize= TEXT_SIZE_DEFAULT_LARGE;
     private boolean hasTextEllipsize= TEXT_ELLIPSIZE_DEFAULT;
@@ -89,14 +86,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
     }
 
     public void getFragmentResult(){
-        //ConditionFragment 클릭 시 한 개의 Fragment만 생성하기 위한 변수 받기
-        getParentFragmentManager()
-                .setFragmentResultListener(
-                        REQUEST_KEY_REMOVE_FRAGMENT,
-                        this,
-                        (requestKey, result) ->
-                                clickCountCondition=result.getInt(BUNDLE_KEY_IS_CLICKED_ONCE)
-                );
         //변경 text size 값
         getParentFragmentManager()
                 .setFragmentResultListener(
@@ -262,11 +251,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         if(v.getId()==R.id.txtSearch){
             ((MainActivity)mActivity).replaceFragment(new SearchFragment(),SEARCH);
         }else if(v.getId()==R.id.txtCondition){
-            //addFragment 1일 때만 addFragment()하여 여러 번 클릭 시 중복 생성을 막음
-            if(clickCountCondition==1){
-                ((MainActivity)mActivity).addFragment(new ConditionFragment());
-                ++clickCountCondition;
-            }
+            ((MainActivity)mActivity).addFragment(new ConditionFragment());
         }
     }
 
