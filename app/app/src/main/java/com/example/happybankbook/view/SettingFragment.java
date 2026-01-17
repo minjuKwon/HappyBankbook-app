@@ -287,13 +287,13 @@ public class SettingFragment extends Fragment
             changeEllipsize(isCheckEllipsize,PREF_NAME_SEARCH_TEXT_STYLE);
         }else if(v.getId()==R.id.pdf){
             fileExtension="pdf";
-            makeExportDialog(Build.VERSION.SDK_INT, pdfType);
+            makeExportDialog(pdfType);
         }else if(v.getId()==R.id.excel){
             fileExtension="excel";
-            makeExportDialog(Build.VERSION.SDK_INT, csvType);
+            makeExportDialog(csvType);
         }else if(v.getId()==R.id.txt){
             fileExtension="txt";
-            makeExportDialog(Build.VERSION.SDK_INT, txtType);
+            makeExportDialog(txtType);
         }else if(v.getId()==R.id.manual){
             showManual();
         }else if(v.getId()==R.id.openSource){
@@ -319,7 +319,7 @@ public class SettingFragment extends Fragment
         editor.apply();
     }
 
-    private void makeExportDialog(int androidVersion, String type){
+    private void makeExportDialog(String type){
         AlertDialog.Builder builder=new AlertDialog.Builder(mContext);
         final String message=fileExtension+" "+getResources().getText(R.string.doExport);
         builder.setMessage(message);
@@ -328,7 +328,7 @@ public class SettingFragment extends Fragment
                 if(value==0){
                     showToastOnUi(mContext, R.string.noMemo);
                 }else{
-                    if(androidVersion>=Build.VERSION_CODES.Q){
+                    if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.Q){
                         final String fileTitle="happy bank memo";
                         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
                         intent.addCategory(Intent.CATEGORY_OPENABLE);
