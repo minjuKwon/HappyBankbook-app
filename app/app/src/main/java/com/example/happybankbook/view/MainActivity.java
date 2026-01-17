@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 
 import com.example.happybankbook.R;
-import com.example.happybankbook.adapter.OnItemSelectedListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import dagger.hilt.android.AndroidEntryPoint;

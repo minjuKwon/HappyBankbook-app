@@ -33,7 +33,6 @@ import android.widget.TextView;
 
 import com.example.happybankbook.adapter.ListAdapter;
 import com.example.happybankbook.R;
-import com.example.happybankbook.adapter.OnItemSelectedListener;
 import com.example.happybankbook.contract.SearchContract;
 import com.example.happybankbook.db.UiMemoData;
 import com.example.happybankbook.presenter.SearchPresenter;

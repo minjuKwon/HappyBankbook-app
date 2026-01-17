@@ -1,4 +1,4 @@
-package com.example.happybankbook.adapter;
+package com.example.happybankbook.view;
 
 public interface OnItemSelectedListener {
     void onItemSelected(int itemId);
