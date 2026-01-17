@@ -31,7 +31,6 @@ import android.widget.TextView;
 
 import com.example.happybankbook.adapter.ListAdapter;
 import com.example.happybankbook.R;
-import com.example.happybankbook.adapter.OnItemSelectedListener;
 import com.example.happybankbook.contract.ListContract;
 import com.example.happybankbook.db.UiMemoData;
 import com.example.happybankbook.presenter.ListPresenter;
@@ -93,9 +92,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         presenter.setView(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter = new ListAdapter(textSize, textLine, hasTextEllipsize, item ->{
-            callback.onItemSelected(item.getIdx());
-        }
+        adapter = new ListAdapter(textSize, textLine, hasTextEllipsize, item ->
+                callback.onItemSelected(item.getIdx())
         );
         recyclerView.setAdapter(adapter);
 
