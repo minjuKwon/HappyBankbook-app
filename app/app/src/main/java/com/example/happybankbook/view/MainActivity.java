@@ -1,5 +1,9 @@
 package com.example.happybankbook.view;
 
+import static com.example.happybankbook.constants.ConditionDefaults.DEFAULT_COUNT;
+import static com.example.happybankbook.constants.ConditionDefaults.DEFAULT_FROM_DATE;
+import static com.example.happybankbook.constants.ConditionDefaults.DEFAULT_SORT;
+import static com.example.happybankbook.constants.ConditionDefaults.DEFAULT_TO_DATE;
 import static com.example.happybankbook.constants.FragmentTag.CONDITION;
 import static com.example.happybankbook.constants.FragmentTag.LIST;
 import static com.example.happybankbook.constants.FragmentTag.MEMO;
@@ -120,10 +124,10 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
     }
 
     public void resetCondition(){
-        listState.isNewestSort=true;
-        listState.fromDate=0;
-        listState.toDate=30000000;
-        listState.count=0;
+        listState.isNewestSort=DEFAULT_SORT;
+        listState.fromDate=DEFAULT_FROM_DATE;
+        listState.toDate=DEFAULT_TO_DATE;
+        listState.count=DEFAULT_COUNT;
     }
 
 }
