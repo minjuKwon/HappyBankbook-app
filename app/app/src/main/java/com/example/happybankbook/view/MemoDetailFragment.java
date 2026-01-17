@@ -1,6 +1,7 @@
 package com.example.happybankbook.view;
 
 import static com.example.happybankbook.Utils.hideKeyboard;
+import static com.example.happybankbook.Utils.loadItemsByCondition;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_SIZE_SMALL;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_VIEWPAGER_TEXT_STYLE;
@@ -175,22 +176,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
             toDate=temp;
         }
 
-        if(itemCount==0){
-            presenter.setIntResultCallback(value -> {
-                if(isNewestSort){
-                    presenter.getDataDesc(fromDate, toDate, value);
-                }else{
-                    presenter.getDataAsc(fromDate, toDate, value);
-                }
-            });
-            presenter.getDataCount();
-        }else{
-            if(isNewestSort){
-                presenter.getDataDesc(fromDate, toDate, itemCount);
-            }else{
-                presenter.getDataAsc(fromDate, toDate, itemCount);
-            }
-        }
+        loadItemsByCondition(presenter, fromDate, toDate, itemCount, isNewestSort);
 
         SharedPreferences preferences=
                 mActivity.getSharedPreferences(PREF_NAME_VIEWPAGER_TEXT_STYLE,Context.MODE_PRIVATE);

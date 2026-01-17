@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.happybankbook.presenter.ListPresenter;
 import com.example.happybankbook.view.MainActivity;
 import com.google.android.apps.common.testing.accessibility.framework.BuildConfig;
 
@@ -81,6 +82,31 @@ public class Utils {
                         Toast.LENGTH_SHORT
                 ).show()
         );
+    }
+
+    public static void loadItemsByCondition(
+            ListPresenter presenter,
+            int fromDate,
+            int toDate,
+            int itemCount,
+            boolean isNewestSort
+    ){
+        if(itemCount==0){
+            presenter.setIntResultCallback(value -> {
+                if(isNewestSort){
+                    presenter.getDataDesc(fromDate, toDate, value);
+                }else{
+                    presenter.getDataAsc(fromDate, toDate, value);
+                }
+            });
+            presenter.getDataCount();
+        }else{
+            if(isNewestSort){
+                presenter.getDataDesc(fromDate, toDate, itemCount);
+            }else{
+                presenter.getDataAsc(fromDate, toDate, itemCount);
+            }
+        }
     }
 
 }

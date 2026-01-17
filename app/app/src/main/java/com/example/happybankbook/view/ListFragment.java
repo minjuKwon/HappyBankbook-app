@@ -1,5 +1,6 @@
 package com.example.happybankbook.view;
 
+import static com.example.happybankbook.Utils.loadItemsByCondition;
 import static com.example.happybankbook.constants.FragmentTag.SEARCH;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_ELLIPSIZE;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_LINE;
@@ -139,6 +140,15 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         adapter.setTextSize(textSize);
     }
 
+    public void keepCondition(){
+        if(fromDate>toDate){
+            int temp=fromDate;
+            fromDate=toDate;
+            toDate=temp;
+        }
+        loadItemsByCondition(presenter, fromDate, toDate, itemCount, isNewestSort);
+    }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -168,31 +178,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, List
         super.onDetach();
         mContext=null;
         mActivity=null;
-    }
-
-    public void keepCondition(){
-        if(fromDate>toDate){
-            int temp=fromDate;
-            fromDate=toDate;
-            toDate=temp;
-        }
-
-        if(itemCount==0){
-            presenter.setIntResultCallback(value -> {
-                if(isNewestSort){
-                    presenter.getDataDesc(fromDate, toDate, value);
-                }else{
-                    presenter.getDataAsc(fromDate, toDate, value);
-                }
-            });
-            presenter.getDataCount();
-        }else{
-            if(isNewestSort){
-                presenter.getDataDesc(fromDate, toDate, itemCount);
-            }else{
-                presenter.getDataAsc(fromDate, toDate, itemCount);
-            }
-        }
     }
 
     @Override
