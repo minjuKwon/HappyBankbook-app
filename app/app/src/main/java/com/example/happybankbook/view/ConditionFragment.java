@@ -5,6 +5,9 @@ import static com.example.happybankbook.Utils.formatDateToString;
 import static com.example.happybankbook.Utils.hideKeyboard;
 import static com.example.happybankbook.Utils.setCurrentDate;
 import static com.example.happybankbook.Utils.setDate;
+import static com.example.happybankbook.constants.ConditionDefaults.DEFAULT_COUNT;
+import static com.example.happybankbook.constants.ConditionDefaults.DEFAULT_FROM_DATE;
+import static com.example.happybankbook.constants.ConditionDefaults.DEFAULT_TO_DATE;
 
 import android.app.Activity;
 import android.content.Context;
@@ -31,11 +34,6 @@ import com.example.happybankbook.R;
 public class ConditionFragment extends Fragment
         implements View.OnClickListener, RadioGroup.OnCheckedChangeListener
 {
-
-    private static final int DEFAULT_FROM_DATE=0;
-    private static final int DEFAULT_TO_DATE=30000000;
-    private static final int DEFAULT_COUNT=0;
-
     private Context mContext;
     private Activity mActivity;
 
