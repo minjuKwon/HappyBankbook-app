@@ -12,7 +12,6 @@ public interface ListContract {
     }
 
     interface Presenter extends DataPresenter<View> {
-        void getData();
         void getDataAsc(int from, int to, int cnt);
         void getDataDesc(int from, int to, int cnt);
         void getDataCount();

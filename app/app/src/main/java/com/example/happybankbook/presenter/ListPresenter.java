@@ -48,32 +48,6 @@ public class ListPresenter implements ListContract.Presenter {
     }
 
     @Override
-    public void getData() {
-        disposable.add(
-                memoDao.getAll()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                            item->{
-                                ArrayList<UiMemoData> list = new ArrayList<>();
-                                for(int i=0;i<item.size();i++){
-                                    MemoData data= item.get(i);
-                                    list.add(new UiMemoData(
-                                            data.getIdx(),
-                                            item.size()-i,
-                                            data.getDate(),
-                                            data.getPrice(),
-                                            data.getContent(),
-                                            data.getImage()
-                                    ));
-                                }
-                                view.setItems(list);
-                            }
-                        )
-        );
-    }
-
-    @Override
     public void getDataAsc(int from, int to, int cnt) {
         disposable.add(
                 memoDao.searchAsc(from, to, cnt)
