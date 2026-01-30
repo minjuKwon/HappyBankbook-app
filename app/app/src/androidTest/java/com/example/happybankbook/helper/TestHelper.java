@@ -1,5 +1,6 @@
 package com.example.happybankbook.helper;
 
+import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -35,6 +36,7 @@ public class TestHelper {
             onView(ViewMatchers.withId(R.id.addMenu)).perform(click());
         }
         onView(withId(R.id.editMemo)).perform(typeText(data.getMemo()));
+        closeSoftKeyboard();
         onView(withId(R.id.save)).perform(click());
         onView(withId(R.id.editHappy)).perform(typeText(data.getPrice()));
         onView(withId(R.id.ok)).perform(click());
