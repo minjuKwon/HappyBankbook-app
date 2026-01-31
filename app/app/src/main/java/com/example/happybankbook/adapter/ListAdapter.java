@@ -28,6 +28,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
     private final OnItemClickListener listener;
     private TextView idxTextView,dateTextView,contentTextView,priceTextView;
     private List<UiMemoData> dataList=new ArrayList<>();
+    private long updateTime = System.currentTimeMillis();
     private int textLine;
     private float textSize;
     private boolean textEllipsize;
@@ -65,10 +66,22 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
         return dataList.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        // 갱신 시간과 포지션을 조합해 매번 새로운 뷰 타입인 것처럼 취급
+        // 데이터 재활용으로 인한 오류 해결 위해 설정
+        return (int) (updateTime + position);
+    }
+
     public void setItems(ArrayList<UiMemoData> data){
         DiffUtil.DiffResult diffResult=
                 DiffUtil.calculateDiff(new MemoDiffUtilCallback(dataList,data));
-        dataList=data;
+
+        dataList = new ArrayList<>(data);
+        // 갱신될 때마다 고유한 타임 스탬프 가져와서
+        // 새로운 ViewType 생성에 사용
+        updateTime = System.currentTimeMillis();
+
         diffResult.dispatchUpdatesTo(this);
     }
 
