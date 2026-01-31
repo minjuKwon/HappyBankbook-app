@@ -134,13 +134,6 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         changePage();
     }
 
-    private void moveToItem(int itemId) {
-        int position = adapter.getPositionById(itemId);
-        if (position >= 0) {
-            viewPager.setCurrentItem(position, false);
-        }
-    }
-
     private void getRowCount(){
         presenter.setIntResultCallback(value -> rowCount=value);
         presenter.getDataCount();
@@ -228,6 +221,13 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         if (pendingItemId != null) {
             moveToItem(pendingItemId);
             pendingItemId = null;
+        }
+    }
+
+    private void moveToItem(int itemId) {
+        int position = adapter.getPositionById(itemId);
+        if (position >= 0) {
+            viewPager.setCurrentItem(position, false);
         }
     }
 
