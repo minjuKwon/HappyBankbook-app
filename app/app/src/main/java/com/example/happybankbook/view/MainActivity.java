@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.view.ViewGroup;
 
 import com.example.happybankbook.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -49,12 +50,11 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
 
         ViewCompat.setOnApplyWindowInsetsListener(navigationView, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(
-                    v.getPaddingLeft(),
-                    v.getPaddingTop(),
-                    v.getPaddingRight(),
-                    systemBars.bottom   // 하단만 적용
-            );
+
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            lp.bottomMargin = systemBars.bottom;
+            v.setLayoutParams(lp);
+
             return insets;
         });
     }
