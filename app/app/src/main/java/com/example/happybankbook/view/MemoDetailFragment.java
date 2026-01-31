@@ -2,6 +2,7 @@ package com.example.happybankbook.view;
 
 import static com.example.happybankbook.Utils.hideKeyboard;
 import static com.example.happybankbook.Utils.loadItemsByCondition;
+import static com.example.happybankbook.constants.ConditionDefaults.DEFAULT_COUNT;
 import static com.example.happybankbook.constants.PreferencesDefaults.PREF_DEFAULT_TEXT_SIZE_SMALL;
 import static com.example.happybankbook.constants.PreferencesKeys.PREF_KEY_TEXT_SIZE;
 import static com.example.happybankbook.constants.PreferencesNames.PREF_NAME_VIEWPAGER_TEXT_STYLE;
@@ -70,7 +71,7 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
     };
 
     private float textSize= TEXT_SIZE_DEFAULT_SMALL;
-    private int itemCount, fromDate, toDate, currentPosition;
+    private int itemCount, fromDate, toDate, rowCount, currentPosition;
     private boolean isNewestSort;
     private Integer pendingItemId;
 
@@ -128,6 +129,8 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         itemCount= state.count;
         isNewestSort= state.isNewestSort;
 
+        getRowCount();
+
         changePage();
     }
 
@@ -138,17 +141,25 @@ public class MemoDetailFragment extends Fragment implements ListContract.View,Vi
         }
     }
 
+    private void getRowCount(){
+        presenter.setIntResultCallback(value -> rowCount=value);
+        presenter.getDataCount();
+    }
+
     private void changePage(){
         ListConditionState state = ((MainActivity) requireActivity()).getListState();
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
+                int listSize;
+                if(state.count==DEFAULT_COUNT) listSize= rowCount-1;
+                else listSize= state.count-1;
                 currentPosition=position;
                 if(currentPosition==0){
                     forwardImageView.setVisibility(View.INVISIBLE);
                     backImageView.setVisibility(View.VISIBLE);
-                }else if(currentPosition==(state.count-1)){
+                }else if(currentPosition==(listSize)){
                     forwardImageView.setVisibility(View.VISIBLE);
                     backImageView.setVisibility(View.INVISIBLE);
                 }else{
